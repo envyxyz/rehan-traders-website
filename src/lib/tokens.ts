@@ -17,5 +17,8 @@ export const spring = {
 /** Scroll reveal: 8px rise, once, when 15% visible. */
 export const reveal = { rise: 8, amount: 0.15, stagger: 0.06 } as const
 
+/** Hero copy entrance stagger, seconds (CSS animate-rise). */
+export const heroStagger = 0.08
+
 /** Browser chrome colour (metadata cannot use CSS vars). Mirrors --paper. */
 export const themeColor = { light: "#f5f5f2", dark: "#0b0b0b" } as const

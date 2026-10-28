@@ -11,6 +11,8 @@ const buttonVariants = cva(
     variants: {
       variant: {
         ink: "bg-action text-on-action active:bg-action-active",
+        /** Primary action on an ink band (CTA, footer). */
+        inverse: "bg-on-band text-band active:brightness-90",
         line: "border border-hairline bg-card text-ink active:bg-concrete",
         whatsapp: "bg-whatsapp text-on-whatsapp active:brightness-95",
         glass: "glass active:brightness-95",
@@ -42,7 +44,13 @@ function Button({ className, variant, size, asChild = false, arrow = false, chil
     <Comp data-slot="button" className={cn(buttonVariants({ variant, size }), arrow && "pr-2", className)} {...props}>
       <Slot.Slottable>{children}</Slot.Slottable>
       {arrow && (
-        <span aria-hidden className="grid size-7.5 place-items-center rounded-pill bg-on-action text-action">
+        <span
+          aria-hidden
+          className={cn(
+            "grid size-7.5 place-items-center rounded-pill",
+            variant === "inverse" ? "bg-band text-on-band" : "bg-on-action text-action"
+          )}
+        >
           <ArrowUpRight className="size-4" strokeWidth={2} />
         </span>
       )}

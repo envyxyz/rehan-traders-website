@@ -1,15 +1,19 @@
 "use client"
 
 import * as React from "react"
-import { LazyMotion, MotionConfig, domAnimation, useReducedMotion } from "motion/react"
+import { LazyMotion, MotionConfig, useReducedMotion } from "motion/react"
 import * as m from "motion/react-m"
 
 import { duration, ease, reveal } from "@/lib/tokens"
 
-/** LazyMotion keeps the motion bundle small; `m.*` components only. */
+// Wait for an idle moment so the features chunk never competes with first paint and hydration.
+const idle = () => new Promise<void>((done) => ("requestIdleCallback" in window ? requestIdleCallback(() => done()) : setTimeout(done, 200)))
+const loadFeatures = () => idle().then(() => import("@/lib/motion-features")).then((mod) => mod.default)
+
+/** LazyMotion keeps the motion bundle out of the first load; `m.*` components only. */
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   return (
-    <LazyMotion features={domAnimation} strict>
+    <LazyMotion features={loadFeatures} strict>
       <MotionConfig reducedMotion="user">{children}</MotionConfig>
     </LazyMotion>
   )

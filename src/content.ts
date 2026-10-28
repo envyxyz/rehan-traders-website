@@ -62,6 +62,7 @@ export const site = {
     closedNow: "Closed now",
     opensAt: (when: string) => `opens ${when}`,
     prayerBreak: "Prayer break",
+    tomorrow: "tomorrow",
   },
   payments: "All payment methods accepted", // Adnan, PRD §11 q4
   courier: true, // Adnan, PRD §11 q6: courier and out-of-city repairs
@@ -87,6 +88,8 @@ export const nav = {
   call: `Call ${site.phone.display}`,
   menu: "Menu",
   home: `${site.name} home`,
+  label: "Main",
+
 } as const
 
 export const actions = {
@@ -114,6 +117,8 @@ export const hero = {
     ],
     status: "Booked at G-88",
   },
+  /** Decorative screens on the CSS fold (aria-hidden). */
+  fold: { time: "11:00", date: "Tuesday, 28 October", network: "5G" },
 } as const
 
 export type Service = {
@@ -304,6 +309,7 @@ export const footer = {
     { label: "FAQ", href: "/faq" },
     // Warranty page publishes only once Adnan confirms terms
   ],
+  directions: "Directions on Google Maps",
   legalLinks: [
     { label: "Privacy", href: "/privacy" },
     { label: "Terms", href: "/terms" },
@@ -332,6 +338,8 @@ export const chat = {
   greeting: "Assalam o alaikum. Ask about your phone's fault, our hours or how to find G-88.",
   fallback: `Sorry, I can't answer right now. WhatsApp or call us on ${site.phone.display}.`,
   launcher: "Ask a question",
+  // ponytail: placeholder sheet until the assistant ships in Phase 6
+  placeholder: `The assistant is on its way. For now, WhatsApp or call us on ${site.phone.display}.`,
 } as const
 
 /** Labels for UI chrome and screen readers. */

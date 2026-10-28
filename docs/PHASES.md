@@ -48,3 +48,18 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 ### 2026-10-28 · Phase 1 update: typeface
 - Decided: the website sets everything in Google Sans Flex (one variable file with the opsz axis, weights 400–800), replacing Archivo and Inter. Chosen over Roboto for warmth and readability; Google Sans (non-Flex) stops at 700, below the 800 headlines. Logo wordmark and print kit keep Archivo. Recorded in `DESIGN.md` Website Overrides.
 - Note: next/font has no metric overrides for this family, so there is no size-adjusted fallback (small swap shift possible on first load). Preloaded Latin file is about 136 KB.
+
+### 2026-10-28 · Phase 3: nav, hero, chrome
+- Shipped:
+  - Nav (`src/components/nav.tsx`): top bar (logo and name, glass pill of links, phone button); after 80px it gathers into a centred glass island with Motion `layout` (spring, no bounce). Phones: logo, call icon, menu; hides on scroll down, returns on scroll up. Repairs opens a dropdown of the 8 repairs plus "All repairs". Mobile menu is a Sheet.
+  - Hero (`hero.tsx`): inset panel, copy column, Book a visit and WhatsApp, phone, address and live `OpenStatus` (Asia/Karachi from `site.hours`, Friday break; logic in `src/lib/hours.ts`, checked by `node scripts/check-hours.mjs`). The h1 never animates; the rest rises in with an 80 ms CSS stagger.
+  - `Fold3D`: the mock's CSS fold ported as-is (CSS in `globals.css`, fixed `--device-*` tokens so the phone looks the same in light and dark). aria-hidden; open and still under reduced motion.
+  - `StickyBar` (phones, glass, after the hero), `ChatLauncher` (desktop/tablet, glass) opening a placeholder sheet until Phase 6. `CtaBand` and `Footer` per the PRD. Reveal on scroll for band and footer content; Lenis as in Phase 1.
+  - Site chrome lives in the `src/app/(site)/layout.tsx` route group, so `/dev` pages get none.
+  - Motion features (`domMax`, for layout) load async on idle via `src/lib/motion-features.ts`.
+  - Button gained an `inverse` variant for ink bands. Screenshots: `design/phase-3/`.
+- Decided: a chevron on Repairs to signal the dropdown (not in the mock). Ameer pre-approved this phase while away; screens wait for his review.
+- Left / known gaps:
+  - Lighthouse mobile (local static build, brotli): Performance 76–86 simulated, 94 with applied throttling; LCP is the h1 (3.3–3.7 s simulated, 2.3 s applied); CLS 0; Accessibility 100, SEO 100, Best Practices 96. The 95 target is not met. Cause is CPU (document parse/layout plus hydration put JS on the LCP path), not one component: stripping JS scores 100, and removing nav, floating bars, reveals, glass, fold or font one at a time did not move it. The framework-only 404 page scores 98. Fix in Phase 9 at the latest.
+  - Initial JS: react-dom plus the Next runtime alone are about 157 KB gzip, so the 120 KB budget in CLAUDE.md cannot be met with this stack; Phase 3 adds about 25 KB. The budget needs restating.
+  - Best Practices 96: links prefetch routes that do not exist yet (`/book`, `/repairs/*`), logging 404s until Phases 5 and 7.
