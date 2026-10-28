@@ -49,12 +49,13 @@ pnpm build        # static export to out/ (must pass before any commit)
 pnpm start        # next start (dev parity only; production is the static export)
 pnpm lint         # eslint --max-warnings 0 (includes the no-raw-hex / no-arbitrary-value / no-literal-copy rules)
 pnpm typecheck    # next typegen && tsc --noEmit (typegen writes the route types such as LayoutProps)
+pnpm palette      # snapshot /dev/kitchen-sink into design/palette.html (needs pnpm dev running)
 pnpm test:e2e     # (added in Phase 9) Playwright + axe
 pnpm lhci         # (added in Phase 9) Lighthouse CI against the production build
 pnpm preview      # (added in Phase 5) wrangler dev: the static export plus the Worker, as production runs it
 ```
 Deploys: Cloudflare Workers Builds deploys `main` on push.
-Keep this list in sync with `package.json`. The colour reference is `design/palette.html`; it mirrors `src/app/globals.css`, so change both together.
+Keep this list in sync with `package.json`. `pnpm palette` (with `pnpm dev` running) regenerates `design/palette.html`, an offline snapshot of the kitchen sink with a light/dark/auto switch. Re-run it whenever tokens or primitives change.
 
 ## How work happens here
 

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "palette": "node scripts/palette.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
