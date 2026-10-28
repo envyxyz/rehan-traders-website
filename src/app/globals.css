@@ -295,6 +295,11 @@
   }
 }
 
+/* BeforeAfter: the "before" photo shows left of the handle (--pos set by the slider). */
+@utility clip-before {
+  clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+
 /* ---------- Fold3D: CSS 3D Galaxy Z Fold (hero). Closed on load, opens into a V facing the copy. ---------- */
 @layer components {
   .fold-stage {

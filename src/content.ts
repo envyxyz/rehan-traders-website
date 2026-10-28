@@ -69,13 +69,35 @@ export const site = {
 } as const
 
 // Typed in by hand (static site, no Places API). Update rating, count and asOf together.
+// Read from the public listing on 28 Oct 2026 (signed out): Google shows only 3 reviews and no sort
+// or exact dates without signing in, so `date` is Google's relative date as of `asOf`.
 export const reviews = {
   rating: 4.9,
-  count: 47,
-  asOf: "2026-10-23",
+  count: 49,
+  asOf: "2026-10-28",
+  asOfLabel: "28 October 2026",
   url: site.mapsUrl, // TODO(adnan): confirm the Google reviews link (needs listing access)
-  // TODO(adnan): confirm which reviews to show; copy text, first name and date exactly from Google
-  items: [] as { author: string; date: string; rating: number; text: string }[],
+  // TODO(adnan): confirm the picks and add the 2 most recent (needs a signed-in view). Text copied exactly.
+  items: [
+    {
+      author: "Hassnain T.",
+      date: "5 months ago",
+      rating: 5,
+      text: "I recently got my phone repair. Very professional extremely happy with the services of Rehan Trader",
+    },
+    {
+      author: "Haadi O.",
+      date: "6 months ago",
+      rating: 5,
+      text: "Mr Rehan was very honest and helped me fixed my andriod s22 ultra which was ocean water damaged. He is expert in iphone so he recommended me to proper person and didn't charge me anything. My phone data was recovered.",
+    },
+    {
+      author: "Zunair K.",
+      date: "4 months ago",
+      rating: 5,
+      text: "I repaired my fold4 blank display.Good job",
+    },
+  ] as { author: string; date: string; rating: number; text: string }[],
 } as const
 
 export const nav = {
@@ -101,6 +123,7 @@ export const actions = {
   directions: "Directions",
   allRepairs: "All repairs",
   readReviews: (count: number) => `Read all ${count} on Google`,
+  allQuestions: "All questions",
 } as const
 
 export const hero = {
@@ -129,13 +152,14 @@ export type Service = {
   faults: string[]
   /** Rupees. Shown only when priceMode is "from". */
   priceFrom?: number
+  /** Phase 2 image name: public/images/<image>-<width>.avif|webp */
   image: string
   alt: string
   faq: { q: string; a: string }[]
   lead?: boolean
 }
 
-// Images arrive in Phase 2 (public/images). Prices stay unset while priceMode is "quote".
+// Images arrive in Phase 2 (public/images); until then cards show a placeholder surface. Prices stay unset while priceMode is "quote".
 export const services: Service[] = [
   {
     slug: "touch-glass-replacement",
@@ -143,7 +167,7 @@ export const services: Service[] = [
     short: "Cracked glass replaced on its own. Your original display stays.",
     long: "We separate the cracked top glass from the display under heat and vacuum, fit new glass and laminate it back. The display underneath is the one your phone came with.",
     faults: ["Cracked glass", "Scratched glass", "Touch not working"],
-    image: "/images/glass-separation.jpg",
+    image: "glass-separation",
     alt: "Technician separating cracked glass from a phone display at the bench",
     faq: [],
     lead: true,
@@ -154,7 +178,7 @@ export const services: Service[] = [
     short: "Outer glass, inner screen and hinge for every Fold and Flip.",
     long: "Fold and Flip outer glass, inner panel and hinge repairs. We try to recover the damaged panel first and replace it only when it cannot be saved.",
     faults: ["Outer glass", "Inner screen", "Hinge", "Blank display", "Lines on screen"],
-    image: "/images/fold-inner-panel.jpg",
+    image: "fold-inner-panel",
     alt: "Galaxy Z Fold opened on the bench with its inner panel exposed",
     faq: [],
     lead: true,
@@ -165,7 +189,7 @@ export const services: Service[] = [
     short: "Screen, back glass, Face ID, battery and charging.",
     long: "iPhone screens, back glass, Face ID, batteries, cameras and charging faults, fixed at the open bench.",
     faults: ["Screen", "Back glass", "Face ID", "Battery", "Charging", "Camera"],
-    image: "/images/iphone-back-glass.jpg",
+    image: "iphone-back-glass",
     alt: "iPhone with its back glass being replaced",
     faq: [],
   },
@@ -175,7 +199,7 @@ export const services: Service[] = [
     short: "Lines, black, green or flickering screens replaced.",
     long: "When the display itself is damaged: lines, pink or green screens, black or blank displays and flicker.",
     faults: ["Lines on screen", "Black or blank display", "Green or white screen", "Flickering"],
-    image: "/images/screen-replacement.jpg",
+    image: "screen-replacement", // no Phase 2 job yet: shows the placeholder,
     alt: "Phone with its display panel removed on the bench",
     faq: [],
   },
@@ -185,7 +209,7 @@ export const services: Service[] = [
     short: "Batteries that drain fast and ports that will not charge.",
     long: "Battery replacement and charging port repair. Swollen batteries are removed and disposed of safely.",
     faults: ["Battery drains fast", "Swollen battery", "Not charging", "Loose charging port"],
-    image: "/images/battery-swap.jpg",
+    image: "battery-swap",
     alt: "Phone battery being replaced at the bench",
     faq: [],
   },
@@ -195,7 +219,7 @@ export const services: Service[] = [
     short: "Wet or dead phones cleaned, repaired and your data recovered.",
     long: "Liquid-damaged and dead phones are opened, cleaned and repaired at board level, with your data recovered first where possible.",
     faults: ["Water damage", "Phone will not turn on", "Data recovery"],
-    image: "/images/wet-board-cleaning.jpg",
+    image: "wet-board-cleaning",
     alt: "Phone board being cleaned after water damage",
     faq: [],
   },
@@ -205,7 +229,7 @@ export const services: Service[] = [
     short: "Board-level faults found and fixed under the microscope.",
     long: "Motherboard faults, network and SIM faults, Face ID and no-power faults diagnosed and repaired under the microscope.",
     faults: ["No power", "No network or SIM", "Face ID", "Camera", "Vibration"],
-    image: "/images/microscope-bench.jpg",
+    image: "board-microscope",
     alt: "Microscope over a phone board at the repair bench",
     faq: [],
   },
@@ -215,7 +239,7 @@ export const services: Service[] = [
     short: "Tablet glass, screens, batteries and charging.",
     long: "iPad and tablet glass, screens, batteries and charging repairs. Very old, obsolete tablets are not taken in.",
     faults: ["Cracked glass", "Screen", "Battery", "Charging"],
-    image: "/images/tablet-screen.jpg",
+    image: "ipad-screen",
     alt: "Tablet screen being repaired at the bench",
     faq: [],
   },
@@ -283,6 +307,13 @@ export const visit = {
   directions: "Ground floor of Hafeez Center, Main Boulevard, Gulberg III.", // TODO(adnan): confirm walking directions to G-88
   mapAlt: "Map showing Rehan Traders at Hafeez Center, Lahore",
   today: "Today",
+  photo: "storefront",
+  photoAlt: "Shopfront of Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore",
+  hoursTitle: "Hours",
+  hoursRange: (open: string, close: string) => `${open} to ${close}`,
+  hoursBreak: (from: string, to: string) => `break ${from} to ${to}`,
+  closed: "Closed",
+  courier: "Outside Lahore? Send it by courier. Message us on WhatsApp first.", // TODO(adnan): courier terms (PRD §12 q4)
 } as const
 
 export const estimate = {
@@ -290,6 +321,31 @@ export const estimate = {
   label: "Describe the problem",
   placeholder: "My Fold's inner screen has a black line",
   submit: "Get an estimate",
+} as const
+
+/** Homepage section copy, in PRD §5 order. */
+export const home = {
+  repairs: { title: "What we repair" },
+  beforeAfter: {
+    title: "Same phone, new glass.",
+    // TODO(adnan): real before-and-after pair from a finished job (PRD §12 q6). Placeholder images until then.
+    caption: "Example pair, to be replaced by a real job: cracked front glass, replaced with the display kept.",
+    before: { image: "placeholder-before", alt: "Placeholder: phone with shattered front glass before repair", label: "Before" },
+    after: { image: "placeholder-after", alt: "Placeholder: the same phone with new front glass after repair", label: "After" },
+    slider: "Before and after comparison",
+    valueText: (after: number) => `${after}% after, ${100 - after}% before`,
+  },
+  process: {
+    title: "How a repair works",
+    jobCardAlt: "The Rehan Traders repair job card, with fields for the customer, device and fault",
+    sealAlt: "Rehan Traders tamper seal",
+  },
+  reviews: {
+    title: "What customers say",
+    summary: (count: number) => `on Google from ${count} reviews`,
+    asOf: (date: string) => `As of ${date}`,
+  },
+  faq: { title: "Questions" },
 } as const
 
 export const cta = {

@@ -63,3 +63,29 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - Lighthouse mobile (local static build, brotli): Performance 76–86 simulated, 94 with applied throttling; LCP is the h1 (3.3–3.7 s simulated, 2.3 s applied); CLS 0; Accessibility 100, SEO 100, Best Practices 96. The 95 target is not met. Cause is CPU (document parse/layout plus hydration put JS on the LCP path), not one component: stripping JS scores 100, and removing nav, floating bars, reveals, glass, fold or font one at a time did not move it. The framework-only 404 page scores 98. Fix in Phase 9 at the latest.
   - Initial JS: react-dom plus the Next runtime alone are about 157 KB gzip, so the 120 KB budget in CLAUDE.md cannot be met with this stack; Phase 3 adds about 25 KB. The budget needs restating.
   - Best Practices 96: links prefetch routes that do not exist yet (`/book`, `/repairs/*`), logging 404s until Phases 5 and 7.
+
+### 2026-10-28 · Phase 4: homepage sections
+- Shipped (PRD §5 order, between the hero and the CTA band, all in `src/components/home.tsx`):
+  - Repairs: `ServiceCard` (image, title, two-line description, `PriceLine`, "Book this repair" to `/book?service=SLUG`). Touch glass and Fold/Flip are the larger lead cards; "All repairs" link.
+  - `Img` (`src/components/img.tsx`, server only): `<picture>` with AVIF/WebP `srcset` from Phase 2's `public/images/<name>-<640|960|1280|1920>.avif|webp`. It checks the files at build time and renders a quiet concrete placeholder when they are missing (all of them today). Service `image` fields now hold Phase 2 names.
+  - `BeforeAfter`: a native range input over the two images (slider role, aria value text, drag and arrow keys), handle follows it; images lazy. Uses the placeholder pair names until a real job exists.
+  - How a repair works: four steps with Signal Red numbers, beside a crop of the real job card (fields only, no red number) and the tamper seal from `../growth/Brand/Print/`, exported to `public/art/` (WebP, about 18 KB total).
+  - Reviews: rating, count, "As of 28 October 2026", "Read all 49 on Google" (new tab), three review cards. No AggregateRating.
+  - "Not sure what's wrong?": one labelled input, plain GET form to `/estimate?q=` (no JS).
+  - Visit: storefront image slot, address with Ground Floor, `OpenStatus`, `HoursTable` (today's row gets the 4px red bar and `aria-current` on the client; Friday break, public holidays line), Directions to the Google Maps listing, courier line linking to WhatsApp.
+  - FAQ: top 5 in the Accordion, "All questions" link. Then the CTA band.
+  - `weekdayIn()` added to `src/lib/hours.ts`, with a check in `scripts/check-hours.mjs`.
+- Reviews data: read from the public Google listing on 28 Oct 2026, signed out. It now shows **4.9 from 49 reviews** (was 47), so `reviews.count` is 49 and the hero proof row says 49. Signed out, Google shows only 3 reviews, with no sort and only relative dates, so `content.ts` has those 3, copied exactly, with Google's relative date ("5 months ago") as of `asOf`. Not the "5 most recent".
+- Lighthouse mobile on `/` (local static build, brotli server): simulated Performance 80, 81, 86 (LCP 2.9 to 3.3 s, the h1; TBT 360 to 390 ms; CLS 0); with applied throttling 88 and 92 (LCP 2.3 s). Accessibility 100, SEO 100, Best Practices 96 in every run. Same as Phase 3: CPU bound, not these sections. Tried `content-visibility: auto` on the new sections: style and layout time fell about 170 ms but the score did not move, so it was reverted. Best Practices 96 is still the console 404s from prefetching routes that do not exist yet.
+- Left:
+  - Item 8 (move `public/images/alt.json` into `content.ts`) waits for Phase 2: `alt.json` does not exist. Alt text for the cards and storefront is already in `content.ts`.
+  - Every image is a placeholder until Phase 2 exports; `screen-replacement` has no Phase 2 job at all.
+  - Real before-and-after pair (PRD §12 q6); the caption says it is an example.
+  - Two more reviews and the "most recent" order need a signed-in view of the listing (Ameer or Adnan).
+  - Courier terms (PRD §12 q4); the courier line only says to message on WhatsApp first.
+  - Lighthouse Performance 95 (Phase 9 at the latest), as in Phase 3.
+- For Ameer's review:
+  - Haadi O.'s review says "Mr Rehan". It is quoted exactly, but nobody called Rehan works there; keep, or swap it once more reviews are visible?
+  - Zunair K.'s review ends in emoji and "…" on Google; the card shows the text without them.
+  - Design calls made conservatively: the steps sit beside the print-kit art instead of four cards; reviews sit on the panel tone and the estimate box is a card on paper, so neighbouring bands alternate; the Visit view's one red element is today's hours bar; the "21st" and taste skills were not run this phase (no new component pulled).
+- Screens: `design/phase-4/` (full page, 1440 and 390, light and dark). Ameer was away and pre-approved; they wait for his review.

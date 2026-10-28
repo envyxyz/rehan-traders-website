@@ -17,6 +17,10 @@ export const formatTime = (hhmm: string) => {
 
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
+/** Day of the week (0 = Sunday) at `now` in `timeZone`. */
+export const weekdayIn = (now: Date, timeZone: string) =>
+  weekdays.indexOf(new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short" }).format(now))
+
 /** Open or closed at `now`, in the shop's time zone. Public holidays are not known here. */
 export function openStatus(now: Date, hours: Hours, copy: StatusCopy) {
   const parts = new Intl.DateTimeFormat("en-US", {
