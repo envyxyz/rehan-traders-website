@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Rehan Traders palette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ponytail: reference page only. Values mirror src/app/globals.css; change them there first, then here. */
+  :root { --paper: #f5f5f2; --card: #ffffff; --ink: #0e0e0e; --steel: #5e5e5a; --hairline: #d9d9d4; --signal: #d7141a; }
+  @media (prefers-color-scheme: dark) { :root { --paper: #0b0b0b; --card: #1e1e1d; --ink: #f5f5f2; --steel: #a4a49f; --hairline: #2e2e2c; --signal: #ff4a4f; } }
+  * { box-sizing: border-box; margin: 0; }
+  body { font: 400 1rem/1.6 Inter, -apple-system, "Segoe UI", sans-serif; background: var(--paper); color: var(--ink); padding: clamp(1rem, 4vw, 3rem); }
+  ::selection { background: var(--signal); color: #fff; }
+  header { max-width: 70rem; margin: 0 auto 2.5rem; }
+  header i { display: block; width: 2.75rem; height: .25rem; background: var(--signal); margin-bottom: 1.25rem; }
+  h1 { font: 800 clamp(2rem, 1.6rem + 2vw, 3rem)/1.04 Archivo, Arial, sans-serif; letter-spacing: -0.025em; }
+  header p { color: var(--steel); margin-top: .75rem; max-width: 40rem; }
+  h2 { font: 600 1.125rem/1.4 Archivo, Arial, sans-serif; max-width: 70rem; margin: 2.5rem auto 1rem; }
+  .grid { max-width: 70rem; margin: 0 auto; display: grid; gap: .75rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+  .tok { background: var(--card); border: 1px solid var(--hairline); border-radius: 1.125rem; overflow: hidden; }
+  .sw { display: grid; grid-template-columns: 1fr 1fr; height: 5.5rem; }
+  .sw span { display: flex; align-items: flex-end; padding: .5rem .625rem; font: 500 .75rem/1 Inter, sans-serif; }
+  .meta { padding: .875rem 1rem 1rem; }
+  .meta b { font: 600 .9375rem/1.3 Archivo, Arial, sans-serif; }
+  .meta code { display: block; font: 500 .75rem/1.5 ui-monospace, Consolas, monospace; color: var(--steel); margin-top: .125rem; }
+  .meta code span { white-space: nowrap; }
+  .meta p { font-size: .8125rem; line-height: 1.45; color: var(--steel); margin-top: .5rem; }
+  footer { max-width: 70rem; margin: 3rem auto 0; font-size: .8125rem; color: var(--steel); }
+</style>
+</head>
+<body>
+<header>
+  <i></i>
+  <h1>Rehan Traders palette</h1>
+  <p>Every colour token on the website. Each swatch shows light (left) and dark (right). The page itself follows your device theme. Source of truth: <code>src/app/globals.css</code>.</p>
+</header>
+<main id="out"></main>
+<footer>Signal Red appears once per view, as a line or a number. Dark values follow the Website Overrides in DESIGN.md; concrete, band and the semantic colours in dark are Phase 1 additions.</footer>
+<script>
+  // [token, light, dark, role]
+  const groups = {
+    Surfaces: [
+      ["paper", "#f5f5f2", "#0b0b0b", "Page floor everywhere."],
+      ["panel", "#e9e9e4", "#151514", "Inset hero panel, quiet bands."],
+      ["card", "#ffffff", "#1e1e1d", "Cards, forms, popovers, sheets."],
+      ["concrete", "#e3e3df", "#262625", "Chips, table heads, pressed line buttons."],
+      ["hairline", "#d9d9d4", "#2e2e2c", "1px borders on cards and inputs."],
+    ],
+    Text: [
+      ["ink", "#0e0e0e", "#f5f5f2", "Headlines, key text, icons."],
+      ["body", "#1b1b1b", "#e6e6e2", "Running text."],
+      ["steel", "#5e5e5a", "#a4a49f", "Secondary text, labels, placeholders."],
+      ["steel-soft", "#9a9a96", "#74746f", "Fine print, disabled, scrollbar thumb."],
+    ],
+    Actions: [
+      ["action", "#0e0e0e", "#f5f5f2", "Primary (ink) buttons. Inverts to paper in dark."],
+      ["action-active", "#2b2b2b", "#d9d9d4", "Pressed primary button."],
+      ["on-action", "#f5f5f2", "#0e0e0e", "Text and icons on primary buttons."],
+      ["whatsapp", "#25d366", "#25d366", "WhatsApp buttons only. Text on it is ink."],
+    ],
+    "Signal and status": [
+      ["signal", "#d7141a", "#ff4a4f", "Signal Red: one rule, job number or badge per view."],
+      ["signal-active", "#b01015", "#ff6b6f", "Pressed state for the rare red control."],
+      ["star", "#e8a500", "#e8a500", "Google rating stars."],
+      ["open", "#2e9e5b", "#3fbf74", "Open-now dot."],
+      ["success", "#2e7d4f", "#4caf7a", "Request sent, repair ready."],
+      ["warning", "#b7791f", "#e0a43c", "Holiday and Friday prayer notices."],
+      ["error", "#9e1b1b", "#f07a7a", "Form validation. Never decoration."],
+    ],
+    "Ink bands": [
+      ["band", "#0e0e0e", "#151514", "CTA band and footer."],
+      ["band-elevated", "#1b1b1b", "#1e1e1d", "Cards inside ink bands."],
+      ["on-band", "#f5f5f2", "#f5f5f2", "Headings on ink bands."],
+      ["on-band-soft", "#b9b9b5", "#b9b9b5", "Body text on ink bands."],
+    ],
+  };
+  // Pick readable label colour for each swatch (relative luminance).
+  const lum = (h) => { const [r, g, b] = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((c) => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const label = (h) => `<span style="background:${h};color:${lum(h) > 0.4 ? "#0e0e0e" : "#f5f5f2"}">${h}</span>`;
+  document.getElementById("out").innerHTML = Object.entries(groups).map(([name, toks]) =>
+    `<h2>${name}</h2><div class="grid">${toks.map(([t, l, d, role]) =>
+      `<div class="tok"><div class="sw">${label(l)}${label(d)}</div><div class="meta"><b>${t}</b><code>${[`bg-${t}`, `text-${t}`, `var(--${t})`].map((c) => `<span>${c}</span>`).join(" · ")}</code><p>${role}</p></div></div>`).join("")}</div>`).join("");
+</script>
+</body>
+</html>

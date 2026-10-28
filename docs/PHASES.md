@@ -17,3 +17,30 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 - Decided: hosting is Cloudflare Workers free plan (static export + a small Worker for `/api/*`); Vercel dropped. No Google Cloud billing, so no Places API or Static Maps: reviews are typed into `content.ts` with an as-of date, and `/visit` gets a tap-to-load Google Maps embed. Domain stays at Hostinger; nameservers move to Cloudflare at go-live. `priceMode` launches as `'quote'`. Adnan's answers recorded in `docs/PRD.md` §11.
 - Shipped: shot list with AI example photos (`design/shot-examples/`, plan PDF). Plan Artifact prompts updated for the above. Phase 1 (running) told to build for static export.
 - Left: warranty, turnaround, registered name/NTN, courier terms, "iPhone Duo" check (`docs/PRD.md` §12); real photos from the shot list.
+
+### 2026-10-28 · Phase 1: foundation and design system
+- Shipped:
+  - Next.js 16.4 (App Router, TypeScript strict, Tailwind 4.3, ESLint, `src/`, `@/*`) on pnpm, built as a static export to `out/`.
+  - Archivo and Inter via `next/font`, one variable file each.
+  - Tokens in `src/app/globals.css`. Tailwind's default colours, sizes, radii, shadows and easings are switched off, so only our tokens exist. Covers light and dark palettes, a fluid type scale (390 to 1440), section spacing, radii, one floating shadow, the `glass` material, motion tokens, and themed selection, focus and scrollbars.
+  - shadcn primitives, restyled. Button has variants ink, line, whatsapp, glass and icon, sizes md and lg, and the arrow chip.
+  - Composed basics: Container, Section, Heading, Text, Chip, PriceLine, Icon, WhatsAppIcon.
+  - `src/content.ts` with every unconfirmed value marked `TODO(adnan)`.
+  - Motion: LazyMotion, MotionConfig, Reveal, and Lenis for mouse wheels only.
+  - ESLint rules against raw colours, arbitrary values and literal copy. Each rule was tested against a deliberate violation.
+  - `/dev/kitchen-sink`: noindex, and a 404 in the export.
+  - `design/palette.html`, a colour reference page.
+- Decided:
+  - The approved mock wins over DESIGN.md for panel `#E9E9E4` and muted `#5E5E5A`, for AA contrast.
+  - Dark mode fills the gaps in the overrides: concrete `#262625`, ink band `#151514`, lighter semantic colours.
+  - Placeholders use steel, for contrast.
+  - shadcn's "accent" means hover fill. Signal Red is called `signal`.
+  - "G-88" in headings uses a non-breaking hyphen.
+  - JS mirrors of the CSS tokens (Motion, theme colour) live in `src/lib/tokens.ts`.
+  - Sheets use a CSS slide for now. The Motion spring comes with the booking, menu and chat phases.
+  - Static export per the Cloudflare decision: no `cacheComponents`, images unoptimized.
+- Left:
+  - Real images (Phase 2).
+  - `/api/*` dev rewrite to the Worker (Phase 5).
+  - `test:e2e` and `lhci` scripts (Phase 9).
+  - The `TODO(adnan)` items in `content.ts`: address line, reviews link and picks, device lists, warranty, walking directions, registered name/NTN.

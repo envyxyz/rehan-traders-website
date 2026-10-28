@@ -1,0 +1,310 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "lenis/dist/lenis.css";
+
+/*
+  Rehan Traders tokens. Source: DESIGN.md front matter + Website Overrides, and the
+  approved mock (design/mock/hero.html) where the two differ (panel, muted, star).
+  Raw colour values live here and nowhere else. Theme follows the device; no toggle.
+*/
+
+/* ---------- Palette: light ---------- */
+:root {
+  color-scheme: light dark;
+
+  --paper: #f5f5f2;          /* page floor */
+  --panel: #e9e9e4;          /* inset hero panel, quiet bands (mock value) */
+  --card: #ffffff;           /* cards, forms, popovers */
+  --concrete: #e3e3df;       /* chips, table heads, pressed line buttons */
+  --hairline: #d9d9d4;       /* 1px borders */
+  --ink: #0e0e0e;            /* headlines, key text, icons */
+  --body: #1b1b1b;           /* running text */
+  --steel: #5e5e5a;          /* secondary text, labels (mock value, AA on panel) */
+  --steel-soft: #9a9a96;     /* fine print, disabled, scrollbar thumb */
+
+  --action: #0e0e0e;         /* primary (ink) buttons */
+  --action-active: #2b2b2b;  /* pressed: one step lighter on black */
+  --on-action: #f5f5f2;
+
+  --signal: #d7141a;         /* Signal Red: one line or number per view */
+  --signal-active: #b01015;
+  --on-signal: #ffffff;
+
+  --whatsapp: #25d366;       /* WhatsApp buttons only */
+  --on-whatsapp: #0e0e0e;
+  --star: #e8a500;           /* Google stars */
+  --open: #2e9e5b;           /* open-now dot */
+
+  --success: #2e7d4f;
+  --warning: #b7791f;
+  --error: #9e1b1b;          /* darker than Signal Red so errors never read as decoration */
+
+  --band: #0e0e0e;           /* ink bands: CTA, footer */
+  --band-elevated: #1b1b1b;  /* cards inside ink bands */
+  --on-band: #f5f5f2;
+  --on-band-soft: #b9b9b5;
+
+  --glass: rgb(255 255 255 / 0.72);
+  --glass-rim: rgb(255 255 255 / 0.8);
+  --glass-depth: rgb(0 0 0 / 0.3);
+  --scrim: rgb(14 14 14 / 0.32);   /* overlay behind dialogs and sheets */
+  --floor: rgb(14 14 14 / 0.22);   /* soft floor shadow under floating objects */
+  --float: rgb(14 14 14 / 0.45);   /* the one floating shadow */
+}
+
+/* ---------- Palette: dark (Website Overrides) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0b0b0b;
+    --panel: #151514;
+    --card: #1e1e1d;
+    --concrete: #262625;       /* not in the overrides: one step above card */
+    --hairline: #2e2e2c;
+    --ink: #f5f5f2;
+    --body: #e6e6e2;
+    --steel: #a4a49f;
+    --steel-soft: #74746f;
+
+    --action: #f5f5f2;         /* primary buttons invert to paper */
+    --action-active: #d9d9d4;
+    --on-action: #0e0e0e;
+
+    --signal: #ff4a4f;         /* lightened only on dark screens */
+    --signal-active: #ff6b6f;
+    --on-signal: #0b0b0b;
+
+    --open: #3fbf74;
+    --success: #4caf7a;
+    --warning: #e0a43c;
+    --error: #f07a7a;
+
+    --band: #151514;           /* ink band sits one step above the dark page */
+    --band-elevated: #1e1e1d;
+
+    --glass: rgb(30 30 29 / 0.6);
+    --glass-rim: rgb(255 255 255 / 0.16);
+    --glass-depth: rgb(0 0 0 / 0.5);
+    --scrim: rgb(0 0 0 / 0.55);
+    --floor: rgb(0 0 0 / 0.6);
+    --float: rgb(0 0 0 / 0.7);
+  }
+}
+
+/* ---------- shadcn variables, mapped onto ours ---------- */
+:root {
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card-foreground: var(--ink);
+  --popover: var(--card);
+  --popover-foreground: var(--ink);
+  --primary: var(--action);
+  --primary-foreground: var(--on-action);
+  --secondary: var(--concrete);
+  --secondary-foreground: var(--ink);
+  --muted: var(--concrete);
+  --muted-foreground: var(--steel);
+  --accent: var(--concrete);         /* shadcn "accent" = hover fill, not Signal Red */
+  --accent-foreground: var(--ink);
+  --destructive: var(--error);
+  --border: var(--hairline);
+  --input: var(--hairline);
+  --ring: var(--ink);
+}
+
+/* ---------- Tailwind theme: only our tokens exist ---------- */
+@theme {
+  --color-*: initial;
+  --text-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --ease-*: initial;
+  --font-*: initial;
+
+  --font-display: var(--font-archivo), Arial, sans-serif;
+  --font-sans: var(--font-inter), -apple-system, "Segoe UI", sans-serif;
+
+  /* Fluid type: phone (390px) to desktop (1440px), rem + clamp. */
+  --text-display-xl: clamp(2.25rem, 1.646rem + 2.476vw, 3.875rem);
+  --text-display-xl--line-height: 1.02;
+  --text-display-xl--letter-spacing: -0.025em;
+  --text-display-xl--font-weight: 800;
+  --text-display-lg: clamp(2rem, 1.721rem + 1.143vw, 2.75rem);
+  --text-display-lg--line-height: 1.04;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-display-lg--font-weight: 800;
+  --text-display-md: clamp(1.5rem, 1.361rem + 0.571vw, 1.875rem);
+  --text-display-md--line-height: 1.15;
+  --text-display-md--letter-spacing: -0.017em;
+  --text-display-md--font-weight: 700;
+  --text-title-lg: clamp(1.25rem, 1.204rem + 0.19vw, 1.375rem);
+  --text-title-lg--line-height: 1.3;
+  --text-title-lg--letter-spacing: -0.01em;
+  --text-title-lg--font-weight: 700;
+  --text-title-md: clamp(1.0625rem, 1.039rem + 0.095vw, 1.125rem);
+  --text-title-md--line-height: 1.4;
+  --text-title-md--font-weight: 600;
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.6;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.6;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--font-weight: 500;
+  --text-button: 1rem;
+  --text-button--line-height: 1;
+  --text-button--font-weight: 700;
+  --text-nav: 0.875rem;
+  --text-nav--line-height: 1;
+  --text-nav--font-weight: 600;
+
+  /* Spacing: Tailwind's 4px base (p-1 = 4px) plus the section rhythm, 56px phone to 88px desktop. */
+  --spacing: 0.25rem;
+  --spacing-section: clamp(3.5rem, 2.757rem + 3.048vw, 5.5rem);
+  --spacing-sheet: 92svh;      /* bottom sheet max height */
+  --container-content: 70rem;  /* 1120px */
+  --container-panel: 96rem;    /* hero panel cap, 1536px */
+
+  /* Radii: 18px cards, 28px panels, pills for controls. */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.125rem;
+  --radius-xl: 1.75rem;
+  --radius-pill: 9999px;
+
+  --shadow-float: 0 0.625rem 1.875rem -0.75rem var(--float);
+
+  /* Motion. JS mirrors these in src/lib/motion.ts. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);       /* reveals, copy entrances */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* the fold */
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);   /* nav hide/show, sheets */
+  --duration-press: 100ms;
+  --duration-fast: 200ms;
+  --duration-base: 350ms;
+  --duration-reveal: 700ms;
+  --duration-fold: 1400ms;
+
+  --animate-accordion-down: accordion-down var(--duration-fast) var(--ease-out);
+  --animate-accordion-up: accordion-up var(--duration-fast) var(--ease-out);
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-panel: var(--panel);
+  --color-card: var(--card);
+  --color-concrete: var(--concrete);
+  --color-hairline: var(--hairline);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-steel: var(--steel);
+  --color-steel-soft: var(--steel-soft);
+  --color-action: var(--action);
+  --color-action-active: var(--action-active);
+  --color-on-action: var(--on-action);
+  --color-signal: var(--signal);
+  --color-signal-active: var(--signal-active);
+  --color-on-signal: var(--on-signal);
+  --color-whatsapp: var(--whatsapp);
+  --color-on-whatsapp: var(--on-whatsapp);
+  --color-star: var(--star);
+  --color-open: var(--open);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-band: var(--band);
+  --color-band-elevated: var(--band-elevated);
+  --color-on-band: var(--on-band);
+  --color-on-band-soft: var(--on-band-soft);
+  --color-scrim: var(--scrim);
+  --color-floor: var(--floor);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* shadcn semantic names, so primitives resolve through our palette */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* ---------- Materials ---------- */
+/* Liquid glass: floating chrome only (nav island, bottom bar, chat launcher, sheets over photos). Never on body content, never glass on glass. */
+@utility glass {
+  background: var(--glass);
+  color: var(--ink);
+  -webkit-backdrop-filter: blur(2rem) saturate(160%);
+  backdrop-filter: blur(2rem) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 0 0 1px color-mix(in oklab, var(--glass-rim) 40%, transparent),
+    0 0.75rem 2rem -1rem var(--glass-depth);
+
+  @media (prefers-reduced-transparency: reduce) {
+    background: var(--card);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ---------- Base and browser surfaces ---------- */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scrollbar-color: var(--steel-soft) transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-paper font-sans text-body-md text-body antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply text-ink;
+  }
+  ::selection {
+    background: var(--signal);
+    color: var(--on-signal);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  ::-webkit-scrollbar {
+    width: 0.625rem;
+    height: 0.625rem;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--steel-soft);
+    border: 0.1875rem solid var(--paper);
+    border-radius: 9999px;
+  }
+  a {
+    text-underline-offset: 0.2em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
