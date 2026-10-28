@@ -1,0 +1,23 @@
+# deps and builds
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# env: only the example is committed
+.env*
+!.env.example
+
+# tooling output
+.vercel/
+playwright-report/
+test-results/
+.lighthouseci/
+.impeccable/review/
+.impeccable/mocks/
+*.log
+.DS_Store
+Thumbs.db

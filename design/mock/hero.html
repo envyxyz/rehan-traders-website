@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Hero mock v3 — Rehan Traders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ponytail: design mock only. Tokens mirror growth/Brand/DESIGN.md + dark extension; the build moves them to globals.css. */
+  :root {
+    --ink: #0E0E0E; --body: #1B1B1B; --muted: #5E5E5A; --paper: #F5F5F2; --panel: #E9E9E4; --card: #FFFFFF;
+    --red: #D7141A; --wa: #25D366; --star: #E8A500; --btn: #0E0E0E; --on-btn: #F5F5F2;
+    --glass: rgba(255,255,255,.72); --glass-rim: rgba(255,255,255,.8); --glass-text: #0E0E0E;
+    --floor: rgba(14,14,14,.22);
+    --display: "Archivo", Arial, sans-serif; --text: "Inter", -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --ink: #F5F5F2; --body: #E6E6E2; --muted: #A4A49F; --paper: #0B0B0B; --panel: #151514; --card: #1E1E1D;
+    --btn: #F5F5F2; --on-btn: #0E0E0E; --glass: rgba(30,30,29,.6); --glass-rim: rgba(255,255,255,.16); --glass-text: #F5F5F2;
+    --floor: rgba(0,0,0,.6);
+  } }
+  * { box-sizing: border-box; margin: 0; }
+  body { font: 400 1rem/1.6 var(--text); background: var(--paper); color: var(--body); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--red); color: #fff; }
+  a { color: inherit; }
+  svg { flex: none; }
+
+  .glass { background: var(--glass); color: var(--glass-text);
+    -webkit-backdrop-filter: blur(2rem) saturate(160%); backdrop-filter: blur(2rem) saturate(160%);
+    box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px color-mix(in oklab, var(--glass-rim) 40%, transparent), 0 .75rem 2rem -1rem rgba(0,0,0,.3); }
+  @media (prefers-reduced-transparency: reduce) { .glass { background: var(--card); backdrop-filter: none; } }
+
+  .nav { position: fixed; z-index: 10; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between;
+    padding: 1.75rem clamp(1.75rem, 4vw, 3.5rem) 0; transition: transform .35s cubic-bezier(.32,.72,0,1); }
+  .nav.hide { transform: translateY(-130%); }
+  .bar { flex: 1; display: flex; align-items: center; justify-content: space-between; gap: .25rem; }
+  .call { min-height: 2.375rem; font-size: .875rem; }
+  /* Island: after the hero top, logo + links + call gather into one centred glass pill. The build animates this with Motion layout. */
+  .nav.island { padding-top: .875rem; }
+  .nav.island .bar { flex: none; width: max-content; margin: 0 auto; padding: .3125rem .3125rem .3125rem .75rem; border-radius: 999px;
+    background: var(--glass); -webkit-backdrop-filter: blur(2rem) saturate(160%); backdrop-filter: blur(2rem) saturate(160%);
+    box-shadow: inset 0 1px 0 var(--glass-rim), inset 0 0 0 1px color-mix(in oklab, var(--glass-rim) 40%, transparent), 0 .75rem 2rem -1rem rgba(0,0,0,.3); }
+  .nav.island .links { background: none; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; }
+  .nav.island .name, .nav.island .num { display: none; }
+  .nav.island .call { width: 2.375rem; padding: 0; }
+  .nav.island .brand svg { width: 1.625rem; height: 1.625rem; }
+  .brand { display: flex; align-items: center; gap: .55rem; text-decoration: none; color: var(--ink); font: 800 1.125rem/1 var(--display); letter-spacing: -0.02em; }
+  .brand svg { width: 1.875rem; height: 1.875rem; }
+  .links { display: flex; align-items: center; gap: .125rem; padding: .3125rem; border-radius: 999px; }
+  .links a.l { padding: .55rem .8rem; border-radius: 999px; text-decoration: none; font: 600 .875rem/1 var(--display); }
+  .pill { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 2.75rem; padding: 0 1.125rem;
+    border-radius: 999px; font: 700 .9375rem/1 var(--display); text-decoration: none; border: 0; cursor: pointer; white-space: nowrap; }
+  .pill svg { width: 1.0625rem; height: 1.0625rem; }
+  .pill-ink { background: var(--btn); color: var(--on-btn); }
+  .pill-ink .arrow { display: grid; place-items: center; width: 1.875rem; height: 1.875rem; margin-right: -.6rem; border-radius: 999px; background: var(--on-btn); color: var(--btn); }
+  .pill-ink .arrow svg { width: .9375rem; height: .9375rem; }
+  .pill-wa { background: var(--wa); color: #0E0E0E; }
+  .pill-lg { min-height: 3.25rem; padding: 0 1.5rem; font-size: 1rem; }
+  .menu { display: none; width: 2.75rem; padding: 0; }
+
+  .hero { min-height: 100svh; padding: .75rem; display: flex; }
+  .panel { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 2rem;
+    background: var(--panel); border-radius: 1.75rem; padding: 7rem clamp(1.5rem, 5vw, 5rem) 3rem; max-width: 96rem; margin: 0 auto; overflow: hidden; }
+  .copy > * { animation: rise .7s cubic-bezier(.16,1,.3,1) both; }
+  .copy > :nth-child(2) { animation: none; } /* h1 paints at once: it is the LCP element */
+  .copy > :nth-child(3) { animation-delay: .08s; } .copy > :nth-child(4) { animation-delay: .16s; } .copy > :nth-child(5) { animation-delay: .24s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(.5rem); } }
+  .proof { display: flex; align-items: center; gap: .5rem; font: 500 .8125rem/1.2 var(--text); color: var(--muted); }
+  .stars { display: inline-flex; gap: .1rem; color: var(--star); }
+  .stars svg { width: .8125rem; height: .8125rem; }
+  .proof b { font: 700 .875rem/1 var(--display); color: var(--ink); }
+  h1 { margin-top: 1.125rem; font: 800 clamp(2.375rem, 1.5rem + 2.4vw, 3.875rem)/1.02 var(--display); letter-spacing: -0.025em; color: var(--ink); text-wrap: balance; max-width: 13ch; }
+  h1 .r { display: block; width: 2.75rem; height: .25rem; background: var(--red); margin-bottom: 1.25rem; }
+  .lede { margin-top: 1rem; max-width: 30rem; font-size: 1.0625rem; color: var(--muted); }
+  .ctas { margin-top: 1.75rem; display: flex; flex-wrap: wrap; gap: .625rem; }
+  .contact { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: .375rem 1.25rem; font: 500 .8125rem/1.4 var(--text); color: var(--muted); }
+  .contact span { display: inline-flex; align-items: center; gap: .375rem; }
+  .contact b { font: 700 .875rem/1 var(--display); color: var(--ink); }
+  .dot { width: .4375rem; height: .4375rem; border-radius: 999px; background: #2E9E5B; }
+
+  /* ---------- Galaxy Z Fold, pure CSS 3D. Closed on load, opens into a V facing the copy. ---------- */
+  .stage { position: relative; display: grid; place-items: center; height: min(36rem, 70svh); perspective: 110rem; }
+  .stage::after { content: ""; position: absolute; bottom: 6%; left: 50%; width: 46%; height: 1.5rem; translate: -50% 0;
+    background: radial-gradient(closest-side, var(--floor), transparent); filter: blur(.4rem); }
+  .fold { --w: clamp(9.5rem, 6rem + 7vw, 13.5rem); --h: calc(var(--w) * 2.25); --l: 180deg; --r: 0deg;
+    position: relative; width: calc(var(--w) * 2); height: var(--h); transform-style: preserve-3d;
+    transform: rotateY(14deg) rotateX(5deg); animation: hover 6s ease-in-out 2.4s infinite; }
+  .half { position: absolute; top: 0; width: var(--w); height: 100%; transform-style: preserve-3d; }
+  .half.l { left: 0; transform-origin: right center; transform: rotateY(var(--l)); animation: openL 1.4s cubic-bezier(.65,0,.35,1) .6s forwards; }
+  .half.r { left: var(--w); transform-origin: left center; transform: rotateY(var(--r)); animation: openR 1.4s cubic-bezier(.65,0,.35,1) .6s forwards; }
+  @keyframes openL { to { transform: rotateY(52deg); } }
+  @keyframes openR { to { transform: rotateY(-52deg); } }
+  @keyframes hover { 50% { translate: 0 -.375rem; } }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: calc(var(--w) * .1); overflow: hidden;
+    background: #0A0A0A; box-shadow: 0 0 0 .3rem #8E8E92, 0 0 0 .36rem #5B5B5F; }
+  .half.l .face.in { border-top-right-radius: .25rem; border-bottom-right-radius: .25rem; }
+  .half.r .face.in { border-top-left-radius: .25rem; border-bottom-left-radius: .25rem; }
+  .face.out { transform: rotateY(180deg) translateZ(1px); }
+  .face::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(115deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.07) 100%); }
+  .hinge { position: absolute; top: .4rem; bottom: .4rem; left: calc(var(--w) - .3rem); width: .6rem; border-radius: .3rem;
+    background: linear-gradient(90deg, #4A4A4E, #A9A9AE 45%, #5C5C60); transform: translateZ(-.3rem); }
+  .screen { position: absolute; top: 0; width: calc(var(--w) * 2); height: 100%; padding: calc(var(--w) * .12);
+    background: radial-gradient(120% 70% at 30% 0%, #26201F 0%, #0C0C0C 60%); color: #F5F5F2; font-family: var(--text); }
+  .half.r .screen { left: calc(var(--w) * -1); }
+  .status { display: flex; justify-content: space-between; font: 600 calc(var(--w) * .07)/1 var(--display); opacity: .85; }
+  .jc { margin-top: calc(var(--w) * .28); background: #F5F5F2; color: #0E0E0E; border-radius: calc(var(--w) * .08); padding: calc(var(--w) * .09); }
+  .jc .t { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: calc(var(--w) * .05); border-bottom: 1.5px solid #0E0E0E;
+    font: 700 calc(var(--w) * .045)/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: #5E5E5A; }
+  .jc .t b { font: 800 calc(var(--w) * .085)/1 var(--display); letter-spacing: 0; color: var(--red); text-transform: none; }
+  .jc .row { display: flex; justify-content: space-between; padding: calc(var(--w) * .05) 0; border-bottom: 1px solid #D9D9D4;
+    font: 500 calc(var(--w) * .058)/1.2 var(--text); }
+  .jc .row span:first-child { color: #6E6E6A; }
+  .jc .ok { margin-top: calc(var(--w) * .07); display: flex; align-items: center; gap: calc(var(--w) * .04); font: 700 calc(var(--w) * .06)/1 var(--display); color: #2E7D4F; }
+  .jc .ok i { width: calc(var(--w) * .06); height: calc(var(--w) * .06); border-radius: 50%; background: #2E7D4F; }
+  .mark { position: absolute; bottom: calc(var(--w) * .14); left: calc(var(--w) * .12); width: calc(var(--w) * .16); opacity: .9; }
+  .cover { position: absolute; inset: 0; padding: calc(var(--w) * .16) calc(var(--w) * .12); background: radial-gradient(90% 60% at 50% 15%, #2A2525, #0A0A0A 70%); color: #F5F5F2; text-align: center; }
+  .cover .time { font: 600 calc(var(--w) * .3)/1 var(--display); letter-spacing: -0.02em; margin-top: calc(var(--w) * .1); }
+  .cover .date { font: 500 calc(var(--w) * .065)/1 var(--text); opacity: .7; margin-top: calc(var(--w) * .05); }
+  .cover svg { width: calc(var(--w) * .22); margin-top: calc(var(--w) * .9); }
+  .back { position: absolute; inset: 0; background: linear-gradient(150deg, #3A3A3E, #1C1C1F); }
+  .cam { position: absolute; top: calc(var(--w) * .1); right: calc(var(--w) * .1); width: calc(var(--w) * .26); padding: calc(var(--w) * .03); display: grid; gap: calc(var(--w) * .03); }
+  .cam i { aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #3B4A66, #050505 55%); box-shadow: 0 0 0 calc(var(--w) * .012) #77777B; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .copy > * { animation: none; }
+    .fold { animation: none; } .half.l { animation: none; transform: rotateY(52deg); } .half.r { animation: none; transform: rotateY(-52deg); }
+  }
+
+  @media (max-width: 64rem) {
+    .links a.l, .num { display: none; }
+    .call { width: 2.75rem; min-height: 2.75rem; padding: 0; }
+    .menu { display: inline-flex; }
+    .panel { grid-template-columns: 1fr; padding: 6.5rem 1.5rem 1rem; gap: 0; align-content: start; }
+    .stage { height: 22rem; }
+    .fold { --w: 6.75rem; }
+  }
+  @media (max-width: 30rem) {
+    .nav { padding: 1.25rem 1.25rem 0 1.5rem; }
+    .hero { padding: .5rem; }
+    .panel { border-radius: 1.5rem; padding: 5.5rem 1.25rem .5rem; }
+    h1 { font-size: 2.25rem; }
+    .lede { font-size: 1rem; }
+    .ctas { flex-wrap: nowrap; }
+    .ctas .pill { flex: 1; padding: 0 1rem; }
+    .stage { height: 18.5rem; }
+    .fold { --w: 5.75rem; }
+  }
+</style>
+</head>
+<body>
+<header class="nav" id="nav">
+  <div class="bar">
+    <a class="brand" href="#"><svg viewBox="0 0 256 256" fill="none" aria-hidden="true"><path d="M40 220V89A44 44 0 0 1 84 45H172A44 44 0 0 1 216 89V112A30 30 0 0 1 186 142H171.7" stroke="currentColor" stroke-width="26"/><circle cx="171.7" cy="142" r="13" fill="currentColor"/><path d="M65 176.6L161.8 79.8A13 13 0 0 1 180.2 98.2L136.4 142L214.4 220H177.6L118 160.4L65 213.4Z" fill="#D7141A"/></svg><span class="name">Rehan Traders</span></a>
+    <nav class="links glass" aria-label="Main">
+      <a class="l" href="#">Repairs</a>
+      <a class="l" href="#">Estimate</a>
+      <a class="l" href="#">Reviews</a>
+      <a class="l" href="#">Visit</a>
+      <a class="pill pill-ink call" href="tel:+923058874839" aria-label="Call 0305 8874839"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg><span class="num">0305 8874839</span></a>
+      <button class="pill menu" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 9h16M4 15h16"/></svg></button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="panel">
+    <div class="copy">
+      <div class="proof">
+        <span class="stars" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1Z"/></svg></span>
+        <span><b>4.9</b> on Google · 47 reviews</span>
+      </div>
+      <h1><span class="r" aria-hidden="true"></span>Cracked glass? Fixed at G-88.</h1>
+      <p class="lede">Phone and tablet repairs at an open bench in Hafeez Center, Lahore. Touch glass, Fold and Flip, iPhone, boards.</p>
+      <div class="ctas">
+        <a class="pill pill-ink pill-lg" href="#">Book a visit <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+        <a class="pill pill-wa pill-lg" href="https://wa.me/923058874839"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>WhatsApp</a>
+      </div>
+      <div class="contact">
+        <span><b>0305 8874839</b></span>
+        <span>Shop G-88, Hafeez Center</span>
+        <span><i class="dot"></i>Open now · closes 10 PM</span>
+      </div>
+    </div>
+
+    <div class="stage" aria-hidden="true">
+      <div class="fold">
+        <div class="hinge"></div>
+        <div class="half l">
+          <div class="face in"><div class="screen">
+            <div class="status"><span>11:00</span><span>5G</span></div>
+            <div class="jc">
+              <div class="t">Repair job card <b>No. RT-0427</b></div>
+              <div class="row"><span>Device</span><span>Galaxy Z Fold5</span></div>
+              <div class="row"><span>Fault</span><span>Inner screen</span></div>
+              <div class="row"><span>Visit</span><span>Today, 6:30 PM</span></div>
+              <div class="ok"><i></i>Booked at G-88</div>
+            </div>
+            <svg class="mark" viewBox="0 0 256 256" fill="none"><path d="M40 220V89A44 44 0 0 1 84 45H172A44 44 0 0 1 216 89V112A30 30 0 0 1 186 142H171.7" stroke="#F5F5F2" stroke-width="26"/><circle cx="171.7" cy="142" r="13" fill="#F5F5F2"/><path d="M65 176.6L161.8 79.8A13 13 0 0 1 180.2 98.2L136.4 142L214.4 220H177.6L118 160.4L65 213.4Z" fill="#D7141A"/></svg>
+          </div></div>
+          <div class="face out"><div class="cover">
+            <div class="time">11:00</div><div class="date">Tuesday, 28 October</div>
+            <svg viewBox="0 0 256 256" fill="none"><path d="M40 220V89A44 44 0 0 1 84 45H172A44 44 0 0 1 216 89V112A30 30 0 0 1 186 142H171.7" stroke="#F5F5F2" stroke-width="26"/><circle cx="171.7" cy="142" r="13" fill="#F5F5F2"/><path d="M65 176.6L161.8 79.8A13 13 0 0 1 180.2 98.2L136.4 142L214.4 220H177.6L118 160.4L65 213.4Z" fill="#D7141A"/></svg>
+          </div></div>
+        </div>
+        <div class="half r">
+          <div class="face in"><div class="screen">
+            <div class="status"><span>11:00</span><span>5G</span></div>
+            <div class="jc">
+              <div class="t">Repair job card <b>No. RT-0427</b></div>
+              <div class="row"><span>Device</span><span>Galaxy Z Fold5</span></div>
+              <div class="row"><span>Fault</span><span>Inner screen</span></div>
+              <div class="row"><span>Visit</span><span>Today, 6:30 PM</span></div>
+              <div class="ok"><i></i>Booked at G-88</div>
+            </div>
+          </div></div>
+          <div class="face out"><div class="back"><div class="cam"><i></i><i></i><i></i></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div style="height:150vh"></div>
+<script>
+  let y = scrollY; const nav = document.getElementById('nav');
+  addEventListener('scroll', () => {
+    nav.classList.toggle('island', scrollY > 80);
+    nav.classList.toggle('hide', innerWidth < 1024 && scrollY > y && scrollY > 80); // phones: hide going down, return going up
+    y = scrollY;
+  }, { passive: true });
+</script>
+</body>
+</html>
