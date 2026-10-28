@@ -1,9 +1,11 @@
 import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 
+import { Icon } from "@/components/icon"
 import { Container } from "@/components/layout"
 import { Mark } from "@/components/logo"
 import { Reveal } from "@/components/motion"
-import { footer, nav, services, site, actions } from "@/content"
+import { footer, nav, services, site, actions, ui } from "@/content"
 
 const groupTitle = "font-display text-title-md text-on-band"
 const linkClass = "inline-flex min-h-11 items-center text-on-band-soft no-underline hover:text-on-band md:min-h-9"
@@ -54,23 +56,23 @@ export function Footer() {
           <div className="lg:col-span-3">
             <h2 className={groupTitle}>{footer.groups.visit}</h2>
             <address className="mt-3 space-y-3 not-italic">
-              <p>
-                {site.address.lines.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-                {site.address.city}
-              </p>
-              <p>
-                {site.hours.oneLine}. {site.hours.fridayBreak}.
-              </p>
+              {[site.address.lines, site.hours.lines].map((lines) => (
+                <p key={lines[0]}>
+                  {lines.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+              ))}
               <p className="flex flex-col">
                 <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} className={linkClass}>
                   {actions.whatsapp}
                 </a>
-                <a href={site.mapsUrl} className={linkClass}>
+                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1 underline-offset-4 hover:underline`}>
                   {footer.directions}
+                  <span className="sr-only">, {ui.externalLink}</span>
+                  <Icon icon={ArrowUpRight} size="sm" />
                 </a>
               </p>
             </address>

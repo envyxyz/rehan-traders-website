@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, MapPin, Star } from "lucide-react"
+import { ArrowRight, ArrowUpRight, Star } from "lucide-react"
 
 import { BeforeAfter } from "@/components/before-after"
 import { HoursTable } from "@/components/hours-table"
@@ -8,7 +8,7 @@ import { Img } from "@/components/img"
 import { Container, Section } from "@/components/layout"
 import { Reveal } from "@/components/motion"
 import { OpenStatus } from "@/components/open-status"
-import { PriceLine } from "@/components/price-line"
+import { ReviewCarousel } from "@/components/review-carousel"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
@@ -47,9 +47,8 @@ function ServiceCard({ service, lead }: { service: Service; lead?: boolean }) {
       />
       <div className="flex flex-1 flex-col gap-3 p-6">
         <CardTitle className={cn(lead && "text-title-lg")}>{service.title}</CardTitle>
-        <CardDescription className="line-clamp-2">{service.short}</CardDescription>
-        <PriceLine priceFrom={service.priceFrom} className="mt-auto pt-3 text-body-md" />
-        <Button asChild variant="line" className="self-start">
+        <CardDescription className="mb-2 line-clamp-2">{service.short}</CardDescription>
+        <Button asChild variant="line" className="mt-auto self-start">
           <Link href={`/book?service=${service.slug}`} prefetch={false}>
             {actions.bookRepair}
           </Link>
@@ -174,44 +173,28 @@ function Reviews() {
   const c = home.reviews
   return (
     <Section tone="panel">
-      <Container>
-        <Heading>{c.title}</Heading>
-        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-          <p className="flex items-center gap-3">
+      <Container className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+        <Reveal className="lg:col-span-5">
+          <Heading>{c.title}</Heading>
+          <p className="mt-6 flex items-center gap-3">
             <b className="font-display text-display-lg text-ink tabular-nums">{reviews.rating.toFixed(1)}</b>
             <span>
               <Stars rating={reviews.rating} />
               <span className="mt-1 block text-body-sm text-body">{c.summary(reviews.count)}</span>
             </span>
           </p>
-          <p className="text-caption text-steel">
+          <p className="mt-2 text-caption text-steel">
             <time dateTime={reviews.asOf}>{c.asOf(reviews.asOfLabel)}</time>
           </p>
-          <a href={reviews.url} target="_blank" rel="noopener noreferrer" className={cn(textLink, "sm:ml-auto")}>
+          <a href={reviews.url} target="_blank" rel="noopener noreferrer" className={cn(textLink, "mt-4")}>
             {actions.readReviews(reviews.count)}
             <span className="sr-only">, {ui.externalLink}</span>
-            <Icon icon={ArrowRight} size="sm" />
+            <Icon icon={ArrowUpRight} size="sm" />
           </a>
-        </div>
-        {reviews.items.length > 0 && (
-          <ul className="mt-10 grid gap-4 md:grid-cols-3">
-            {reviews.items.map((r, i) => (
-              <li key={r.author}>
-                <Reveal delay={i * reveal.stagger} className="h-full">
-                  <Card className="h-full">
-                    <figure className="flex h-full flex-col gap-4">
-                      <Stars rating={r.rating} />
-                      <blockquote className="text-body-md text-body">{r.text}</blockquote>
-                      <figcaption className="mt-auto text-body-sm">
-                        <span className="font-semibold text-ink">{r.author}</span> <span className="text-steel">· {r.date}</span>
-                      </figcaption>
-                    </figure>
-                  </Card>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
-        )}
+        </Reveal>
+        <Reveal className="lg:col-span-7">
+          <ReviewCarousel />
+        </Reveal>
       </Container>
     </Section>
   )
@@ -221,20 +204,19 @@ function Estimate() {
   return (
     <Section>
       <Container>
-        <Reveal className="grid gap-6 rounded-xl border border-hairline bg-card p-6 sm:p-10 lg:grid-cols-12 lg:items-end lg:gap-10">
+        <Reveal className="grid gap-6 rounded-xl border border-hairline bg-card p-6 sm:p-10 lg:grid-cols-12 lg:items-center lg:gap-10">
           <Heading size="display-md" className="lg:col-span-5">
             {estimate.title}
           </Heading>
-          <form action="/estimate" method="get" className="grid gap-2 lg:col-span-7">
-            <Label htmlFor="estimate-q" className="text-body-sm text-steel">
+          {/* The heading is the visible prompt; the label stays for screen readers. */}
+          <form action="/estimate" method="get" className="flex flex-col gap-2.5 sm:flex-row lg:col-span-7">
+            <Label htmlFor="estimate-q" className="sr-only">
               {estimate.label}
             </Label>
-            <div className="flex flex-col gap-2.5 sm:flex-row">
-              <Input id="estimate-q" name="q" placeholder={estimate.placeholder} autoComplete="off" />
-              <Button type="submit" size="lg" className="sm:shrink-0">
-                {estimate.submit}
-              </Button>
-            </div>
+            <Input id="estimate-q" name="q" placeholder={estimate.placeholder} autoComplete="off" />
+            <Button type="submit" size="lg" className="sm:shrink-0">
+              {estimate.submit}
+            </Button>
           </form>
         </Reveal>
       </Container>
@@ -245,26 +227,28 @@ function Estimate() {
 function Visit() {
   return (
     <Section tone="panel" id="visit">
-      <Container className="grid gap-10 lg:grid-cols-12 lg:items-start">
-        <Reveal className="lg:col-span-6">
-          <Img name={visit.photo} alt={visit.photoAlt} sizes="(min-width: 1024px) 560px, 100vw" className="aspect-4/3 w-full rounded-xl" />
+      <Container className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+        {/* Keyless Google embed, lazy (below the fold). Dark styling is a CSS filter on the iframe. */}
+        <Reveal className="overflow-hidden rounded-xl bg-band lg:col-span-6">
+          <iframe
+            src={visit.mapEmbed}
+            title={visit.mapTitle}
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="map-dark aspect-4/3 w-full border-0"
+          />
         </Reveal>
-        <Reveal className="lg:col-span-6 lg:pl-6">
+        <Reveal className="lg:col-span-6 lg:pl-4">
           <Heading>{visit.title}</Heading>
-          <address className="mt-5 flex gap-2.5 not-italic text-body-md text-body">
-            <Icon icon={MapPin} className="mt-1 text-steel" />
-            <span>
-              {site.address.lines.map((l) => (
-                <span key={l} className="block">
-                  {l}
-                </span>
-              ))}
-              <span className="block">{site.address.city}</span>
-            </span>
+          <address className="mt-5 not-italic text-body-md text-body">
+            {site.address.lines.map((l) => (
+              <span key={l} className="block">
+                {l}
+              </span>
+            ))}
           </address>
           <OpenStatus className="mt-4 text-body-sm text-body" />
-          <HoursTable className="mt-5" />
-          <p className="mt-3 text-caption text-steel">{site.hours.holidays}</p>
+          <HoursTable className="mt-4" />
           <Button asChild size="lg" arrow className="mt-7">
             <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
               {actions.directions}
@@ -272,8 +256,9 @@ function Visit() {
             </a>
           </Button>
           <Text size="body-sm" tone="muted" className="mt-5">
+            {visit.courier}{" "}
             <a href={site.whatsapp.href} className="text-ink underline underline-offset-4">
-              {visit.courier}
+              {visit.courierLink}
             </a>
           </Text>
         </Reveal>

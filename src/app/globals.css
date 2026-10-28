@@ -295,6 +295,11 @@
   }
 }
 
+/* Visit map: Google's embed has no dark style without an API key, so the iframe is inverted and its hues turned back. */
+@utility map-dark {
+  filter: invert(0.92) hue-rotate(180deg) saturate(0.6);
+}
+
 /* BeforeAfter: the "before" photo shows left of the handle (--pos set by the slider). */
 @utility clip-before {
   clip-path: inset(0 calc(100% - var(--pos)) 0 0);

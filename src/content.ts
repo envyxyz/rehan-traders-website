@@ -31,7 +31,7 @@ export const site = {
   email: "rehanmobiletraders@gmail.com", // Adnan, PRD §11 q8
   address: {
     // TODO(adnan): confirm this exact line (Business Profile marks it "to confirm")
-    lines: ["Shop G-88, Ground Floor, Hafeez Center", "Main Boulevard, Block E1, Gulberg III"],
+    lines: ["Shop G-88, Ground Floor", "Hafeez Center, Main Boulevard", "Block E1, Gulberg III, Lahore"],
     short: "Shop G-88, Hafeez Center",
     city: "Lahore",
     region: "Punjab",
@@ -53,6 +53,8 @@ export const site = {
       { day: 0, label: "Sunday", open: null, close: null },
     ],
     oneLine: "Monday to Saturday 11:00 AM to 10:00 PM, Sunday closed",
+    /** Footer, one phrase per line. */
+    lines: ["Monday to Saturday", "11:00 AM to 10:00 PM", "Sunday closed"],
     fridayBreak: "Friday prayer break 1:00 to 2:00 PM",
     holidays: "Closed on public holidays",
   },
@@ -69,35 +71,60 @@ export const site = {
 } as const
 
 // Typed in by hand (static site, no Places API). Update rating, count and asOf together.
-// Read from the public listing on 28 Oct 2026 (signed out): Google shows only 3 reviews and no sort
-// or exact dates without signing in, so `date` is Google's relative date as of `asOf`.
+// Read from the public listing on 28 Oct 2026 (signed out): Google shows these 5 reviews and only relative
+// dates, so `date` is Google's relative date as of `asOf`. Text copied exactly (Google's trailing "…" dropped).
+// `url` opens that review on Google Maps; `avatar` is the reviewer's Google profile picture, saved to public/reviews/.
+const reviewUrl = (id: string, inner: string) =>
+  `https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1s${id}!2m1!1s0x0:0x61c1e2f03a5bd64b!3m1!1s2@1:${inner}%7C%7C`
+
 export const reviews = {
   rating: 4.9,
-  count: 49,
+  count: 50,
   asOf: "2026-10-28",
   asOfLabel: "28 October 2026",
   url: site.mapsUrl, // TODO(adnan): confirm the Google reviews link (needs listing access)
-  // TODO(adnan): confirm the picks and add the 2 most recent (needs a signed-in view). Text copied exactly.
   items: [
     {
+      author: "Zunair K.",
+      avatar: "/reviews/zunair-k.webp",
+      date: "4 months ago",
+      rating: 5,
+      text: "I repaired my fold4 blank display.Good job🥰😍🥰",
+      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT2kxSlNFMXFOREJmZHpaak1sUm9jRFZUVG10b1pHYxAB", "CAIQACodChtycF9oOi1JSE1qNDBfdzZjMlRocDVTTmtoZGc"),
+    },
+    {
+      author: "Farwah W.",
+      avatar: "/reviews/farwah-w.webp",
+      date: "4 months ago",
+      rating: 5,
+      text: "Best Lab in the Entire Hafeez Centre for Mobile repair. Thumbs up 👍",
+      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT210WFdHRlhNVGRQWTFVNVNVNURUbnBKZUdSbGEyYxAB", "CAIQACodChtycF9oOmtXWGFXMTdPY1U5SU5DTnpJeGRla2c"),
+    },
+    {
       author: "Hassnain T.",
+      avatar: "/reviews/hassnain-t.webp",
       date: "5 months ago",
       rating: 5,
       text: "I recently got my phone repair. Very professional extremely happy with the services of Rehan Trader",
+      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT21kMlRrOVpUWFY1YVU1MFJEbFlUVmwxVm5WamRGRRAB", "CAIQACodChtycF9oOmd2Tk9ZTXV5aU50RDlYTVl1VnVjdFE"),
     },
     {
       author: "Haadi O.",
+      avatar: "/reviews/haadi-o.webp",
       date: "6 months ago",
       rating: 5,
       text: "Mr Rehan was very honest and helped me fixed my andriod s22 ultra which was ocean water damaged. He is expert in iphone so he recommended me to proper person and didn't charge me anything. My phone data was recovered.",
+      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT2t4V01VVklWSHBLZEVOd1ZuWTJZa1Z1V1MwM05sRRAB", "CAIQACodChtycF9oOkxWMUVIVHpKdENwVnY2YkVuWS03NlE"),
     },
     {
-      author: "Zunair K.",
-      date: "4 months ago",
+      author: "Muhammad A.",
+      avatar: "/reviews/muhammad-a.webp",
+      date: "a year ago",
       rating: 5,
-      text: "I repaired my fold4 blank display.Good job",
+      text: "\"I had a great experience at Mobile Repairing. The staff was very friendly and helpful. They were able to answer all of my questions and help me find the right phone for my needs. I was especially impressed with the staff's politeness and professionalism. I would highly recommend mobile repairing to anyone looking for a new phone.\"",
+      url: reviewUrl("ChdDSUhNMG9nS0VJQ0FnTURJNDRIbXlBRRAB", "CIHM0ogKEICAgMDI44HmyAE"),
     },
-  ] as { author: string; date: string; rating: number; text: string }[],
+  ],
 } as const
 
 export const nav = {
@@ -124,6 +151,9 @@ export const actions = {
   allRepairs: "All repairs",
   readReviews: (count: number) => `Read all ${count} on Google`,
   allQuestions: "All questions",
+  /** Phase 5: the button on the booking form / page opened by "Book this repair", and its success message. */
+  getQuote: "Get a quote",
+  quoteSent: "Ticket Created. You'll be given a quote in 5 minutes.",
 } as const
 
 export const hero = {
@@ -305,15 +335,20 @@ export const faq = [
 export const visit = {
   title: "Visit G-88",
   directions: "Ground floor of Hafeez Center, Main Boulevard, Gulberg III.", // TODO(adnan): confirm walking directions to G-88
-  mapAlt: "Map showing Rehan Traders at Hafeez Center, Lahore",
+  mapTitle: "Google Map showing Rehan Traders at Hafeez Center, Lahore",
+  /** "Embed a map" from the listing's Share menu: no API key, no billing. */
+  mapEmbed:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.293694128489!2d74.3433854!3d31.516092600000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3919050c3198a217%3A0x61c1e2f03a5bd64b!2sRehan%20Traders%20%26%20Mobile%20Repairing%20Shop!5e0!3m2!1sen!2s!4v1793211191069!5m2!1sen!2s",
   today: "Today",
-  photo: "storefront",
-  photoAlt: "Shopfront of Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore",
   hoursTitle: "Hours",
-  hoursRange: (open: string, close: string) => `${open} to ${close}`,
-  hoursBreak: (from: string, to: string) => `break ${from} to ${to}`,
-  closed: "Closed",
-  courier: "Outside Lahore? Send it by courier. Message us on WhatsApp first.", // TODO(adnan): courier terms (PRD §12 q4)
+  /** Compact hours. `days` (0 = Sunday) picks the row marked as today; the last match wins. */
+  hours: [
+    { label: "Monday to Saturday", value: "11 AM to 10 PM", days: [1, 2, 3, 4, 5, 6] },
+    { label: "Friday prayer break", value: "1 to 2 PM", days: [5] },
+    { label: "Sunday and public holidays", value: "Closed", days: [0] },
+  ],
+  courier: "Outside Lahore? Send it by courier.", // TODO(adnan): courier terms (PRD §12 q4)
+  courierLink: "Message us on WhatsApp",
 } as const
 
 export const estimate = {
@@ -344,6 +379,9 @@ export const home = {
     title: "What customers say",
     summary: (count: number) => `on Google from ${count} reviews`,
     asOf: (date: string) => `As of ${date}`,
+    readOne: "Read on Google",
+    show: (n: number, total: number) => `Show review ${n} of ${total}`,
+    next: "Next review",
   },
   faq: { title: "Questions" },
 } as const
@@ -405,5 +443,7 @@ export const ui = {
   noResults: "No results",
   stars: (rating: number) => `${rating} out of 5 stars`,
   externalLink: "opens in a new tab",
+  /** alt for images that only repeat nearby text (reviewer avatars next to the name). */
+  decorative: "",
   toastSent: "Request sent",
 } as const

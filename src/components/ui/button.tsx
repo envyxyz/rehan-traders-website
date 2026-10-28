@@ -6,17 +6,18 @@ import { ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-pill font-display text-button whitespace-nowrap select-none transition duration-(--duration-press) ease-out active:scale-97 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  // Hover (pointer devices only): a 2px lift and the arrow chip turning to point right. Press: scale 0.97.
+  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-pill font-display text-button whitespace-nowrap select-none transition duration-(--duration-fast) ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-97 motion-reduce:hover:translate-y-0 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        ink: "bg-action text-on-action active:bg-action-active",
+        ink: "bg-action text-on-action hover:bg-action-active active:bg-action-active",
         /** Primary action on an ink band (CTA, footer). */
-        inverse: "bg-on-band text-band active:brightness-90",
-        line: "border border-hairline bg-card text-ink active:bg-concrete",
-        whatsapp: "bg-whatsapp text-on-whatsapp active:brightness-95",
+        inverse: "bg-on-band text-band hover:brightness-95 active:brightness-90",
+        line: "border border-hairline bg-card text-ink hover:border-ink active:bg-concrete",
+        whatsapp: "bg-whatsapp text-on-whatsapp hover:brightness-105 active:brightness-95",
         glass: "glass active:brightness-95",
-        icon: "text-ink active:bg-concrete",
+        icon: "text-ink hover:translate-y-0 hover:bg-concrete active:bg-concrete",
       },
       size: {
         md: "h-11 px-4.5",
@@ -51,7 +52,7 @@ function Button({ className, variant, size, asChild = false, arrow = false, chil
             variant === "inverse" ? "bg-band text-on-band" : "bg-on-action text-action"
           )}
         >
-          <ArrowUpRight className="size-4" strokeWidth={2} />
+          <ArrowUpRight className="size-4 transition-transform duration-(--duration-base) ease-out group-hover/button:rotate-45 motion-reduce:transition-none" strokeWidth={2} />
         </span>
       )}
     </Comp>
