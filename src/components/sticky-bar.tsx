@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 import { MessageCircle } from "lucide-react"
 
+import { BookButton } from "@/components/book-button"
 import { ChatSheet } from "@/components/chat-launcher"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
@@ -30,9 +30,7 @@ export function StickyBar() {
         !shown && "translate-y-full opacity-0"
       )}
     >
-      <Button asChild className="flex-1">
-        <Link href="/book">{actions.book}</Link>
-      </Button>
+      <BookButton className="flex-1">{actions.book}</BookButton>
       <Button asChild variant="whatsapp" className="flex-1">
         <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
           <WhatsAppIcon />

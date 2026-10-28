@@ -1,0 +1,129 @@
+[
+  {
+    "name": "microscope-bench",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_03_microscope-bench.jpg",
+      "design/mock/hero-clean.jpg"
+    ],
+    "aspect": "16:9",
+    "prompt": "Using the attached photo as the layout reference, rebuild this microscope bench as a premium, spotless repair lab. Keep the trinocular microscope in the same position and angle. Clean matte off-white wall, a smooth light-grey bench top, a matte charcoal ESD mat instead of the red one, one phone with its display removed under the microscope, two precision tools placed neatly. Nothing else on the bench. Leave the lower-left third of the frame as clear, empty bench surface.",
+    "alt": "Trinocular microscope over a red silicone mat on the repair bench at Rehan Traders, Hafeez Center, Lahore"
+  },
+  {
+    "name": "workbench-team",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_02_workbench-team.jpg"
+    ],
+    "aspect": "3:2",
+    "prompt": "Using the attached photo as reference, recreate the same scene with the same three people in the same poses and positions, the same faces and clothing. Turn the workshop into a calm, modern, premium repair lab: clean white walls instead of green, neat closed white storage instead of cluttered shelves, light-grey benches, matte charcoal mats, only the tools they are using, no loose cables, no boxes, no rubbish.",
+    "alt": "Technicians working at the shared repair bench at Rehan Traders, Hafeez Center, Lahore"
+  },
+  {
+    "name": "microscope-station",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_06_microscope-station.jpg"
+    ],
+    "aspect": "3:2",
+    "prompt": "Using the attached photo as reference, keep the same white stereo microscope and gooseneck lamp at the same angle, but make the station spotless and minimal: smooth light-grey bench, matte charcoal ESD mat instead of the red one, one small bottle and a pair of tweezers neatly placed, nothing else. No dust, stains or scratches.",
+    "alt": "Stereo microscope and red silicone mat at the board repair station, Rehan Traders, Lahore"
+  },
+  {
+    "name": "parts-drawers",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_07_parts-drawers.jpg"
+    ],
+    "aspect": "3:2",
+    "prompt": "Using the attached photo as reference, show the same idea, a wall of parts drawers, but premium and orderly: matching matte white drawer units in a clean grid, small plain grey labels with no readable text, a clean light wall, even soft light. No boxes on top, no loose items.",
+    "alt": "Labelled parts drawers holding screens, batteries and camera parts at Rehan Traders, Lahore"
+  },
+  {
+    "name": "machine-corner",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_08_machine-corner.jpg"
+    ],
+    "aspect": "3:2",
+    "prompt": "Using the attached photo as reference, keep the same OCA laminating machine in the same corner, but make the corner spotless and minimal: clean white walls, the air conditioner kept but tidy, cables hidden, a clear light-grey bench beside the machine with one phone panel on it. No floor clutter, no bottles, no boxes.",
+    "alt": "Laminating machine used for touch glass replacement in the Rehan Traders workshop, Lahore"
+  },
+  {
+    "name": "storefront",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_01_storefront.jpg"
+    ],
+    "aspect": "3:2",
+    "prompt": "Using the attached photo, keep this exact shopfront recognisable: the same sign layout and text, the same glass display wall and the same camera angle. Clean it up only: straighten the perspective, even out the light, remove glare and dirt from the glass, tidy the displays so products sit in neat rows, and remove clutter at the edges of the frame. Do not change or invent any sign text.",
+    "alt": "Shopfront of Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore"
+  },
+  {
+    "name": "glass-separation",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Close-up of a technician's gloved hands, no face, separating cracked front glass from a smartphone display on a heated separator plate with a thin wire. Matte charcoal ESD mat, smooth light-grey bench, clean background softly out of focus.",
+    "alt": "Cracked front glass being separated from a phone display on a heated plate"
+  },
+  {
+    "name": "fold-inner-panel",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Close-up of a technician's gloved hands, no face, lifting the inner folding screen out of an opened Samsung Galaxy Z Fold that lies flat, holding the flexible panel by its edges. Matte charcoal ESD mat, clean light-grey bench, no logos.",
+    "alt": "Inner folding panel lifted out of a Samsung Galaxy Z Fold during repair"
+  },
+  {
+    "name": "iphone-back-glass",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Close-up of a technician's hands, no face, holding an iPhone with its back glass removed, showing the clean frame, the MagSafe coil and the camera bump. Matte charcoal ESD mat, clean light-grey bench, soft background.",
+    "alt": "iPhone with its back glass removed, showing the frame and charging coil"
+  },
+  {
+    "name": "battery-swap",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Close-up of a technician's gloved hands, no face, lifting the old battery out of an opened smartphone with a plastic spudger; a new plain battery with no label waits beside it. Matte charcoal ESD mat, clean light-grey bench.",
+    "alt": "Old phone battery being lifted out of an opened smartphone"
+  },
+  {
+    "name": "charging-port",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Macro close-up of the bottom edge of a smartphone, its USB-C port being cleaned with fine tweezers by a technician's hand, no face. Matte charcoal ESD mat, clean light-grey bench, very shallow depth of field.",
+    "alt": "USB-C charging port of a phone being cleaned with fine tweezers"
+  },
+  {
+    "name": "board-microscope",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Close-up of a bare smartphone logic board held in a board holder under a microscope objective with a ring light, fine tweezers near one chip. Matte charcoal ESD mat, clean light-grey bench, no people.",
+    "alt": "Phone logic board under the microscope during board-level repair"
+  },
+  {
+    "name": "wet-board-cleaning",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Close-up of a technician's gloved hand, no face, gently cleaning a smartphone logic board with a small soft brush and isopropyl alcohol; a little visible green corrosion around a few components, a small plain bottle with no label beside it. Matte charcoal ESD mat, clean light-grey bench.",
+    "alt": "Water-damaged phone board being cleaned with a brush and alcohol"
+  },
+  {
+    "name": "ipad-screen",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Close-up of a technician's hands, no face, lifting the cracked front glass off an iPad with a suction cup and a plastic pick. Matte charcoal ESD mat, clean light-grey bench, no logos.",
+    "alt": "Cracked iPad screen being lifted off with a suction cup"
+  },
+  {
+    "name": "placeholder-before",
+    "sources": [],
+    "aspect": "3:2",
+    "prompt": "Shot from straight above: a Samsung Galaxy S-series phone lies face-up and centred on a matte charcoal ESD mat on a clean light-grey bench, screen on with a plain dark grey wallpaper, the front glass badly shattered in a spider web from the lower-right corner. No people, nothing else in frame.",
+    "alt": "Placeholder: phone with shattered front glass before repair"
+  },
+  {
+    "name": "placeholder-after",
+    "sources": [
+      "out:placeholder-before"
+    ],
+    "aspect": "3:2",
+    "prompt": "Exactly the same photo as the one attached: the same phone, position, light, wallpaper and framing. The only change: the front glass is now flawless and new, with no cracks.",
+    "alt": "Placeholder: the same phone with new front glass after repair"
+  }
+]

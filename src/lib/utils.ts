@@ -7,6 +7,8 @@ export const cn = createCn({
       "font-size": [
         { text: ["display-xl", "display-lg", "display-md", "title-lg", "title-md", "body-md", "body-sm", "caption", "button", "nav"] },
       ],
+      // Our radius tokens, so `rounded-md` passed in replaces a primitive's `rounded-pill` instead of losing to it.
+      rounded: [{ rounded: ["xs", "sm", "md", "lg", "xl", "pill"] }],
     },
   },
 })

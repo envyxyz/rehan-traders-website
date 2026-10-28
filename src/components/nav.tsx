@@ -20,7 +20,8 @@ import { actions, nav, services, site } from "@/content"
 import { spring } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
-const ISLAND_AT = 80 // px of scroll before the bar gathers into the island
+const ISLAND_AT = 80 // phones: px of scroll before the bar gathers into the island
+const BAR_FADE = 120 // desktop: px of scroll over which the top bar fades out
 
 const linkClass = "inline-flex h-11 items-center gap-1 rounded-pill px-3.5 font-display text-nav text-ink active:bg-concrete"
 
@@ -57,7 +58,7 @@ function MobileMenu() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="icon" className="bg-concrete lg:hidden" aria-label={nav.menu}>
+        <Button variant="icon" className="bg-concrete" aria-label={nav.menu}>
           <Icon icon={Equal} size="lg" />
         </Button>
       </SheetTrigger>
@@ -99,22 +100,88 @@ function MobileMenu() {
   )
 }
 
+/** Phone button: number on the bar, icon only in the island and on phones. */
+function CallButton({ compact }: { compact?: boolean }) {
+  return (
+    <Button asChild className={compact ? "w-11 px-0" : undefined}>
+      <a href={site.phone.href} aria-label={nav.call}>
+        <Icon icon={Phone} />
+        {!compact && <span className="text-nav font-bold">{site.phone.display}</span>}
+      </a>
+    </Button>
+  )
+}
+
 /**
- * Top: logo and name left, glass pill of links and the phone button right.
- * After 80px it gathers into one centred glass island (Motion layout spring, no bounce).
- * Below lg it hides on scroll down and returns on scroll up.
+ * Desktop. Scrolling fades the top bar (logo and name left, glass pill of links and phone right) out.
+ * Once the hero is behind you, a separate centred glass island fades in. No morph between them.
  */
-export function Nav() {
+function DesktopNav() {
+  const bar = React.useRef<HTMLDivElement>(null)
+  const [gone, setGone] = React.useState(false)
+  const [island, setIsland] = React.useState(false)
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      const fade = Math.min(scrollY / BAR_FADE, 1)
+      bar.current?.style.setProperty("opacity", String(1 - fade))
+      setGone(fade === 1)
+      // Only the home page has a hero (#top); elsewhere the island takes over as soon as the bar is gone.
+      const hero = document.getElementById("top")
+      setIsland(hero ? hero.getBoundingClientRect().bottom <= 0 : fade === 1)
+    }
+    onScroll()
+    addEventListener("scroll", onScroll, { passive: true })
+    return () => removeEventListener("scroll", onScroll)
+  }, [])
+
+  return (
+    <header className="max-lg:hidden">
+      <div ref={bar} inert={gone} className="pointer-events-none fixed inset-x-0 top-0 z-40 flex px-14 pt-7 pb-6">
+        <div className="pointer-events-auto flex flex-1 items-center justify-between">
+          <Link href="/" aria-label={nav.home} className="flex items-center gap-2.25 font-display text-title-md font-extrabold tracking-tight text-ink">
+            <Mark className="size-7.5" />
+            <span>{site.name}</span>
+          </Link>
+          <nav aria-label={nav.label} className="glass flex items-center gap-0.5 rounded-pill p-1.25">
+            <NavLinks />
+            <CallButton />
+          </nav>
+        </div>
+      </div>
+      <nav
+        aria-label={nav.label}
+        inert={!island}
+        className={cn(
+          "glass fixed inset-x-0 top-3.5 z-40 mx-auto flex w-fit items-center gap-0.5 rounded-pill p-1.25 pl-3 transition duration-base ease-drawer motion-reduce:transition-none",
+          !island && "-translate-y-2 opacity-0 motion-reduce:translate-y-0"
+        )}
+      >
+        <Link href="/" aria-label={nav.home} className="mr-1.5 flex items-center">
+          <Mark className="size-6.5" />
+        </Link>
+        <NavLinks />
+        <CallButton compact />
+      </nav>
+    </header>
+  )
+}
+
+/**
+ * Below lg: logo and name left, glass pill of the phone button and menu right.
+ * After 80px it gathers into one centred glass island (Motion layout spring, no bounce).
+ * It hides on scroll down and returns on scroll up.
+ */
+function MobileNav() {
   const [island, setIsland] = React.useState(false)
   const [hidden, setHidden] = React.useState(false)
 
   React.useEffect(() => {
-    const desktop = matchMedia("(width >= 64rem)")
     let last = scrollY
     const onScroll = () => {
       const y = scrollY
       setIsland(y > ISLAND_AT)
-      setHidden(!desktop.matches && y > last && y > ISLAND_AT)
+      setHidden(y > last && y > ISLAND_AT)
       last = y
     }
     onScroll()
@@ -125,7 +192,7 @@ export function Nav() {
   return (
     <header
       className={cn(
-        "pointer-events-none fixed inset-x-0 top-0 z-40 flex px-5 pt-5 pb-6 transition-transform duration-base ease-drawer sm:px-7 sm:pt-7 lg:px-14",
+        "pointer-events-none fixed inset-x-0 top-0 z-40 flex px-5 pt-5 pb-6 transition-transform duration-base ease-drawer sm:px-7 sm:pt-7 lg:hidden",
         island && "pt-3.5 sm:pt-3.5",
         hidden && "-translate-y-full"
       )}
@@ -151,18 +218,21 @@ export function Nav() {
           aria-label={nav.label}
           className={cn("flex items-center gap-0.5 rounded-pill", !island && "glass p-1.25")}
         >
-          <div className="flex items-center gap-0.5 max-lg:hidden">
-            <NavLinks />
-          </div>
-          <Button asChild className={cn(island ? "w-11 px-0" : "max-lg:w-11 max-lg:px-0")}>
-            <m.a layout transition={spring.layout} href={site.phone.href} aria-label={nav.call}>
-              <Icon icon={Phone} />
-              {!island && <span className="text-nav font-bold max-lg:hidden">{site.phone.display}</span>}
-            </m.a>
-          </Button>
+          <m.div layout transition={spring.layout}>
+            <CallButton compact />
+          </m.div>
           <MobileMenu />
         </m.nav>
       </m.div>
     </header>
+  )
+}
+
+export function Nav() {
+  return (
+    <>
+      <DesktopNav />
+      <MobileNav />
+    </>
   )
 }

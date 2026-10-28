@@ -53,7 +53,10 @@ export function SmoothScroll() {
     let cancelled = false
     // Loaded on demand so touch devices never download it.
     import("lenis").then(({ default: Lenis }) => {
-      if (!cancelled) lenis = new Lenis({ autoRaf: true, lerp: 0.1 })
+      // While a sheet or dialog locks the page (Radix sets data-scroll-locked on body), Lenis lets wheel events
+      // go native, so the sheet scrolls and the page behind it stays put.
+      if (!cancelled)
+        lenis = new Lenis({ autoRaf: true, lerp: 0.1, virtualScroll: () => !document.body.hasAttribute("data-scroll-locked") })
     })
     return () => {
       cancelled = true

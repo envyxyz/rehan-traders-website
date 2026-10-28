@@ -208,6 +208,7 @@
   --duration-press: 100ms;
   --duration-fast: 200ms;
   --duration-base: 350ms;
+  --duration-fill: 450ms;  /* arrow button: chip colour filling the button */
   --duration-reveal: 700ms;
   --duration-fold: 1400ms;
 
@@ -303,6 +304,47 @@
 /* BeforeAfter: the "before" photo shows left of the handle (--pos set by the slider). */
 @utility clip-before {
   clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+}
+
+/* Arrow buttons: the chip's colour grows out of the chip (centre 23px from the right, radius 15px) until it fills the
+   button. A clip-path circle in percent, so it covers any button width. Behind the label: the button is `isolate`.
+   The label changes colour a beat after the fill starts, once the circle has swept over it, never light on light. */
+@layer components {
+  .btn-fill {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    clip-path: circle(0.9375rem at calc(100% - 1.4375rem) 50%);
+    transition: clip-path var(--duration-fill) var(--ease-out);
+  }
+  [data-slot="button"]:has(> .btn-fill) {
+    transition:
+      translate var(--duration-base) var(--ease-out),
+      scale var(--duration-press) var(--ease-out),
+      color var(--duration-fast) var(--ease-out) 80ms,
+      background-color 0s;
+  }
+  /* Once the circle has covered the button, the button's own fill switches too, so no light hairline shows where the
+     clip's anti-aliased edge meets the rounded corners. On the way out it switches back at once. */
+  @media (hover: hover) {
+    [data-slot="button"]:hover:has(> .btn-fill) {
+      transition-delay: 0s, 0s, 80ms, var(--duration-base);
+    }
+  }
+  @media (hover: hover) {
+    [data-slot="button"]:hover > .btn-fill {
+      clip-path: circle(150% at calc(100% - 1.4375rem) 50%);
+    }
+  }
+  [data-slot="button"]:focus-visible > .btn-fill {
+    clip-path: circle(150% at calc(100% - 1.4375rem) 50%);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-fill {
+      transition-duration: var(--duration-fast);
+    }
+  }
 }
 
 /* ---------- Fold3D: CSS 3D Galaxy Z Fold (hero). Closed on load, opens into a V facing the copy. ---------- */

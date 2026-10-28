@@ -6,8 +6,9 @@ import { ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  // Hover (pointer devices only): a 2px lift and the arrow chip turning to point right. Press: scale 0.97.
-  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-pill font-display text-button whitespace-nowrap select-none transition duration-(--duration-fast) ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-97 motion-reduce:hover:translate-y-0 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  // Hover (pointer devices only): a 2px lift and the arrow chip turning to point right; on arrow buttons the chip's
+  // colour also fills the button (btn-fill). Press: scale 0.97.
+  "group/button inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-pill font-display text-button whitespace-nowrap select-none transition duration-(--duration-base) ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-97 motion-reduce:hover:translate-y-0 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -42,8 +43,22 @@ type ButtonProps = React.ComponentProps<"button"> &
 function Button({ className, variant, size, asChild = false, arrow = false, children, ...props }: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
   return (
-    <Comp data-slot="button" className={cn(buttonVariants({ variant, size }), arrow && "pr-2", className)} {...props}>
+    <Comp
+      data-slot="button"
+      className={cn(
+        buttonVariants({ variant, size }),
+        arrow && "relative isolate pr-2",
+        // Label and, once the fill has covered it (delay in globals.css), the button itself take the chip's colours.
+        arrow &&
+          (variant === "inverse"
+            ? "hover:bg-band hover:text-on-band focus-visible:text-on-band"
+            : "hover:bg-on-action hover:text-action focus-visible:text-action"),
+        className
+      )}
+      {...props}
+    >
       <Slot.Slottable>{children}</Slot.Slottable>
+      {arrow && <span aria-hidden className={cn("btn-fill", variant === "inverse" ? "bg-band" : "bg-on-action")} />}
       {arrow && (
         <span
           aria-hidden

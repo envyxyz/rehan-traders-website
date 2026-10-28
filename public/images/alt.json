@@ -1,0 +1,51 @@
+{
+  "microscope-bench": {
+    "alt": "Trinocular microscope over a red silicone mat on the repair bench at Rehan Traders, Hafeez Center, Lahore",
+    "width": 1920,
+    "height": 1920,
+    "placeholder": false,
+    "ai": false
+  },
+  "workbench-team": {
+    "alt": "Technicians working at the shared repair bench at Rehan Traders, Hafeez Center, Lahore",
+    "width": 1920,
+    "height": 1920,
+    "placeholder": false,
+    "ai": false
+  },
+  "microscope-station": {
+    "alt": "Stereo microscope and red silicone mat at the board repair station, Rehan Traders, Lahore",
+    "width": 1920,
+    "height": 1920,
+    "placeholder": false,
+    "ai": false
+  },
+  "parts-drawers": {
+    "alt": "Labelled parts drawers holding screens, batteries and camera parts at Rehan Traders, Lahore",
+    "width": 1920,
+    "height": 1920,
+    "placeholder": false,
+    "ai": false
+  },
+  "machine-corner": {
+    "alt": "Laminating machine used for touch glass replacement in the Rehan Traders workshop, Lahore",
+    "width": 1920,
+    "height": 1920,
+    "placeholder": false,
+    "ai": false
+  },
+  "storefront": {
+    "alt": "Shopfront of Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore",
+    "width": 1920,
+    "height": 1920,
+    "placeholder": false,
+    "ai": false
+  },
+  "iphone-back-glass": {
+    "alt": "iPhone with its back glass removed, showing the frame and charging coil",
+    "width": 1920,
+    "height": 1921,
+    "placeholder": false,
+    "ai": false
+  }
+}

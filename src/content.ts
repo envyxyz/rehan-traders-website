@@ -187,6 +187,8 @@ export type Service = {
   alt: string
   faq: { q: string; a: string }[]
   lead?: boolean
+  /** Device step shows two dropdowns (family, then model) instead of the full search. `prefix` matches src/data/devices.json names. */
+  families?: { label: string; prefix: string }[]
 }
 
 // Images arrive in Phase 2 (public/images); until then cards show a placeholder surface. Prices stay unset while priceMode is "quote".
@@ -212,6 +214,10 @@ export const services: Service[] = [
     alt: "Galaxy Z Fold opened on the bench with its inner panel exposed",
     faq: [],
     lead: true,
+    families: [
+      { label: "Galaxy Z Fold", prefix: "Samsung Galaxy Z Fold" },
+      { label: "Galaxy Z Flip", prefix: "Samsung Galaxy Z Flip" },
+    ],
   },
   {
     slug: "iphone",
@@ -222,6 +228,10 @@ export const services: Service[] = [
     image: "iphone-back-glass",
     alt: "iPhone with its back glass being replaced",
     faq: [],
+    families: [
+      { label: "iPhone", prefix: "iPhone" },
+      { label: "iPad", prefix: "iPad" },
+    ],
   },
   {
     slug: "screen-replacement",
@@ -295,6 +305,135 @@ export const faults = [
   "Back glass",
   "Other",
 ] as const
+
+// Pakistan's public holidays: no booking slots on these dates. Fixed-date holidays are certain; Eid, Ashura and
+// 12 Rabi ul Awal follow the moon, so their dates are estimates. Update them when the government announces them.
+// TODO(adnan): confirm the shop closes on every one of these days. Extend the list before August 2027.
+export const holidays = [
+  { date: "2026-11-09", name: "Iqbal Day" },
+  { date: "2026-12-25", name: "Quaid-e-Azam Day" },
+  { date: "2027-02-05", name: "Kashmir Solidarity Day" },
+  { date: "2027-03-10", name: "Eid ul Fitr (estimate)" },
+  { date: "2027-03-11", name: "Eid ul Fitr (estimate)" },
+  { date: "2027-03-12", name: "Eid ul Fitr (estimate)" },
+  { date: "2027-03-23", name: "Pakistan Day" },
+  { date: "2027-05-01", name: "Labour Day" },
+  { date: "2027-05-17", name: "Eid ul Adha (estimate)" },
+  { date: "2027-05-18", name: "Eid ul Adha (estimate)" },
+  { date: "2027-05-19", name: "Eid ul Adha (estimate)" },
+  { date: "2027-05-28", name: "Youm-e-Takbeer" },
+  { date: "2027-06-15", name: "Ashura (estimate)" },
+  { date: "2027-06-16", name: "Ashura (estimate)" },
+  { date: "2027-08-14", name: "Independence Day" },
+  { date: "2027-08-15", name: "12 Rabi ul Awal (estimate)" },
+] as const
+
+/** What the booking flow carries to the confirmation page and the WhatsApp text. */
+export type BookingSummary = {
+  kind: "book" | "quote"
+  /** Job number from the Sheet (RT-0001), or a local reference when the Sheet could not be reached. */
+  ref: string
+  saved: boolean
+  device: string
+  fault: string
+  /** Visit line ("Thu 30 Oct, 6:30 PM") and ISO slot; null for a quote. */
+  visit: string | null
+  slot: string | null
+  name: string
+}
+
+export const booking = {
+  title: "Book a visit",
+  lede: "Four quick questions. No account, no payment.",
+  progress: (step: number, total: number, name: string) => `Step ${step} of ${total}: ${name}`,
+  next: "Next",
+  back: "Back",
+  steps: {
+    device: { name: "Device", title: "Which device is it?" },
+    fault: { name: "Fault", title: "What's wrong with it?" },
+    time: { name: "Visit", title: "When will you come in?" },
+    details: { name: "Details", title: "Your name and number" },
+    review: { name: "Review", title: "Check and confirm" },
+  },
+  device: {
+    search: "Search your model, like Galaxy A54 or iPhone 13",
+    brands: "Brands",
+    models: "Models",
+    notListed: "Not listed",
+    other: ["Other phone", "Other tablet"],
+    useTyped: (q: string) => `Use "${q}"`,
+    family: "Device",
+    model: "Model",
+    choose: "Choose one",
+    searchAll: "Different device? Search all models",
+    pickError: "Pick your device to continue.",
+  },
+  fault: { label: "Fault", pickError: "Pick what's wrong to continue." },
+  time: {
+    days: "Day",
+    slots: "Time",
+    today: "Today",
+    hour: "Hour",
+    minute: "Minutes",
+    picked: (when: string) => `You'll come in ${when}`,
+    none: "No times are left in the next 7 days. Message us on WhatsApp instead.",
+    pickError: "Pick a time to continue.",
+    quoteInstead: "Not ready to book? Ask for a quote first.",
+  },
+  details: {
+    name: "Your name",
+    phone: "Mobile number",
+    phonePlaceholder: "0300 1234567",
+    phoneHint: "Only the shop sees it, to reach you about this repair.",
+    nameError: "Enter your name.",
+    phoneError: "Enter a Pakistani mobile number, like 0300 1234567.",
+    /** Hidden from people; only bots fill it. */
+    honeypot: "Leave this field empty",
+  },
+  review: {
+    device: "Device",
+    fault: "Fault",
+    visit: "Visit",
+    quoteVisit: "Quote first, no visit booked",
+    name: "Name",
+    phone: "Mobile",
+    submit: "Confirm booking",
+    sending: "Sending",
+    error: "Something in the form was not accepted. Go back, check it and try again.",
+  },
+  /** Prefilled WhatsApp text: job number, device, fault, time and name. */
+  whatsapp: (b: BookingSummary) =>
+    [
+      `Assalam o alaikum. ${b.kind === "quote" ? "Quote request" : "Booking"} No. ${b.ref}`,
+      `Device: ${b.device}`,
+      `Fault: ${b.fault}`,
+      b.visit && `Visit: ${b.visit}`,
+      `Name: ${b.name}`,
+    ]
+      .filter(Boolean)
+      .join("\n"),
+  confirmed: {
+    title: "You're booked at G-88.",
+    quoteTitle: actions.quoteSent,
+    failedTitle: "Send it on WhatsApp to finish.",
+    lede: "Show this number at the counter.",
+    quoteLede: "The shop replies on WhatsApp with your quote.",
+    failedLede: "We could not save your booking online. Send it on WhatsApp now so the shop has it.",
+    number: "Job number",
+    reference: "Reference",
+    visit: "Visit",
+    where: "Where",
+    send: "Send on WhatsApp",
+    calendar: "Add to calendar",
+    missing: "There is no booking on this device yet.",
+    sealAlt: "Rehan Traders tamper seal",
+  },
+  ics: {
+    file: (ref: string) => `rehan-traders-${ref.toLowerCase()}.ics`,
+    summary: `Repair visit, ${site.name}`,
+    description: (ref: string) => `Job ${ref}. Questions: ${site.phone.display}.`,
+  },
+} as const
 
 export const process = [
   { title: "Job card at the counter", text: "Your device, fault and contact are written on a numbered job card." },
@@ -424,6 +563,11 @@ export const seo = {
       "Touch glass replacement, Galaxy Z Fold and Flip, iPhone and board repairs at Shop G-88, Hafeez Center, Lahore. Book a visit or WhatsApp 0305 8874839.",
   },
   titleTemplate: "%s · Rehan Traders",
+  book: {
+    title: "Book a visit",
+    description: "Book a repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time.",
+  },
+  bookConfirmed: { title: "Booking confirmed", description: "Your Rehan Traders booking." },
   notFound: { title: "Page not found", description: "This page does not exist." },
   kitchenSink: { title: "Kitchen sink" },
 } as const

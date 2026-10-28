@@ -1,6 +1,6 @@
-import Link from "next/link"
 import { Star } from "lucide-react"
 
+import { BookButton } from "@/components/book-button"
 import { Fold3D } from "@/components/fold-3d"
 import { WhatsAppIcon } from "@/components/icon"
 import { OpenStatus } from "@/components/open-status"
@@ -41,9 +41,9 @@ export function Hero() {
             {hero.lede}
           </Text>
           <div className={`mt-7 flex gap-2.5 ${rise(2).className}`} style={rise(2).style}>
-            <Button asChild size="lg" arrow className="flex-1 sm:flex-none">
-              <Link href="/book">{actions.book}</Link>
-            </Button>
+            <BookButton size="lg" arrow className="flex-1 sm:flex-none">
+              {actions.book}
+            </BookButton>
             <Button asChild size="lg" variant="whatsapp" className="flex-1 sm:flex-none">
               <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
                 <WhatsAppIcon />

@@ -1,5 +1,4 @@
-import Link from "next/link"
-
+import { BookButton } from "@/components/book-button"
 import { WhatsAppIcon } from "@/components/icon"
 import { Container, Section } from "@/components/layout"
 import { Reveal } from "@/components/motion"
@@ -15,9 +14,9 @@ export function CtaBand() {
         <Reveal className="flex flex-col gap-8 rounded-xl bg-band px-6 py-12 md:px-14 md:py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
           <Heading className="text-on-band">{cta.title}</Heading>
           <div className="flex shrink-0 gap-2.5">
-            <Button asChild size="lg" variant="inverse" arrow className="flex-1 sm:flex-none">
-              <Link href="/book">{actions.book}</Link>
-            </Button>
+            <BookButton size="lg" variant="inverse" arrow className="flex-1 sm:flex-none">
+              {actions.book}
+            </BookButton>
             <Button asChild size="lg" variant="whatsapp" className="flex-1 sm:flex-none">
               <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
                 <WhatsAppIcon />

@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { ArrowRight, ArrowUpRight, Star } from "lucide-react"
 
+import { BookButton } from "@/components/book-button"
 import { BeforeAfter } from "@/components/before-after"
 import { HoursTable } from "@/components/hours-table"
 import { Icon } from "@/components/icon"
@@ -48,11 +49,9 @@ function ServiceCard({ service, lead }: { service: Service; lead?: boolean }) {
       <div className="flex flex-1 flex-col gap-3 p-6">
         <CardTitle className={cn(lead && "text-title-lg")}>{service.title}</CardTitle>
         <CardDescription className="mb-2 line-clamp-2">{service.short}</CardDescription>
-        <Button asChild variant="line" className="mt-auto self-start">
-          <Link href={`/book?service=${service.slug}`} prefetch={false}>
-            {actions.bookRepair}
-          </Link>
-        </Button>
+        <BookButton service={service.slug} variant="line" className="mt-auto self-start">
+          {actions.bookRepair}
+        </BookButton>
       </div>
     </Card>
   )

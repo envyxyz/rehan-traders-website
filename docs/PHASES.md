@@ -100,3 +100,18 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 - "Not sure what's wrong?": heading and input row centred; the "Describe the problem" label is now screen-reader only (the heading is the visible prompt).
 - Lighthouse mobile after these changes: Performance 69 and 74 (LCP still the h1; the map is not requested), Accessibility 100, Best Practices 96, SEO 100. Lower than the earlier 80–86. The new Phase 2 card images (not committed here) now load, and the machine was busy, so this needs a clean re-run in Phase 9.
 - WCAG 2.2.2 note: the pause button became a next arrow at Ameer's request. The carousel still stops on hover and focus and under reduced motion; a visible pause control is gone.
+
+### 2026-10-29 · Phase 5: booking
+- Shipped:
+  - `/book`, the BookingSheet behind every Book button, and `/book/confirmed`. Five steps (device, fault, visit, details, review), booking saved by the Worker (`worker/book.ts`, Zod) to the Apps Script webhook (`integrations/booking-apps-script/`: Sheet row, RT-#### job number, email), with a WhatsApp handoff and a local `WEB-` reference when the Sheet is down.
+  - Device step: about 3,900 current phone and tablet models from public sources (Google Play's supported-devices list, AppleDB), built by `pnpm devices` (`scripts/devices.mjs`) into `src/data/devices.json` with per-brand filters for current model lines. Search by any words ("s24 ultra"), brand shortcuts, "Use what I typed", Other phone/tablet. Services with `families` (iPhone repair: iPhone/iPad; Fold and Flip) ask with two themed dropdowns (new `ui/select.tsx`, Radix Select) instead.
+  - Visit step: day tiles plus an iOS-style time wheel (`time-wheel.tsx`): hours left, minutes right, AM/PM beside; wheel, drag, arrow keys, or click/type a number; built only from bookable slots, so it cannot leave shop hours or the Friday break.
+  - Confirmation: a full-width ticket (stub with the red job number, tear line, details) that fills one screen, WhatsApp and Add to calendar inside it.
+  - Sheets and dialogs: Lenis hands wheel events back to the browser while Radix locks the page, so a sheet scrolls and the page behind it does not.
+  - Arrow buttons: the chip's colour grows from the chip to fill the button in 450ms (`btn-fill`, `--duration-fill`), label colour follows; the 2px lift is now 350ms.
+  - `cn` knows the radius tokens, so a `rounded-*` passed in replaces a primitive's `rounded-pill`.
+  - Shop email (Apps Script): HTML ticket in the site's look, sender name "Rehan Traders", `resetForLaunch()` for launch day.
+- Left:
+  - Paste the new `Code.gs` into the Apps Script editor and deploy a new version (README, "Changing the script later"); until then the old plain email goes out.
+  - Emails come from the account the script runs in; to send from rehanmobiletraders@gmail.com, deploy it from that account (README).
+  - Launch day: run `resetForLaunch()` (README).
