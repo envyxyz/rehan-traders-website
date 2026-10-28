@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Next.js (App Router) + React + TypeScript, Tailwind CSS v4, shadcn/ui, Motion (Framer Motion) for subtle animation, 21st.dev components where they fit. Hosted on Vercel at rehanmobiletraders.com. Chosen by Ameer on 28 Oct 2026 over a Vite SPA (weak SEO) and Astro (harder shadcn/21st wiring).
+Next.js (App Router) + React + TypeScript, Tailwind CSS v4, shadcn/ui, Motion (Framer Motion) for subtle animation, 21st.dev components where they fit. Static export hosted free on Cloudflare Workers at rehanmobiletraders.com, with a small Worker for booking and AI. Chosen by Ameer on 28 Oct 2026 over a Vite SPA (weak SEO) and Astro (harder shadcn/21st wiring). Hosting must be free (Vercel Hobby is non-commercial); Google Cloud billing is not available.
 
 ## Users
 
@@ -21,14 +21,20 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 ## Positioning
 
 - Touch glass replacement that keeps the original display (the shop's own title: "Touch Glass Specialist").
-- Samsung Galaxy Z Fold and Z Flip repair: outer glass, inner panel, hinge.
+- Saves the damaged panel first where it can (Adnan: "our main priority").
+- Foldables: every Galaxy Z Fold and Z Flip generation, Pixel Fold, Surface Duo. Outer glass, inner panel, hinge.
 - Board-level repair at an open bench with a microscope, inside Hafeez Center, Lahore's phone market.
-- 4.9 on Google from 47 reviews (23 Oct 2026). Always pulled live, never typed in.
+- Repairing phones since 2009.
+- 4.9 on Google from 47 reviews (23 Oct 2026). Copied from the Google listing into content.ts with its date, refreshed by hand; never rounded up or guessed.
 
 ## Operating Context
 
 - Walk-in shop: Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54000. Coordinates 31.5161006, 74.3433894.
-- Hours: Monday to Saturday 11:00 AM to 10:00 PM, Sunday closed.
+- Hours: Monday to Saturday 11:00 AM to 10:00 PM, Friday prayer break 1:00 to 2:00 PM, closed Sundays and public holidays.
+- Courier repairs from outside Lahore: yes (terms not confirmed yet).
+- Payment: all methods (cash, card, JazzCash, EasyPaisa, bank transfer).
+- Customers can watch the repair and take back removed parts, on request, when the bench is not busy. Swollen batteries are disposed of safely straight away.
+- Booking emails go to rehanmobiletraders@gmail.com.
 - Phone and WhatsApp: 0305 8874839 (dial +923058874839). WhatsApp is the shop's real channel.
 - Contact person: Adnan Ali. The shop is called Rehan Traders; nobody called Rehan is the client.
 
@@ -36,8 +42,8 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 
 - Booking: device, fault, visit time, name and phone. Saved and emailed to the shop, then WhatsApp opens with a prefilled message.
 - AI chat assistant: answers from the site's own content only. Primary model Claude Haiku via OpenRouter, fallback Gemini via Google AI Studio, final fallback a fixed reply with WhatsApp and call links. Replies in the language the customer writes in (English, Roman Urdu or Urdu script).
-- Google reviews and rating via Places API, refreshed daily.
-- Prices: one switch in content.ts between "From Rs X" (placeholders now) and "Get a quote in 5 minutes". Panel prices move fast; the switch must stay one line.
+- Google reviews and rating: 5 real reviews copied into content.ts with an as-of date, linking to the Google listing (no Places API: no billing).
+- Prices: launch in "Get a quote in 5 minutes" mode (Adnan). One switch in content.ts flips to "From Rs X" later; panel prices move fast, so the switch must stay one line.
 - All copy lives in `src/content.ts`. No copy in components.
 - Theme follows the device (prefers-color-scheme). Static background. Subtle motion only, reduced-motion respected.
 - Lighthouse 95+ on Performance, Accessibility, Best Practices and SEO, mobile.
@@ -56,7 +62,8 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Real photos: `../growth/Photos/Originals/` (12, 20 Oct 2026) and retouched set `../growth/Photos/Edited/`.
 - Google: 4.9 from 47 reviews. Reviews mention a Galaxy S22 Ultra water-damage fix with data recovered and a Galaxy Z Fold4 blank display fix.
 - Service list: `../growth/Documents/Business Profile.html` section 02.
-- Not confirmed, never invent: prices, warranty length, turnaround times, year founded, number of repairs, registered name/NTN, original-parts claims.
+- Adnan's answers of 28 Oct 2026: `docs/PRD.md` §11.
+- Not confirmed, never invent: prices, warranty length, turnaround times, number of repairs, registered name/NTN, courier terms, original-parts claims.
 
 ## Product Principles
 

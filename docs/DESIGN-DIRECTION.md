@@ -60,7 +60,9 @@ Look: shot on iPhone 15 Pro main camera, natural Smart HDR, slight grain, true c
 | Close-ups (new): glass separation, Fold inner panel, iPhone back glass, battery swap, charging port, wet board cleaning, tablet screen | generated to match the bench | Service cards and pages |
 | Before/after pair | placeholder generated; replace with a real job before launch | Homepage slider |
 
-Pipeline: `scripts/images.mjs` sends source + prompt to an OpenRouter image model, writes `public/images/<name>.jpg` and a `<name>.json` sidecar with the exact prompt and source (provenance). `next/image` serves AVIF/WebP.
+Pipeline: `scripts/images.mjs` sends source + prompt to an OpenRouter image model, writes `public/images/<name>-<width>.avif|webp` at fixed widths and a `<name>.json` sidecar with the exact prompt and source (provenance). Pages use those files with `srcset` (static export, no image optimizer).
+
+New photos: Ameer shoots them from the shot list (plan PDF, AI examples in `design/shot-examples/`). Real shots replace generated close-ups wherever they exist; the before/after pair must be real.
 
 ## Later options
 

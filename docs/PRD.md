@@ -25,7 +25,7 @@ Targets for 90 days after launch:
 Full reports: `docs/research/competitors-agy.md`, `docs/research/local-seo-agy.md`. Treat their numbers and unverified claims as unconfirmed.
 
 - Every leading repair site uses the same skeleton: device/fault picker in the hero, services grid, trust signals, reviews, location. Users expect it (Jakob's Law). We keep the skeleton and execute it better.
-- Price before contact wins (uBreakiFix, iSmash, Apple estimator). Lahore shops hide prices behind WhatsApp. We show "From Rs X" behind a one-line switch.
+- Price before contact wins (uBreakiFix, iSmash, Apple estimator). Lahore shops hide prices behind WhatsApp. Panel prices move daily, so Adnan chose "Get a quote" at launch; "From Rs X" stays behind a one-line switch.
 - Ask for the phone number last, after the customer has picked device, fault and time. 3 to 4 fields total. No accounts, no IMEI.
 - Sticky mobile action bar (Book + WhatsApp) and prefilled WhatsApp links are standard in Lahore and work.
 - The local fear is part-swapping and data theft. Answer it plainly (job card, sealed device, warranty card), only with claims Adnan confirms.
@@ -71,12 +71,12 @@ Later (phase 11): device pages (`/repairs/galaxy-z-fold/fold5`), cost guides, ma
 ## 5. Homepage, top to bottom
 
 1. **Hero (100svh, inset panel).** Google proof row, red rule, h1 "Cracked glass? Fixed at G-88.", one-line lede, **Book a visit** (primary) + **WhatsApp**, then phone, address and live open status. Right: CSS 3D Galaxy Z Fold, closed on load, opens into a V with a job card (No. RT-0427) on its inner screen.
-2. **Repairs.** Cards with image, title, two-line description, price line ("From Rs X" or "Get a quote in 5 minutes") and a **Book this repair** button. Lead with touch glass and Fold/Flip (larger cards), then iPhone, screen, battery/charging, water/data, board, tablets. "All repairs" link.
+2. **Repairs.** Cards with image, title, two-line description, price line ("Get a quote in 5 minutes" at launch) and a **Book this repair** button. Lead with touch glass and Fold/Flip (larger cards), then iPhone, screen, battery/charging, water/data, board, tablets. "All repairs" link.
 3. **Before and after.** Drag slider: the same phone cracked and fixed, caption naming device and fault.
 4. **How a repair works.** Four steps that mirror the shop's real kit: 1 job card at the counter, 2 repaired at the open bench, 3 tested and sealed in the pouch, 4 warranty card. Step numbers in Signal Red.
-5. **Reviews.** Live rating and count, up to 5 latest Google reviews (author, date, stars, text), "Read all 47 on Google".
+5. **Reviews.** Rating and count with an "as of" date, 5 hand-picked Google reviews (author, date, stars, text), "Read all on Google".
 6. **Not sure what's wrong?** One input: "Describe the problem" sends to `/estimate`.
-7. **Visit.** Static map image (opens Google Maps), address with "Ground floor", hours with today highlighted, open status, Directions button.
+7. **Visit.** Storefront photo, address with "Ground floor", hours with today highlighted, open status, Directions button (Google Maps link), "Outside Lahore? Send it by courier" line.
 8. **FAQ.** Five top questions, link to `/faq`.
 9. **CTA band (ink).** "Cracked glass? Bring it to G-88." Book + WhatsApp.
 10. **Footer.**
@@ -86,8 +86,8 @@ Floating: on phones a glass bottom bar (Book a visit · WhatsApp · chat icon) a
 ## 6. Features
 
 ### 6.1 Booking (Slot + WhatsApp handoff)
-- Steps: device (searchable picker: brand, then model) → fault (chips) → visit time (next 7 days, Mon to Sat, 11:00 to 21:30 in 30-min slots, Asia/Karachi, past slots hidden) → name + phone (Pakistani mobile, validated) → confirm.
-- Submit: server action validates with Zod, honeypot + time-trap, rate limit; posts to a Google Apps Script web app that appends to a Google Sheet, assigns the next sequential job number (RT-0001…), emails the shop, and returns the number.
+- Steps: device (searchable picker: brand, then model) → fault (chips) → visit time (next 7 days, Mon to Sat, 11:00 to 21:30 in 30-min slots, no Friday 13:00 to 14:00 slots, public holidays from a list in content.ts, Asia/Karachi, past slots hidden) → name + phone (Pakistani mobile, validated) → confirm.
+- Submit: the Worker's `/api/book` validates with Zod, honeypot + time-trap; posts to a Google Apps Script web app that appends to a Google Sheet, assigns the next sequential job number (RT-0001…), emails the shop, and returns the number.
 - Confirmation: job number in Signal Red, tamper seal, visit time, address, "Add to calendar" (.ics), and **Send on WhatsApp** opening `wa.me/923058874839` with a prefilled message (job number, device, fault, time, name).
 - Failure: if the Sheet call fails, still show a confirmation with a local reference and push the WhatsApp handoff harder. Never lose the booking silently.
 - No capacity limits at launch. Add slot capacity only if double-booking happens.
@@ -97,20 +97,20 @@ Floating: on phones a glass bottom bar (Book a visit · WhatsApp · chat icon) a
 - Language: replies in the language the customer writes in (English, Roman Urdu or Urdu script).
 - Hands off to booking, WhatsApp or a call when the customer is ready or the question is out of scope.
 - Models, in order: Claude Haiku via OpenRouter (prompt caching on the knowledge block) → Gemini Flash via Google AI Studio → a fixed reply with WhatsApp and call buttons. Timeout per provider, streaming, max tokens and max turns per session capped.
-- Built on the Vercel AI SDK. The widget is lazy-loaded on first interaction or idle, never in the initial bundle.
-- Rate limited per IP; no logs of message content beyond what the providers keep; disclosed in `/privacy`.
+- Runs in the Cloudflare Worker (`/api/chat`) with the AI SDK. The widget is lazy-loaded on first interaction or idle, never in the initial bundle.
+- Rate limited per IP (Cloudflare rate-limiting rule on `/api/*`); no logs of message content beyond what the providers keep; disclosed in `/privacy`.
 
 ### 6.3 AI repair estimator (`/estimate`)
-- Two paths on one page: pick device + fault, or type the problem in your own words. The AI maps free text to a fault category and device using the same knowledge, then shows the price line from `content.ts` (never a number it made up), likely time, and **Book this repair**.
+- Two paths on one page: pick device + fault, or type the problem in your own words. The AI maps free text to a fault category and device using the same knowledge, then shows the likely repair, whether the original panel may be saved, the price line from `content.ts` (in quote mode: **Get a quote on WhatsApp** with the device and fault prefilled; never a number it made up), and **Book this repair**.
 - Same provider chain and limits as the chat.
 
 ### 6.4 Google reviews
-- Places API (New) Place Details: `rating`, `userRatingCount`, `reviews` (Google returns at most 5). Fetched server-side, cached 24 h (ISR). Server-only key restricted to the Places API.
-- Fallback: hand-picked reviews in `content.ts` with dates, shown only if the API fails.
-- Follow Google's attribution rules (author name, link, "Google" attribution). No `AggregateRating` JSON-LD.
+- Google Cloud billing is not available, so no Places API. Rating, count and 5 real reviews (author first name and initial, date, stars, text) are copied from the Google Business Profile into `content.ts` with an `asOf` date, refreshed by hand monthly.
+- Every review links to the Google listing ("Read all on Google"). No `AggregateRating` JSON-LD.
+- Later, free: the Google Business Profile API (needs an access request, no billing) can automate this.
 
 ### 6.5 Prices
-- `content.ts` holds `priceMode: 'from' | 'quote'` and a `priceFrom` per service. `from` shows "From Rs X"; `quote` shows "Get a quote in 5 minutes" everywhere (cards, service pages, estimator, chat knowledge). Switching is a one-line change.
+- `content.ts` holds `priceMode: 'from' | 'quote'` and a `priceFrom` per service. `from` shows "From Rs X"; `quote` shows "Get a quote in 5 minutes" everywhere (cards, service pages, estimator, chat knowledge). Launch in `quote` (Adnan). Switching is a one-line change.
 
 ### 6.6 Signature details
 - Red job number: fold screen, booking confirmation, WhatsApp message.
@@ -118,38 +118,45 @@ Floating: on phones a glass bottom bar (Book a visit · WhatsApp · chat icon) a
 
 ## 7. Content model
 
-All copy in `src/content.ts`, typed, no copy in components. Sections: `site` (name, phone display/dial, WhatsApp, email, address lines, geo, hours, maps URL), `priceMode`, `nav`, `hero`, `services[]` (slug, title, short, long, faults, priceFrom, image, alt, faq), `devices` (brands → models), `faults`, `process[]`, `reviewsFallback[]`, `faq[]`, `visit`, `cta`, `footer`, `legal`, `seo` (per route title/description), `chat` (greeting, canned fallback). Placeholders are allowed now; mark each with `// TODO(adnan): confirm` so they can be grepped before launch.
+All copy in `src/content.ts`, typed, no copy in components. Sections: `site` (name, phone display/dial, WhatsApp, email, address lines, geo, hours, maps URL), `priceMode`, `nav`, `hero`, `services[]` (slug, title, short, long, faults, priceFrom, image, alt, faq), `devices` (brands → models), `faults`, `process[]`, `reviews` (rating, count, asOf, url, items[]), `payments`, `holidays[]`, `faq[]`, `visit`, `cta`, `footer`, `legal`, `seo` (per route title/description), `chat` (greeting, canned fallback). Placeholders are allowed now; mark each with `// TODO(adnan): confirm` so they can be grepped before launch.
 
 ## 8. Non-functional
 
-- **Performance budget (home, mobile):** initial JS under 120 KB gzip; fonts self-hosted with `next/font`, Latin subset, 2 families; hero has no raster image (CSS fold) so LCP is the h1; images AVIF/WebP via `next/image` with sizes; map is a static image; GA4 loads after hydration; chat, Lenis on touch, and the before/after slider load lazily.
+- **Performance budget (home, mobile):** initial JS under 120 KB gzip; fonts self-hosted with `next/font`, Latin subset, 2 families; hero has no raster image (CSS fold) so LCP is the h1; images pre-sized AVIF/WebP from the image script with `srcset`/`sizes` (static export has no image optimizer); no map on the homepage, and on `/visit` a Google Maps embed (Share → Embed a map, no key) loads only when tapped; GA4 loads after hydration; chat, Lenis on touch, and the before/after slider load lazily.
 - **Accessibility:** WCAG 2.2 AA, 44px targets, visible focus, keyboard-complete booking and chat, reduced motion and reduced transparency honoured, form errors inline and specific.
 - **SEO:** per-route metadata, canonical URLs, OG images, JSON-LD (`MobilePhoneStore` with address, geo, hours, phone; `Service` per repair page; `FAQPage`; `BreadcrumbList`), `sitemap.ts`, `robots.ts`, `llms.txt`, one entity sentence ("Rehan Traders is a phone and tablet repair lab at Shop G-88, Ground Floor, Hafeez Center, Gulberg III, Lahore") repeated in footer, about and schema. NAP identical to the Google Business Profile.
-- **Security:** security headers (CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`); secrets server-only; Zod on every input; rate limits on `/book` and AI routes; prompt-injection rules in the system prompt; no PII in URLs or analytics.
+- **Security:** security headers in `public/_headers` (CSP, HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`); secrets only in the Worker; Zod on every input; one Cloudflare rate-limiting rule on `/api/*`; prompt-injection rules in the system prompt; no PII in URLs or analytics.
 - **Analytics (GA4 events):** `book_start`, `book_step`, `book_submit`, `whatsapp_click`, `call_click`, `directions_click`, `chat_open`, `chat_handoff`, `estimate_complete`, `price_view`. Search Console and Bing Webmaster verified.
 
 ## 9. Stack
 
-Next.js (App Router, static where possible) · React · TypeScript strict · Tailwind CSS v4 (`@theme` tokens) · shadcn/ui (restyled to the tokens) · Motion (`motion/react`, LazyMotion) · Lenis · lucide-react · Vercel AI SDK (OpenRouter + Google providers) · Zod · Playwright + axe · Lighthouse CI · pnpm · Vercel hosting.
+Next.js (App Router, `output: 'export'`) · React · TypeScript strict · Tailwind CSS v4 (`@theme` tokens) · shadcn/ui (restyled to the tokens) · Motion (`motion/react`, LazyMotion) · Lenis · lucide-react · AI SDK (OpenRouter + Google providers) · Zod · Playwright + axe · Lighthouse CI · pnpm · Cloudflare Workers (free plan).
 
-**Hosting note:** Vercel's Hobby plan is for non-commercial use only. A shop site needs Vercel Pro (about $20/month) or a host whose free tier allows commercial use (Netlify, Cloudflare). Decide before go-live.
+**Hosting (decided 28 Oct 2026, must be free):** Cloudflare Workers free plan, which allows commercial use. The Next.js static export (`out/`) is served as static assets: free and unlimited, and they never run the Worker. A small Worker in `worker/` handles only `/api/book`, `/api/chat` and `/api/estimate`: 100,000 requests a day and 10 ms CPU each (waiting on OpenRouter or Apps Script does not count). So: no ISR, middleware, server actions or dynamic route handlers in Next. Deploys from GitHub through Workers Builds. The domain stays registered at Hostinger; at go-live its nameservers move to Cloudflare (copy any MX/email records first).
 
 ## 10. Out of scope at launch
 
 Accounts, payments, online parts shop, repair status tracking, multi-language site, blog, device-specific landing pages, photoreal 3D fold (planned as a phase-11 swap).
 
-## 11. Open questions for Adnan
+## 11. Answers from Adnan (28 Oct 2026)
+
+These are confirmed and can go on the site:
+- **Prices:** none shown. "Get a quote" everywhere (`priceMode: 'quote'`).
+- **Payment:** all methods accepted (content.ts lists cash, card, JazzCash, EasyPaisa, bank transfer).
+- **Watching the repair, removed parts:** both on request when the bench is not busy. Removed parts go back to the customer when safe; swollen batteries are disposed of safely straight away.
+- **Courier / out-of-city repairs:** yes.
+- **Hours:** Mon to Sat 11 AM to 10 PM, Friday prayer break 1 to 2 PM, closed Sundays and public holidays.
+- **Booking email:** rehanmobiletraders@gmail.com.
+- **Photos:** team faces allowed, names not needed. Owner is Adnan (his photo: the old profile picture in `../growth/Brand/`).
+- **Coverage:** every Galaxy Z Fold and Z Flip generation, Pixel Fold, Surface Duo; iPhones (panels, back glass); water damage; tablets except very old, obsolete models. The shop tries to save the damaged panel first.
+- **Founded:** 2009.
+
+## 12. Still open
 
 Nothing below goes on the site until answered.
 1. Warranty: length and what it covers.
 2. Typical turnaround per repair (glass, screen, battery, port, Fold inner screen).
-3. Starting prices per service (or keep "Get a quote in 5 minutes").
-4. Payment methods (cash, JazzCash, EasyPaisa, bank transfer, card?).
-5. Can customers watch the repair at the bench? Are removed parts returned?
-6. Courier / out-of-city repairs: yes or no.
-7. Friday prayer break and public holiday hours.
-8. Email address for booking notifications (rehanmobiletraders@gmail.com?).
-9. Team names and permission to show faces in photos.
-10. Real before-and-after photos of finished jobs (with customer permission) to replace the placeholder pair.
-11. Which Fold/Flip generations and which tablet brands are covered.
-12. Year started, registered business name, NTN (footer and schema).
+3. Registered business name and NTN (footer and schema).
+4. Courier terms: which courier, who pays each way, how to pack.
+5. "iPhone Duo" in the answer: there is no such phone. Assumed Microsoft Surface Duo; confirm.
+6. Real before-and-after photos of a finished job (customer permission), plus the shot list in the plan PDF.
