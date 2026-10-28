@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Archivo, Inter } from "next/font/google"
+import { Google_Sans_Flex } from "next/font/google"
 
 import { MotionProvider, SmoothScroll } from "@/components/motion"
 import { Toaster } from "@/components/ui/sonner"
@@ -8,9 +8,9 @@ import { seo, site } from "@/content"
 import { themeColor } from "@/lib/tokens"
 import "./globals.css"
 
-// Variable fonts: one file each covers the weights in use (Archivo 500–800, Inter 400–600).
-const archivo = Archivo({ subsets: ["latin"], display: "swap", variable: "--font-archivo" })
-const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" })
+// One variable family for headlines and body (weights 400–800). The opsz axis tightens
+// large headlines and opens small text automatically (font-optical-sizing: auto).
+const googleSans = Google_Sans_Flex({ subsets: ["latin"], display: "swap", axes: ["opsz"], variable: "--font-google-sans" })
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -28,7 +28,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${archivo.variable} ${inter.variable}`}>
+    <html lang="en" className={googleSans.variable}>
       <body>
         <MotionProvider>
           <TooltipProvider>{children}</TooltipProvider>

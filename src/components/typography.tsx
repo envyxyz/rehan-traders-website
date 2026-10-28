@@ -17,7 +17,7 @@ type HeadingProps = React.ComponentProps<"h2"> & {
   rule?: boolean
 }
 
-/** Archivo, tight, balanced. No kicker above it, ever. */
+/** Display face, tight, balanced. No kicker above it, ever. */
 export function Heading({ as: Tag = "h2", size = "display-lg", rule, className, children, ...props }: HeadingProps) {
   return (
     <Tag className={cn("font-display text-balance text-ink", headingSizes[size], className)} {...props}>
@@ -36,7 +36,7 @@ type TextProps = React.ComponentProps<"p"> & {
   tone?: keyof typeof textTones
 }
 
-/** Inter running text. Callers cap the measure (max-w-prose) where text runs long. */
+/** Body running text. Callers cap the measure (max-w-prose) where text runs long. */
 export function Text({ as: Tag = "p", size = "body-md", tone = "body", className, ...props }: TextProps) {
   return <Tag className={cn("text-pretty", textSizes[size], textTones[tone], className)} {...props} />
 }

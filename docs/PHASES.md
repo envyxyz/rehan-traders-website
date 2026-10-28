@@ -44,3 +44,7 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - `/api/*` dev rewrite to the Worker (Phase 5).
   - `test:e2e` and `lhci` scripts (Phase 9).
   - The `TODO(adnan)` items in `content.ts`: address line, reviews link and picks, device lists, warranty, walking directions, registered name/NTN.
+
+### 2026-10-28 · Phase 1 update: typeface
+- Decided: the website sets everything in Google Sans Flex (one variable file with the opsz axis, weights 400–800), replacing Archivo and Inter. Chosen over Roboto for warmth and readability; Google Sans (non-Flex) stops at 700, below the 800 headlines. Logo wordmark and print kit keep Archivo. Recorded in `DESIGN.md` Website Overrides.
+- Note: next/font has no metric overrides for this family, so there is no size-adjusted fallback (small swap shift possible on first load). Preloaded Latin file is about 136 KB.

@@ -121,8 +121,8 @@
   --ease-*: initial;
   --font-*: initial;
 
-  --font-display: var(--font-archivo), Arial, sans-serif;
-  --font-sans: var(--font-inter), -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-google-sans), Arial, sans-serif;
+  --font-sans: var(--font-google-sans), -apple-system, "Segoe UI", sans-serif;
 
   /* Fluid type: phone (390px) to desktop (1440px), rem + clamp. */
   --text-display-xl: clamp(2.25rem, 1.646rem + 2.476vw, 3.875rem);
