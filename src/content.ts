@@ -178,8 +178,8 @@ export type Service = {
   alt: string
   faq: { q: string; a: string }[]
   lead?: boolean
-  /** Device step shows two dropdowns (family, then model) instead of the full search. `prefix` matches src/data/devices.json names. */
-  families?: { label: string; prefix: string }[]
+  /** Device step: the brand dropdown is fixed to this one (src/data/devices.json brand name). */
+  brand?: string
 }
 
 // Images arrive in Phase 2 (public/images); until then cards show a placeholder surface. Prices stay unset while priceMode is "quote".
@@ -205,10 +205,6 @@ export const services: Service[] = [
     alt: "Galaxy Z Fold opened on the bench with its inner panel exposed",
     faq: [],
     lead: true,
-    families: [
-      { label: "Galaxy Z Fold", prefix: "Samsung Galaxy Z Fold" },
-      { label: "Galaxy Z Flip", prefix: "Samsung Galaxy Z Flip" },
-    ],
   },
   {
     slug: "iphone",
@@ -219,10 +215,7 @@ export const services: Service[] = [
     image: "iphone-back-glass",
     alt: "iPhone with its back glass being replaced",
     faq: [],
-    families: [
-      { label: "iPhone", prefix: "iPhone" },
-      { label: "iPad", prefix: "iPad" },
-    ],
+    brand: "Apple",
   },
   {
     slug: "screen-replacement",
@@ -347,16 +340,13 @@ export const booking = {
     review: { name: "Review", title: "Check and confirm" },
   },
   device: {
-    search: "Search your model, like Galaxy A54 or iPhone 13",
-    brands: "Brands",
-    models: "Models",
-    notListed: "Not listed",
-    other: ["Other phone", "Other tablet"],
-    useTyped: (q: string) => `Use "${q}"`,
-    family: "Device",
+    brand: "Brand",
     model: "Model",
-    choose: "Choose one",
-    searchAll: "Different device? Search all models",
+    brandSearch: "Type or pick a brand",
+    modelSearch: "Type or pick your model",
+    brandFirst: "Pick the brand first",
+    notListed: "Not listed",
+    useTyped: (q: string) => `Use "${q}"`,
     pickError: "Pick your device to continue.",
   },
   fault: { label: "Fault", pickError: "Pick what's wrong to continue." },

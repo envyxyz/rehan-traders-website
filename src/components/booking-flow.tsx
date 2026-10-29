@@ -2,20 +2,15 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { Check } from "lucide-react"
 
-import { Icon } from "@/components/icon"
+import { DevicePicker } from "@/components/device-picker"
 import { Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { TimeWheel } from "@/components/time-wheel"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { actions, booking, faults, holidays, priceMode, services, site, type BookingSummary } from "@/content"
-import catalog from "@/data/devices.json"
-import { findModels, models } from "@/lib/devices"
 import { bookingDays, displayPhone, normalizePhone, slotDay, slotLabel, type BookingDay } from "@/lib/booking"
 import { track } from "@/lib/track"
 import { cn } from "@/lib/utils"
@@ -70,9 +65,6 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
     name: "",
     phone: "",
   })
-  const [query, setQuery] = React.useState("")
-  const [family, setFamily] = React.useState<string>("")
-  const [searchAll, setSearchAll] = React.useState(!svc?.families)
   const [days, setDays] = React.useState<BookingDay[]>([])
   const [error, setError] = React.useState<string | null>(null)
   const [sending, setSending] = React.useState(false)
@@ -189,14 +181,6 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
   const copy = booking.steps[step]
   const slots = days.find((d) => d.date === draft.day)?.slots ?? []
   const detailsError = error === "details"
-  const found = findModels(query)
-
-  const deviceItem = (name: string, label = name) => (
-    <CommandItem key={name} value={`pick:${name}`} onSelect={() => set({ device: name })} aria-checked={draft.device === name}>
-      <span className="flex-1">{label}</span>
-      {draft.device === name && <Icon icon={Check} />}
-    </CommandItem>
-  )
 
   return (
     <form
@@ -222,81 +206,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
           {copy.title}
         </h2>
 
-        {step === "device" && !searchAll && svc?.families && (
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor={`${ids}-family`}>{booking.device.family}</Label>
-              <Select
-                value={family}
-                onValueChange={(f) => {
-                  setFamily(f)
-                  set({ device: null })
-                }}
-              >
-                <SelectTrigger id={`${ids}-family`}>
-                  <SelectValue placeholder={booking.device.choose} />
-                </SelectTrigger>
-                <SelectContent>
-                  {svc.families.map((f) => (
-                    <SelectItem key={f.prefix} value={f.prefix}>
-                      {f.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {family && (
-              <div className="flex animate-rise flex-col gap-2 motion-reduce:animate-none">
-                <Label htmlFor={`${ids}-model`}>{booking.device.model}</Label>
-                <Select value={draft.device ?? ""} onValueChange={(device) => set({ device })}>
-                  <SelectTrigger id={`${ids}-model`}>
-                    <SelectValue placeholder={booking.device.choose} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {models
-                      .filter((m) => m.startsWith(family))
-                      .map((m) => (
-                        <SelectItem key={m} value={m}>
-                          {m}
-                        </SelectItem>
-                      ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-            <Button type="button" variant="line" still className="self-start" onClick={() => setSearchAll(true)}>
-              {booking.device.searchAll}
-            </Button>
-          </div>
-        )}
-
-        {step === "device" && searchAll && (
-          <Command label={copy.name} shouldFilter={false} className="bg-paper">
-            <CommandInput placeholder={booking.device.search} aria-label={booking.device.search} value={query} onValueChange={setQuery} />
-            <CommandList>
-              {query.trim() ? (
-                found.length > 0 && <CommandGroup heading={booking.device.models}>{found.map((m) => deviceItem(m))}</CommandGroup>
-              ) : (
-                <>
-                  {draft.device && deviceItem(draft.device)}
-                  <CommandGroup heading={booking.device.brands}>
-                    {catalog.map((b) => (
-                      <CommandItem key={b.brand} value={b.brand} onSelect={() => setQuery(`${b.brand} `)}>
-                        {b.brand}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </>
-              )}
-              <CommandGroup heading={booking.device.notListed}>
-                {query.trim() &&
-                  !found.some((m) => m.toLowerCase() === query.trim().toLowerCase()) &&
-                  deviceItem(query.trim().slice(0, 60), booking.device.useTyped(query.trim().slice(0, 60)))}
-                {booking.device.other.map((o) => deviceItem(o))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        )}
+        {step === "device" && <DevicePicker value={draft.device} onChange={(device) => set({ device })} lockedBrand={svc?.brand} />}
 
         {step === "fault" && (
           <RadioGroup aria-label={booking.fault.label} value={draft.fault ?? ""} onValueChange={(fault) => set({ fault })}>

@@ -145,3 +145,9 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - Set `OPENROUTER_API_KEY`, `GOOGLE_AI_PRO_API_KEY`, `GOOGLE_AI_API_KEY`, `GROQ_API_KEY` as Worker secrets before launch, and the Cloudflare rate-limiting rule on `/api/*` (Phase 10). Without it anyone can spend the OpenRouter balance.
   - Disclose chat data handling in `/privacy` (Phase 7): messages go to OpenRouter/Anthropic, Google and Groq; the Worker logs only provider errors.
   - A paid Gemini key would make that tier dependable; it needs Google billing, which is not available.
+
+### 2026-10-30 · Phase 6 update: device picker
+- Booking and `/estimate` pick the device with two typeable dropdowns, Brand then Model (`device-picker.tsx`, on the `Command` primitive). Each list opens on focus and narrows as you type. A name that is not listed can be used as typed ("Nokia 3310").
+- Fixes: picking "Apple" in the old single search showed nothing, because Apple model names leave out the brand ("iPhone 15").
+- The iPhone repair fixes the brand to Apple (`brand` on the service in `content.ts`). The Fold/Flip family dropdowns are gone; pick Samsung, then type "fold".
+- Home page on phones: the reviews grid no longer widens the page to 540px (it pushed the sticky bar off screen).

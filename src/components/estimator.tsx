@@ -2,18 +2,17 @@
 
 import * as React from "react"
 import { useSearchParams } from "next/navigation"
-import { Check, Phone } from "lucide-react"
+import { Phone } from "lucide-react"
 
 import { BookButton } from "@/components/book-button"
+import { DevicePicker } from "@/components/device-picker"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { actions, booking, estimator, priceMode, site } from "@/content"
+import { actions, estimator, priceMode, site } from "@/content"
 import { MAX_INPUT, repairFor } from "@/lib/assistant"
-import { findModels } from "@/lib/devices"
 import { track } from "@/lib/track"
 
 type Result = { device: string | null; faultSlug: string; confidence: "high" | "medium" | "low"; path: "pick" | "describe" }
@@ -49,7 +48,6 @@ export function EstimatorFromUrl() {
 export function Estimator({ q = "" }: { q?: string }) {
   const [mode, setMode] = React.useState<"pick" | "describe">(q ? "describe" : "pick")
   const [device, setDevice] = React.useState<string | null>(null)
-  const [query, setQuery] = React.useState("")
   const [fault, setFault] = React.useState("")
   const [text, setText] = React.useState(q)
   const [result, setResult] = React.useState<Result | null>(null)
@@ -57,7 +55,6 @@ export function Estimator({ q = "" }: { q?: string }) {
   const [status, setStatus] = React.useState<"idle" | "working" | "unavailable">(runsQ ? "working" : "idle")
   const [error, setError] = React.useState<string | null>(null)
   const ids = React.useId()
-  const found = findModels(query)
 
   const settle = React.useCallback((r: Result | null) => {
     setStatus(r ? "idle" : "unavailable")
@@ -104,46 +101,7 @@ export function Estimator({ q = "" }: { q?: string }) {
 
         {mode === "pick" ? (
           <>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor={`${ids}-device`}>{estimator.device}</Label>
-              <Command label={estimator.device} shouldFilter={false} className="bg-paper">
-                <CommandInput
-                  id={`${ids}-device`}
-                  placeholder={booking.device.search}
-                  value={query}
-                  onValueChange={(v) => {
-                    setQuery(v)
-                    setDevice(null)
-                  }}
-                />
-                {query.trim() && !device && (
-                  <CommandList>
-                    {found.length > 0 && (
-                      <CommandGroup heading={booking.device.models}>
-                        {found.map((m) => (
-                          <CommandItem key={m} value={`pick:${m}`} onSelect={() => (setDevice(m), setQuery(m))}>
-                            {m}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    )}
-                    {!found.some((m) => m.toLowerCase() === query.trim().toLowerCase()) && (
-                      <CommandGroup heading={booking.device.notListed}>
-                        <CommandItem value={`typed:${query}`} onSelect={() => setDevice(query.trim().slice(0, 60))}>
-                          {booking.device.useTyped(query.trim().slice(0, 60))}
-                        </CommandItem>
-                      </CommandGroup>
-                    )}
-                  </CommandList>
-                )}
-              </Command>
-              {device && (
-                <p className="flex items-center gap-2 text-body-sm font-semibold text-ink">
-                  <Icon icon={Check} size="sm" />
-                  {device}
-                </p>
-              )}
-            </div>
+            <DevicePicker value={device} onChange={setDevice} />
             <div className="flex flex-col gap-2">
               <Label id={`${ids}-fault`}>{estimator.fault}</Label>
               <RadioGroup aria-labelledby={`${ids}-fault`} value={fault} onValueChange={setFault}>

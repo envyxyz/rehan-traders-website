@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test"
 
 import { actions, assistant, chat, estimator, price } from "../../src/content"
 import { MAX_INPUT, MAX_TURNS, parseReply } from "../../src/lib/assistant"
+import { pickDevice } from "./helpers"
 
 // UI tests stub /api/chat and /api/estimate, so they cost nothing and do not depend on a model.
 // scripts/chat-evals.mjs tests the real models.
@@ -76,8 +77,7 @@ test("estimate: picking device and fault needs no model", async ({ page }) => {
   await page.goto("/estimate")
   await page.getByRole("button", { name: estimator.submit }).click()
   await expect(page.locator("form").getByRole("alert")).toHaveText(estimator.pickError)
-  await page.getByPlaceholder(/Search your model/).fill("z fold5")
-  await page.getByRole("option", { name: "Samsung Galaxy Z Fold5", exact: true }).click()
+  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5")
   await page.getByRole("radio", { name: "Fold or Flip inner screen" }).click()
   await page.getByRole("button", { name: estimator.submit }).click()
 
