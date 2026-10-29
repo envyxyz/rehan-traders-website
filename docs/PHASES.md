@@ -115,3 +115,9 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - Paste the new `Code.gs` into the Apps Script editor and deploy a new version (README, "Changing the script later"); until then the old plain email goes out.
   - Emails come from the account the script runs in; to send from rehanmobiletraders@gmail.com, deploy it from that account (README).
   - Launch day: run `resetForLaunch()` (README).
+
+### 2026-10-29 · Phase 5 update: Ameer's review
+- Booking sheet: "Step 3 of 5: Visit" replaces the "Four quick questions" line under the title. The time wheel shows 3 rows, so the visit step (with Get a quote) fits a 786px-tall window without scrolling.
+- Arrow buttons: fill 700ms ease-in-out (`--duration-fill`), lift on the same curve, label turns at 400ms, the arrow stays diagonal. Buttons inside the booking sheet take `still`: no fill, no lift.
+- Reviews: all 32 written Google reviews in `content.ts` (the other 18 of 50 are stars only; Ameer's own review left out), each with a clarity `weight`. The carousel draws a weighted random 10 per page load; no "Read on Google" link on the card; initial-letter avatars (`public/reviews/` removed).
+- Shop email: newsletter-style HTML (ink header, horizontal ticket with the red job number, WhatsApp, Call and All bookings buttons, stacks on phones), sender name "Rehan Traders Website Bookings", sent with GmailApp from rehanmobiletraders@gmail.com once that address is a verified alias. Needs Ameer: add the alias, paste `Code.gs`, deploy a new version and allow the Gmail permission (README, "Send from the shop's address").

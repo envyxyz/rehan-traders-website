@@ -5,7 +5,7 @@ import * as React from "react"
 import { booking } from "@/content"
 import { cn } from "@/lib/utils"
 
-const VISIBLE = 5 // rows on show; the middle one is the pick
+const VISIBLE = 3 // rows on show; the middle one is the pick. Three keep the whole visit step on one screen.
 const ROW_REM = 2.75 // h-11, the 44px target
 const ROW_PX = 44
 
@@ -84,7 +84,7 @@ function Wheel({
       aria-valuemin={items[0]?.value}
       aria-valuemax={items.at(-1)?.value}
       data-lenis-prevent
-      className="relative h-55 w-20 cursor-ns-resize touch-none overflow-hidden rounded-md outline-none select-none focus-visible:ring-3 focus-visible:ring-ink/20"
+      className="relative h-33 w-20 cursor-ns-resize touch-none overflow-hidden rounded-md outline-none select-none focus-visible:ring-3 focus-visible:ring-ink/20"
       onKeyDown={(e) => {
         if (typing !== null) return
         const keys: Record<string, number> = {

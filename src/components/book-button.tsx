@@ -4,7 +4,7 @@ import * as React from "react"
 import dynamic from "next/dynamic"
 
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { booking, services } from "@/content"
 
 const loadFlow = () => import("@/components/booking-flow").then((m) => m.BookingFlow)
@@ -59,9 +59,9 @@ export function BookingSheet({
   const svc = services.find((s) => s.slug === service)
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="pb-0">
+      {/* No description: the flow's "Step 1 of 5" line sits under the title instead. */}
+      <SheetContent side="right" className="gap-2 pb-0" aria-describedby={undefined}>
         <SheetTitle>{svc ? svc.title : booking.title}</SheetTitle>
-        <SheetDescription>{booking.lede}</SheetDescription>
         {open && <BookingFlow service={svc?.slug} device={device} onDone={() => onOpenChange(false)} />}
       </SheetContent>
     </Sheet>
