@@ -172,7 +172,7 @@ function Reviews() {
   const c = home.reviews
   return (
     <Section tone="panel">
-      <Container className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+      <Container className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
         <Reveal className="lg:col-span-5">
           <Heading>{c.title}</Heading>
           <p className="mt-6 flex items-center gap-3">
