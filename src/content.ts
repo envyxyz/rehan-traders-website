@@ -71,59 +71,50 @@ export const site = {
 } as const
 
 // Typed in by hand (static site, no Places API). Update rating, count and asOf together.
-// Read from the public listing on 28 Oct 2026 (signed out): Google shows these 5 reviews and only relative
-// dates, so `date` is Google's relative date as of `asOf`. Text copied exactly (Google's trailing "…" dropped).
-// `url` opens that review on Google Maps; `avatar` is the reviewer's Google profile picture, saved to public/reviews/.
-const reviewUrl = (id: string, inner: string) =>
-  `https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1s${id}!2m1!1s0x0:0x61c1e2f03a5bd64b!3m1!1s2@1:${inner}%7C%7C`
-
+// Copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings, 32 with text (the other 18 are
+// stars only and are left out). Text exactly as written; `date` is Google's relative date as of `asOf`. Ameer's own
+// review is left out: the agency should not review its client. `weight` (3 clear English naming the repair, 2 clear
+// praise, 1 short or vague) makes the clearest ones come up most often in the random 10 shown per visit.
 export const reviews = {
   rating: 4.9,
   count: 50,
-  asOf: "2026-10-28",
-  asOfLabel: "28 October 2026",
+  asOf: "2026-10-29",
+  asOfLabel: "29 October 2026",
   url: site.mapsUrl, // TODO(adnan): confirm the Google reviews link (needs listing access)
+  /** Reviews shown per visit, drawn at random (weighted) from `items`. */
+  show: 10,
   items: [
-    {
-      author: "Zunair K.",
-      avatar: "/reviews/zunair-k.webp",
-      date: "4 months ago",
-      rating: 5,
-      text: "I repaired my fold4 blank display.Good job🥰😍🥰",
-      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT2kxSlNFMXFOREJmZHpaak1sUm9jRFZUVG10b1pHYxAB", "CAIQACodChtycF9oOi1JSE1qNDBfdzZjMlRocDVTTmtoZGc"),
-    },
-    {
-      author: "Farwah W.",
-      avatar: "/reviews/farwah-w.webp",
-      date: "4 months ago",
-      rating: 5,
-      text: "Best Lab in the Entire Hafeez Centre for Mobile repair. Thumbs up 👍",
-      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT210WFdHRlhNVGRQWTFVNVNVNURUbnBKZUdSbGEyYxAB", "CAIQACodChtycF9oOmtXWGFXMTdPY1U5SU5DTnpJeGRla2c"),
-    },
-    {
-      author: "Hassnain T.",
-      avatar: "/reviews/hassnain-t.webp",
-      date: "5 months ago",
-      rating: 5,
-      text: "I recently got my phone repair. Very professional extremely happy with the services of Rehan Trader",
-      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT21kMlRrOVpUWFY1YVU1MFJEbFlUVmwxVm5WamRGRRAB", "CAIQACodChtycF9oOmd2Tk9ZTXV5aU50RDlYTVl1VnVjdFE"),
-    },
-    {
-      author: "Haadi O.",
-      avatar: "/reviews/haadi-o.webp",
-      date: "6 months ago",
-      rating: 5,
-      text: "Mr Rehan was very honest and helped me fixed my andriod s22 ultra which was ocean water damaged. He is expert in iphone so he recommended me to proper person and didn't charge me anything. My phone data was recovered.",
-      url: reviewUrl("Ci9DQUlRQUNvZENodHljRjlvT2t4V01VVklWSHBLZEVOd1ZuWTJZa1Z1V1MwM05sRRAB", "CAIQACodChtycF9oOkxWMUVIVHpKdENwVnY2YkVuWS03NlE"),
-    },
-    {
-      author: "Muhammad A.",
-      avatar: "/reviews/muhammad-a.webp",
-      date: "a year ago",
-      rating: 5,
-      text: "\"I had a great experience at Mobile Repairing. The staff was very friendly and helpful. They were able to answer all of my questions and help me find the right phone for my needs. I was especially impressed with the staff's politeness and professionalism. I would highly recommend mobile repairing to anyone looking for a new phone.\"",
-      url: reviewUrl("ChdDSUhNMG9nS0VJQ0FnTURJNDRIbXlBRRAB", "CIHM0ogKEICAgMDI44HmyAE"),
-    },
+    { author: "Haadi O.", rating: 5, date: "6 months ago", weight: 3, text: "Mr Rehan was very honest and helped me fixed my andriod s22 ultra which was ocean water damaged. He is expert in iphone so he recommended me to proper person and didn't charge me anything. My phone data was recovered." },
+    { author: "Asil M.", rating: 5, date: "a year ago", weight: 3, text: "Highly impressed with the mobile repair service here Fast, reliable, and professional my phone feels brand new again. Definitely the go-to spot for any mobile issues.Mr Adnan is very cooperative and humble person really impressed" },
+    { author: "Hassnain T.", rating: 5, date: "5 months ago", weight: 3, text: "I recently got my phone repair. Very professional extremely happy with the services of Rehan Trader" },
+    { author: "Zunair K.", rating: 5, date: "4 months ago", weight: 3, text: "I repaired my fold4 blank display.Good job🥰😍🥰" },
+    { author: "Faizan I.", rating: 5, date: "6 days ago", weight: 3, text: "Very good service just repaired my 14 pro max" },
+    { author: "M. Arsim Z.", rating: 5, date: "a year ago", weight: 3, text: "Good overall service. They only do the necessary work which needs to be done and nothing extra." },
+    { author: "Farooq A.", rating: 5, date: "a month ago", weight: 3, text: "Visited second time, more reliable, satisfactory, honest services. God bless you dear" },
+    { author: "Rao S.", rating: 5, date: "2 days ago", weight: 3, text: "Honest, fair and expert at what they do." },
+    { author: "Farwah W.", rating: 5, date: "4 months ago", weight: 3, text: "Best Lab in the Entire Hafeez Centre for Mobile repair. Thumbs up 👍" },
+    { author: "Junaid B.", rating: 5, date: "a year ago", weight: 3, text: "Iphone and samsung front glass specialist" },
+    { author: "Salman S.", rating: 5, date: "a year ago", weight: 2, text: "Rehan trader is very good repairing center . He is very coprative and honest people. All employees very good trained." },
+    { author: "Shoaib M.", rating: 5, date: "a month ago", weight: 2, text: "Very much satisfied from their customer services." },
+    { author: "Aqsa I.", rating: 5, date: "9 months ago", weight: 2, text: "Wonderful people professional and experienced polite and humble no doubt\n\nALLAH Khush Rakhe Ameen" },
+    { author: "Mian Haider M.", rating: 5, date: "a year ago", weight: 2, text: "Highly professional and reasonable services" },
+    { author: "Bilal R.", rating: 5, date: "a week ago", weight: 2, text: "Best repairing center in lahore" },
+    { author: "Emraan K.", rating: 5, date: "5 months ago", weight: 2, text: "Best repairing shop in Hafeez centre" },
+    { author: "Muhammad A.", rating: 5, date: "a year ago", weight: 2, text: "\"I had a great experience at Mobile Repairing. The staff was very friendly and helpful. They were able to answer all of my questions and help me find the right phone for my needs. I was especially impressed with the staff's politeness and professionalism. I would highly recommend mobile repairing to anyone looking for a new phone.\"" },
+    { author: "Xhah A.", rating: 5, date: "a month ago", weight: 2, text: "google pixel fold 9 pro display problem mai tha display problem adnan bhai ny bht sy professional tareeky sy repair kiya or mera same panel repair kiya" },
+    { author: "Ali R.", rating: 5, date: "4 months ago", weight: 2, text: "men ne apna fold7 repaire kraya very pfrofesional" },
+    { author: "Adnan F.", rating: 5, date: "6 months ago", weight: 2, text: "Hum na  Rehan traders phone repair kariya hai fold 4 blank display fix kariya both acha Kam Kya unhe bundle of thanks price be boht best market saw ache" },
+    { author: "Ahmad S.", rating: 5, date: "a year ago", weight: 1, text: "Best service... satisfied\nMust recommend ♥️" },
+    { author: "Zain C.", rating: 5, date: "a year ago", weight: 1, text: "Good Service\nRecommended" },
+    { author: "Uzze B.", rating: 5, date: "a month ago", weight: 1, text: "Excellent services of repair" },
+    { author: "Yasir A.", rating: 4, date: "2 years ago", weight: 1, text: "Offer variety of mobile reparations." },
+    { author: "Urooj F.", rating: 5, date: "2 weeks ago", weight: 1, text: "Good service" },
+    { author: "Golden J.", rating: 5, date: "6 months ago", weight: 1, text: "Very nice staff" },
+    { author: "Usman A.", rating: 5, date: "a year ago", weight: 1, text: "Very good" },
+    { author: "Husnain J.", rating: 5, date: "3 years ago", weight: 1, text: "Very good" },
+    { author: "NAQi Z.", rating: 5, date: "a month ago", weight: 1, text: "Grateful" },
+    { author: "Danish K.", rating: 5, date: "2 years ago", weight: 1, text: "Rauf Good" },
+    { author: "Muhammad U.", rating: 2, date: "6 months ago", weight: 1, text: "Average" },
   ],
 } as const
 
@@ -518,7 +509,6 @@ export const home = {
     title: "What customers say",
     summary: (count: number) => `on Google from ${count} reviews`,
     asOf: (date: string) => `As of ${date}`,
-    readOne: "Read on Google",
     show: (n: number, total: number) => `Show review ${n} of ${total}`,
     next: "Next review",
   },

@@ -205,15 +205,16 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         e.preventDefault()
         next()
       }}
-      className="flex flex-col gap-6"
+      className="flex flex-col gap-5"
     >
+      {/* Where you are, in the lede's place under the sheet title, then the bars. */}
       <div>
-        <div aria-hidden className="flex gap-1">
+        <p className="text-body-md text-steel">{booking.progress(index + 1, STEPS.length, copy.name)}</p>
+        <div aria-hidden className="mt-3 flex gap-1">
           {STEPS.map((s, i) => (
             <span key={s} className={cn("h-1 flex-1 rounded-pill", i <= index ? "bg-ink" : "bg-hairline")} />
           ))}
         </div>
-        <p className="mt-2.5 text-caption text-steel">{booking.progress(index + 1, STEPS.length, copy.name)}</p>
       </div>
 
       <div key={step} className="flex animate-rise flex-col gap-4 motion-reduce:animate-none">
@@ -263,7 +264,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
                 </Select>
               </div>
             )}
-            <Button type="button" variant="line" className="self-start" onClick={() => setSearchAll(true)}>
+            <Button type="button" variant="line" still className="self-start" onClick={() => setSearchAll(true)}>
               {booking.device.searchAll}
             </Button>
           </div>
@@ -358,6 +359,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
             <Button
               type="button"
               variant="line"
+              still
               onClick={() => {
                 set({ kind: "quote" })
                 go("details")
@@ -442,11 +444,11 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
 
       <div className="sticky bottom-0 -mx-1 flex gap-2.5 bg-card px-1 py-3">
         {index > 0 && (
-          <Button type="button" variant="line" size="lg" onClick={back} disabled={sending}>
+          <Button type="button" variant="line" size="lg" still onClick={back} disabled={sending}>
             {booking.back}
           </Button>
         )}
-        <Button type="submit" size="lg" arrow className="flex-1 justify-between" disabled={sending}>
+        <Button type="submit" size="lg" arrow still className="flex-1 justify-between" disabled={sending}>
           {step !== "review" ? booking.next : sending ? booking.review.sending : draft.kind === "quote" ? actions.getQuote : booking.review.submit}
         </Button>
       </div>

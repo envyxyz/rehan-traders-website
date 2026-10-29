@@ -116,6 +116,12 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - Emails come from the account the script runs in; to send from rehanmobiletraders@gmail.com, deploy it from that account (README).
   - Launch day: run `resetForLaunch()` (README).
 
+### 2026-10-29 · Phase 5 update: Ameer's review
+- Booking sheet: "Step 3 of 5: Visit" replaces the "Four quick questions" line under the title. The time wheel shows 3 rows, so the visit step (with Get a quote) fits a 786px-tall window without scrolling.
+- Arrow buttons: fill 700ms ease-in-out (`--duration-fill`), lift on the same curve, label turns at 400ms, the arrow stays diagonal. Buttons inside the booking sheet take `still`: no fill, no lift.
+- Reviews: all 32 written Google reviews in `content.ts` (the other 18 of 50 are stars only; Ameer's own review left out), each with a clarity `weight`. The carousel draws a weighted random 10 per page load; no "Read on Google" link on the card; initial-letter avatars (`public/reviews/` removed).
+- Shop email: newsletter-style HTML (ink header, horizontal ticket with the red job number, WhatsApp, Call and All bookings buttons, stacks on phones), sender name "Rehan Traders Website Bookings", sent with GmailApp from rehanmobiletraders@gmail.com once that address is a verified alias. Needs Ameer: add the alias, paste `Code.gs`, deploy a new version and allow the Gmail permission (README, "Send from the shop's address").
+
 ### 2026-10-29 · Phase 6: AI assistant and repair estimator
 - Shipped:
   - `/api/chat` (`worker/chat.ts`): streams a plain-text reply. Model order: Claude Haiku 5.5 via OpenRouter (`anthropic/claude-haiku-5.5`, thinking off, system block cached: 2,363 of 2,409 prompt tokens read from cache, about $0.0001 a reply), then Gemini via AI Studio (`gemini-3.8-flash`, then `gemini-3.6-flash`, each on `GOOGLE_AI_PRO_API_KEY` then `GOOGLE_AI_API_KEY`), then Groq (`openai/gpt-oss-120b`, `GROQ_API_KEY`), then a fixed reply with WhatsApp and Call. A model that has not started answering in 8 s is skipped; replies stop at 25 s; output capped (400 tokens Haiku, 1,200 for models that count thinking). Zod: at most 12 customer messages, 500 characters each, last message from the customer, 32 KB body. A per-request script hint (Urdu script, Roman Urdu or English letters) sits after the cached block.
@@ -129,7 +135,7 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - Evals: Haiku 20/20, Groq 20/20, Gemini passed every reply it served (17/17 twice, 10/10 once); the rest fell through to Groq because both free keys hit the 20-a-day quota and 3.8 Flash was overloaded, so a clean 20/20 Gemini run is not possible on free tier. Groq once wrote the button lines inline with one ">"; parseReply now accepts that (e2e test added).
   - Fallbacks, each by forcing the ones before it to fail with `wrangler dev --var AI_FORCE_FAIL:...`: openrouter → Gemini answered; openrouter,google → Groq answered (20/20); openrouter,google,groq → fixed reply (chat) and 503 with the WhatsApp/Call panel (estimate).
   - Home initial JS: 282.3 KB → 283.9 KB gzip (16 scripts, was 15). The +1.6 KB is the new copy in `content.ts`, which ships whole to every page (no tree-shaking of that module; `sideEffects` did not change it), plus a 0.2 KB loader stub. The assistant's code is a separate lazy chunk.
-  - `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` (25 passed, 1 skipped).
+  - `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` (27 passed, 1 skipped).
   - Screens: `design/phase-6/` (chat in English and Roman Urdu, `/estimate`; 1440 and 390; light and dark).
 - Decided:
   - Gemini 3.8 Flash was overloaded for minutes at a time on 29 Oct (503 "high demand", 25 s to 77 s answers), so 3.6 Flash follows it.

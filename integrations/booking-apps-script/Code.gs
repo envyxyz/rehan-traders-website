@@ -10,6 +10,7 @@
 
 var SHEET_NAME = 'Bookings'
 var SHOP_EMAIL = 'rehanmobiletraders@gmail.com'
+var SENDER_NAME = 'Rehan Traders Website Bookings'
 var STATUSES = ['New', 'Confirmed', 'Came in', 'Done', 'No-show', 'Cancelled']
 // Column order. Status and Notes are for the shop; the website fills the rest.
 var COLUMNS = [
@@ -155,9 +156,12 @@ function setup() {
 }
 
 /**
- * The shop's email for a new booking: a ticket in the website's look (paper, ink, the job number in Signal Red,
- * Archivo-style bold headings) with buttons to WhatsApp or call the customer, plus a plain-text copy.
- * It comes from the account the script runs in (README, "Send from the shop's address").
+ * The shop's email for a new booking, laid out like a brand newsletter in the website's look: ink header, a
+ * horizontal ticket (stub with the job number in Signal Red, a dashed tear line, the details), then buttons to
+ * WhatsApp or call the customer. Tables and inline styles only, so Gmail renders it; the ticket stacks under 600px.
+ * Plain text goes along for clients without HTML.
+ * Sender: rehanmobiletraders@gmail.com when the script runs in that account, or when that address is a verified
+ * "Send mail as" alias of the account it runs in (README, "Send from the shop's address"). Name: SENDER_NAME.
  */
 function sendShopEmail(job, data) {
   var quote = data.kind === 'quote'
@@ -179,34 +183,80 @@ function sendShopEmail(job, data) {
     .concat(['WhatsApp the customer: ' + data.whatsapp, '', 'All bookings: ' + sheetUrl])
     .join('\n')
 
+  var MUTED = '#5E5E5A'
+  var LINE = '#D9D9D4'
+  var GREEN = '#25D366'
   var display = "font-family:Archivo,'Arial Black',Helvetica,Arial,sans-serif;font-weight:800;letter-spacing:-0.02em;"
   var body = 'font-family:Inter,Helvetica,Arial,sans-serif;'
-  var button = function (href, label, primary) {
-    return '<a href="' + esc(href) + '" style="' + body + 'display:inline-block;margin:0 8px 8px 0;padding:13px 22px;border-radius:999px;font-size:15px;font-weight:600;text-decoration:none;' +
-      (primary ? 'background:' + INK + ';color:' + PAPER + ';border:1px solid ' + INK + ';' : 'background:#FFFFFF;color:' + INK + ';border:1px solid #D9D9D4;') + '">' + esc(label) + '</a>'
+  var button = function (href, label, bg, fg, border) {
+    return '<a href="' + esc(href) + '" style="' + body + 'display:inline-block;margin:0 8px 10px 0;padding:14px 24px;border-radius:999px;' +
+      'font-size:15px;font-weight:700;line-height:1;text-decoration:none;background:' + bg + ';color:' + fg + ';border:1px solid ' + border + ';">' + esc(label) + '</a>'
   }
+  // Details as a 2-column grid inside the ticket, label above value, like the website's confirmation ticket.
+  var cells = rows.map(function (r) {
+    return '<td class="cell" width="50%" valign="top" style="padding:0 16px 18px 0;">' +
+      '<div style="' + body + 'font-size:12px;line-height:1.4;color:' + MUTED + ';">' + esc(r[0]) + '</div>' +
+      '<div style="' + body + 'font-size:15px;line-height:1.4;font-weight:700;color:' + INK + ';padding-top:2px;">' + esc(r[1]) + '</div></td>'
+  })
+  var grid = ''
+  for (var i = 0; i < cells.length; i += 2) grid += '<tr>' + cells[i] + (cells[i + 1] || '<td class="cell"></td>') + '</tr>'
+
   var html =
-    '<!doctype html><html><body style="margin:0;padding:0;background:' + PAPER + ';">' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + PAPER + ';"><tr><td align="center" style="padding:32px 16px;">' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">' +
-    '<tr><td style="' + display + 'font-size:18px;color:' + INK + ';padding:0 4px 20px;">Rehan Traders</td></tr>' +
-    '<tr><td style="' + display + 'font-size:28px;line-height:1.15;color:' + INK + ';padding:0 4px 8px;">' + (quote ? 'New quote request' : 'New booking') + '</td></tr>' +
-    '<tr><td style="' + body + 'font-size:15px;line-height:1.5;color:#5C5C58;padding:0 4px 24px;">' + esc(quote ? 'Send the customer a quote on WhatsApp.' : 'Confirm the visit with the customer on WhatsApp.') + '</td></tr>' +
-    '<tr><td style="background:#FFFFFF;border:1px solid #E2E2DD;border-radius:20px;padding:24px;">' +
-    '<div style="' + body + 'font-size:13px;color:#5C5C58;">Job number</div>' +
-    '<div style="' + display + 'font-size:40px;line-height:1.1;color:' + SIGNAL + ';padding:4px 0 20px;">' + esc(job) + '</div>' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E2E2DD;">' +
-    rows.map(function (r) {
-      return '<tr><td style="' + body + 'font-size:14px;color:#5C5C58;padding:12px 16px 12px 0;width:84px;vertical-align:top;border-bottom:1px solid #EFEFEA;">' + esc(r[0]) +
-        '</td><td style="' + body + 'font-size:15px;font-weight:600;color:' + INK + ';padding:12px 0;vertical-align:top;border-bottom:1px solid #EFEFEA;">' + esc(r[1]) + '</td></tr>'
-    }).join('') +
-    '</table></td></tr>' +
-    '<tr><td style="padding:24px 0 0;">' + button(data.whatsapp, 'WhatsApp the customer', true) + button(tel, 'Call ' + data.phone, false) + button(sheetUrl, 'All bookings', false) + '</td></tr>' +
-    '<tr><td style="' + body + 'font-size:12px;line-height:1.5;color:#8A8A85;padding:24px 4px 0;">Sent by rehanmobiletraders.com when a customer books. The booking is also saved in the Bookings sheet.</td></tr>' +
+    '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<meta name="color-scheme" content="light only"><style>' +
+    '@media (max-width:600px){.stack{display:block!important;width:100%!important;box-sizing:border-box}' +
+    '.stub{border-radius:20px 20px 0 0!important}.tear{border-left:0!important;border-top:2px dashed ' + LINE + '!important}' +
+    '.details{border-radius:0 0 20px 20px!important}.cell{display:block!important;width:100%!important}.pad{padding:24px 20px!important}}' +
+    '</style></head>' +
+    '<body style="margin:0;padding:0;background:' + PAPER + ';">' +
+    // Preheader: the line Gmail shows after the subject in the inbox list.
+    '<div style="display:none;max-height:0;overflow:hidden;">' + esc(data.name + ' · ' + data.device + ' · ' + visit) + '</div>' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + PAPER + ';"><tr><td align="center" style="padding:24px 12px;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;">' +
+
+    // Header band
+    '<tr><td style="background:' + INK + ';border-radius:20px 20px 0 0;padding:22px 28px;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+    '<td style="' + display + 'font-size:20px;color:' + PAPER + ';">Rehan Traders</td>' +
+    '<td align="right" style="' + body + 'font-size:13px;color:#A4A49F;">Website bookings</td>' +
+    '</tr></table></td></tr>' +
+
+    // Hero
+    '<tr><td class="pad" style="background:#FFFFFF;padding:36px 28px 8px;">' +
+    '<div style="' + display + 'font-size:34px;line-height:1.1;color:' + INK + ';">' + (quote ? 'New quote request' : 'New booking') + '</div>' +
+    '<div style="' + body + 'font-size:16px;line-height:1.55;color:' + MUTED + ';padding-top:10px;">' +
+    esc(quote ? data.name + ' wants a quote. Reply on WhatsApp with the price.' : data.name + ' is coming in ' + visit + '. Confirm on WhatsApp.') + '</div>' +
+    '</td></tr>' +
+
+    // Ticket: stub | dashed tear line | details. Stacks on phones.
+    '<tr><td class="pad" style="background:#FFFFFF;padding:24px 28px 8px;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
+    '<td class="stack stub" width="34%" valign="middle" style="background:' + PANEL + ';border-radius:20px 0 0 20px;padding:26px 22px;">' +
+    '<div style="' + body + 'font-size:13px;color:' + MUTED + ';">Job number</div>' +
+    '<div style="' + display + 'font-size:34px;line-height:1.1;color:' + SIGNAL + ';padding-top:4px;white-space:nowrap;">' + esc(job) + '</div>' +
+    '<div style="' + body + 'font-size:13px;font-weight:700;color:' + INK + ';padding-top:14px;">' + (quote ? 'Quote request' : 'Booking') + '</div>' +
+    '</td>' +
+    '<td class="stack tear details" valign="top" style="background:' + PANEL + ';border-left:2px dashed ' + LINE + ';border-radius:0 20px 20px 0;padding:26px 22px 8px;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + grid + '</table>' +
+    '</td></tr></table></td></tr>' +
+
+    // Actions
+    '<tr><td class="pad" style="background:#FFFFFF;padding:24px 28px 30px;">' +
+    button(data.whatsapp, 'WhatsApp ' + String(data.name).split(' ')[0], GREEN, INK, GREEN) +
+    button(tel, 'Call ' + data.phone, INK, PAPER, INK) +
+    button(sheetUrl, 'All bookings', '#FFFFFF', INK, LINE) +
+    '</td></tr>' +
+
+    // Footer
+    '<tr><td style="background:' + PANEL + ';border-radius:0 0 20px 20px;padding:20px 28px;' + body + 'font-size:12px;line-height:1.6;color:' + MUTED + ';">' +
+    'Rehan Traders · Shop G-88, Ground Floor, Hafeez Center, Gulberg III, Lahore · 0305 8874839<br>' +
+    'Sent by rehanmobiletraders.com when a customer books. The booking is also in the Bookings sheet.' +
+    '</td></tr>' +
     '</table></td></tr></table></body></html>'
 
-  // MailApp sends from the account the script runs in; deployed from rehanmobiletraders@gmail.com, that is the shop.
-  MailApp.sendEmail(SHOP_EMAIL, subject, text, { name: 'Rehan Traders', htmlBody: html })
+  var options = { name: SENDER_NAME, htmlBody: html }
+  if (Session.getEffectiveUser().getEmail() !== SHOP_EMAIL && GmailApp.getAliases().indexOf(SHOP_EMAIL) >= 0) options.from = SHOP_EMAIL
+  GmailApp.sendEmail(SHOP_EMAIL, subject, text, options)
 }
 
 /**

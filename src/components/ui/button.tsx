@@ -6,8 +6,8 @@ import { ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  // Hover (pointer devices only): a 2px lift and the arrow chip turning to point right; on arrow buttons the chip's
-  // colour also fills the button (btn-fill). Press: scale 0.97.
+  // Hover (pointer devices only): a 2px lift; on arrow buttons the chip's colour also fills the button (btn-fill)
+  // and the arrow stays diagonal. Press: scale 0.97.
   "group/button inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-pill font-display text-button whitespace-nowrap select-none transition duration-(--duration-base) ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-97 motion-reduce:hover:translate-y-0 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
@@ -38,9 +38,12 @@ type ButtonProps = React.ComponentProps<"button"> &
     asChild?: boolean
     /** Round arrow chip on the right, for the primary action. */
     arrow?: boolean
+    /** Arrow button without the hover fill and lift, for buttons inside a working flow (the booking sheet). */
+    still?: boolean
   }
 
-function Button({ className, variant, size, asChild = false, arrow = false, children, ...props }: ButtonProps) {
+function Button({ className, variant, size, asChild = false, arrow = false, still = false, children, ...props }: ButtonProps) {
+  const fill = arrow && !still
   const Comp = asChild ? Slot.Root : "button"
   return (
     <Comp
@@ -49,16 +52,17 @@ function Button({ className, variant, size, asChild = false, arrow = false, chil
         buttonVariants({ variant, size }),
         arrow && "relative isolate pr-2",
         // Label and, once the fill has covered it (delay in globals.css), the button itself take the chip's colours.
-        arrow &&
+        fill &&
           (variant === "inverse"
             ? "hover:bg-band hover:text-on-band focus-visible:text-on-band"
             : "hover:bg-on-action hover:text-action focus-visible:text-action"),
+        still && "hover:translate-y-0",
         className
       )}
       {...props}
     >
       <Slot.Slottable>{children}</Slot.Slottable>
-      {arrow && <span aria-hidden className={cn("btn-fill", variant === "inverse" ? "bg-band" : "bg-on-action")} />}
+      {fill && <span aria-hidden className={cn("btn-fill", variant === "inverse" ? "bg-band" : "bg-on-action")} />}
       {arrow && (
         <span
           aria-hidden
@@ -67,7 +71,7 @@ function Button({ className, variant, size, asChild = false, arrow = false, chil
             variant === "inverse" ? "bg-band text-on-band" : "bg-on-action text-action"
           )}
         >
-          <ArrowUpRight className="size-4 transition-transform duration-(--duration-base) ease-out group-hover/button:rotate-45 motion-reduce:transition-none" strokeWidth={2} />
+          <ArrowUpRight className="size-4" strokeWidth={2} />
         </span>
       )}
     </Comp>

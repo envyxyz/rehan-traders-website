@@ -86,13 +86,15 @@ Edit the code, save, then **Deploy** > **Manage deployments** > the pencil icon 
 
 ## Send from the shop's address
 
-Emails go out named **Rehan Traders**, as an HTML ticket in the website's look with WhatsApp, Call and All bookings buttons. Google always sends them from the account the script runs in, so they come from rehanmobiletraders@gmail.com only when the script lives in that account:
+Emails go out as **Rehan Traders Website Bookings** <rehanmobiletraders@gmail.com>, to the same address, as an HTML ticket in the website's look (ink header, horizontal ticket with the red job number, WhatsApp, Call and All bookings buttons). The script sends with GmailApp, so it can use the shop's address as long as that address is a verified alias of the account the script runs in (Ameer's). One-time setup, about 3 minutes:
 
-1. Sign in to Google as rehanmobiletraders@gmail.com and follow steps 2 to 6 above (new Sheet, paste `Code.gs`, set `SECRET`, run `setup`, deploy).
-2. Put the new web app URL into the Worker: `BOOKING_WEBHOOK_URL` in `.env.local` and `pnpm wrangler secret put BOOKING_WEBHOOK_URL` for production. Keep the same secret.
-3. In the old script (Ameer's account): **Deploy** > **Manage deployments** > **Archive**, so only the shop's copy takes bookings.
+1. In Ameer's Gmail: gear > **See all settings** > **Accounts and Import** > **Send mail as** > **Add another email address**.
+2. Name `Rehan Traders Website Bookings`, address `rehanmobiletraders@gmail.com`, keep **Treat as an alias** ticked > **Next step** > **Send verification**.
+3. In the shop's inbox, open Google's verification email and click the link (or paste the code into the box from step 2).
+4. Paste the new `Code.gs` into the Apps Script editor and save.
+5. **Deploy** > **Manage deployments** > pencil > **Version: New version** > **Deploy**. Google asks for one new permission ("Read, compose, send and permanently delete all your email from Gmail", which GmailApp needs to send as an alias): **Review permissions** > Ameer's account > **Advanced** > **Go to Rehan Traders booking webhook** > **Allow**.
 
-Until then they come from the account the script runs in now (Ameer's), still named Rehan Traders.
+Without the alias the email still goes out with the new name and design, from the account the script runs in. If the script is ever moved into the shop's own account, no alias is needed.
 
 ## Launch day: start from RT-0001
 
