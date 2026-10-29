@@ -1,11 +1,14 @@
 import { book, type BookEnv } from "./book"
+import { chat, type AiEnv } from "./chat"
+import { estimate } from "./estimate"
 
 // Runs only for /api/* (wrangler.jsonc run_worker_first). Every other path is a static file from out/.
-// Phase 6 adds /api/chat and /api/estimate here.
 const worker = {
-  async fetch(request: Request, env: BookEnv): Promise<Response> {
+  async fetch(request: Request, env: BookEnv & AiEnv): Promise<Response> {
     const { pathname } = new URL(request.url)
     if (pathname === "/api/book") return book(request, env)
+    if (pathname === "/api/chat") return chat(request, env)
+    if (pathname === "/api/estimate") return estimate(request, env)
     return Response.json({ ok: false, error: "not_found" }, { status: 404 })
   },
 }

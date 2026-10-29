@@ -576,8 +576,6 @@ export const chat = {
   greeting: "Assalam o alaikum. Ask about your phone's fault, our hours or how to find G-88.",
   fallback: `Sorry, I can't answer right now. WhatsApp or call us on ${site.phone.display}.`,
   launcher: "Ask a question",
-  // ponytail: placeholder sheet until the assistant ships in Phase 6
-  placeholder: `The assistant is on its way. For now, WhatsApp or call us on ${site.phone.display}.`,
 } as const
 
 /** Labels for UI chrome and screen readers. */
@@ -590,4 +588,89 @@ export const ui = {
   /** alt for images that only repeat nearby text (reviewer avatars next to the name). */
   decorative: "",
   toastSent: "Request sent",
+} as const
+
+// ─── Phase 6: chat assistant and repair estimator ─────────────────────────────────────────────────────────
+// Kept in one block at the end so it merges cleanly with Phase 7's inner-page copy.
+// The assistant's knowledge is built from the exports above (src/lib/assistant.ts); nothing here adds facts.
+
+export const assistant = {
+  title: chat.launcher,
+  greeting: chat.greeting,
+  /** Shown when every model is down, the turn cap is hit, or the reply breaks off. */
+  fallback: chat.fallback,
+  limit: "That's all this chat can take. WhatsApp or call the shop to carry on.",
+  disclosure: "Answers come from this site only. For a price or anything else, the shop replies on WhatsApp.",
+  input: "Your question",
+  placeholder: "Type in English or Urdu",
+  send: "Send",
+  typing: "Typing",
+  tooLong: (max: number) => `Keep it under ${max} characters.`,
+  you: "You",
+  shop: site.name,
+  /** First quick replies, before the model suggests its own. */
+  chips: ["Can you fix a Fold inner screen?", "Touch glass ki price kya hai?", "When are you open?", "Where is G-88?"],
+  actions: { book: actions.book, whatsapp: actions.whatsapp, call: actions.call },
+  whatsappText: "Assalam o alaikum. I have a question about a repair.",
+} as const
+
+export type EstimateFault = {
+  slug: string
+  label: string
+  /** Service it most often needs; src/lib/assistant.ts moves it to the Fold, iPhone or tablet service by device. */
+  service: string
+  /** "kept": only the glass is changed. "maybe": the shop tries to save the panel first. null: no panel involved. */
+  panel: "kept" | "maybe" | null
+}
+
+export const estimator = {
+  seo: {
+    title: "Repair estimate",
+    description:
+      "Not sure what's wrong with your phone or tablet? Pick the device and fault, or describe it, and see the likely repair at Rehan Traders, Hafeez Center, Lahore.",
+  },
+  title: "Repair estimate",
+  lede: "Pick your device and the fault, or describe the problem in your own words. You'll see the likely repair and how to get a price.",
+  mode: { label: "How do you want to tell us?", pick: "Pick device and fault", describe: "Describe it" },
+  device: "Device",
+  fault: "Fault",
+  describe: estimate.label,
+  describePlaceholder: estimate.placeholder,
+  describeHint: "English, Roman Urdu or Urdu. Don't include your name or number.",
+  submit: estimate.submit,
+  working: "Reading your problem",
+  pickError: "Pick your device and the fault.",
+  describeError: "Describe the problem in a few words.",
+  result: {
+    title: "Likely repair",
+    device: "Device",
+    fault: "Fault",
+    panel: {
+      kept: "Your original display stays: only the cracked glass is replaced.",
+      maybe: "The shop tries to save the damaged panel first and replaces it only when it cannot be saved.",
+    },
+    guess: "This is a guess from your description. The shop confirms it when they see the device.",
+    unknownDevice: "Your device",
+    quote: "Get a quote on WhatsApp",
+    other: "That doesn't match a repair we list. Ask on WhatsApp and the shop will tell you.",
+  },
+  unavailable: `The estimator isn't working right now. WhatsApp or call us on ${site.phone.display}.`,
+  whatsapp: (device: string, fault: string) => `Assalam o alaikum. Quote please.\nDevice: ${device}\nFault: ${fault}`,
+  faults: [
+    { slug: "cracked-glass", label: "Cracked glass, screen still works", service: "touch-glass-replacement", panel: "kept" },
+    { slug: "touch-not-working", label: "Touch not working", service: "touch-glass-replacement", panel: "kept" },
+    { slug: "screen-damaged", label: "Lines, black, green or flickering screen", service: "screen-replacement", panel: "maybe" },
+    { slug: "fold-inner-screen", label: "Fold or Flip inner screen", service: "galaxy-z-fold-flip", panel: "maybe" },
+    { slug: "hinge", label: "Hinge", service: "galaxy-z-fold-flip", panel: null },
+    { slug: "back-glass", label: "Back glass", service: "iphone", panel: null },
+    { slug: "battery", label: "Battery drains fast or is swollen", service: "battery-charging", panel: null },
+    { slug: "charging", label: "Not charging", service: "battery-charging", panel: null },
+    { slug: "water-damage", label: "Water damage", service: "water-damage-data-recovery", panel: null },
+    { slug: "no-power", label: "Will not turn on", service: "board-repair", panel: null },
+    { slug: "data-recovery", label: "Data recovery", service: "water-damage-data-recovery", panel: null },
+    { slug: "network", label: "No network or SIM", service: "board-repair", panel: null },
+    { slug: "face-id", label: "Face ID", service: "iphone", panel: null },
+    { slug: "camera", label: "Camera", service: "board-repair", panel: null },
+    { slug: "other", label: "Something else", service: "", panel: null },
+  ] satisfies EstimateFault[],
 } as const

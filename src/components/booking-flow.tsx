@@ -15,6 +15,7 @@ import { TimeWheel } from "@/components/time-wheel"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { actions, booking, faults, holidays, priceMode, services, site, type BookingSummary } from "@/content"
 import catalog from "@/data/devices.json"
+import { findModels, models } from "@/lib/devices"
 import { bookingDays, displayPhone, normalizePhone, slotDay, slotLabel, type BookingDay } from "@/lib/booking"
 import { track } from "@/lib/track"
 import { cn } from "@/lib/utils"
@@ -40,23 +41,6 @@ const tz = site.hours.timezone
 const now = () => Date.now()
 /** Shown when the Sheet could not be reached: "WEB-" and six characters of the time, never a job number. */
 const localRef = () => `WEB-${now().toString(36).toUpperCase().slice(-6)}`
-
-// Every model as people say it: "Samsung Galaxy A54", "Redmi Note 13" (no "Redmi Redmi"), "iPhone 15" (no "Apple").
-// From scripts/devices.mjs.
-const models = catalog.flatMap((b) => b.models.map((m) => (b.brand === "Apple" || m.toLowerCase().startsWith(b.brand.toLowerCase()) ? m : `${b.brand} ${m}`)))
-
-/** Models holding every typed word ("s24 ultra", "iphone 13"), closest first: name starts with the query, then shortest. */
-function findModels(query: string) {
-  const q = query.trim().toLowerCase()
-  const words = q.split(/\s+/).filter(Boolean)
-  if (!words.length) return []
-  const score = (m: string) => (m.toLowerCase().startsWith(q) || m.toLowerCase().includes(` ${q}`) ? 0 : 1)
-  // ponytail: linear scan of ~4k names per keystroke is well under a millisecond; index it if the list grows 10x.
-  return models
-    .filter((m) => words.every((w) => m.toLowerCase().includes(w)))
-    .sort((a, b) => score(a) - score(b) || a.length - b.length || a.localeCompare(b, "en", { numeric: true }))
-    .slice(0, 40)
-}
 
 /** Day tile parts: ["Today" or "Thu", "30", "Oct"]. */
 const dayParts = (date: string) => {

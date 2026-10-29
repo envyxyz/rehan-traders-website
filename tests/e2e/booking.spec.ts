@@ -10,7 +10,8 @@ const next = (page: Page) => page.getByRole("button", { name: booking.next }).cl
 
 async function pickDeviceAndFault(page: Page, fault = "Charging") {
   // A service with device families (Fold and Flip) asks with two dropdowns; plain /book searches every model.
-  if (await page.locator('[data-slot="select-trigger"]').first().isVisible()) {
+  // Decided by the URL: the static HTML paints the plain flow first, so probing the page can catch it mid-swap.
+  if (new URL(page.url()).searchParams.get("service") === "galaxy-z-fold-flip") {
     await page.getByLabel(booking.device.family).click()
     await page.getByRole("option", { name: "Galaxy Z Fold" }).click()
     await page.getByLabel(booking.device.model).click()

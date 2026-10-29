@@ -25,16 +25,18 @@ function SheetContent({
   className,
   children,
   side = "right",
+  glass = false,
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Content> & { side?: keyof typeof sides }) {
+}: React.ComponentProps<typeof SheetPrimitive.Content> & { side?: keyof typeof sides; glass?: boolean }) {
   return (
     <SheetPrimitive.Portal>
       <SheetPrimitive.Overlay className="fixed inset-0 z-50 bg-scrim data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "fixed z-50 flex flex-col gap-4 overflow-y-auto bg-card p-6 text-body shadow-float duration-(--duration-base) ease-drawer outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
+          "fixed z-50 flex flex-col gap-4 overflow-y-auto p-6 text-body shadow-float duration-(--duration-base) ease-drawer outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
           sides[side],
+          glass ? "glass" : "bg-card",
           className
         )}
         {...props}

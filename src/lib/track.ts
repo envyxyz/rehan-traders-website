@@ -3,6 +3,9 @@ type Events = {
   book_step: { step: string; index: number }
   book_submit: { kind: "book" | "quote"; saved: boolean }
   whatsapp_click: { from: string }
+  chat_open: Record<string, never>
+  chat_handoff: { action: "book" | "whatsapp" | "call" }
+  estimate_complete: { path: "pick" | "describe"; fault: string; service: string | null }
 }
 
 type Gtag = (command: "event", name: string, params: object) => void

@@ -1,5 +1,6 @@
 // Cloudflare Workers, free plan. The static export in out/ is served as static assets (free, never runs the
-// Worker); the Worker runs only for /api/*. Secrets: BOOKING_WEBHOOK_URL and BOOKING_WEBHOOK_SECRET, set with
+// Worker); the Worker runs only for /api/*. Secrets: BOOKING_WEBHOOK_URL, BOOKING_WEBHOOK_SECRET,
+// OPENROUTER_API_KEY, GOOGLE_AI_PRO_API_KEY, GOOGLE_AI_API_KEY and GROQ_API_KEY (chat and estimator), set with
 // `wrangler secret put NAME` or in the dashboard; locally `wrangler dev` reads them from .env.local.
 {
   "$schema": "node_modules/wrangler/config-schema.json",

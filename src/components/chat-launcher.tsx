@@ -1,36 +1,37 @@
 "use client"
 
-import { MessageCircle, Phone } from "lucide-react"
+import * as React from "react"
+import dynamic from "next/dynamic"
+import { MessageCircle } from "lucide-react"
 
-import { Icon, WhatsAppIcon } from "@/components/icon"
-import { Text } from "@/components/typography"
+import { Icon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { actions, chat, site } from "@/content"
+import { assistant } from "@/content"
+import { track } from "@/lib/track"
 
-// ponytail: placeholder sheet; Phase 6 swaps in the lazy-loaded assistant behind the same triggers.
+const loadPanel = () => import("@/components/chat-panel").then((m) => m.ChatPanel)
+// Not in the first page load: the assistant downloads on hover, focus or the first tap of a chat button.
+const ChatPanel = dynamic(loadPanel, { ssr: false })
+
+/** The glass chat sheet behind the desktop launcher and the phone StickyBar's chat icon. */
 export function ChatSheet({ children }: { children: React.ReactNode }) {
+  const [open, setOpen] = React.useState(false)
   return (
-    <Sheet>
-      <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent side="right">
-        <SheetTitle>{chat.launcher}</SheetTitle>
-        <SheetDescription>{chat.greeting}</SheetDescription>
-        <Text tone="muted">{chat.placeholder}</Text>
-        <div className="mt-auto grid gap-2.5">
-          <Button asChild size="lg" variant="whatsapp">
-            <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
-              <WhatsAppIcon />
-              {actions.whatsapp}
-            </a>
-          </Button>
-          <Button asChild size="lg" variant="line">
-            <a href={site.phone.href}>
-              <Icon icon={Phone} />
-              {site.phone.display}
-            </a>
-          </Button>
-        </div>
+    <Sheet
+      open={open}
+      onOpenChange={(o) => {
+        setOpen(o)
+        if (o) track("chat_open", {})
+      }}
+    >
+      <SheetTrigger asChild onPointerEnter={() => void loadPanel()} onFocus={() => void loadPanel()}>
+        {children}
+      </SheetTrigger>
+      <SheetContent side="right" glass className="gap-3 pb-4">
+        <SheetTitle>{assistant.title}</SheetTitle>
+        <SheetDescription className="text-caption">{assistant.disclosure}</SheetDescription>
+        {open && <ChatPanel />}
       </SheetContent>
     </Sheet>
   )
@@ -43,7 +44,7 @@ export function ChatLauncher() {
       <ChatSheet>
         <Button variant="glass">
           <Icon icon={MessageCircle} />
-          {chat.launcher}
+          {assistant.title}
         </Button>
       </ChatSheet>
     </div>
