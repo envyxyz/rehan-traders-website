@@ -6,6 +6,7 @@ import { HoursTable } from "@/components/hours-table"
 import { Icon } from "@/components/icon"
 import { Img } from "@/components/img"
 import { InteractiveMap } from "@/components/interactive-map"
+import { JobCard } from "@/components/job-card"
 import { Container, Section } from "@/components/layout"
 import { Reveal } from "@/components/motion"
 import { OpenStatus } from "@/components/open-status"
@@ -130,32 +131,11 @@ function Process() {
             ))}
           </ol>
         </div>
-        {/* The real job card and tamper seal from the print kit (../growth/Brand/Print). */}
-        <Reveal className="relative mx-auto w-full max-w-md lg:col-span-5">
-          <div className="rounded-xl bg-panel p-6 sm:p-10">
-            {/* eslint-disable-next-line @next/next/no-img-element -- static export, pre-sized files */}
-            <img
-              src="/art/job-card-960.webp"
-              srcSet="/art/job-card-480.webp 480w, /art/job-card-960.webp 960w"
-              sizes="(min-width: 1024px) 400px, 90vw"
-              width={1360}
-              height={860}
-              alt={c.jobCardAlt}
-              loading="lazy"
-              decoding="async"
-              className="h-auto w-full -rotate-2 rounded-xs border border-hairline"
-            />
+        {/* The interactive job card and tamper seal */}
+        <Reveal className="relative mx-auto w-full max-w-lg lg:col-span-5">
+          <div className="rounded-2xl bg-panel p-4 sm:p-7">
+            <JobCard />
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element -- static export, pre-sized file */}
-          <img
-            src="/art/tamper-seal-240.webp"
-            width={240}
-            height={240}
-            alt={c.sealAlt}
-            loading="lazy"
-            decoding="async"
-            className="absolute -right-2 -bottom-6 size-24 rotate-6 sm:size-28"
-          />
         </Reveal>
       </Container>
     </Section>
@@ -222,7 +202,7 @@ function Visit() {
           <OpenStatus className="mt-4 text-body-sm text-body" />
           <HoursTable className="mt-4" />
           <Button asChild size="lg" arrow className="mt-7">
-            <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+            <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" data-track="directions" data-track-from="visit">
               {actions.directions}
               <span className="sr-only">, {ui.externalLink}</span>
             </a>

@@ -107,7 +107,7 @@ export function ChatPanel() {
                   )}
                   {actions.includes("whatsapp") && (
                     <Button asChild variant="whatsapp">
-                      <a href={site.whatsapp.withText(assistant.whatsappText)} onClick={() => track("chat_handoff", { action: "whatsapp" })}>
+                      <a href={site.whatsapp.withText(assistant.whatsappText)} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
                         <WhatsAppIcon />
                         {assistant.actions.whatsapp}
                       </a>
@@ -115,7 +115,7 @@ export function ChatPanel() {
                   )}
                   {actions.includes("call") && (
                     <Button asChild variant="line">
-                      <a href={site.phone.href} onClick={() => track("chat_handoff", { action: "call" })}>
+                      <a href={site.phone.href} onClick={() => track("chat_handoff", { action: "call" })} data-track="call" data-track-from="chat">
                         <Icon icon={Phone} />
                         {site.phone.display}
                       </a>

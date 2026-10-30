@@ -14,8 +14,9 @@ Next.js static export (App Router, React 19, TypeScript, Tailwind CSS v4, shadcn
 
 - **Sitemaps**: Standard XML sitemap (`/sitemap.xml`) including Google Image Sitemap metadata (`image:image`), plus a fallback `sitemap_index.xml` for backwards compatibility.
 - **AI Agent Discoverability**: Implements the [llmstxt.org](https://llmstxt.org) standard with `/llms.txt` (structured shop facts and services) and `/llms-full.txt` (full page content bundle for instant LLM grounding).
-- **Social Previews**: 1200×630 OpenGraph and Twitter summary card images (`/opengraph-image.png`, `/twitter-image.png`, and `/apple-icon.png`).
+- **Social Previews**: Dynamic per-route 1200×630 OpenGraph and Twitter card image generators (`opengraph-image.tsx` and `twitter-image.tsx`) rendered at build time with brand typography, route badges, and contextual titles.
 - **Crawler Access**: Configured `robots.txt` explicitly permitting Googlebot, ChatGPT (`ChatGPT-User`, `OAI-SearchBot`), Perplexity (`PerplexityBot`), Claude (`Claude-SearchBot`), Bingbot, and Applebot.
+- **Interactive Components & Tracking**: 3D interactive repair Job Card with realistic subtle tilt, editable fields, and tamper seal; delegated link tracking (`data-track`) for zero-overhead analytics.
 
 ## Run it
 

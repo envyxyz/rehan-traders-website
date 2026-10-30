@@ -30,7 +30,7 @@ export function StickyBar() {
     >
       <BookButton className="flex-1">{actions.book}</BookButton>
       <Button asChild variant="whatsapp" className="flex-1">
-        <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
+        <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="sticky">
           <WhatsAppIcon />
           {actions.whatsapp}
         </a>

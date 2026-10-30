@@ -49,14 +49,14 @@ export default function VisitPage() {
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild size="lg" arrow>
-                  <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" data-track="directions" data-track-from="visit">
                     {actions.directions}
                     <span className="sr-only">, {ui.externalLink}</span>
                     <Icon icon={ArrowUpRight} size="sm" />
                   </a>
                 </Button>
                 <Button asChild size="lg" variant="whatsapp">
-                  <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
+                  <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="visit">
                     <WhatsAppIcon />
                     {actions.whatsapp}
                   </a>
@@ -177,13 +177,13 @@ export default function VisitPage() {
               <Link href="/estimate?tab=describe">{visitPage.courierActions.ticket}</Link>
             </Button>
             <Button asChild size="lg" variant="whatsapp">
-              <a href={site.whatsapp.href}>
+              <a href={site.whatsapp.href} data-track="whatsapp" data-track-from="visit">
                 <WhatsAppIcon />
                 {visitPage.courierActions.whatsapp}
               </a>
             </Button>
             <Button asChild size="lg" variant="line">
-              <a href={site.phone.href}>
+              <a href={site.phone.href} data-track="call" data-track-from="visit">
                 <Icon icon={Phone} />
                 {visitPage.courierActions.call}
               </a>

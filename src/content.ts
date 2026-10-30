@@ -199,6 +199,20 @@ export const hero = {
   fold: { time: "11:00", date: "Tuesday, 28 October", network: "5G" },
 } as const
 
+export const jobCardContent = {
+  brandFirst: "Rehan",
+  brandSecond: "Traders",
+  qrAria: `${site.name} QR Code`,
+  phone: site.phone.display,
+  fields: {
+    jobNo: { label: "Job no.", aria: "Job number", initial: "RT-2849" },
+    date: { label: "Date", aria: "Date", initial: "12-11-2024" },
+    device: { label: "Device", aria: "Device model", initial: "iPhone 13 Pro Max" },
+    warranty: { label: "Warranty to", aria: "Warranty to", initial: "6 Months" },
+  },
+  sealAlt: "Rehan Traders tamper seal",
+} as const
+
 export type Service = {
   slug: string
   title: string

@@ -49,13 +49,13 @@ export default function FaqPage() {
               <h2 className="font-display text-title-md text-ink">{faqPage.stillHaveQuestions}</h2>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button asChild variant="whatsapp">
-                  <a href={site.whatsapp.href}>
+                  <a href={site.whatsapp.href} data-track="whatsapp" data-track-from="faq">
                     <WhatsAppIcon />
                     {faqPage.askWhatsApp}
                   </a>
                 </Button>
                 <Button asChild variant="line">
-                  <a href={site.phone.href}>
+                  <a href={site.phone.href} data-track="call" data-track-from="faq">
                     {actions.call} {site.phone.display}
                   </a>
                 </Button>

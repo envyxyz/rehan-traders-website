@@ -384,7 +384,7 @@ function Outcome({ result, onAgain }: { result: Result; onAgain: () => void }) {
         </Button>
         {(priceMode === "quote" || !service) && (
           <Button asChild size="lg" variant="whatsapp">
-            <a href={quote}>
+            <a href={quote} data-track="whatsapp" data-track-from="estimate">
               <WhatsAppIcon />
               {estimator.result.quote}
             </a>

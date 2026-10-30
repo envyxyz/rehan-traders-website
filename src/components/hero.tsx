@@ -47,7 +47,7 @@ export function Hero() {
                 {actions.book}
               </BookButton>
               <Button asChild size="lg" variant="whatsapp" className="flex-1 sm:flex-none">
-                <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
+                <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="hero">
                   <WhatsAppIcon />
                   {actions.whatsapp}
                 </a>

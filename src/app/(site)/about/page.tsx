@@ -3,11 +3,12 @@ import type { Metadata } from "next"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
 import { Img } from "@/components/img"
+import { JobCard } from "@/components/job-card"
 import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
-import { aboutPage, breadcrumbs, home, seo } from "@/content"
+import { aboutPage, breadcrumbs, seo } from "@/content"
 import { storeSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
@@ -116,29 +117,8 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-12 flex justify-center">
-            <div className="relative w-full max-w-md rounded-xl bg-panel p-6 sm:p-8">
-              {/* eslint-disable-next-line @next/next/no-img-element -- static export, pre-sized file */}
-              <img
-                src="/art/job-card-960.webp"
-                srcSet="/art/job-card-480.webp 480w, /art/job-card-960.webp 960w"
-                sizes="(min-width: 1024px) 400px, 90vw"
-                width={1360}
-                height={860}
-                alt={home.process.jobCardAlt}
-                loading="lazy"
-                decoding="async"
-                className="h-auto w-full -rotate-1 rounded-xs border border-hairline"
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element -- static export, pre-sized file */}
-              <img
-                src="/art/tamper-seal-240.webp"
-                width={240}
-                height={240}
-                alt={home.process.sealAlt}
-                loading="lazy"
-                decoding="async"
-                className="absolute -right-2 -bottom-4 size-20 rotate-6 sm:size-24"
-              />
+            <div className="relative w-full max-w-2xl rounded-2xl bg-panel p-4 sm:p-8">
+              <JobCard />
             </div>
           </div>
         </Container>

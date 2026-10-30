@@ -90,7 +90,7 @@ function MobileMenu() {
             <Link href="/book">{actions.book}</Link>
           </Button>
           <Button asChild size="lg" variant="whatsapp">
-            <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
+            <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="nav">
               <WhatsAppIcon />
               {actions.whatsapp}
             </a>
@@ -105,7 +105,7 @@ function MobileMenu() {
 function CallButton({ compact }: { compact?: boolean }) {
   return (
     <Button asChild className={compact ? "w-11 px-0" : undefined}>
-      <a href={site.phone.href} aria-label={nav.call}>
+      <a href={site.phone.href} aria-label={nav.call} data-track="call" data-track-from="nav">
         <Icon icon={Phone} />
         {!compact && <span className="text-nav font-bold">{site.phone.display}</span>}
       </a>

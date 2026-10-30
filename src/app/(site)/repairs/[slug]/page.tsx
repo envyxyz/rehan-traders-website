@@ -74,6 +74,8 @@ export default async function ServicePage({ params }: PageProps) {
                 <Button asChild size="lg" variant="whatsapp">
                   <a
                     href={site.whatsapp.withText(service.title)}
+                    data-track="whatsapp"
+                    data-track-from="repair"
                     aria-label={actions.whatsappLabel}
                   >
                     <WhatsAppIcon />

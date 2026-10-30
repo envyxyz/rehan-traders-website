@@ -31,7 +31,7 @@ export function Footer() {
               {site.name}
             </Link>
             <p className="mt-4 max-w-xs text-pretty">{site.entity}</p>
-            <a href={site.phone.href} className="mt-6 block font-display text-display-md text-on-band no-underline">
+            <a href={site.phone.href} className="mt-6 block font-display text-display-md text-on-band no-underline" data-track="call" data-track-from="footer">
               {site.phone.display}
             </a>
           </div>
@@ -66,10 +66,10 @@ export function Footer() {
                 </p>
               ))}
               <p className="flex flex-col">
-                <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} className={linkClass}>
+                <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} className={linkClass} data-track="whatsapp" data-track-from="footer">
                   {actions.whatsapp}
                 </a>
-                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1 underline-offset-4 hover:underline`}>
+                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1 underline-offset-4 hover:underline`} data-track="directions" data-track-from="footer">
                   {footer.directions}
                   <span className="sr-only">, {ui.externalLink}</span>
                   <Icon icon={ArrowUpRight} size="sm" />

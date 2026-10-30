@@ -27,12 +27,12 @@ export default function BookPage() {
           </Text>
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-caption text-steel max-lg:hidden">
             <Button asChild variant="whatsapp">
-              <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
+              <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="book">
                 <WhatsAppIcon />
                 {actions.whatsapp}
               </a>
             </Button>
-            <a href={site.phone.href} className="font-display text-body-sm font-bold text-ink no-underline">
+            <a href={site.phone.href} className="font-display text-body-sm font-bold text-ink no-underline" data-track="call" data-track-from="book">
               {site.phone.display}
             </a>
             <span>{site.address.short}</span>
