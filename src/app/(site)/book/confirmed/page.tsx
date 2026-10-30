@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: seo.bookConfirmed.title,
   description: seo.bookConfirmed.description,
   alternates: { canonical: "/book/confirmed" },
+  openGraph: { title: seo.bookConfirmed.title, description: seo.bookConfirmed.description, url: "/book/confirmed" },
   robots: { index: false, follow: false },
 }
 
