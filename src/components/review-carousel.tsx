@@ -116,7 +116,7 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
         ))}
       </div>
       {all ? (
-        <div className="mt-3 flex items-center gap-4">
+        <div className={cn("mt-3 flex items-center gap-4", all && "justify-center")}>
           <button
             type="button"
             onClick={() => step(-1)}

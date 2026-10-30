@@ -226,96 +226,125 @@ function sendShopEmail(job, data, files) {
     ['Service', data.service],
     ['Name', data.name],
     ['Mobile', data.phone],
-    ['Problem', data.problem],
-    ['Photos', files.length ? files.length + ' attached' : ''],
   ].filter(function (r) { return r[1] })
   var sheetUrl = SpreadsheetApp.getActiveSpreadsheet().getUrl()
   var tel = 'tel:+92' + String(data.phone).replace(/\D/g, '').replace(/^0/, '')
 
   var text = [(quote ? 'Quote request ' : 'Booking ') + job, '']
     .concat(rows.map(function (r) { return r[0] + ': ' + r[1] }))
+    .concat(data.problem ? ['Problem: ' + data.problem] : [])
+    .concat(files.map(function (f, i) { return 'Photo ' + (i + 1) + ': ' + f.getUrl() }))
     .concat(['WhatsApp the customer: ' + data.whatsapp, '', 'All bookings: ' + sheetUrl])
     .join('\n')
 
   var MUTED = '#5E5E5A'
-  var LINE = '#D9D9D4'
+  var LINE = '#C9C9C3'
   var GREEN = '#25D366'
+  var CARD = '#FFFFFF'
   var display = "font-family:Archivo,'Arial Black',Helvetica,Arial,sans-serif;font-weight:800;letter-spacing:-0.02em;"
   var body = 'font-family:Inter,Helvetica,Arial,sans-serif;'
-  var button = function (href, label, bg, fg, border) {
-    return '<a href="' + esc(href) + '" style="' + body + 'display:inline-block;margin:0 8px 10px 0;padding:14px 24px;border-radius:999px;' +
-      'font-size:15px;font-weight:700;line-height:1;text-decoration:none;background:' + bg + ';color:' + fg + ';border:1px solid ' + border + ';">' + esc(label) + '</a>'
+  // Long names, problems or pasted links wrap inside their cell instead of pushing the ticket wider.
+  var wrap = 'word-break:break-word;overflow-wrap:anywhere;'
+  var label = function (t) {
+    return '<div style="' + body + 'font-size:12px;line-height:1.4;color:' + MUTED + ';">' + esc(t) + '</div>'
   }
-  // Details as a 2-column grid inside the ticket, label above value, like the website's confirmation ticket.
+  var button = function (href, text, bg, fg, border) {
+    return '<a href="' + esc(href) + '" style="' + body + 'display:inline-block;margin:0 8px 10px 0;padding:14px 24px;border-radius:999px;' +
+      'font-size:15px;font-weight:700;line-height:1;text-decoration:none;background:' + bg + ';color:' + fg + ';border:1px solid ' + border + ';">' + esc(text) + '</a>'
+  }
+  // Short details as a 2-column grid, label above value, like the website's confirmation ticket.
   var cells = rows.map(function (r) {
-    return '<td class="cell" width="50%" valign="top" style="padding:0 16px 18px 0;">' +
-      '<div style="' + body + 'font-size:12px;line-height:1.4;color:' + MUTED + ';">' + esc(r[0]) + '</div>' +
-      '<div style="' + body + 'font-size:15px;line-height:1.4;font-weight:700;color:' + INK + ';padding-top:2px;">' + esc(r[1]) + '</div></td>'
+    return '<td class="cell" width="50%" valign="top" style="padding:0 14px 18px 0;">' + label(r[0]) +
+      '<div style="' + body + wrap + 'font-size:15px;line-height:1.4;font-weight:700;color:' + INK + ';padding-top:2px;">' + esc(r[1]) + '</div></td>'
   })
   var grid = ''
-  for (var i = 0; i < cells.length; i += 2) grid += '<tr>' + cells[i] + (cells[i + 1] || '<td class="cell"></td>') + '</tr>'
+  for (var i = 0; i < cells.length; i += 2) grid += '<tr>' + cells[i] + (cells[i + 1] || '<td class="cell" width="50%"></td>') + '</tr>'
+  // The problem in the customer's words, full width.
+  if (data.problem) {
+    grid += '<tr><td colspan="2" style="padding:0 0 18px;">' + label('Problem') +
+      '<div style="' + body + wrap + 'font-size:15px;line-height:1.5;color:' + INK + ';padding-top:2px;white-space:pre-line;">' + esc(data.problem) + '</div></td></tr>'
+  }
+  // Photos inside the ticket (inline images, cid:photoN), each a link to the full file in Drive.
+  var inline = {}
+  if (files.length) {
+    var thumbs = files.map(function (f, n) {
+      inline['photo' + n] = f.getBlob()
+      return '<td width="33%" valign="top" style="padding:0 8px 0 0;">' +
+        '<a href="' + esc(f.getUrl()) + '" style="display:block;text-decoration:none;">' +
+        '<img src="cid:photo' + n + '" alt="Photo ' + (n + 1) + '" width="140" style="display:block;width:100%;max-width:140px;height:auto;border:0;border-radius:12px;background:' + LINE + ';"></a></td>'
+    })
+    while (thumbs.length < 3) thumbs.push('<td width="33%"></td>')
+    grid += '<tr><td colspan="2" style="padding:0 0 18px;">' + label('Photos (tap to open full size)') +
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;margin-top:8px;"><tr>' + thumbs.join('') + '</tr></table></td></tr>'
+  }
 
   var html =
     '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><style>' +
-    '@media (max-width:600px){.stack{display:block!important;width:100%!important;box-sizing:border-box}' +
-    '.stub{border-radius:20px 20px 0 0!important}.tear{border-left:0!important;border-top:2px dashed ' + LINE + '!important}' +
-    '.details{border-radius:0 0 20px 20px!important}.cell{display:block!important;width:100%!important}.pad{padding:24px 20px!important}}' +
+    '@media (max-width:620px){.stack{display:block!important;width:100%!important;box-sizing:border-box}' +
+    '.seal{display:none!important}.tearh{display:block!important}' +
+    '.stub{padding:22px 20px 18px!important;border-radius:20px 20px 0 0!important}' +
+    '.details{padding:0 20px 4px!important;border-left:0!important;border-radius:0 0 20px 20px!important}.grid{table-layout:auto!important}.cell{display:block!important;width:100%!important;padding-right:0!important}.pad{padding:24px 18px!important}}' +
     '</style></head>' +
     '<body style="margin:0;padding:0;background:' + PAPER + ';">' +
     // Preheader: the line Gmail shows after the subject in the inbox list.
     '<div style="display:none;max-height:0;overflow:hidden;">' + esc(data.name + ' · ' + data.device + ' · ' + visit) + '</div>' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:' + PAPER + ';"><tr><td align="center" style="padding:24px 12px;">' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:780px;">' +
 
     // Header band
-    '<tr><td style="background:' + INK + ';border-radius:20px 20px 0 0;padding:22px 28px;">' +
+    '<tr><td style="background:' + INK + ';border-radius:20px 20px 0 0;padding:22px 32px;">' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
     '<td style="' + display + 'font-size:20px;color:' + PAPER + ';">Rehan Traders</td>' +
     '<td align="right" style="' + body + 'font-size:13px;color:#A4A49F;">Website bookings</td>' +
     '</tr></table></td></tr>' +
 
     // Hero
-    '<tr><td class="pad" style="background:#FFFFFF;padding:36px 28px 8px;">' +
+    '<tr><td class="pad" style="background:' + CARD + ';padding:36px 32px 8px;">' +
     '<div style="' + display + 'font-size:34px;line-height:1.1;color:' + INK + ';">' + (quote ? 'New quote request' : 'New booking') + '</div>' +
-    '<div style="' + body + 'font-size:16px;line-height:1.55;color:' + MUTED + ';padding-top:10px;">' +
+    '<div style="' + body + wrap + 'font-size:16px;line-height:1.55;color:' + MUTED + ';padding-top:10px;">' +
     esc(quote ? data.name + ' wants a quote. Reply on WhatsApp with the price.' : data.name + ' is coming in ' + visit + '. Confirm on WhatsApp.') + '</div>' +
     '</td></tr>' +
 
-    // Ticket: stub | dashed tear line | details. Stacks on phones.
-    '<tr><td class="pad" style="background:#FFFFFF;padding:24px 28px 8px;">' +
+    // Ticket, as on the website: stub with the job number and the tamper seal, a dashed tear line with notches cut
+    // to the card colour, then the details. On phones the stub sits on top and the tear line runs across.
+    '<tr><td class="pad" style="background:' + CARD + ';padding:24px 32px 8px;">' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>' +
-    '<td class="stack stub" width="34%" valign="middle" style="background:' + PANEL + ';border-radius:20px 0 0 20px;padding:26px 22px;">' +
-    '<div style="' + body + 'font-size:13px;color:' + MUTED + ';">Job number</div>' +
+    // The two halves' inner corners are rounded, so where they meet they cut a notch at each end of the tear line.
+    '<td class="stack stub" width="190" valign="top" style="width:190px;background:' + PANEL + ';border-radius:20px 14px 14px 20px;padding:28px 18px 28px 26px;">' +
+    label(quote ? 'Reference' : 'Job number') +
     '<div style="' + display + 'font-size:34px;line-height:1.1;color:' + SIGNAL + ';padding-top:4px;white-space:nowrap;">' + esc(job) + '</div>' +
-    '<div style="' + body + 'font-size:13px;font-weight:700;color:' + INK + ';padding-top:14px;">' + (quote ? 'Quote request' : 'Booking') + '</div>' +
+    '<div style="' + body + 'font-size:13px;font-weight:700;color:' + INK + ';padding-top:10px;">' + (quote ? 'Quote request' : 'Booking') + '</div>' +
+    '<img class="seal" src="https://rehanmobiletraders.com/art/tamper-seal-240.webp" alt="" width="76" height="76" style="display:block;width:76px;height:76px;border:0;margin-top:28px;">' +
     '</td>' +
-    '<td class="stack tear details" valign="top" style="background:' + PANEL + ';border-left:2px dashed ' + LINE + ';border-radius:0 20px 20px 0;padding:26px 22px 8px;">' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + grid + '</table>' +
+    '<td class="stack details" valign="top" style="background:' + PANEL + ';border-left:2px dashed ' + LINE + ';border-radius:14px 20px 20px 14px;padding:28px 26px 8px 22px;">' +
+    '<div class="tearh" style="display:none;border-top:2px dashed ' + LINE + ';margin:0 0 22px;font-size:0;line-height:0;">&nbsp;</div>' +
+    '<table class="grid" role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;">' + grid + '</table>' +
     '</td></tr></table></td></tr>' +
 
     // Actions
-    '<tr><td class="pad" style="background:#FFFFFF;padding:24px 28px 30px;">' +
+    '<tr><td class="pad" style="background:' + CARD + ';padding:24px 32px 30px;">' +
     button(data.whatsapp, 'WhatsApp ' + String(data.name).split(' ')[0], GREEN, INK, GREEN) +
     button(tel, 'Call ' + data.phone, INK, PAPER, INK) +
-    button(sheetUrl, 'All bookings', '#FFFFFF', INK, LINE) +
+    button(sheetUrl, 'All bookings', CARD, INK, LINE) +
     '</td></tr>' +
 
     // Footer
-    '<tr><td style="background:' + PANEL + ';border-radius:0 0 20px 20px;padding:20px 28px;' + body + 'font-size:12px;line-height:1.6;color:' + MUTED + ';">' +
+    '<tr><td style="background:' + PANEL + ';border-radius:0 0 20px 20px;padding:20px 32px;' + body + 'font-size:12px;line-height:1.6;color:' + MUTED + ';">' +
     'Rehan Traders · Shop G-88, Ground Floor, Hafeez Center, Gulberg III, Lahore · 0305 8874839<br>' +
     'Sent by rehanmobiletraders.com when a customer books. The booking is also in the Bookings sheet.' +
     '</td></tr>' +
     '</table></td></tr></table></body></html>'
 
   // Not from the shop's own address: Gmail keeps mail "from yourself" out of the inbox.
+  // Photos go inline in the ticket, not as attachments, so they are not shown twice.
   MailApp.sendEmail({
     to: SHOP_EMAIL,
     subject: subject,
     body: text,
     name: SENDER_NAME,
     htmlBody: html,
-    attachments: files.map(function (f) { return f.getBlob() })
+    inlineImages: inline
   })
 }
 

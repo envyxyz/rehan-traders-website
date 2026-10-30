@@ -39,7 +39,9 @@ function AccordionTrigger({ className, children, as: Tag = "h3", ...props }: Rea
 
 function AccordionContent({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Content>) {
   return (
+    // forceMount: closed answers stay in the static HTML (hidden attribute) so crawlers without JS can read them.
     <AccordionPrimitive.Content
+      forceMount
       data-slot="accordion-content"
       className="overflow-hidden data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
       {...props}

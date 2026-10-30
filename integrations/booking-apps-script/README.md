@@ -85,6 +85,10 @@ Run `pnpm preview` and book a visit at http://localhost:8787/book. A row appears
 
 Edit the code, save, then **Deploy** > **Manage deployments** > the pencil icon > **Version: New version** > **Deploy**. The URL stays the same. (A **New deployment** would make a new URL.)
 
+### Ticket email with photos inside (30 Oct 2026)
+
+The shop email's ticket now matches the website's: a stub with the job number and tamper seal, a dashed tear line with notches, then the details. It is wider (780px), long names, problems and links wrap inside the ticket, and booking photos show as thumbnails in the ticket (inline images, each linking to the full file in Drive) instead of as attachments. No new permissions. Paste the new `Code.gs`, save, run **testEmailAndDrive** to see it, then **Deploy** > **Manage deployments** > pencil > **Version: New version** > **Deploy**.
+
 ### Sort-safe hourly limit, MailApp and `testEmailAndDrive` (30 Oct 2026)
 
 `Code.gs` in this repo now matches the script that is deployed (it had drifted), plus one fix: `recentForPhone` used to stop at the first row older than an hour, so sorting the Sheet by another column let a number go past 5 bookings an hour. It now counts every one of the newest 300 rows.

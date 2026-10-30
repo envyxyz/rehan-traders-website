@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 
 import { Icon } from "@/components/icon"
+import { JsonLd } from "@/components/json-ld"
 import { breadcrumbs, site } from "@/content"
 import { cn } from "@/lib/utils"
 
@@ -32,7 +33,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={jsonLd} />
       <nav aria-label={breadcrumbs.label} className={cn("text-caption text-steel", className)}>
         <ol className="flex flex-wrap items-center gap-1.5">
           {allItems.map((item, index) => {

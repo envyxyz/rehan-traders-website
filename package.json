@@ -17,6 +17,7 @@
   "dependencies": {
     "@ai-sdk/google": "4.0.107",
     "@ai-sdk/groq": "4.0.69",
+    "@next/third-parties": "16.4.3",
     "@openrouter/ai-sdk-provider": "3.1.0",
     "ai": "7.0.150",
     "class-variance-authority": "^0.7.1",
