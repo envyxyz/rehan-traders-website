@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { loadGtm } from "@/lib/track"
+import { loadGtm, startGtm } from "@/lib/track"
 
 /**
  * Google Tag Manager, loaded once the page has finished loading and the main thread is idle, so its ~100 KB never
@@ -10,6 +10,7 @@ import { loadGtm } from "@/lib/track"
  */
 export function GoogleTagManager({ gtmId }: { gtmId: string }) {
   React.useEffect(() => {
+    startGtm()
     let cancelled = false
     const start = () => {
       const run = () => !cancelled && loadGtm(gtmId)

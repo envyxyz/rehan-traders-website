@@ -28,9 +28,15 @@ export function track<E extends keyof Events>(name: E, params: Events[E]) {
   dataLayer().push({ event: name, ...params })
 }
 
-/** GTM's own snippet, minus the inline script: start the queue, then add gtm.js. */
+/**
+ * GTM's own snippet in two halves, minus the inline script. startGtm queues the page-view event at hydration, so it
+ * comes before any tracked click; loadGtm adds gtm.js later, and gtm.js reads the queue in order.
+ */
+export function startGtm() {
+  if (!dataLayer().some((e) => e.event === "gtm.js")) dataLayer().push({ "gtm.start": Date.now(), event: "gtm.js" })
+}
+
 export function loadGtm(id: string) {
-  dataLayer().push({ "gtm.start": Date.now(), event: "gtm.js" })
   const script = document.createElement("script")
   script.async = true
   script.src = `https://www.googletagmanager.com/gtm.js?id=${id}`
