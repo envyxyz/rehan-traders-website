@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, Star } from "lucide-react"
 import { BookButton } from "@/components/book-button"
 import { BeforeAfter } from "@/components/before-after"
 import { HoursTable } from "@/components/hours-table"
-import { Icon } from "@/components/icon"
+import { Icon, WhatsAppIcon } from "@/components/icon"
 import { Img } from "@/components/img"
 import { Container, Section } from "@/components/layout"
 import { Reveal } from "@/components/motion"
@@ -73,8 +73,36 @@ function Repairs() {
             </li>
           ))}
         </ul>
+        <Estimate />
       </Container>
     </Section>
+  )
+}
+
+/**
+ * Under the repairs: a fault not in the list goes to the shop on WhatsApp. A plain GET form to wa.me, whose `text`
+ * parameter prefills the chat, so it works without JS. Switches to /estimate once the estimator ships (PRD §6.3).
+ */
+function Estimate() {
+  return (
+    <Reveal className="mt-4 grid gap-5 rounded-xl border border-hairline bg-card p-6 sm:p-8 lg:grid-cols-12 lg:items-center lg:gap-10">
+      <div className="lg:col-span-5">
+        <h3 className="font-display text-title-lg text-ink">{estimate.title}</h3>
+        <Text tone="muted" size="body-sm" className="mt-1.5">
+          {estimate.lede}
+        </Text>
+      </div>
+      <form action={site.whatsapp.href} method="get" target="_blank" className="flex flex-col gap-2.5 sm:flex-row lg:col-span-7">
+        <Label htmlFor="estimate-q" className="sr-only">
+          {estimate.label}
+        </Label>
+        <Input id="estimate-q" name="text" required maxLength={500} placeholder={estimate.placeholder} autoComplete="off" />
+        <Button type="submit" size="lg" variant="whatsapp" className="sm:shrink-0">
+          <WhatsAppIcon />
+          {estimate.submit}
+        </Button>
+      </form>
+    </Reveal>
   )
 }
 
@@ -199,30 +227,6 @@ function Reviews() {
   )
 }
 
-function Estimate() {
-  return (
-    <Section>
-      <Container>
-        <Reveal className="grid gap-6 rounded-xl border border-hairline bg-card p-6 sm:p-10 lg:grid-cols-12 lg:items-center lg:gap-10">
-          <Heading size="display-md" className="lg:col-span-5">
-            {estimate.title}
-          </Heading>
-          {/* The heading is the visible prompt; the label stays for screen readers. */}
-          <form action="/estimate" method="get" className="flex flex-col gap-2.5 sm:flex-row lg:col-span-7">
-            <Label htmlFor="estimate-q" className="sr-only">
-              {estimate.label}
-            </Label>
-            <Input id="estimate-q" name="q" placeholder={estimate.placeholder} autoComplete="off" />
-            <Button type="submit" size="lg" className="sm:shrink-0">
-              {estimate.submit}
-            </Button>
-          </form>
-        </Reveal>
-      </Container>
-    </Section>
-  )
-}
-
 function Visit() {
   return (
     <Section tone="panel" id="visit">
@@ -294,7 +298,6 @@ export function HomeSections() {
       <BeforeAfterSection />
       <Process />
       <Reviews />
-      <Estimate />
       <Visit />
       <Faq />
     </>

@@ -306,32 +306,31 @@
   clip-path: inset(0 calc(100% - var(--pos)) 0 0);
 }
 
-/* Arrow buttons: the chip's colour grows out of the chip (centre 23px from the right, radius 15px) until it fills the
-   button. A clip-path circle in percent, so it covers any button width. Behind the label: the button is `isolate`.
-   The label changes colour a beat after the fill starts, once the circle has swept over it, never light on light. */
+/* Arrow buttons: an inverted copy of the button (label and arrow) sits on top, clipped to a circle on the chip
+   (centre 23px from the right, radius 15px). Hover grows the circle until it covers the button, so whatever the circle
+   has passed over is inverted and the rest is not. Percent radius, so it covers any button width.
+   The base fill is clipped 1px inside a transparent border and the copy reaches 1px past it, so no light fringe shows
+   where the two rounded edges meet. The copy inherits the button's layout, so it lines up with the label. */
 @layer components {
+  [data-slot="button"]:has(> .btn-fill) {
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    transition:
+      translate var(--duration-fill) var(--ease-in-out),
+      scale var(--duration-press) var(--ease-out);
+  }
   .btn-fill {
     position: absolute;
-    inset: 0;
-    z-index: -1;
+    inset: -1px;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+    gap: inherit;
+    padding: inherit;
+    border: 1px solid transparent;
     border-radius: inherit;
     clip-path: circle(0.9375rem at calc(100% - 1.4375rem) 50%);
     transition: clip-path var(--duration-fill) var(--ease-in-out);
-  }
-  [data-slot="button"]:has(> .btn-fill) {
-    transition:
-      translate var(--duration-fill) var(--ease-in-out),
-      scale var(--duration-press) var(--ease-out),
-      color var(--duration-fast) var(--ease-in-out),
-      background-color 0s;
-  }
-  /* Once the circle has covered the button, the button's own fill switches too, so no light hairline shows where the
-     clip's anti-aliased edge meets the rounded corners. On the way out it switches back at once. */
-  @media (hover: hover) {
-    [data-slot="button"]:hover:has(> .btn-fill) {
-      /* The label turns once the circle has swept past it (about 60% in), the button fill once the circle is done. */
-      transition-delay: 0s, 0s, 400ms, var(--duration-fill);
-    }
   }
   @media (hover: hover) {
     [data-slot="button"]:hover > .btn-fill {

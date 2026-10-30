@@ -19,6 +19,8 @@ const buttonVariants = cva(
         whatsapp: "bg-whatsapp text-on-whatsapp hover:brightness-105 active:brightness-95",
         glass: "glass active:brightness-95",
         icon: "text-ink hover:translate-y-0 hover:bg-concrete active:bg-concrete",
+        /** Ink outline that fills on hover, label and arrow taking the sheet's colour (booking flow). */
+        outline: "border border-ink text-ink hover:bg-ink hover:text-card active:bg-ink active:text-card",
       },
       size: {
         md: "h-11 px-4.5",
@@ -44,34 +46,32 @@ type ButtonProps = React.ComponentProps<"button"> &
 
 function Button({ className, variant, size, asChild = false, arrow = false, still = false, children, ...props }: ButtonProps) {
   const fill = arrow && !still
+  const inverse = variant === "inverse"
   const Comp = asChild ? Slot.Root : "button"
+  // With asChild the label is the child element's children (e.g. <Link>Book</Link>).
+  const label = asChild && React.isValidElement<{ children?: React.ReactNode }>(children) ? children.props.children : children
   return (
     <Comp
       data-slot="button"
-      className={cn(
-        buttonVariants({ variant, size }),
-        arrow && "relative isolate pr-2",
-        // Label and, once the fill has covered it (delay in globals.css), the button itself take the chip's colours.
-        fill &&
-          (variant === "inverse"
-            ? "hover:bg-band hover:text-on-band focus-visible:text-on-band"
-            : "hover:bg-on-action hover:text-action focus-visible:text-action"),
-        still && "hover:translate-y-0",
-        className
-      )}
+      className={cn(buttonVariants({ variant, size }), arrow && "relative isolate pr-2", still && "hover:translate-y-0", className)}
       {...props}
     >
       <Slot.Slottable>{children}</Slot.Slottable>
-      {fill && <span aria-hidden className={cn("btn-fill", variant === "inverse" ? "bg-band" : "bg-on-action")} />}
       {arrow && (
         <span
           aria-hidden
-          className={cn(
-            "grid size-7.5 place-items-center rounded-pill",
-            variant === "inverse" ? "bg-band text-on-band" : "bg-on-action text-action"
-          )}
+          className={cn("grid size-7.5 place-items-center rounded-pill", inverse ? "bg-band text-on-band" : "bg-on-action text-action")}
         >
           <ArrowUpRight className="size-4" strokeWidth={2} />
+        </span>
+      )}
+      {/* Inverted copy, revealed by the growing circle (globals.css). Its chip blends into the fill. */}
+      {fill && (
+        <span aria-hidden className={cn("btn-fill", inverse ? "bg-band text-on-band" : "bg-on-action text-action")}>
+          {label}
+          <span className="grid size-7.5 place-items-center">
+            <ArrowUpRight className="size-4" strokeWidth={2} />
+          </span>
         </span>
       )}
     </Comp>

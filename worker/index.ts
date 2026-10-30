@@ -1,4 +1,4 @@
-import { book, type BookEnv } from "./book"
+import { book, upload, type BookEnv } from "./book"
 import { chat, type AiEnv } from "./chat"
 import { estimate } from "./estimate"
 
@@ -9,6 +9,7 @@ const worker = {
     if (pathname === "/api/book") return book(request, env)
     if (pathname === "/api/chat") return chat(request, env)
     if (pathname === "/api/estimate") return estimate(request, env)
+    if (pathname === "/api/upload") return upload(request, env)
     return Response.json({ ok: false, error: "not_found" }, { status: 404 })
   },
 }

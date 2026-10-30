@@ -22,3 +22,6 @@ export const heroStagger = 0.08
 
 /** Browser chrome colour (metadata cannot use CSS vars). Mirrors --paper. */
 export const themeColor = { light: "#f5f5f2", dark: "#0b0b0b" } as const
+
+/** Saved ticket image: always the light brand palette, whatever the screen theme. Mirrors the light tokens. */
+export const ticketColors = { paper: "#f5f5f2", panel: "#e9e9e4", hairline: "#d9d9d4", ink: "#0e0e0e", steel: "#5e5e5a", signal: "#d7141a" } as const

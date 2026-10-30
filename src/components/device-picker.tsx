@@ -7,7 +7,7 @@ import { Icon } from "@/components/icon"
 import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Label } from "@/components/ui/label"
 import { booking } from "@/content"
-import { brandOf, brands, deviceName, match, modelsOf } from "@/lib/devices"
+import { brandOf, brands, deviceName, isTablet, match, modelsOf, tabletBrands } from "@/lib/devices"
 
 const copy = booking.device
 const LIMIT = 60
@@ -102,20 +102,23 @@ export function DevicePicker({
   value,
   onChange,
   lockedBrand,
+  tabletsOnly,
 }: {
   value: string | null
   onChange: (device: string | null) => void
   lockedBrand?: string
+  /** The tablet repair: only brands that make tablets, and only their tablets. */
+  tabletsOnly?: boolean
 }) {
   const [brand, setBrand] = React.useState(lockedBrand ?? (value ? (brandOf(value) ?? "") : ""))
-  const options = React.useMemo(() => modelsOf(brand), [brand])
+  const options = React.useMemo(() => modelsOf(brand).filter((m) => !tabletsOnly || isTablet(m)), [brand, tabletsOnly])
 
   return (
     <div className="flex flex-col gap-4">
       <Combo
         label={copy.brand}
         placeholder={copy.brandSearch}
-        options={brands}
+        options={tabletsOnly ? tabletBrands : brands}
         value={brand}
         disabled={!!lockedBrand}
         onPick={(b) => {

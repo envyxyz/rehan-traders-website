@@ -84,17 +84,19 @@ Run `pnpm preview` and book a visit at http://localhost:8787/book. A row appears
 
 Edit the code, save, then **Deploy** > **Manage deployments** > the pencil icon > **Version: New version** > **Deploy**. The URL stays the same. (A **New deployment** would make a new URL.)
 
-## Send from the shop's address
+### Photos, Problem and the hourly limit (30 Oct 2026)
 
-Emails go out as **Rehan Traders Website Bookings** <rehanmobiletraders@gmail.com>, to the same address, as an HTML ticket in the website's look (ink header, horizontal ticket with the red job number, WhatsApp, Call and All bookings buttons). The script sends with GmailApp, so it can use the shop's address as long as that address is a verified alias of the account the script runs in (Ameer's). One-time setup, about 3 minutes:
+This version adds booking photos (saved to the Drive folder "Rehan Traders booking photos", attached to the shop email), the Problem and Photos columns, and a limit of 5 bookings per mobile number per hour. To switch it on:
 
-1. In Ameer's Gmail: gear > **See all settings** > **Accounts and Import** > **Send mail as** > **Add another email address**.
-2. Name `Rehan Traders Website Bookings`, address `rehanmobiletraders@gmail.com`, keep **Treat as an alias** ticked > **Next step** > **Send verification**.
-3. In the shop's inbox, open Google's verification email and click the link (or paste the code into the box from step 2).
-4. Paste the new `Code.gs` into the Apps Script editor and save.
-5. **Deploy** > **Manage deployments** > pencil > **Version: New version** > **Deploy**. Google asks for one new permission ("Read, compose, send and permanently delete all your email from Gmail", which GmailApp needs to send as an alias): **Review permissions** > Ameer's account > **Advanced** > **Go to Rehan Traders booking webhook** > **Allow**.
+1. Paste the new `Code.gs` over the old one and save.
+2. Pick `setup` in the function menu and click **Run**. Google asks for a new permission (Drive, to save the photos): **Review permissions** > Ameer's account > **Advanced** > **Go to Rehan Traders booking webhook** > **Allow**. `setup` adds the Problem and Photos columns.
+3. **Deploy** > **Manage deployments** > pencil > **Version: New version** > **Deploy**.
 
-Without the alias the email still goes out with the new name and design, from the account the script runs in. If the script is ever moved into the shop's own account, no alias is needed.
+The folder is made, and shared with rehanmobiletraders@gmail.com as a viewer, on the first photo. Photos someone adds and then removes, or never books with, stay in the folder; clear it out now and then.
+
+## Sender
+
+Emails go out as **Rehan Traders Website Bookings** from the account the script runs in (Ameer's), to rehanmobiletraders@gmail.com, as an HTML ticket in the website's look. Do not send them from the shop's own address through a "Send mail as" alias: Gmail treats mail from yourself to yourself as sent mail and keeps it out of the inbox (tried 29 Oct 2026; emails stopped arriving).
 
 ## Launch day: start from RT-0001
 

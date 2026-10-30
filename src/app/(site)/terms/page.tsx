@@ -1,0 +1,51 @@
+import type { Metadata } from "next"
+
+import { Breadcrumbs } from "@/components/breadcrumbs"
+import { CtaBand } from "@/components/cta-band"
+import { Container, Section } from "@/components/layout"
+import { Heading, Text } from "@/components/typography"
+import { breadcrumbs, seo, termsPage } from "@/content"
+
+export const metadata: Metadata = {
+  title: seo.terms.title,
+  description: seo.terms.description,
+  alternates: { canonical: "/terms" },
+  openGraph: { title: seo.terms.title, description: seo.terms.description, url: "/terms" },
+}
+
+export default function TermsPage() {
+  return (
+    <>
+      <Section className="pt-28 lg:pt-36">
+        <Container>
+          <Breadcrumbs items={[{ label: breadcrumbs.terms }]} className="mb-8" />
+
+          <div className="max-w-2xl">
+            <Heading as="h1" size="display-xl" rule>
+              {termsPage.title}
+            </Heading>
+            <Text tone="muted" size="body-md" className="mt-4">
+              {termsPage.lede}
+            </Text>
+            <p className="mt-2 text-caption text-steel">
+              {termsPage.lastUpdated}
+            </p>
+          </div>
+
+          <div className="mt-12 max-w-3xl space-y-10">
+            {termsPage.sections.map((sec) => (
+              <div key={sec.title} className="border-t border-hairline pt-8">
+                <h2 className="font-display text-title-lg text-ink">{sec.title}</h2>
+                <Text tone="body" className="mt-3">
+                  {sec.text}
+                </Text>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      <CtaBand />
+    </>
+  )
+}

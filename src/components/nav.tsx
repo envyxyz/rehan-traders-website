@@ -21,20 +21,21 @@ import { spring } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
 const ISLAND_AT = 80 // phones: px of scroll before the bar gathers into the island
-const BAR_FADE = 120 // desktop: px of scroll over which the top bar fades out
+const BAR_FADE = 240 // desktop: px of scroll over which the top bar fades out
 
 const linkClass = "inline-flex h-11 items-center gap-1 rounded-pill px-3.5 font-display text-nav text-ink active:bg-concrete"
 
-/** Repairs opens the 8 repairs; the other links are plain. */
-function NavLinks() {
+/** Repairs opens the 8 repairs; the other links are plain. `menu` controls the Repairs menu (the top bar's). */
+function NavLinks({ menu }: { menu?: { open: boolean; onOpenChange: (open: boolean) => void } }) {
   return nav.links.map((link) =>
     link.href === "/repairs" ? (
-      <DropdownMenu key={link.href} modal={false}>
+      <DropdownMenu key={link.href} modal={false} {...menu}>
         <DropdownMenuTrigger className={cn(linkClass, "cursor-pointer outline-none focus-visible:outline-2")}>
           {link.label}
           <Icon icon={ChevronDown} size="sm" className="text-steel" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" sideOffset={12}>
+        {/* The top bar's menu fades with the bar (--nav-fade, set on scroll), so it never floats on after the bar. */}
+        <DropdownMenuContent align="start" sideOffset={12} style={menu && { opacity: "var(--nav-fade, 1)", transition: "opacity var(--duration-reveal) var(--ease-out)" }}>
           {services.map((s) => (
             <DropdownMenuItem key={s.slug} asChild>
               <Link href={`/repairs/${s.slug}`}>{s.title}</Link>
@@ -120,12 +121,15 @@ function DesktopNav() {
   const bar = React.useRef<HTMLDivElement>(null)
   const [gone, setGone] = React.useState(false)
   const [island, setIsland] = React.useState(false)
+  const [menu, setMenu] = React.useState(false)
 
   React.useEffect(() => {
     const onScroll = () => {
       const fade = Math.min(scrollY / BAR_FADE, 1)
       bar.current?.style.setProperty("opacity", String(1 - fade))
+      document.documentElement.style.setProperty("--nav-fade", String(1 - fade))
       setGone(fade === 1)
+      if (fade === 1) setMenu(false)
       // Only the home page has a hero (#top); elsewhere the island takes over as soon as the bar is gone.
       const hero = document.getElementById("top")
       setIsland(hero ? hero.getBoundingClientRect().bottom <= 0 : fade === 1)
@@ -137,14 +141,14 @@ function DesktopNav() {
 
   return (
     <header className="max-lg:hidden">
-      <div ref={bar} inert={gone} className="pointer-events-none fixed inset-x-0 top-0 z-40 flex px-14 pt-7 pb-6">
+      <div ref={bar} inert={gone} className="pointer-events-none fixed inset-x-0 top-0 z-40 flex px-14 pt-7 pb-6 transition-opacity duration-(--duration-reveal) ease-out motion-reduce:transition-none">
         <div className="pointer-events-auto flex flex-1 items-center justify-between">
           <Link href="/" aria-label={nav.home} className="flex items-center gap-2.25 font-display text-title-md font-extrabold tracking-tight text-ink">
             <Mark className="size-7.5" />
             <span>{site.name}</span>
           </Link>
           <nav aria-label={nav.label} className="glass flex items-center gap-0.5 rounded-pill p-1.25">
-            <NavLinks />
+            <NavLinks menu={{ open: menu, onOpenChange: setMenu }} />
             <CallButton />
           </nav>
         </div>
@@ -153,7 +157,7 @@ function DesktopNav() {
         aria-label={nav.label}
         inert={!island}
         className={cn(
-          "glass fixed inset-x-0 top-3.5 z-40 mx-auto flex w-fit items-center gap-0.5 rounded-pill p-1.25 pl-3 transition duration-base ease-drawer motion-reduce:transition-none",
+          "glass fixed inset-x-0 top-3.5 z-40 mx-auto flex w-fit items-center gap-0.5 rounded-pill p-1.25 pl-3 transition duration-(--duration-reveal) ease-out motion-reduce:transition-none",
           !island && "-translate-y-2 opacity-0 motion-reduce:translate-y-0"
         )}
       >

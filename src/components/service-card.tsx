@@ -1,0 +1,44 @@
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
+
+import { BookButton } from "@/components/book-button"
+import { Icon } from "@/components/icon"
+import { Img } from "@/components/img"
+import { PriceLine } from "@/components/price-line"
+import { Card, CardDescription, CardTitle } from "@/components/ui/card"
+import { actions, repairsPage, type Service } from "@/content"
+import { cn } from "@/lib/utils"
+
+export function ServiceCard({ service, lead }: { service: Service; lead?: boolean }) {
+  return (
+    <Card className="flex h-full flex-col gap-0 overflow-hidden p-0">
+      <Link href={`/repairs/${service.slug}`} className="block overflow-hidden">
+        <Img
+          name={service.image}
+          alt={service.alt}
+          sizes={lead ? "(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 368px, (min-width: 768px) 50vw, 100vw"}
+          className={cn("w-full transition-transform duration-(--duration-base) ease-out hover:scale-102", lead ? "aspect-16/10" : "aspect-4/3")}
+        />
+      </Link>
+      <div className="flex flex-1 flex-col gap-3 p-6">
+        <Link href={`/repairs/${service.slug}`} className="no-underline">
+          <CardTitle className={cn(lead && "text-title-lg", "hover:text-ink")}>{service.title}</CardTitle>
+        </Link>
+        <CardDescription className="mb-1 line-clamp-2">{service.short}</CardDescription>
+        <PriceLine priceFrom={service.priceFrom} className="text-body-sm font-semibold" />
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-3">
+          <BookButton service={service.slug} variant="line">
+            {actions.bookRepair}
+          </BookButton>
+          <Link
+            href={`/repairs/${service.slug}`}
+            className="inline-flex min-h-11 items-center gap-1 font-display text-caption font-bold text-steel hover:text-ink"
+          >
+            <span>{repairsPage.viewDetails}</span>
+            <Icon icon={ArrowRight} size="sm" />
+          </Link>
+        </div>
+      </div>
+    </Card>
+  )
+}

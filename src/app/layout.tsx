@@ -10,7 +10,13 @@ import "./globals.css"
 
 // One variable family for headlines and body (weights 400–800). The opsz axis tightens
 // large headlines and opens small text automatically (font-optical-sizing: auto).
-const googleSans = Google_Sans_Flex({ subsets: ["latin"], display: "swap", axes: ["opsz"], variable: "--font-google-sans" })
+const googleSans = Google_Sans_Flex({
+  subsets: ["latin"],
+  display: "swap",
+  axes: ["opsz"],
+  variable: "--font-google-sans",
+  adjustFontFallback: false,
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

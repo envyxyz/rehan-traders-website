@@ -1,0 +1,51 @@
+"use client"
+
+import * as React from "react"
+import { MapPin } from "lucide-react"
+
+import { Icon } from "@/components/icon"
+import { Button } from "@/components/ui/button"
+import { visit, visitPage } from "@/content"
+import { cn } from "@/lib/utils"
+
+export function InteractiveMap({
+  children,
+  className,
+}: {
+  children?: React.ReactNode
+  className?: string
+}) {
+  const [active, setActive] = React.useState(false)
+
+  if (active) {
+    return (
+      <div className={cn("overflow-hidden rounded-xl bg-band", className)}>
+        <iframe
+          src={visit.mapEmbed}
+          title={visit.mapTitle}
+          loading="eager"
+          referrerPolicy="strict-origin-when-cross-origin"
+          className="map-dark aspect-4/3 w-full border-0"
+        />
+      </div>
+    )
+  }
+
+  return (
+    <div className={cn("relative aspect-4/3 w-full overflow-hidden rounded-xl border border-hairline bg-concrete", className)}>
+      {children}
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-scrim p-6 text-center">
+        <Button
+          type="button"
+          size="lg"
+          variant="glass"
+          onClick={() => setActive(true)}
+          className="cursor-pointer gap-2 shadow-float"
+        >
+          <Icon icon={MapPin} className="text-signal" />
+          <span>{visitPage.mapPrompt}</span>
+        </Button>
+      </div>
+    </div>
+  )
+}

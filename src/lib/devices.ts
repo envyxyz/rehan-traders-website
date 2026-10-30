@@ -7,6 +7,10 @@ export const deviceName = (brand: string, model: string) =>
 
 export const brands = catalog.map((b) => b.brand)
 
+// ponytail: tablets by name ("iPad", "Galaxy Tab", "Redmi Pad", "MegaPad"); the catalog has no device type.
+export const isTablet = (m: string) => /pad|tab/i.test(m)
+export const tabletBrands = catalog.filter((b) => b.models.some(isTablet)).map((b) => b.brand)
+
 /** A brand's models by display name; [] for a brand typed in that is not in the list. */
 export const modelsOf = (brand: string) =>
   catalog.find((b) => b.brand.toLowerCase() === brand.trim().toLowerCase())?.models.map((m) => deviceName(brand, m)) ?? []

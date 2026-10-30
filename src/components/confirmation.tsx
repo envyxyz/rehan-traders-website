@@ -2,13 +2,14 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { CalendarPlus } from "lucide-react"
+import { CalendarPlus, Download } from "lucide-react"
 
 import { BOOKING_KEY } from "@/components/booking-flow"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 import { actions, booking, site, type BookingSummary } from "@/content"
+import { ticketImage } from "@/lib/ticket-image"
 import { track } from "@/lib/track"
 
 const noSubscribe = () => () => {}
@@ -42,10 +43,42 @@ const ics = (b: BookingSummary) => {
   ].join("\r\n")
 }
 
+/**
+ * Saves the ticket image. On phones (`share`) the share sheet opens, where iOS offers "Save Image" to Photos;
+ * elsewhere, and for the automatic save, it downloads (Android lists downloaded images in the gallery).
+ */
+async function saveTicket(b: BookingSummary, share = false) {
+  const blob = await ticketImage(b)
+  const file = new File([blob], booking.confirmed.image.file(b.ref), { type: blob.type })
+  if (share && matchMedia("(pointer: coarse)").matches && navigator.canShare?.({ files: [file] })) {
+    return navigator.share({ files: [file] }).catch(() => {}) // dismissed share sheet
+  }
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = file.name
+  a.click()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
+
 /** /book/confirmed. The booking comes from sessionStorage (never the URL), so the static HTML renders nothing. */
 export function Confirmation() {
   const raw = React.useSyncExternalStore(noSubscribe, readBooking, () => undefined)
   const b = React.useMemo(() => (raw ? (JSON.parse(raw) as BookingSummary) : null), [raw])
+
+  // Save the ticket to the phone once per job number, so a reload does not save it again.
+  React.useEffect(() => {
+    if (!b?.saved) return
+    const key = `rt-ticket-${b.ref}`
+    try {
+      if (sessionStorage.getItem(key)) return
+      sessionStorage.setItem(key, "1")
+    } catch {
+      return
+    }
+    saveTicket(b).catch(() => {}) // the Save ticket button is still there
+  }, [b])
+
   if (raw === undefined) return null
 
   if (!b)
@@ -109,6 +142,12 @@ export function Confirmation() {
             </div>
           </dl>
           <div className="mt-auto flex flex-wrap justify-end gap-2.5">
+            {b.saved && (
+              <Button type="button" size="lg" variant="line" onClick={() => saveTicket(b, true)}>
+                <Icon icon={Download} />
+                {c.save}
+              </Button>
+            )}
             {b.slot && (
               <Button asChild size="lg" variant="line">
                 <a href={`data:text/calendar;charset=utf-8,${encodeURIComponent(ics(b))}`} download={booking.ics.file(b.ref)}>

@@ -2,13 +2,16 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
+import { ArrowRight } from "lucide-react"
 
 import { DevicePicker } from "@/components/device-picker"
+import { Icon } from "@/components/icon"
 import { Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Input, Textarea } from "@/components/ui/input"
+import { PhotoPicker, type Photo } from "@/components/photo-picker"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { RadioGroup, RadioGroupItem, TogglePill } from "@/components/ui/radio-group"
 import { TimeWheel } from "@/components/time-wheel"
 import { actions, booking, faults, holidays, priceMode, services, site, type BookingSummary } from "@/content"
 import { bookingDays, displayPhone, normalizePhone, slotDay, slotLabel, type BookingDay } from "@/lib/booking"
@@ -23,19 +26,38 @@ export const BOOKING_KEY = "rt-booking"
 
 type Draft = {
   device: string | null
-  fault: string | null
+  /** Any number of faults, or exactly one of the open ones ("Not sure", "Not mentioned here"). */
+  faults: string[]
   day: string | null
   slot: string | null
   kind: "book" | "quote"
   name: string
   phone: string
+  problem: string
 }
 
 const tz = site.hours.timezone
 // Module-level so the React compiler sees these as event-time reads, not render-time ones.
 const now = () => Date.now()
+
+/** 5 bookings per device per hour (localStorage), before the Sheet's own 5 per number per hour. */
+const LIMIT = 5
+const HOUR = 3_600_000
+const LIMIT_KEY = "rt-bookings"
+const recentBookings = () => {
+  try {
+    return (JSON.parse(localStorage.getItem(LIMIT_KEY) ?? "[]") as number[]).filter((t) => now() - t < HOUR)
+  } catch {
+    return []
+  }
+}
 /** Shown when the Sheet could not be reached: "WEB-" and six characters of the time, never a job number. */
 const localRef = () => `WEB-${now().toString(36).toUpperCase().slice(-6)}`
+
+const openFaults: readonly string[] = booking.fault.open
+/** Tap a fault pill: on or off. An open choice ("Not sure") stands alone; picking a listed fault drops it. */
+const toggleFault = (picked: string[], f: string) =>
+  picked.includes(f) ? picked.filter((x) => x !== f) : openFaults.includes(f) ? [f] : [...picked.filter((x) => !openFaults.includes(x)), f]
 
 /** Day tile parts: ["Today" or "Thu", "30", "Oct"]. */
 const dayParts = (date: string) => {
@@ -52,19 +74,21 @@ const dayParts = (date: string) => {
 export function BookingFlow({ service, device, onDone }: { service?: string; device?: string; onDone?: () => void }) {
   const router = useRouter()
   const svc = services.find((s) => s.slug === service)
-  const faultChoices: readonly string[] = svc?.faults ?? faults
+  const faultChoices: readonly string[] = [...(svc?.faults ?? faults), ...booking.fault.open]
   const allowQuote = priceMode === "quote" && !!svc
 
   const [step, setStep] = React.useState<Step>("device")
   const [draft, setDraft] = React.useState<Draft>({
     device: device ?? null,
-    fault: null,
+    faults: [],
     day: null,
     slot: null,
     kind: "book",
     name: "",
     phone: "",
+    problem: "",
   })
+  const [photos, setPhotos] = React.useState<Photo[]>([])
   const [days, setDays] = React.useState<BookingDay[]>([])
   const [error, setError] = React.useState<string | null>(null)
   const [sending, setSending] = React.useState(false)
@@ -99,12 +123,19 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
   }
 
   const phone = normalizePhone(draft.phone)
+  // "Not sure" and "Not mentioned here" open the description and photos; only then are they sent.
+  const fault =draft.faults.join(", ") // one field everywhere after this step: Sheet, email, ticket
+  const openFault = openFaults.includes(fault)
+  const problem = openFault ? draft.problem.trim() : ""
+  const photoIds = openFault ? photos.flatMap((p) => (p.id ? [p.id] : [])) : []
   const nameOk = draft.name.trim().length > 0
 
   function next() {
     if (step === "device") return draft.device ? go("fault") : setError(booking.device.pickError)
     if (step === "fault") {
-      if (!draft.fault) return setError(booking.fault.pickError)
+      if (!fault) return setError(booking.fault.pickError)
+      if (openFault && !problem) return setError(booking.fault.describeError)
+      if (openFault && photos.some((p) => !p.id)) return setError(booking.fault.wait)
       // Slots are worked out when the step opens, so past times never show.
       const open = bookingDays(new Date(), site.hours, holidays)
       setDays(open)
@@ -129,12 +160,15 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
   }
 
   async function submit() {
+    if (recentBookings().length >= LIMIT) return setError(booking.review.limit)
     setSending(true)
     const body = {
       kind: draft.kind,
       ...(svc && { service: svc.slug }),
       device: draft.device,
-      fault: draft.fault,
+      fault,
+      ...(problem && { problem }),
+      ...(photoIds.length && { photos: photoIds }),
       slot: draft.kind === "quote" ? null : draft.slot,
       name: draft.name.trim(),
       phone: draft.phone,
@@ -148,9 +182,9 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         headers: { "content-type": "application/json" },
         body: JSON.stringify(body),
       })
-      if (res.status === 400) {
+      if (res.status === 400 || res.status === 429) {
         setSending(false)
-        return setError(booking.review.error)
+        return setError(res.status === 429 ? booking.review.limit : booking.review.error)
       }
       const out = (await res.json()) as { ok?: boolean; job?: string }
       if (out.ok && out.job) job = out.job
@@ -162,13 +196,15 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
       ref: job ?? localRef(),
       saved: !!job,
       device: draft.device!,
-      fault: draft.fault!,
+      fault,
       visit: draft.kind === "quote" ? null : slotLabel(draft.slot!, tz),
       slot: draft.kind === "quote" ? null : draft.slot,
       name: draft.name.trim(),
+      ...(problem && { problem }),
     }
     track("book_submit", { kind: summary.kind, saved: summary.saved })
     try {
+      if (job) localStorage.setItem(LIMIT_KEY, JSON.stringify([...recentBookings(), now()]))
       sessionStorage.setItem(BOOKING_KEY, JSON.stringify(summary))
     } catch {
       // Private mode can refuse storage; the confirmation page then shows its fallback.
@@ -189,7 +225,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         e.preventDefault()
         next()
       }}
-      className="flex flex-col gap-5"
+      className="flex flex-1 flex-col gap-5"
     >
       {/* Where you are, in the lede's place under the sheet title, then the bars. */}
       <div>
@@ -206,16 +242,45 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
           {copy.title}
         </h2>
 
-        {step === "device" && <DevicePicker value={draft.device} onChange={(device) => set({ device })} lockedBrand={svc?.brand} />}
+        {step === "device" && (
+          <DevicePicker value={draft.device} onChange={(device) => set({ device })} lockedBrand={svc?.brand} tabletsOnly={svc?.tablets} />
+        )}
 
         {step === "fault" && (
-          <RadioGroup aria-label={booking.fault.label} value={draft.fault ?? ""} onValueChange={(fault) => set({ fault })}>
+          <div role="group" aria-label={booking.fault.label} className="flex flex-wrap gap-2">
             {faultChoices.map((f) => (
-              <RadioGroupItem key={f} value={f}>
+              <TogglePill
+                key={f}
+                pressed={draft.faults.includes(f)}
+                onClick={() => {
+                  setError(null)
+                  setDraft((d) => ({ ...d, faults: toggleFault(d.faults, f) }))
+                }}
+              >
                 {f}
-              </RadioGroupItem>
+              </TogglePill>
             ))}
-          </RadioGroup>
+          </div>
+        )}
+
+        {step === "fault" && openFault && (
+          <div className="flex animate-rise flex-col gap-4 motion-reduce:animate-none">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor={`${ids}-problem`}>{booking.fault.describe}</Label>
+              <Textarea
+                id={`${ids}-problem`}
+                maxLength={500}
+                placeholder={booking.fault.describePlaceholder}
+                value={draft.problem}
+                onChange={(e) => set({ problem: e.target.value })}
+                aria-invalid={error === booking.fault.describeError}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-body-sm font-medium text-ink">{booking.fault.photos}</p>
+              <PhotoPicker photos={photos} onChange={setPhotos} onError={setError} />
+            </div>
+          </div>
         )}
 
         {step === "time" &&
@@ -260,25 +325,6 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
               )}
             </>
           ))}
-
-        {step === "time" && allowQuote && (
-          <div className="flex flex-col items-start gap-2 border-t border-hairline pt-4">
-            <Text size="body-sm" tone="muted">
-              {booking.time.quoteInstead}
-            </Text>
-            <Button
-              type="button"
-              variant="line"
-              still
-              onClick={() => {
-                set({ kind: "quote" })
-                go("details")
-              }}
-            >
-              {actions.getQuote}
-            </Button>
-          </div>
-        )}
 
         {step === "details" && (
           <div className="flex flex-col gap-4">
@@ -329,7 +375,9 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
           <dl className="divide-y divide-hairline rounded-lg border border-hairline">
             {[
               [booking.review.device, draft.device],
-              [booking.review.fault, draft.fault],
+              [booking.review.fault, fault],
+              ...(problem ? [[booking.review.problem, problem]] : []),
+              ...(photoIds.length ? [[booking.review.photos, booking.review.photoCount(photoIds.length)]] : []),
               [booking.review.visit, draft.kind === "quote" ? booking.review.quoteVisit : slotLabel(draft.slot!, tz)],
               [booking.review.name, draft.name.trim()],
               [booking.review.phone, phone && displayPhone(phone)],
@@ -352,14 +400,29 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
       {/* Honeypot: off-screen and out of the tab order, so only bots fill it. */}
       <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" aria-label={booking.details.honeypot} />
 
-      <div className="sticky bottom-0 -mx-1 flex gap-2.5 bg-card px-1 py-3">
+      <div className="sticky bottom-0 -mx-1 mt-auto flex gap-2.5 bg-card px-1 py-3">
         {index > 0 && (
           <Button type="button" variant="line" size="lg" still onClick={back} disabled={sending}>
             {booking.back}
           </Button>
         )}
-        <Button type="submit" size="lg" arrow still className="flex-1 justify-between" disabled={sending}>
+        {step === "time" && allowQuote && (
+          <Button
+            type="button"
+            variant="line"
+            size="lg"
+            still
+            onClick={() => {
+              set({ kind: "quote" })
+              go("details")
+            }}
+          >
+            {actions.getQuote}
+          </Button>
+        )}
+        <Button type="submit" variant="outline" size="lg" still className="flex-1 justify-between" disabled={sending}>
           {step !== "review" ? booking.next : sending ? booking.review.sending : draft.kind === "quote" ? actions.getQuote : booking.review.submit}
+          <Icon icon={ArrowRight} />
         </Button>
       </div>
     </form>

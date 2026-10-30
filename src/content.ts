@@ -180,6 +180,10 @@ export type Service = {
   lead?: boolean
   /** Device step: the brand dropdown is fixed to this one (src/data/devices.json brand name). */
   brand?: string
+  /** Device search lists tablets only. */
+  tablets?: boolean
+  howItWorks: { step: string; title: string; text: string }[]
+  related: string[]
 }
 
 // Images arrive in Phase 2 (public/images); until then cards show a placeholder surface. Prices stay unset while priceMode is "quote".
@@ -192,8 +196,19 @@ export const services: Service[] = [
     faults: ["Cracked glass", "Scratched glass", "Touch not working"],
     image: "glass-separation",
     alt: "Technician separating cracked glass from a phone display at the bench",
-    faq: [],
     lead: true,
+    howItWorks: [
+      { step: "01", title: "Intake check", text: "We check the display to verify the panel underneath has no ink spots or colored lines." },
+      { step: "02", title: "Glass separation", text: "Under heat and vacuum, the cracked outer glass is separated from the display." },
+      { step: "03", title: "Lamination", text: "A fresh glass layer is aligned and laminated to your original display panel." },
+      { step: "04", title: "Testing and pouch", text: "Touch response is tested across the entire surface, then sealed in a protective pouch." },
+    ],
+    faq: [
+      { q: "Will my original display be kept?", a: "Yes. Touch glass replacement keeps the display your phone came with. Only the cracked outer glass is changed." },
+      { q: "What if the screen has black spots or colored lines?", a: "If the screen shows lines or dark patches, the panel underneath is damaged. That requires a full screen replacement." },
+      { q: "Can I watch the glass replacement at the bench?", a: "Yes, on request, when the bench is not busy." },
+    ],
+    related: ["screen-replacement", "galaxy-z-fold-flip", "iphone"],
   },
   {
     slug: "galaxy-z-fold-flip",
@@ -203,8 +218,19 @@ export const services: Service[] = [
     faults: ["Outer glass", "Inner screen", "Hinge", "Blank display", "Lines on screen"],
     image: "fold-inner-panel",
     alt: "Galaxy Z Fold opened on the bench with its inner panel exposed",
-    faq: [],
     lead: true,
+    howItWorks: [
+      { step: "01", title: "Hinge and display inspection", text: "We inspect hinge tension, frame alignment, and inner flexible panel condition." },
+      { step: "02", title: "Panel recovery priority", text: "We try to save the original flexible display first before considering replacement." },
+      { step: "03", title: "Bench repair", text: "Outer glass, inner panel connections, or hinge mechanisms are repaired at the open bench." },
+      { step: "04", title: "Folding test and pouch", text: "We verify opening angles and touch response across the fold line before sealing." },
+    ],
+    faq: [
+      { q: "Which Fold and Flip models do you repair?", a: "We repair every Samsung Galaxy Z Fold and Galaxy Z Flip generation, Pixel Fold, and Surface Duo." },
+      { q: "Can a blank inner screen be saved without full replacement?", a: "Yes. In many cases we can recover the display panel or resolve flexible cable faults." },
+      { q: "Do you repair stiff or stuck hinges?", a: "Yes. We clean and service Fold and Flip hinges at the bench." },
+    ],
+    related: ["touch-glass-replacement", "screen-replacement", "board-repair"],
   },
   {
     slug: "iphone",
@@ -214,8 +240,19 @@ export const services: Service[] = [
     faults: ["Screen", "Back glass", "Face ID", "Battery", "Charging", "Camera"],
     image: "iphone-back-glass",
     alt: "iPhone with its back glass being replaced",
-    faq: [],
     brand: "Apple",
+    howItWorks: [
+      { step: "01", title: "Diagnostic check", text: "We test Face ID, display, battery health, and cameras on the job card." },
+      { step: "02", title: "Bench repair", text: "Screens, back glass, battery swaps, or board faults are worked on at the bench." },
+      { step: "03", title: "Component calibration", text: "Sensors, touch response, and Face ID alignment are verified." },
+      { step: "04", title: "Testing and sealing", text: "Every repaired iPhone is tested and placed in a protective pouch for collection." },
+    ],
+    faq: [
+      { q: "Can you replace cracked iPhone back glass?", a: "Yes. We remove the broken back glass and install new glass at the bench." },
+      { q: "Do you fix Face ID faults?", a: "Yes. Face ID sensors and dot projector faults are diagnosed under the microscope." },
+      { q: "Can I get my old parts back?", a: "Yes, on request, provided the part is safe to return. Swollen batteries are disposed of immediately." },
+    ],
+    related: ["touch-glass-replacement", "battery-charging", "board-repair"],
   },
   {
     slug: "screen-replacement",
@@ -225,7 +262,18 @@ export const services: Service[] = [
     faults: ["Lines on screen", "Black or blank display", "Green or white screen", "Flickering"],
     image: "screen-replacement", // no Phase 2 job yet: shows the placeholder,
     alt: "Phone with its display panel removed on the bench",
-    faq: [],
+    howItWorks: [
+      { step: "01", title: "Panel assessment", text: "We confirm whether the fault is in the display panel or motherboard output." },
+      { step: "02", title: "Assembly removal", text: "The damaged screen assembly is taken off at the bench." },
+      { step: "03", title: "New display installation", text: "A fresh display panel is fitted and calibrated." },
+      { step: "04", title: "Display testing and pouch", text: "Brightness, touch response, and color balance are checked before sealing." },
+    ],
+    faq: [
+      { q: "When do I need a full screen replacement instead of touch glass?", a: "Full replacement is required when the screen has colored lines, black bleed, green tint, or no picture." },
+      { q: "Do you repair both iPhone and Android displays?", a: "Yes. We replace screens on iPhone, Samsung, Google Pixel, OnePlus, and other brands." },
+      { q: "How can I get a quote for my screen?", a: "Message us on WhatsApp with your exact model to receive a quote in 5 minutes." },
+    ],
+    related: ["touch-glass-replacement", "galaxy-z-fold-flip", "water-damage-data-recovery"],
   },
   {
     slug: "battery-charging",
@@ -235,7 +283,18 @@ export const services: Service[] = [
     faults: ["Battery drains fast", "Swollen battery", "Not charging", "Loose charging port"],
     image: "battery-swap",
     alt: "Phone battery being replaced at the bench",
-    faq: [],
+    howItWorks: [
+      { step: "01", title: "Power testing", text: "We measure current draw, charging rate, and battery degradation at the bench." },
+      { step: "02", title: "Component repair", text: "Degraded batteries or damaged charging flex boards are replaced." },
+      { step: "03", title: "Thermal and voltage check", text: "The device is charged and monitored for stable voltage and temperature." },
+      { step: "04", title: "Safe disposal and pouch", text: "Swollen batteries are safely disposed of straight away. The phone is sealed." },
+    ],
+    faq: [
+      { q: "What do you do with swollen batteries?", a: "Swollen batteries are removed carefully and disposed of straight away for safety." },
+      { q: "Can a loose charging port be repaired without replacement?", a: "We clean compacted lint and dust first. If the pins are broken, we replace the port." },
+      { q: "Can I take my old battery home?", a: "Yes, on request, as long as the battery is not swollen or leaking." },
+    ],
+    related: ["iphone", "board-repair", "ipad-tablet"],
   },
   {
     slug: "water-damage-data-recovery",
@@ -245,7 +304,18 @@ export const services: Service[] = [
     faults: ["Water damage", "Phone will not turn on", "Data recovery"],
     image: "wet-board-cleaning",
     alt: "Phone board being cleaned after water damage",
-    faq: [],
+    howItWorks: [
+      { step: "01", title: "Immediate intake", text: "The phone is opened immediately and the battery disconnected to halt short circuits." },
+      { step: "02", title: "Corrosion cleaning", text: "Mineral deposits and liquid corrosion are cleaned from the board." },
+      { step: "03", title: "Data recovery priority", text: "Power rails are restored under the microscope to recover photos and files first." },
+      { step: "04", title: "Board testing", text: "Circuits are checked for short circuits before final assembly." },
+    ],
+    faq: [
+      { q: "What should I do if my phone dropped in water?", a: "Turn it off immediately. Do not connect a charger. Bring it to G-88 as soon as possible." },
+      { q: "Can you recover data if the phone does not power on?", a: "Yes. Our priority is repairing essential power lines to recover your personal data." },
+      { q: "How long does water damage cleaning take?", a: "Turnaround depends on the extent of corrosion found on the board." }, // TODO(adnan): confirm typical water damage diagnostic turnaround
+    ],
+    related: ["board-repair", "screen-replacement", "battery-charging"],
   },
   {
     slug: "board-repair",
@@ -255,7 +325,18 @@ export const services: Service[] = [
     faults: ["No power", "No network or SIM", "Face ID", "Camera", "Vibration"],
     image: "board-microscope",
     alt: "Microscope over a phone board at the repair bench",
-    faq: [],
+    howItWorks: [
+      { step: "01", title: "Microscope inspection", text: "The logic board is examined under the microscope for burnt chips and damaged lines." },
+      { step: "02", title: "Circuit diagnostics", text: "Power lines and short circuits are traced with digital multimeters and schematics." },
+      { step: "03", title: "Micro-soldering", text: "Damaged chips, micro-capacitors, and power ICs are replaced with precision heat." },
+      { step: "04", title: "Full diagnostic test", text: "Network, power management, and logic lines are verified before sealing." },
+    ],
+    faq: [
+      { q: "What is board-level repair?", a: "It is repairing individual micro-components on the phone logic board rather than replacing the board." },
+      { q: "Can you fix a phone that does not turn on at all?", a: "Yes. We locate short circuits and replace damaged power management chips." },
+      { q: "Can I watch the board repair under the microscope?", a: "Yes, on request, when the bench is not busy." },
+    ],
+    related: ["water-damage-data-recovery", "iphone", "battery-charging"],
   },
   {
     slug: "ipad-tablet",
@@ -265,7 +346,19 @@ export const services: Service[] = [
     faults: ["Cracked glass", "Screen", "Battery", "Charging"],
     image: "ipad-screen",
     alt: "Tablet screen being repaired at the bench",
-    faq: [],
+    tablets: true,
+    howItWorks: [
+      { step: "01", title: "Tablet inspection", text: "We assess whether the digitizer glass or the underlying display panel is damaged." },
+      { step: "02", title: "Bench repair", text: "Glass separation, display replacement, or battery service is performed at the bench." },
+      { step: "03", title: "Touch digitizer testing", text: "Touch response and pencil tracking are tested across all screen quadrants." },
+      { step: "04", title: "Cleaning and pouch", text: "The tablet is cleaned, inspected, and sealed in a protective pouch." },
+    ],
+    faq: [
+      { q: "Which tablet brands do you repair?", a: "We repair Apple iPad and Samsung Galaxy Tab devices. Very old, obsolete tablets are not accepted." },
+      { q: "Can you fix tablet charging ports?", a: "Yes. We repair loose USB-C and Lightning charging ports on tablets." },
+      { q: "Can you replace only the glass on an iPad?", a: "On models with separate outer glass digitizers, yes. On laminated models, we check feasibility at the bench." },
+    ],
+    related: ["touch-glass-replacement", "screen-replacement", "battery-charging"],
   },
 ]
 
@@ -287,7 +380,6 @@ export const faults = [
   "Will not turn on",
   "Hinge",
   "Back glass",
-  "Other",
 ] as const
 
 // Pakistan's public holidays: no booking slots on these dates. Fixed-date holidays are certain; Eid, Ashura and
@@ -324,6 +416,8 @@ export type BookingSummary = {
   visit: string | null
   slot: string | null
   name: string
+  /** The customer's own words, with "Not sure" or "Not mentioned here". */
+  problem?: string
 }
 
 export const booking = {
@@ -349,7 +443,22 @@ export const booking = {
     useTyped: (q: string) => `Use "${q}"`,
     pickError: "Pick your device to continue.",
   },
-  fault: { label: "Fault", pickError: "Pick what's wrong to continue." },
+  fault: {
+    label: "Fault",
+    pickError: "Pick what's wrong to continue.",
+    /** Always offered after the service's faults; both open the description and photos. */
+    open: ["Not sure", "Not mentioned here"],
+    describe: "Describe the problem",
+    describePlaceholder: "What happened, and what does it do now?",
+    describeError: "Describe the problem to continue.",
+    photos: "Photos, up to 3 (optional)",
+    addPhoto: "Add a photo",
+    removePhoto: "Remove photo",
+    photoAlt: "Your photo of the problem",
+    uploading: "Uploading photo",
+    wait: "Wait for the photos to finish uploading.",
+    uploadError: "A photo did not upload. Try adding it again.",
+  },
   time: {
     days: "Day",
     slots: "Time",
@@ -359,7 +468,6 @@ export const booking = {
     picked: (when: string) => `You'll come in ${when}`,
     none: "No times are left in the next 7 days. Message us on WhatsApp instead.",
     pickError: "Pick a time to continue.",
-    quoteInstead: "Not ready to book? Ask for a quote first.",
   },
   details: {
     name: "Your name",
@@ -378,9 +486,13 @@ export const booking = {
     quoteVisit: "Quote first, no visit booked",
     name: "Name",
     phone: "Mobile",
+    problem: "Problem",
+    photos: "Photos",
+    photoCount: (n: number) => `${n} attached`,
     submit: "Confirm booking",
     sending: "Sending",
     error: "Something in the form was not accepted. Go back, check it and try again.",
+    limit: "That is 5 bookings in the last hour. Try again later, or message the shop on WhatsApp.",
   },
   /** Prefilled WhatsApp text: job number, device, fault, time and name. */
   whatsapp: (b: BookingSummary) =>
@@ -388,6 +500,7 @@ export const booking = {
       `Assalam o alaikum. ${b.kind === "quote" ? "Quote request" : "Booking"} No. ${b.ref}`,
       `Device: ${b.device}`,
       `Fault: ${b.fault}`,
+      b.problem && `Problem: ${b.problem}`,
       b.visit && `Visit: ${b.visit}`,
       `Name: ${b.name}`,
     ]
@@ -406,6 +519,12 @@ export const booking = {
     where: "Where",
     send: "Send on WhatsApp",
     calendar: "Add to calendar",
+    save: "Save ticket",
+    /** The ticket image, saved to the phone when the booking is made. */
+    image: {
+      file: (ref: string) => `rehan-traders-${ref.toLowerCase()}.png`,
+      footer: "Show this ticket at the counter.",
+    },
     missing: "There is no booking on this device yet.",
     sealAlt: "Rehan Traders tamper seal",
   },
@@ -474,8 +593,9 @@ export const visit = {
 export const estimate = {
   title: "Not sure what's wrong?",
   label: "Describe the problem",
+  lede: "Not in the list? Describe it and send it to the shop on WhatsApp.",
   placeholder: "My Fold's inner screen has a black line",
-  submit: "Get an estimate",
+  submit: "Ask on WhatsApp",
 } as const
 
 /** Homepage section copy, in PRD §5 order. */
@@ -531,9 +651,185 @@ export const footer = {
   copyright: (year: number) => `© ${year} ${site.name}`,
 } as const
 
+export const breadcrumbs = {
+  home: "Home",
+  repairs: "Repairs",
+  reviews: "Reviews",
+  visit: "Visit",
+  faq: "Questions",
+  about: "About",
+  privacy: "Privacy",
+  terms: "Terms",
+  label: "Breadcrumbs",
+} as const
+
 export const legal = {
   privacyTitle: "Privacy",
   termsTitle: "Terms",
+} as const
+
+export const repairsPage = {
+  title: "Repairs",
+  lede: "Phone and tablet repair services at Shop G-88, Hafeez Center. Touch glass, Fold and Flip, iPhone, batteries and board repairs.",
+  whatWeFix: "What we fix",
+  howItWorks: "How it works",
+  faqTitle: "Questions about this repair",
+  relatedTitle: "Related repairs",
+  bookHeading: "Need this repair?",
+  bookLede: "Book a visit to Shop G-88 or get a quote in 5 minutes on WhatsApp.",
+  allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
+  priceTitle: "Price",
+  viewDetails: "View details",
+} as const
+
+export const reviewsPage = {
+  title: "Customer reviews",
+  lede: "Reviews from customers at Shop G-88, Hafeez Center. Copied directly from our Google Business Profile.",
+  asOfPrefix: "As of",
+  viewOnGoogle: "View on Google Maps",
+  readAllOnGoogle: (count: number) => `Read all ${count} reviews on Google Maps`,
+  verifiedGoogleReview: "Google review",
+  starSummary: (rating: number, count: number) => `${rating.toFixed(1)} out of 5 stars from ${count} verified reviews`,
+} as const
+
+export const visitPage = {
+  title: "Visit Shop G-88",
+  lede: "Find us on the ground floor of Hafeez Center, Main Boulevard, Gulberg III, Lahore.",
+  directionsTitle: "How to find Shop G-88",
+  floorLabel: "Floor",
+  floorValue: "Ground Floor",
+  shopLabel: "Shop number",
+  shopValue: "Shop G-88",
+  buildingLabel: "Building",
+  buildingValue: "Hafeez Center, Main Boulevard, Gulberg III, Lahore",
+  entranceLabel: "Entrance",
+  entranceValue: "Enter through the main front entrance on Main Boulevard. Walk straight down the ground floor corridor towards the center-back.",
+  landmarksLabel: "Landmarks",
+  landmarksValue: "Ground floor corridor near the central stairs.", // TODO(adnan): confirm exact walking landmarks and entrance gate
+  hoursTitle: "Shop hours",
+  mapPrompt: "Tap to load interactive Google Map",
+  mapLoading: "Loading map...",
+  mapAlt: "Rehan Traders storefront at Hafeez Center",
+  courierTitle: "Courier repairs",
+  courierLede: "We accept courier repairs from customers outside Lahore.",
+  courierNotice: "Courier terms and packing guidelines to be confirmed.", // TODO(adnan): confirm courier partners, packing guidelines, and return shipping terms
+  courierStep1: "Message us on WhatsApp with your device model and problem.",
+  courierStep2: "Pack your device securely before handing it to the courier.",
+  courierStep3: "We inspect your device at the bench and confirm the repair with you.",
+  courierAction: "Message on WhatsApp before sending",
+} as const
+
+export const faqPage = {
+  title: "Frequently asked questions",
+  lede: "Answers to common questions about our repair services, pricing, parts, and visiting Shop G-88.",
+  generalTitle: "General questions",
+  serviceTitle: "Service questions",
+  stillHaveQuestions: "Have a question not answered here?",
+  askWhatsApp: "Ask on WhatsApp",
+} as const
+
+export const aboutPage = {
+  title: "About Rehan Traders",
+  lede: "Phone and tablet repair lab at Shop G-88, Hafeez Center, Lahore. Repairing devices since 2009.",
+  sinceTitle: "Since 2009",
+  sinceText: "Rehan Traders has operated in Hafeez Center, Lahore, since 2009. We have repaired phones and tablets across every major hardware generation, from early touchscreen devices to modern foldables.",
+  benchTitle: "The open repair bench",
+  benchText: "All repairs take place at our open bench in Shop G-88. Customers can watch their devices being repaired under the microscope when the bench is not busy.",
+  adnanTitle: "Adnan Ali",
+  adnanRole: "Founder and technician",
+  adnanText: "The shop is run by technician Adnan Ali. We focus on careful diagnostics, honest assessments, and technical precision at the microscope.",
+  panelTitle: "We try to save your original panel first",
+  panelText: "Our main priority is always to save your damaged display. If the front glass cracks but the display still functions, we separate and replace only the glass under heat and vacuum. Your factory display panel remains on your phone.",
+  processTitle: "The job card process",
+  processText: "Every repair follows a strict four-step process to protect your device and data.",
+  processSteps: [
+    { step: "01", title: "Job card intake", text: "Your device and fault are recorded on a numbered job card at the counter." },
+    { step: "02", title: "Open bench repair", text: "Work happens at the open bench under the microscope." },
+    { step: "03", title: "Testing and sealing", text: "The repair is tested, then sealed in a protective pouch." },
+    { step: "04", title: "Handover", text: "You collect your sealed phone with the completed job card." },
+  ],
+  images: {
+    bench: "microscope-bench",
+    benchAlt: "Technician working at the microscope repair bench in Shop G-88",
+    team: "workbench-team",
+    teamAlt: "Rehan Traders repair workbench in Hafeez Center",
+  },
+} as const
+
+export const privacyPage = {
+  title: "Privacy Policy",
+  lede: "Plain English explanation of what information we collect and how we handle it.",
+  lastUpdated: "Last updated: 29 October 2026",
+  sections: [
+    {
+      title: "Booking information",
+      text: "When you book a visit or request a quote, we collect your name, Pakistani mobile number, device model, and reported fault. You can optionally attach photos of the broken device.",
+    },
+    {
+      title: "How your data is used",
+      text: "Your contact details are used solely to create your repair job card, provide a price quote, and coordinate your visit. We do not sell, rent, or share personal information with third-party advertisers.",
+    },
+    {
+      title: "AI chat data",
+      text: "When you use our website chat assistant, your messages are processed by privacy-respecting AI providers to answer questions about our services and hours. Messages are not used to train public models.",
+    },
+    {
+      title: "Data storage and security",
+      text: "Booking records are stored in secure records used solely by shop staff to manage repair job numbers (RT-####). Access is restricted to authorized personnel.",
+    },
+    {
+      title: "Contact regarding your data",
+      text: "You can request to view or delete your contact records by emailing rehanmobiletraders@gmail.com or calling 0305 8874839.",
+    },
+  ],
+} as const
+
+export const termsPage = {
+  title: "Terms of Service",
+  lede: "Plain English terms covering repair bookings, estimates, bench services, and collection.",
+  lastUpdated: "Last updated: 29 October 2026",
+  sections: [
+    {
+      title: "Estimates and bench inspection",
+      text: "Online estimates and quotes are initial assessments based on customer descriptions. Final repair feasibility and pricing depend on physical inspection of the device at the bench.",
+    },
+    {
+      title: "Data backup and customer responsibility",
+      text: "Customers are advised to back up all personal data before handing over any device. While we take care and offer data recovery, preexisting hardware damage or liquid corrosion can affect data integrity.",
+    },
+    {
+      title: "Replaced parts and safe disposal",
+      text: "Replaced parts can be returned to the customer on request when safe. Swollen, punctured, or hazardous batteries are disposed of immediately for safety reasons and cannot be returned.",
+    },
+    {
+      title: "Accepted payment methods",
+      text: "Payment is due upon completion of the repair. We accept cash, direct bank transfer, debit and credit cards, JazzCash, and EasyPaisa.",
+    },
+    {
+      title: "Device collection with job card",
+      text: "Repaired devices are returned upon presentation of the numbered job card issued at intake. Customers should collect completed devices promptly upon notification.",
+    },
+  ],
+} as const
+
+export const states = {
+  error: {
+    title: "Something went wrong",
+    lede: "An error occurred while loading this page. Please try again or reach the shop directly.",
+    retry: "Try again",
+    whatsapp: "Message on WhatsApp",
+    call: "Call 0305 8874839",
+  },
+  loading: {
+    text: "Loading...",
+  },
+  notFound: {
+    title: "Page not found",
+    code: "404",
+    lede: "The page you requested does not exist or has been moved.",
+    home: "Back to home",
+    repairs: "View all repairs",
+  },
 } as const
 
 export const seo = {
@@ -548,6 +844,38 @@ export const seo = {
     description: "Book a repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time.",
   },
   bookConfirmed: { title: "Booking confirmed", description: "Your Rehan Traders booking." },
+  repairs: {
+    title: "Phone and tablet repairs",
+    description: "Touch glass replacement, Galaxy Z Fold and Flip, iPhone, screens, batteries, and board repair at Shop G-88, Hafeez Center, Lahore.",
+  },
+  reviews: {
+    title: "Customer reviews",
+    description: "Read customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore. 4.9 on Google from 50 reviews.",
+  },
+  visit: {
+    title: "Visit Shop G-88",
+    description: "Directions, shop hours and location for Rehan Traders at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Lahore.",
+  },
+  faq: {
+    title: "Frequently asked questions",
+    description: "Answers about phone repairs, touch glass replacement, screen replacement, and pricing at Rehan Traders, Hafeez Center, Lahore.",
+  },
+  about: {
+    title: "About Rehan Traders",
+    description: "Phone and tablet repair lab at Hafeez Center, Lahore, since 2009. Open bench, touch glass specialist, led by Adnan Ali.",
+  },
+  privacy: {
+    title: "Privacy Policy",
+    description: "Privacy policy for Rehan Traders. How booking and chat information is handled in plain English.",
+  },
+  terms: {
+    title: "Terms of Service",
+    description: "Terms of service for phone and tablet repair bookings and bench services at Rehan Traders.",
+  },
+  service: (title: string, short: string) => ({
+    title: `${title} in Lahore`,
+    description: `${short} Fixed at Shop G-88, Hafeez Center, Lahore. Book a visit or WhatsApp 0305 8874839.`,
+  }),
   notFound: { title: "Page not found", description: "This page does not exist." },
   kitchenSink: { title: "Kitchen sink" },
 } as const
@@ -568,6 +896,18 @@ export const ui = {
   /** alt for images that only repeat nearby text (reviewer avatars next to the name). */
   decorative: "",
   toastSent: "Request sent",
+  breadcrumbHome: "Home",
+  breadcrumbRepairs: "Repairs",
+  breadcrumbLabel: "Breadcrumbs",
+  loading: "Loading content",
+  retry: "Try again",
+  backHome: "Back to home",
+  viewAllRepairs: "View all repairs",
+  mapPin: "Location pin",
+  step: "Step",
+  backToRepairs: "Back to all repairs",
+  tapToLoadMap: "Tap to load interactive map",
+  disclaimerReviews: "Reviews are copied directly from our public Google Business Profile without edits.",
 } as const
 
 // ─── Phase 6: chat assistant and repair estimator ─────────────────────────────────────────────────────────
