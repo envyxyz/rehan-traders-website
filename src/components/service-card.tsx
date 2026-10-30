@@ -12,7 +12,8 @@ import { cn } from "@/lib/utils"
 export function ServiceCard({ service, lead }: { service: Service; lead?: boolean }) {
   return (
     <Card className="flex h-full flex-col gap-0 overflow-hidden p-0">
-      <Link href={`/repairs/${service.slug}`} className="block overflow-hidden">
+      {/* The title links the same page; this one is for the eye and the thumb, so it stays out of the tab order and the accessibility tree. */}
+      <Link href={`/repairs/${service.slug}`} aria-hidden tabIndex={-1} className="block overflow-hidden">
         <Img
           name={service.image}
           alt={service.alt}

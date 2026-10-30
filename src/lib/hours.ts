@@ -17,19 +17,20 @@ export const formatTime = (hhmm: string) => {
 
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
+// Intl formatters are slow to build (tens of ms on a phone), so each is built once per time zone.
+const formatters = new Map<string, Intl.DateTimeFormat>()
+const formatter = (timeZone: string, options: Intl.DateTimeFormatOptions) => {
+  const key = timeZone + JSON.stringify(options)
+  if (!formatters.has(key)) formatters.set(key, new Intl.DateTimeFormat("en-US", { timeZone, ...options }))
+  return formatters.get(key)!
+}
+
 /** Day of the week (0 = Sunday) at `now` in `timeZone`. */
-export const weekdayIn = (now: Date, timeZone: string) =>
-  weekdays.indexOf(new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short" }).format(now))
+export const weekdayIn = (now: Date, timeZone: string) => weekdays.indexOf(formatter(timeZone, { weekday: "short" }).format(now))
 
 /** Open or closed at `now`, in the shop's time zone. Public holidays are not known here. */
 export function openStatus(now: Date, hours: Hours, copy: StatusCopy) {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: hours.timezone,
-    weekday: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-  }).formatToParts(now)
+  const parts = formatter(hours.timezone, { weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(now)
   const get = (type: string) => parts.find((p) => p.type === type)!.value
   const dow = weekdays.indexOf(get("weekday"))
   const mins = Number(get("hour")) * 60 + Number(get("minute"))

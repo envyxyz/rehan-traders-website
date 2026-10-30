@@ -1,16 +1,16 @@
 "use client"
 
 import * as React from "react"
-import { LazyMotion, MotionConfig, useReducedMotion } from "motion/react"
-import * as m from "motion/react-m"
+import { LazyMotion, MotionConfig } from "motion/react"
 
-import { duration, ease, reveal } from "@/lib/tokens"
+import { reveal } from "@/lib/tokens"
+import { cn } from "@/lib/utils"
 
 // Wait for an idle moment so the features chunk never competes with first paint and hydration.
 const idle = () => new Promise<void>((done) => ("requestIdleCallback" in window ? requestIdleCallback(() => done()) : setTimeout(done, 200)))
 const loadFeatures = () => idle().then(() => import("@/lib/motion-features")).then((mod) => mod.default)
 
-/** LazyMotion keeps the motion bundle out of the first load; `m.*` components only. */
+/** LazyMotion keeps the motion bundle out of the first load; `m.*` components only (the nav island). */
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   return (
     <LazyMotion features={loadFeatures} strict>
@@ -19,7 +19,11 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-/** Fade + 8px rise, once, at 15% visible. Off under reduced motion. Never wrap the h1. */
+/**
+ * Fade + 8px rise, once, at 15% visible: the `rise` keyframes (globals.css) started by an IntersectionObserver, so
+ * it needs no Motion code and nothing runs per frame. Hidden until it is seen; always shown under reduced motion.
+ * Never wrap the h1.
+ */
 export function Reveal({
   children,
   delay = 0,
@@ -29,18 +33,21 @@ export function Reveal({
   delay?: number
   className?: string
 }) {
-  const reduce = useReducedMotion()
-  if (reduce) return <div className={className}>{children}</div>
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [seen, setSeen] = React.useState(false)
+  React.useEffect(() => {
+    const io = new IntersectionObserver(([entry]) => entry.isIntersecting && (setSeen(true), io.disconnect()), { threshold: reveal.amount })
+    io.observe(ref.current!)
+    return () => io.disconnect()
+  }, [])
   return (
-    <m.div
-      className={className}
-      initial={{ opacity: 0, y: reveal.rise }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: reveal.amount }}
-      transition={{ duration: duration.reveal, ease: ease.out, delay }}
+    <div
+      ref={ref}
+      className={cn(seen ? "animate-rise" : "opacity-0", "motion-reduce:animate-none motion-reduce:opacity-100", className)}
+      style={{ animationDelay: `${delay}s` }}
     >
       {children}
-    </m.div>
+    </div>
   )
 }
 

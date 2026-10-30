@@ -6,47 +6,37 @@ import { MessageCircle } from "lucide-react"
 
 import { Icon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { assistant } from "@/content"
 import { track } from "@/lib/track"
 
-const loadPanel = () => import("@/components/chat-panel").then((m) => m.ChatPanel)
-// Not in the first page load: the assistant downloads on hover, focus or the first tap of a chat button.
-const ChatPanel = dynamic(loadPanel, { ssr: false })
-
-/** The glass chat sheet behind the launcher button. */
-export function ChatSheet({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = React.useState(false)
-  return (
-    <Sheet
-      open={open}
-      onOpenChange={(o) => {
-        setOpen(o)
-        if (o) track("chat_open", {})
-      }}
-    >
-      <SheetTrigger asChild onPointerEnter={() => void loadPanel()} onFocus={() => void loadPanel()}>
-        {children}
-      </SheetTrigger>
-      <SheetContent side="right" glass className="gap-3 pb-4">
-        <SheetTitle>{assistant.title}</SheetTitle>
-        <SheetDescription className="text-caption">{assistant.disclosure}</SheetDescription>
-        {open && <ChatPanel />}
-      </SheetContent>
-    </Sheet>
-  )
-}
+const loadSheet = () => import("@/components/chat-sheet").then((m) => m.ChatSheet)
+// Not in the first page load: the assistant downloads on hover, focus or the first tap.
+const ChatSheet = dynamic(loadSheet, { ssr: false })
 
 /** Glass chat button on every screen from page load: "Ask a question" on desktop, a round icon on phones, above the StickyBar. */
 export function ChatLauncher() {
+  const [open, setOpen] = React.useState(false)
+  // Mounted on the first tap and kept, so the sheet can play its closing animation.
+  const [asked, setAsked] = React.useState(false)
+  const button = React.useRef<HTMLButtonElement>(null)
   return (
     <div className="fixed right-3 bottom-above-bar z-30 md:right-6 md:bottom-6">
-      <ChatSheet>
-        <Button variant="glass" className="max-md:size-12 max-md:px-0">
-          <Icon icon={MessageCircle} />
-          <span className="max-md:sr-only">{assistant.title}</span>
-        </Button>
-      </ChatSheet>
+      <Button
+        ref={button}
+        variant="glass"
+        className="max-md:size-12 max-md:px-0"
+        onPointerEnter={() => void loadSheet()}
+        onFocus={() => void loadSheet()}
+        onClick={() => {
+          setAsked(true)
+          setOpen(true)
+          track("chat_open", {})
+        }}
+      >
+        <Icon icon={MessageCircle} />
+        <span className="max-md:sr-only">{assistant.title}</span>
+      </Button>
+      {asked && <ChatSheet open={open} onOpenChange={setOpen} returnFocus={button} />}
     </div>
   )
 }

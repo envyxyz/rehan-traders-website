@@ -524,6 +524,12 @@
   h1, h2, h3, h4 {
     @apply text-ink;
   }
+  /* Everything below the first screen skips style, layout and paint until it nears the viewport, so the first
+     layout is the hero's alone. "auto" keeps the size once seen. */
+  main > section:not(:first-child), footer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 40rem;
+  }
   ::selection {
     background: var(--signal);
     color: var(--on-signal);
