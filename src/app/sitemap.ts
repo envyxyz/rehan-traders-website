@@ -4,8 +4,17 @@ import { services, site } from "@/content"
 
 export const dynamic = "force-static"
 
+/**
+ * Sitemap with image references for Google Image Sitemaps.
+ * Uses a fixed lastModified so builds don't churn the date on every deploy
+ * (Google treats a changed lastmod as a recrawl signal — only bump it when
+ * the page content actually changes).
+ *
+ * @see https://developers.google.com/search/docs/crawling-indexing/sitemaps/image-sitemaps
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date()
+  // Bump this date when meaningful site content changes (copy, services, images).
+  const lastModified = "2026-10-30"
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -13,6 +22,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "weekly",
       priority: 1.0,
+      images: [
+        `${site.url}/images/storefront-1280.webp`,
+        `${site.url}/images/microscope-bench-1280.webp`,
+        `${site.url}/images/logo.png`,
+      ],
     },
     {
       url: `${site.url}/repairs`,
@@ -37,6 +51,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly",
       priority: 0.8,
+      images: [
+        `${site.url}/images/storefront-1280.webp`,
+      ],
     },
     {
       url: `${site.url}/reviews`,
@@ -55,6 +72,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
+      images: [
+        `${site.url}/images/microscope-bench-1280.webp`,
+        `${site.url}/images/workbench-team-1280.webp`,
+      ],
     },
     {
       url: `${site.url}/privacy`,

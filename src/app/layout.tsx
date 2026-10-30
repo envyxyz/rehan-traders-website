@@ -14,6 +14,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: seo.home.title, template: seo.titleTemplate },
   description: seo.home.description,
+  alternates: {
+    types: {
+      // Discoverable link for AI crawlers (per AgentReady spec).
+      // Emits: <link rel="alternate" type="text/plain" href="…/llms.txt" />
+      "text/plain": "/llms.txt",
+    },
+  },
 }
 
 export const viewport: Viewport = {
