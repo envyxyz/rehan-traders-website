@@ -36,7 +36,7 @@ export default function ReviewsPage() {
               </div>
               <div>
                 <p className="font-display text-body-md font-bold text-ink">
-                  {reviewsPage.starSummary(reviews.rating, reviews.count)}
+                  {reviewsPage.starSummary(reviews.rating)}
                 </p>
                 <p className="text-caption text-steel">
                   <time dateTime={reviews.asOf}>
@@ -44,9 +44,9 @@ export default function ReviewsPage() {
                   </time>
                 </p>
               </div>
-              <Button asChild size="lg" arrow className="h-auto min-h-13 whitespace-normal py-3 text-left">
+              <Button asChild size="lg" arrow>
                 <a href={reviews.url} target="_blank" rel="noopener noreferrer">
-                  {reviewsPage.readAllOnGoogle(reviews.count)}
+                  {reviewsPage.readAllOnGoogle}
                   <span className="sr-only">, {ui.externalLink}</span>
                 </a>
               </Button>

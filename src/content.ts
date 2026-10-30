@@ -749,14 +749,14 @@ export const reviewsPage = {
   lede: "Reviews from customers at Shop G-88, Hafeez Center. Copied directly from our Google Business Profile.",
   asOfPrefix: "As of",
   viewOnGoogle: "View on Google Maps",
-  readAllOnGoogle: (count: number) => `Read all ${count} reviews on Google Maps`,
+  readAllOnGoogle: "Read reviews on Google Maps",
   googleReview: "Google review",
   carouselLabel: "Customer reviews, use the left and right arrow keys to move between them",
   carouselRole: "carousel",
   prev: "Previous review",
   next: "Next review",
   counter: (n: number, total: number) => `${n} of ${total}`,
-  starSummary: (rating: number, count: number) => `${rating.toFixed(1)} out of 5 stars from ${count} Google reviews`,
+  starSummary: (rating: number) => `${rating.toFixed(1)} out of 5 stars on Google`,
 } as const
 
 export const visitPage = {
@@ -924,7 +924,7 @@ export const seo = {
   },
   reviews: {
     title: "Customer reviews",
-    description: `Read customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore. ${reviews.rating.toFixed(1)} on Google from ${reviews.count} reviews.`,
+    description: `Read customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore. ${reviews.rating.toFixed(1)} on Google.`,
   },
   visit: {
     title: "Visit Shop G-88",
