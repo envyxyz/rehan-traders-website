@@ -43,17 +43,13 @@ const ics = (b: BookingSummary) => {
   ].join("\r\n")
 }
 
-/**
- * Saves the ticket image. On phones (`share`) the share sheet opens, where iOS offers "Save Image" to Photos;
- * elsewhere, and for the automatic save, it downloads (Android lists downloaded images in the gallery).
- */
-async function saveTicket(b: BookingSummary, share = false) {
+const ticketFile = async (b: BookingSummary) => {
   const blob = await ticketImage(b)
-  const file = new File([blob], booking.confirmed.image.file(b.ref), { type: blob.type })
-  if (share && matchMedia("(pointer: coarse)").matches && navigator.canShare?.({ files: [file] })) {
-    return navigator.share({ files: [file] }).catch(() => {}) // dismissed share sheet
-  }
-  const url = URL.createObjectURL(blob)
+  return new File([blob], booking.confirmed.image.file(b.ref), { type: blob.type })
+}
+
+const download = (file: File) => {
+  const url = URL.createObjectURL(file)
   const a = document.createElement("a")
   a.href = url
   a.download = file.name
@@ -61,22 +57,34 @@ async function saveTicket(b: BookingSummary, share = false) {
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
+/**
+ * Save ticket. The image is built before the tap, because iOS only opens the share sheet (with "Save Image") while
+ * the tap's gesture is still live, and awaiting the canvas would end it. Without sharing, or if it fails: download.
+ */
+function saveTicket(b: BookingSummary, file: File | null) {
+  if (!file) return void ticketFile(b).then(download) // not built yet, or it failed: build it now
+  if (matchMedia("(pointer: coarse)").matches && navigator.canShare?.({ files: [file] })) {
+    navigator.share({ files: [file] }).catch((e: unknown) => {
+      if (!(e instanceof DOMException && e.name === "AbortError")) download(file) // AbortError: the sheet was dismissed
+    })
+    return
+  }
+  download(file)
+}
+
 /** /book/confirmed. The booking comes from sessionStorage (never the URL), so the static HTML renders nothing. */
 export function Confirmation() {
   const raw = React.useSyncExternalStore(noSubscribe, readBooking, () => undefined)
   const b = React.useMemo(() => (raw ? (JSON.parse(raw) as BookingSummary) : null), [raw])
 
-  // Save the ticket to the phone once per job number, so a reload does not save it again.
+  const [file, setFile] = React.useState<File | null>(null)
   React.useEffect(() => {
     if (!b?.saved) return
-    const key = `rt-ticket-${b.ref}`
-    try {
-      if (sessionStorage.getItem(key)) return
-      sessionStorage.setItem(key, "1")
-    } catch {
-      return
+    let stale = false
+    ticketFile(b).then((f) => !stale && setFile(f), () => {}) // a failed build leaves the button to try again on tap
+    return () => {
+      stale = true
     }
-    saveTicket(b).catch(() => {}) // the Save ticket button is still there
   }, [b])
 
   if (raw === undefined) return null
@@ -143,7 +151,7 @@ export function Confirmation() {
           </dl>
           <div className="mt-auto flex flex-wrap justify-end gap-2.5">
             {b.saved && (
-              <Button type="button" size="lg" variant="line" onClick={() => saveTicket(b, true)}>
+              <Button type="button" size="lg" variant="line" onClick={() => saveTicket(b, file)}>
                 <Icon icon={Download} />
                 {c.save}
               </Button>
