@@ -1,12 +1,12 @@
 import { expect, test, type Page } from "@playwright/test"
 
 import { actions, assistant, booking, estimator } from "../../src/content"
-import { MAX_INPUT, MAX_TURNS, parseReply } from "../../src/lib/assistant"
+import { MAX_INPUT, MAX_TURNS, parseReply, pieces } from "../../src/lib/assistant"
 import { pickDevice } from "./helpers"
 
 // UI tests stub /api/chat and /api/book, so they cost nothing and do not depend on a model.
 // scripts/chat-evals.mjs tests the real models.
-const reply = "Yes, we repair Galaxy Z Fold inner screens.\n>> actions: book whatsapp\n>> chips: When are you open? | Where is G-88?"
+const reply = "Yes, we repair Galaxy Z Fold inner screens. You can [[Book a visit]] for a free check.\n>> actions: book whatsapp call\n>> chips: When are you open? | Where is G-88?"
 const stubChat = (page: Page, status: number, body: string) =>
   page.route("/api/chat", (route) => route.fulfill({ status, contentType: "text/plain; charset=utf-8", body }))
 
@@ -18,11 +18,24 @@ async function openChat(page: Page, load = true) {
   return page.getByRole("dialog", { name: assistant.title })
 }
 
-test("parseReply reads the button lines on their own lines, inline, or half-streamed", () => {
-  expect(parseReply("Hi.\n>> actions: call\n>> chips: X | Y")).toEqual({ body: "Hi.", actions: ["call"], chips: ["X", "Y"] })
+test("parseReply reads the chips line on its own line, inline, or half-streamed, and the model's actions never become buttons", () => {
+  expect(parseReply("Hi.\n>> chips: X | Y")).toEqual({ body: "Hi.", buttons: [], chips: ["X", "Y"] })
   // Groq once wrote them inline with one ">".
-  expect(parseReply("G-88 par.   > actions: book whatsapp   > chips: A | B")).toEqual({ body: "G-88 par.", actions: ["book", "whatsapp"], chips: ["A", "B"] })
-  expect(parseReply("Half a reply\n>")).toEqual({ body: "Half a reply", actions: [], chips: [] })
+  expect(parseReply("G-88 par.   > chips: A | B")).toEqual({ body: "G-88 par.", buttons: [], chips: ["A", "B"] })
+  expect(parseReply("Hi.\n>> actions: book whatsapp call\n>> chips: X")).toEqual({ body: "Hi.", buttons: [], chips: ["X"] })
+  expect(parseReply("Sorry.\n>> buttons: whatsapp call\n>> chips:")).toEqual({ body: "Sorry.", buttons: ["whatsapp", "call"], chips: [] })
+  expect(parseReply("Half a reply\n>")).toEqual({ body: "Half a reply", buttons: [], chips: [] })
+})
+
+test("pieces turns [[send]] and {{form}} into links and holds back an unfinished one", () => {
+  expect(pieces("Fine. [[Book a visit]] or {{custom form}}.")).toEqual([
+    { type: "text", text: "Fine. " },
+    { type: "send", text: "Book a visit" },
+    { type: "text", text: " or " },
+    { type: "form", text: "custom form" },
+    { type: "text", text: "." },
+  ])
+  expect(pieces("Fine. [[Book a vi", true)).toEqual([{ type: "text", text: "Fine. " }])
 })
 
 test("the assistant is not in the home page's first load", async ({ page }) => {
@@ -36,16 +49,16 @@ test("the assistant is not in the home page's first load", async ({ page }) => {
   expect(scripts.some((s) => s.includes("/api/chat"))).toBe(false)
 })
 
-test("chat streams a reply with chips and handoff buttons", async ({ page }) => {
+test("chat streams a reply with chips and inline links, never buttons", async ({ page }) => {
   await stubChat(page, 200, reply)
   const sheet = await openChat(page)
   await expect(sheet.getByText(assistant.greeting)).toBeVisible()
   await sheet.getByRole("button", { name: assistant.chips[0] }).click()
   await expect(sheet.getByText("Yes, we repair Galaxy Z Fold inner screens.")).toBeVisible()
   await expect(sheet.getByText(">>")).toHaveCount(0)
-  await expect(sheet.getByRole("link", { name: actions.book })).toBeVisible()
-  await expect(sheet.getByRole("link", { name: assistant.actions.whatsapp })).toHaveAttribute("href", /^https:\/\/wa\.me\/923058874839\?text=/)
-  await expect(sheet.getByRole("link", { name: /0305 8874839/ })).toHaveCount(0) // no "call" in this reply
+  // "Book a visit" is a link inside the sentence; the model's "actions" line shows nothing.
+  await expect(sheet.getByRole("button", { name: actions.book })).toBeVisible()
+  await expect(sheet.getByRole("link")).toHaveCount(0)
 
   // A chip sends itself, with the conversation so far.
   let sent: { messages: { role: string; content: string }[] } | null = null

@@ -92,7 +92,7 @@ const Body = z
   .refine((b) => b.messages.every((m) => m.role !== "user" || m.content.length <= MAX_INPUT))
 
 const encoder = new TextEncoder()
-const fixedReply = `${assistant.fallback}\n>> actions: whatsapp call\n>> chips:`
+const fixedReply = `${assistant.fallback}\n>> buttons: whatsapp call\n>> chips:`
 
 /** Starts one provider and waits for its first words, so a dead provider fails here and the next one is tried. */
 async function start(p: Provider, messages: ModelMessage[]) {

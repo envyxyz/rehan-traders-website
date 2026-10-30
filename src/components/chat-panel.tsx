@@ -3,13 +3,12 @@
 import * as React from "react"
 import { ArrowUp, Phone } from "lucide-react"
 
-import { BookButton } from "@/components/book-button"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { assistant, site } from "@/content"
-import { MAX_INPUT, MAX_TURNS, parseReply } from "@/lib/assistant"
+import { MAX_INPUT, MAX_TURNS, parseReply, pieces } from "@/lib/assistant"
 import { track } from "@/lib/track"
 import { cn } from "@/lib/utils"
 
@@ -21,9 +20,12 @@ let saved: Msg[] = []
 /** Finished replies only: a reply cut off before its first word is not history. */
 const answered = (m: Msg) => m.role === "user" || !!parseReply(m.content).body
 
-const fixed = (text: string) => `${text}\n>> actions: whatsapp call\n>> chips:`
+// The only replies that carry buttons: the model never writes them, so a model reply cannot show any.
+const fixed = (text: string) => `${text}
+>> buttons: whatsapp call
+>> chips:`
 
-/** The assistant inside ChatSheet: streamed replies, quick-reply chips and Book / WhatsApp / Call from the model. */
+/** The assistant inside ChatSheet: streamed replies with links inside the sentences, and quick-reply chips. */
 export function ChatPanel() {
   const [messages, setMessages] = React.useState<Msg[]>(saved)
   const [draft, setDraft] = React.useState("")
@@ -93,37 +95,49 @@ export function ChatPanel() {
       <div ref={log} role="log" aria-busy={busy} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-6 py-4">
         <Bubble role="assistant">{assistant.greeting}</Bubble>
         {messages.map((m, i) => {
-          const { body, actions } = m.role === "assistant" ? parseReply(m.content) : { body: m.content, actions: [] as string[] }
+          const { body, buttons } = m.role === "assistant" ? parseReply(m.content) : { body: m.content, buttons: [] as ("whatsapp" | "call")[] }
           const streaming = busy && i === messages.length - 1
           return (
-            <React.Fragment key={i}>
-              <Bubble role={m.role}>{body || (streaming && <span className="animate-pulse text-steel">{assistant.typing}</span>)}</Bubble>
-              {!streaming && actions.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {actions.includes("book") && (
-                    <span className="contents" onClickCapture={() => track("chat_handoff", { action: "book" })}>
-                      <BookButton arrow>{assistant.actions.book}</BookButton>
-                    </span>
-                  )}
-                  {actions.includes("whatsapp") && (
-                    <Button asChild variant="whatsapp">
-                      <a href={site.whatsapp.withText(assistant.whatsappText)} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
+            <Bubble
+              key={i}
+              role={m.role}
+              footer={
+                !streaming && buttons.length > 0 ? (
+                  <>
+                    {buttons.includes("whatsapp") && (
+                      <a href={site.whatsapp.withText(assistant.whatsappText)} className={attached} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
                         <WhatsAppIcon />
                         {assistant.actions.whatsapp}
                       </a>
-                    </Button>
-                  )}
-                  {actions.includes("call") && (
-                    <Button asChild variant="line">
-                      <a href={site.phone.href} onClick={() => track("chat_handoff", { action: "call" })} data-track="call" data-track-from="chat">
+                    )}
+                    {buttons.includes("call") && (
+                      <a href={site.phone.href} className={attached} onClick={() => track("chat_handoff", { action: "call" })} data-track="call" data-track-from="chat">
                         <Icon icon={Phone} />
                         {site.phone.display}
                       </a>
-                    </Button>
-                  )}
-                </div>
-              )}
-            </React.Fragment>
+                    )}
+                  </>
+                ) : null
+              }
+            >
+              {m.role === "user"
+                ? body
+                : body
+                  ? pieces(body, streaming).map((p, j) =>
+                      p.type === "send" ? (
+                        <button key={j} type="button" className={inline} disabled={busy || atLimit} onClick={() => void send(p.text)}>
+                          {p.text}
+                        </button>
+                      ) : p.type === "form" ? (
+                        <a key={j} href={assistant.formHref} className={inline} onClick={() => track("chat_handoff", { action: "form" })}>
+                          {p.text}
+                        </a>
+                      ) : (
+                        <React.Fragment key={j}>{buttons.length ? p.text : withPhoneLink(p.text)}</React.Fragment>
+                      )
+                    )
+                  : streaming && <span className="animate-pulse text-steel">{assistant.typing}</span>}
+            </Bubble>
           )
         })}
       </div>
@@ -174,16 +188,37 @@ export function ChatPanel() {
   )
 }
 
-function Bubble({ role, children }: { role: Msg["role"]; children: React.ReactNode }) {
+const inline = "inline cursor-pointer font-medium text-ink underline underline-offset-2 hover:no-underline disabled:cursor-default disabled:no-underline"
+
+// WhatsApp-style buttons attached to the bottom of a bubble, each under a hairline.
+const attached = "flex min-h-11 items-center justify-center gap-2 border-t border-hairline px-4 text-body-md font-medium text-ink hover:bg-concrete"
+
+/** The shop's number inside a reply links to WhatsApp, the same way the inline links work: part of the sentence. */
+function withPhoneLink(text: string) {
+  const at = text.indexOf(site.phone.display)
+  if (at < 0) return text
+  return (
+    <>
+      {text.slice(0, at)}
+      <a href={site.whatsapp.withText(assistant.whatsappText)} className={inline} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
+        {site.phone.display}
+      </a>
+      {text.slice(at + site.phone.display.length)}
+    </>
+  )
+}
+
+function Bubble({ role, children, footer }: { role: Msg["role"]; children: React.ReactNode; footer?: React.ReactNode }) {
   return (
     <div
       dir="auto"
       className={cn(
-        "max-w-5/6 rounded-lg px-4 py-3 text-body-md whitespace-pre-line",
+        "max-w-5/6 overflow-hidden rounded-lg text-body-md",
         role === "user" ? "self-end bg-action text-on-action" : "self-start border border-hairline bg-card text-body"
       )}
     >
-      {children}
+      <div className="px-4 py-3 whitespace-pre-line">{children}</div>
+      {footer}
     </div>
   )
 }

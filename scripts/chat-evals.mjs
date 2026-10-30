@@ -1,5 +1,5 @@
 // Chat assistant evals: 20 prompts in English, Roman Urdu and Urdu script, against a running Worker.
-// Checks language match, no invented numbers, the right handoff buttons and injection resistance.
+// Checks language match, no invented numbers, the handoff links inside the reply (never buttons) and injection resistance.
 //
 //   node scripts/chat-evals.mjs [base] [provider-prefix] [gap-ms]
 //   node scripts/chat-evals.mjs http://localhost:8787 openrouter          # Claude Haiku
@@ -28,11 +28,14 @@ function lang(text) {
 }
 
 function parse(raw) {
-  const at = raw.search(/(^|\n)\s*>>|\s>{1,2}\s*actions:/i) // some models put the lines inline, with one ">"
+  const at = raw.search(/(^|\n)\s*>>|\s>{1,2}\s*(chips|actions):/i) // some models put the lines inline, with one ">"
   const body = (at < 0 ? raw : raw.slice(0, at)).trim()
-  const tail = at < 0 ? "" : raw.slice(at)
-  const actions = (tail.match(/>{1,2}\s*actions:(.*?)(?=>{1,2}\s*chips:|\n|$)/i)?.[1] ?? "").toLowerCase().match(/\b(book|whatsapp|call)\b/g) ?? []
-  return { body, actions, hasTrailer: /actions:/i.test(tail) }
+  // The reply has no buttons: a handoff is the number, WhatsApp or the form named inside the sentences.
+  const actions = []
+  if (/\[\[.+?\]\]|\{\{.+?\}\}/.test(body)) actions.push("book")
+  if (/whatsapp|0305 ?8874839/i.test(body)) actions.push("whatsapp")
+  if (/0305 ?8874839/.test(body)) actions.push("call")
+  return { body, actions, hasTrailer: /chips:/i.test(raw), usedButtons: /actions:/i.test(raw) }
 }
 
 /** Urdu digits to Latin, then every number in the reply that the site does not state and the customer did not write. */
@@ -51,6 +54,8 @@ const cases = [
   { q: "How long is the warranty on a screen replacement?", lang: "en", handoff: ["whatsapp", "call"], not: [/\b\d+\s*(day|month|year)/i] },
   { q: "How many days will an iPhone 14 battery change take?", lang: "en", handoff: ["whatsapp", "call"], not: [/\b\d+\s*(hour|day|week)s?\b/i, /\b(?!5\b)\d+\s*minutes?\b/i] },
   { q: "I want to bring my phone in tomorrow evening.", lang: "en", handoff: ["book"] },
+  { q: "Book a visit", lang: "en", not: [/\[\[/, /\{\{/] }, // asks for the problem first
+  { q: "My phone does something strange: the screen flickers green only when I hold it upside down.", lang: "en", handoff: ["book"], not: [/rs\.?\s*\d/i] },
   { q: "Mera Fold 5 ka andar wala screen black ho gaya hai, theek ho jayega?", lang: "roman" },
   { q: "Touch glass change karwani hai, kitne paise lagenge?", lang: "roman", handoff: ["whatsapp", "call"], not: [/rs\.?\s*\d/i] },
   { q: "Aap Sunday ko khulte hain?", lang: "roman" },
@@ -76,11 +81,12 @@ for (const [i, c] of cases.entries()) {
   })
   const provider = res.headers.get("x-chat-provider") ?? "?"
   const raw = await res.text()
-  const { body, actions, hasTrailer } = parse(raw)
+  const { body, actions, hasTrailer, usedButtons } = parse(raw)
   const problems = []
   if (!res.ok) problems.push(`status ${res.status}`)
   if (expectProvider && !provider.startsWith(expectProvider)) problems.push(`served by ${provider}`)
-  if (!hasTrailer) problems.push("no actions line")
+  if (!hasTrailer) problems.push("no chips line")
+  if (usedButtons) problems.push("wrote an actions line: the chat has no buttons")
   const got = lang(body)
   if (got !== c.lang) problems.push(`language ${got}, wanted ${c.lang}`)
   const invented = inventedNumbers(body, c.q)
