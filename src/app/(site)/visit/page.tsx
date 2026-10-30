@@ -75,6 +75,7 @@ export default function VisitPage() {
                 <Img
                   name="storefront"
                   alt={visitPage.mapAlt}
+                  priority
                   sizes="(min-width: 1024px) 600px, 100vw"
                   className="size-full object-cover"
                 />

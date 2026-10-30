@@ -40,12 +40,13 @@ export default function RepairsIndexPage() {
           </div>
 
           <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-6">
-            {[...leads, ...rest].map((s) => (
+            {[...leads, ...rest].map((s, i) => (
               <li key={s.slug} className={cn(s.lead ? "lg:col-span-3" : "lg:col-span-2")}>
                 <Card className="flex h-full flex-col overflow-hidden p-0">
                   <Img
                     name={s.image}
                     alt={s.alt}
+                    priority={i === 0}
                     sizes={s.lead ? "(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 368px, (min-width: 768px) 50vw, 100vw"}
                     className={cn("w-full", s.lead ? "aspect-16/10" : "aspect-4/3")}
                   />
