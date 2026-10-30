@@ -689,8 +689,8 @@ export const reviewsPage = {
   asOfPrefix: "As of",
   viewOnGoogle: "View on Google Maps",
   readAllOnGoogle: (count: number) => `Read all ${count} reviews on Google Maps`,
-  verifiedGoogleReview: "Google review",
-  starSummary: (rating: number, count: number) => `${rating.toFixed(1)} out of 5 stars from ${count} verified reviews`,
+  googleReview: "Google review",
+  starSummary: (rating: number, count: number) => `${rating.toFixed(1)} out of 5 stars from ${count} Google reviews`,
 } as const
 
 export const visitPage = {
@@ -733,16 +733,16 @@ export const aboutPage = {
   title: "About Rehan Traders",
   lede: "Phone and tablet repair lab at Shop G-88, Hafeez Center, Lahore. Repairing devices since 2009.",
   sinceTitle: "Since 2009",
-  sinceText: "Rehan Traders has operated in Hafeez Center, Lahore, since 2009. We have repaired phones and tablets across every major hardware generation, from early touchscreen devices to modern foldables.",
+  sinceText: "Rehan Traders has been repairing phones since 2009. Today the shop is Shop G-88 in Hafeez Center, Lahore.",
   benchTitle: "The open repair bench",
   benchText: "All repairs take place at our open bench in Shop G-88. Customers can watch their devices being repaired under the microscope when the bench is not busy.",
   adnanTitle: "Adnan Ali",
-  adnanRole: "Founder and technician",
-  adnanText: "The shop is run by technician Adnan Ali. We focus on careful diagnostics, honest assessments, and technical precision at the microscope.",
+  adnanRole: "Owner", // Adnan, PRD §11; his title as a technician is not confirmed
+  adnanText: "The shop is run by its owner, Adnan Ali. His main priority is to save your damaged display.",
   panelTitle: "We try to save your original panel first",
   panelText: "Our main priority is always to save your damaged display. If the front glass cracks but the display still functions, we separate and replace only the glass under heat and vacuum. Your factory display panel remains on your phone.",
   processTitle: "The job card process",
-  processText: "Every repair follows a strict four-step process to protect your device and data.",
+  processText: "Every repair follows the same four steps.",
   processSteps: [
     { step: "01", title: "Job card intake", text: "Your device and fault are recorded on a numbered job card at the counter." },
     { step: "02", title: "Open bench repair", text: "Work happens at the open bench under the microscope." },
@@ -772,11 +772,13 @@ export const privacyPage = {
     },
     {
       title: "AI chat data",
-      text: "When you use our website chat assistant, your messages are processed by privacy-respecting AI providers to answer questions about our services and hours. Messages are not used to train public models.",
+      // TODO(adnan): confirm. The providers' own terms decide whether they keep or train on what they receive.
+      text: "When you use the chat assistant or the repair estimator, your message is sent to AI providers (Anthropic through OpenRouter, Google AI Studio and Groq) to write a reply. This site does not store these messages. Do not type your name, number or other private details into them.",
     },
     {
       title: "Data storage and security",
-      text: "Booking records are stored in secure records used solely by shop staff to manage repair job numbers (RT-####). Access is restricted to authorized personnel.",
+      // TODO(adnan): confirm who can open the Sheet and the photo folder
+      text: "A booking is saved in the shop's Google Sheet and emailed to the shop, and any photos you attach are saved in the shop's Google Drive. The shop uses them to manage repair job numbers (RT-####).",
     },
     {
       title: "Contact regarding your data",
@@ -851,7 +853,7 @@ export const seo = {
   },
   reviews: {
     title: "Customer reviews",
-    description: "Read customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore. 4.9 on Google from 50 reviews.",
+    description: `Read customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore. ${reviews.rating.toFixed(1)} on Google from ${reviews.count} reviews.`,
   },
   visit: {
     title: "Visit Shop G-88",

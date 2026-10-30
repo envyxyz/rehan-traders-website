@@ -91,7 +91,7 @@ export default function ReviewsPage() {
                     </Text>
                   </div>
                   <div className="mt-6 border-t border-hairline pt-3 text-caption text-steel-soft">
-                    {reviewsPage.verifiedGoogleReview}
+                    {reviewsPage.googleReview}
                   </div>
                 </Card>
               </li>
