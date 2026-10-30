@@ -7,6 +7,8 @@
  * go to the Drive folder "Rehan Traders booking photos" (shared with the shop as a viewer), and the booking that
  * names them gets them as email attachments and as links in the Photos column.
  *
+ * Mail goes out through MailApp. testEmailAndDrive() checks the permissions and sends a test email.
+ *
  * Script property (Project Settings > Script properties): SECRET, the same value as the Worker's
  * BOOKING_WEBHOOK_SECRET. The last job number is kept in the property LAST_JOB, the photo folder in PHOTO_FOLDER.
  */
@@ -71,9 +73,12 @@ function doPost(e) {
     }
     s.insertRowAfter(1)
     // A new row copies the header's style; take the body's formats and Status dropdown from the row below instead.
-    var below = s.getRange(3, 1, 1, COLUMNS.length)
-    below.copyTo(s.getRange(2, 1, 1, COLUMNS.length), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false)
-    below.copyTo(s.getRange(2, 1, 1, COLUMNS.length), SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION, false)
+    // (Only when there is a row below: the very first booking has none.)
+    if (s.getMaxRows() >= 3) {
+      var below = s.getRange(3, 1, 1, COLUMNS.length)
+      below.copyTo(s.getRange(2, 1, 1, COLUMNS.length), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false)
+      below.copyTo(s.getRange(2, 1, 1, COLUMNS.length), SpreadsheetApp.CopyPasteType.PASTE_DATA_VALIDATION, false)
+    }
     s.getRange(2, 1, 1, COLUMNS.length).setValues([[
       new Date(),
       job,
@@ -97,14 +102,40 @@ function doPost(e) {
     lock.releaseLock()
   }
 
-  // The row is saved; a failed email must not turn into a failed booking.
+  // The row is saved; a failed email must not turn into a failed booking. The Worker logs emailError.
+  var emailError = null
   try {
     sendShopEmail(job, data, files)
   } catch (err) {
+    emailError = String(err)
     console.error('email failed for ' + job + ': ' + err)
   }
 
-  return reply({ ok: true, job: job })
+  return reply({ ok: true, job: job, emailSent: !emailError, emailError: emailError })
+}
+
+/**
+ * Run from the editor toolbar to force the Drive and Mail permissions, check the Drive folder and the SECRET
+ * property, and send a real test email to SHOP_EMAIL (job number RT-TEST; nothing is added to the Sheet).
+ */
+function testEmailAndDrive() {
+  var folder = photoFolder()
+  console.log('Drive folder ready: ' + folder.getName() + ' (' + folder.getUrl() + ')')
+  console.log('SECRET property set: ' + Boolean(PropertiesService.getScriptProperties().getProperty('SECRET')))
+  console.log('Remaining daily email quota: ' + MailApp.getRemainingDailyQuota())
+
+  sendShopEmail('RT-TEST', {
+    kind: 'booking',
+    visit: 'Today, 4:00 PM',
+    device: 'iPhone 15 Pro',
+    fault: 'Screen replacement',
+    service: 'Screen replacement',
+    name: 'Test Customer',
+    phone: '03001234567',
+    whatsapp: 'https://wa.me/923001234567',
+    problem: 'Test from the Apps Script editor to check the Drive and Mail permissions.'
+  }, [])
+  console.log('Test email sent to ' + SHOP_EMAIL)
 }
 
 /**
@@ -171,7 +202,8 @@ function setup() {
   s.getRange(1, 1, s.getMaxRows(), cols).createFilter()
   s.hideColumns(13) // Slot (ISO) is for scripts, not people
 
-  photoFolder() // asks for the Drive permission and makes the photo folder
+  var folder = photoFolder() // asks for the Drive permission and makes the photo folder
+  console.log('Drive folder ready: ' + folder.getUrl())
   console.log('Ready. Daily email quota left: ' + MailApp.getRemainingDailyQuota())
 }
 
@@ -180,7 +212,8 @@ function setup() {
  * horizontal ticket (stub with the job number in Signal Red, a dashed tear line, the details), then buttons to
  * WhatsApp or call the customer. Tables and inline styles only, so Gmail renders it; the ticket stacks under 600px.
  * Plain text goes along for clients without HTML.
- * Sender: the account the script runs in, shown as SENDER_NAME.
+ * Sender: the account the script runs in, shown as SENDER_NAME. MailApp (scope script.send_mail), not GmailApp,
+ * so the script needs no access to the account's mailbox.
  */
 function sendShopEmail(job, data, files) {
   var quote = data.kind === 'quote'
@@ -276,7 +309,14 @@ function sendShopEmail(job, data, files) {
     '</table></td></tr></table></body></html>'
 
   // Not from the shop's own address: Gmail keeps mail "from yourself" out of the inbox.
-  GmailApp.sendEmail(SHOP_EMAIL, subject, text, { name: SENDER_NAME, htmlBody: html, attachments: files.map(function (f) { return f.getBlob() }) })
+  MailApp.sendEmail({
+    to: SHOP_EMAIL,
+    subject: subject,
+    body: text,
+    name: SENDER_NAME,
+    htmlBody: html,
+    attachments: files.map(function (f) { return f.getBlob() })
+  })
 }
 
 /**
@@ -297,7 +337,8 @@ function resetForLaunch() {
 function savePhoto(base64) {
   var bytes
   try {
-    bytes = Utilities.base64Decode(String(base64))
+    // Also accept a data URL ("data:image/jpeg;base64,...").
+    bytes = Utilities.base64Decode(String(base64 || '').replace(/^data:image\/[a-zA-Z+]+;base64,/, ''))
   } catch (err) {
     return { ok: false, error: 'bad_photo' }
   }
@@ -322,11 +363,17 @@ function photoFolder() {
   var lock = LockService.getScriptLock()
   lock.waitLock(10000)
   try {
+    // Another request may have made it while this one waited for the lock.
     id = props.getProperty('PHOTO_FOLDER')
-    if (id) return DriveApp.getFolderById(id)
+    if (id) {
+      try {
+        return DriveApp.getFolderById(id)
+      } catch (err) {}
+    }
     var folder = DriveApp.createFolder('Rehan Traders booking photos')
     try {
-      folder.addViewer(SHOP_EMAIL)
+      // The owner is the shop already when the script runs in its account; addViewer on the owner would fail.
+      if (Session.getEffectiveUser().getEmail().toLowerCase() !== SHOP_EMAIL.toLowerCase()) folder.addViewer(SHOP_EMAIL)
     } catch (err) {
       console.error('could not share the photo folder: ' + err)
     }
@@ -352,7 +399,10 @@ function photoFiles(ids) {
   }).filter(Boolean)
 }
 
-/** Bookings from this mobile number in the last hour. Newest rows are on top, so stop at the first older row. */
+/**
+ * Bookings from this mobile number in the last hour, among the newest 300 rows. Every row is checked, not just
+ * the top ones, so sorting the Sheet by another column cannot hide recent bookings from the limit.
+ */
 function recentForPhone(phone) {
   var s = sheet()
   var last = Math.min(s.getLastRow(), 300)
@@ -362,8 +412,7 @@ function recentForPhone(phone) {
   var count = 0
   for (var i = 0; i < rows.length; i++) {
     var received = rows[i][0]
-    if (!(received instanceof Date) || received.getTime() < hourAgo) break
-    if (String(rows[i][9]) === phone) count++
+    if (received instanceof Date && received.getTime() >= hourAgo && String(rows[i][9]) === phone) count++
   }
   return count
 }

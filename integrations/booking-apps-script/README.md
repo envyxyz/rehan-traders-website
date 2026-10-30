@@ -29,6 +29,7 @@ Copy the 48 characters it prints. Keep them private: do not commit them or paste
 3. In `Code.gs`, select everything (Ctrl+A) and delete it.
 4. Open `integrations/booking-apps-script/Code.gs` from this repo, copy all of it, and paste it into the editor.
 5. Press **Ctrl+S** to save.
+6. Show the manifest: gear icon > **Project Settings** > tick **Show "appsscript.json" manifest file in editor**. Back in the editor open `appsscript.json` and paste in `integrations/booking-apps-script/appsscript.json` (time zone, the Sheets, Drive and `script.send_mail` scopes, and the web app settings), then save.
 
 ## 4. Store the secret
 
@@ -84,6 +85,14 @@ Run `pnpm preview` and book a visit at http://localhost:8787/book. A row appears
 
 Edit the code, save, then **Deploy** > **Manage deployments** > the pencil icon > **Version: New version** > **Deploy**. The URL stays the same. (A **New deployment** would make a new URL.)
 
+### Sort-safe hourly limit, MailApp and `testEmailAndDrive` (30 Oct 2026)
+
+`Code.gs` in this repo now matches the script that is deployed (it had drifted), plus one fix: `recentForPhone` used to stop at the first row older than an hour, so sorting the Sheet by another column let a number go past 5 bookings an hour. It now counts every one of the newest 300 rows.
+
+The fix is **not live until you paste and redeploy**: paste the new `Code.gs` over the old one, save, then **Deploy** > **Manage deployments** > pencil > **Version: New version** > **Deploy**. Also check `appsscript.json` matches the one in this folder.
+
+Mail goes out through `MailApp` (scope `script.send_mail`), and the web app's reply carries `emailSent` and `emailError`, which the Worker writes to its logs when the email fails. To check Drive and Mail access from the editor, pick **testEmailAndDrive** and click **Run**: it checks the photo folder and the `SECRET` property, then sends a test email (RT-TEST) to the shop. It adds nothing to the Sheet.
+
 ### Photos, Problem and the hourly limit (30 Oct 2026)
 
 This version adds booking photos (saved to the Drive folder "Rehan Traders booking photos", attached to the shop email), the Problem and Photos columns, and a limit of 5 bookings per mobile number per hour. To switch it on:
@@ -96,7 +105,7 @@ The folder is made, and shared with rehanmobiletraders@gmail.com as a viewer, on
 
 ## Sender
 
-Emails go out as **Rehan Traders Website Bookings** from the account the script runs in (Ameer's), to rehanmobiletraders@gmail.com, as an HTML ticket in the website's look. Do not send them from the shop's own address through a "Send mail as" alias: Gmail treats mail from yourself to yourself as sent mail and keeps it out of the inbox (tried 29 Oct 2026; emails stopped arriving).
+Emails go out through `MailApp` as **Rehan Traders Website Bookings** from the account the script runs in (Ameer's), to rehanmobiletraders@gmail.com, as an HTML ticket in the website's look. Do not send them from the shop's own address through a "Send mail as" alias: Gmail treats mail from yourself to yourself as sent mail and keeps it out of the inbox (tried 29 Oct 2026; emails stopped arriving).
 
 ## Launch day: start from RT-0001
 
@@ -105,7 +114,7 @@ In the script editor pick **resetForLaunch** and click **Run**. It deletes every
 ## Good to know
 
 - Job numbers live in the script property `LAST_JOB`. To start again from RT-0001, delete that property. To skip ahead (for example to match the paper job cards), set it to the last number used, like `426`.
-- A consumer Gmail account can send about 100 emails a day from scripts. If the quota runs out, the row is still saved; only the email is skipped.
+- A consumer Gmail account can send about 100 emails a day from scripts (`MailApp.getRemainingDailyQuota()` says how many are left). If the quota runs out, the row is still saved; only the email is skipped, and the reply says `emailSent: false`.
 - A lock makes sure two bookings at the same moment never get the same number. If the lock is busy for more than 4 seconds, the booking is refused, and the website tells the customer to send it on WhatsApp.
 - Cells starting with `=`, `+`, `-` or `@` are saved as plain text, so a customer's name can never run as a formula.
 - To stop all bookings at once: **Deploy** > **Manage deployments** > **Archive**.
