@@ -151,3 +151,30 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 - Fixes: picking "Apple" in the old single search showed nothing, because Apple model names leave out the brand ("iPhone 15").
 - The iPhone repair fixes the brand to Apple (`brand` on the service in `content.ts`). The Fold/Flip family dropdowns are gone; pick Samsung, then type "fold".
 - Home page on phones: the reviews grid no longer widens the page to 540px (it pushed the sticky bar off screen).
+
+### 2026-10-30 · QA pass (`docs/QA-2026-10-30.md`)
+- Shipped:
+  - Booking sheet: the brand and model lists float over the form (Radix Popover, portaled into the sheet so wheel scrolling works, flips up when there is no room, clears the Back/Next bar). The sheet no longer scrolls at 1440x786, 390x664, 390x844 and 360x740 (tighter padding on phones, 80px description box); below about 600px of height it still scrolls, with the bar kept in view. Day tiles scroll sideways at 44px wide, and the sheet no longer opens with the brand list already open. The cmdk inputs report `aria-expanded` and `aria-controls` truthfully.
+  - Chat: round icon button on phones from page load, above the sticky bar (the chat icon is gone from the bar); "Ask a question" pill on desktop. Closing mid-reply aborts the stream and drops the empty reply; empty replies are never sent.
+  - Worker: `/api/upload` puts the Worker's `secret` and `action` last, so a client cannot forge a booking. The description accepts normal punctuation (control characters refused, with a specific error in the flow).
+  - Home: "Not sure what's wrong?" goes to `/estimate?q=`; the map is the tap-to-load facade; service cards are the shared `ServiceCard`.
+  - Confirmation: no automatic download. The ticket image is built when the page opens; Save ticket shares it on the tap (phones) or downloads it, and falls back to a download if sharing fails.
+  - Copy: no "verified", no training or "privacy-respecting" claims about the chat, Adnan is "Owner", the reviews meta description reads `reviews.rating` and `reviews.count`.
+  - SEO: home canonical and OG, `MobilePhoneStore`, `Service` and `FAQPage` JSON-LD, `/estimate` in the sitemap.
+  - Accessibility: heading order on `/repairs` and `/faq`, `text-steel` captions on `/reviews`, WhatsApp names start with the visible label, the image link in service cards is out of the tab order. One red element per view on `/visit` and the loading state.
+  - Responsive: zero horizontal overflow at 320, 360, 390, 768, 1024 and 1440 on all 12 routes, light and dark (the 320px hero text was also being clipped).
+  - Static export: `scripts/fix-segments.mjs` (run by `pnpm build`) renames the prefetch files Next writes into folders on Windows, where its `collectSegmentPaths` keeps the path separator. Zero console 404s. Linux builds (Workers Builds) were already right.
+  - Performance: Reveal is CSS plus an IntersectionObserver (no Motion on the page except the nav island), the booking and chat sheets load on first hover or tap, below-the-fold sections use `content-visibility: auto`, Intl formatters are built once.
+  - Dev: `--show-interactive-dev-session=false` on both wrangler scripts, rewrite target `127.0.0.1`; `preview` goes through `pnpm build`.
+  - `public/_headers`: nosniff, referrer policy, permissions policy, HSTS, `frame-ancestors 'none'`, immutable `/_next/static/*`.
+  - Apps Script: `Code.gs` matches the deployed script, plus a sort-safe `recentForPhone` and `appsscript.json`; the pasted copy `code + appsscript.txt` is deleted.
+  - Cleanup: `ui/select.tsx`, the `devices` export in `content.ts`, `Toaster` and `TooltipProvider` (now in the kitchen sink), `shadcn` moved to devDependencies.
+- Verified:
+  - `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` (37 passed, 1 skipped). Booking and upload are stubbed; the API checks run the Worker handlers against a stubbed `fetch`.
+  - One real booking through the Worker and Apps Script, with a photo and "- ... <20% ... +91" in the description: RT-0024, no email error logged.
+  - Lighthouse mobile on the static export (machine under load, so performance moves by about 10 points between runs): accessibility, best practices and SEO are 100 on all 10 routes. Performance: / 86, /repairs 97, /repairs/touch-glass-replacement 88, /book 93, /estimate 94, /reviews 97, /visit 80, /about 96, /faq 88, /privacy 99.
+  - `wrangler deploy --dry-run`: Worker 2.2 MB, 400 KB gzip (limit 3 MB), no warnings. `public/_headers` and the 404 page confirmed on a local `wrangler dev`.
+- Not fixed or not verified:
+  - Home performance stays under 95 here (TBT about 300 to 450 ms at 4x CPU: hydration and the 3D fold; `content.ts` still ships whole to every page, about 40 KB gzip). `/visit` LCP shows a long element render delay on the storefront photo; cause not found.
+  - Not deployed to Cloudflare (not logged in). `pnpm dev` itself was not run: Ameer's `next dev` and `wrangler dev` were already up on :3000 and :8787 (a `workerd` child of that wrangler was using a full CPU core; left alone). The wrangler flag and quiet output were checked on :8791.
+  - The Apps Script `recentForPhone` fix is not live until `Code.gs` is pasted and redeployed.

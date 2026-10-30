@@ -9,6 +9,7 @@ Next.js static export (App Router, React, TypeScript, Tailwind CSS v4, shadcn/ui
 - `/api/book`: booking, sent to a Google Apps Script (Sheet and email). See `integrations/booking-apps-script/`.
 - `/api/chat`: the chat assistant. It tries Claude Haiku via OpenRouter, then Gemini Flash, then Groq, then a fixed WhatsApp and Call reply.
 - `/api/estimate`: reads a fault description for the `/estimate` page.
+- `/api/upload`: one booking photo, saved to the shop's Drive folder by the Apps Script.
 
 ## Run it
 
