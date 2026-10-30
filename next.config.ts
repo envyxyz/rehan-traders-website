@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   output: dev ? undefined : "export",
   // Dev only: `pnpm dev` runs `wrangler dev` beside Next, and /api/* goes to the Worker on :8787.
   ...(dev && {
-    rewrites: async () => [{ source: "/api/:path*", destination: "http://localhost:8787/api/:path*" }],
+    rewrites: async () => [{ source: "/api/:path*", destination: "http://127.0.0.1:8787/api/:path*" }],
   }),
   images: { unoptimized: true }, // Phase 2 pre-sizes AVIF/WebP
   turbopack: {
