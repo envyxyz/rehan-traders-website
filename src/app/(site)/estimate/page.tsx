@@ -6,13 +6,9 @@ import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
 import { estimator } from "@/content"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: estimator.seo.title,
-  description: estimator.seo.description,
-  alternates: { canonical: "/estimate" },
-  openGraph: { title: estimator.seo.title, description: estimator.seo.description, url: "/estimate" },
-}
+export const metadata: Metadata = pageMeta({ title: estimator.seo.title, description: estimator.seo.description, path: "/estimate" })
 
 export default function EstimatePage() {
   return (

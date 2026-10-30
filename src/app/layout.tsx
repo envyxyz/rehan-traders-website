@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: seo.home.title, template: seo.titleTemplate },
   description: seo.home.description,
+  // Pages replace these whole (see lib/page-meta.ts); they carry the same siteName, type and locale.
+  openGraph: { siteName: site.name, type: "website", locale: "en_PK", title: seo.home.title, description: seo.home.description },
+  twitter: { card: "summary_large_image", title: seo.home.title, description: seo.home.description },
   alternates: {
     types: {
       // Discoverable link for AI crawlers (per AgentReady spec).

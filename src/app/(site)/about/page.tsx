@@ -9,13 +9,9 @@ import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
 import { aboutPage, breadcrumbs, home, seo } from "@/content"
 import { storeSchema } from "@/lib/schema"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.about.title,
-  description: seo.about.description,
-  alternates: { canonical: "/about" },
-  openGraph: { title: seo.about.title, description: seo.about.description, url: "/about" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.about.title, description: seo.about.description, path: "/about" })
 
 export default function AboutPage() {
   return (

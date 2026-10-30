@@ -689,6 +689,10 @@ export const reviewsPage = {
   viewOnGoogle: "View on Google Maps",
   readAllOnGoogle: (count: number) => `Read all ${count} reviews on Google Maps`,
   googleReview: "Google review",
+  carouselLabel: "Customer reviews, use the left and right arrow keys to move between them",
+  prev: "Previous review",
+  next: "Next review",
+  counter: (n: number, total: number) => `${n} of ${total}`,
   starSummary: (rating: number, count: number) => `${rating.toFixed(1)} out of 5 stars from ${count} Google reviews`,
 } as const
 
@@ -841,6 +845,8 @@ export const seo = {
       "Touch glass replacement, Galaxy Z Fold and Flip, iPhone and board repairs at Shop G-88, Hafeez Center, Lahore. Book a visit or WhatsApp 0305 8874839.",
   },
   titleTemplate: "%s · Rehan Traders",
+  /** Alt text for the share image; keep in step with src/app/opengraph-image.alt.txt. */
+  shareImageAlt: "Rehan Traders, Mobile & Tab Repair Lab, Shop G-88, Hafeez Center, Lahore",
   book: {
     title: "Book a visit",
     description: "Book a repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time.",

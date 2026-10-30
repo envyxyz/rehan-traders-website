@@ -15,13 +15,15 @@ type HeadingProps = React.ComponentProps<"h2"> & {
   size?: keyof typeof headingSizes
   /** The 44px Signal Red rule above the heading. Counts as the view's one red element. */
   rule?: boolean
+  /** Centre the heading and its rule. */
+  centered?: boolean
 }
 
 /** Display face, tight, balanced. No kicker above it, ever. */
-export function Heading({ as: Tag = "h2", size = "display-lg", rule, className, children, ...props }: HeadingProps) {
+export function Heading({ as: Tag = "h2", size = "display-lg", rule, centered, className, children, ...props }: HeadingProps) {
   return (
-    <Tag className={cn("font-display text-balance text-ink", headingSizes[size], className)} {...props}>
-      {rule && <span aria-hidden className="mb-5 block h-1 w-11 bg-signal" />}
+    <Tag className={cn("font-display text-balance text-ink", headingSizes[size], centered && "text-center", className)} {...props}>
+      {rule && <span aria-hidden className={cn("mb-5 block h-1 w-11 bg-signal", centered && "mx-auto")} />}
       {children}
     </Tag>
   )

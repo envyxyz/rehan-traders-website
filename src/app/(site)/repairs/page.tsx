@@ -13,13 +13,9 @@ import { Heading, Text } from "@/components/typography"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { actions, breadcrumbs, repairsPage, seo, services } from "@/content"
 import { cn } from "@/lib/utils"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.repairs.title,
-  description: seo.repairs.description,
-  alternates: { canonical: "/repairs" },
-  openGraph: { title: seo.repairs.title, description: seo.repairs.description, url: "/repairs" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.repairs.title, description: seo.repairs.description, path: "/repairs" })
 
 export default function RepairsIndexPage() {
   const leads = services.filter((s) => s.lead)

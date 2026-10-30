@@ -15,13 +15,9 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { actions, breadcrumbs, seo, site, ui, visit, visitPage } from "@/content"
 import { storeSchema } from "@/lib/schema"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.visit.title,
-  description: seo.visit.description,
-  alternates: { canonical: "/visit" },
-  openGraph: { title: seo.visit.title, description: seo.visit.description, url: "/visit" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.visit.title, description: seo.visit.description, path: "/visit" })
 
 export default function VisitPage() {
   return (

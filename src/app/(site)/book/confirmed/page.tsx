@@ -3,14 +3,9 @@ import type { Metadata } from "next"
 import { Confirmation } from "@/components/confirmation"
 import { Container, Section } from "@/components/layout"
 import { seo } from "@/content"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.bookConfirmed.title,
-  description: seo.bookConfirmed.description,
-  alternates: { canonical: "/book/confirmed" },
-  openGraph: { title: seo.bookConfirmed.title, description: seo.bookConfirmed.description, url: "/book/confirmed" },
-  robots: { index: false, follow: false },
-}
+export const metadata: Metadata = pageMeta({ title: seo.bookConfirmed.title, description: seo.bookConfirmed.description, path: "/book/confirmed", extra: { robots: { index: false, follow: false } } })
 
 export default function ConfirmedPage() {
   return (
