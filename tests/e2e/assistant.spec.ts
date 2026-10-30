@@ -235,3 +235,36 @@ test.describe("POST /api/chat", () => {
     expect((await page.request.get("/api/chat")).status()).toBe(405)
   })
 })
+
+test("chat falls back to WhatsApp and call when the network fails", async ({ page }) => {
+  await page.route("/api/chat", (route) => route.abort("connectionfailed"))
+  const sheet = await openChat(page)
+  await sheet.getByLabel(assistant.input).fill("Hello")
+  await sheet.getByRole("button", { name: assistant.send }).click()
+  await expect(sheet.getByText(assistant.fallback)).toBeVisible()
+  await expect(sheet.getByRole("link", { name: assistant.actions.whatsapp })).toBeVisible()
+})
+
+test("chat shows the Worker's fixed reply (every model down) with its contact buttons", async ({ page }) => {
+  await stubChat(page, 200, `${assistant.fallback}\n>> buttons: whatsapp call\n>> chips:`)
+  const sheet = await openChat(page)
+  await sheet.getByLabel(assistant.input).fill("Hello")
+  await sheet.getByRole("button", { name: assistant.send }).click()
+  await expect(sheet.getByText(assistant.fallback)).toBeVisible()
+  await expect(sheet.getByText(">>")).toHaveCount(0)
+  await expect(sheet.getByRole("link", { name: assistant.actions.whatsapp })).toBeVisible()
+  await expect(sheet.getByRole("link", { name: /0305 8874839/ })).toBeVisible()
+})
+
+test("chat keeps working after an error: the next message gets a reply", async ({ page }) => {
+  await stubChat(page, 500, "")
+  const sheet = await openChat(page)
+  await sheet.getByLabel(assistant.input).fill("Hello")
+  await sheet.getByLabel(assistant.input).press("Enter")
+  await expect(sheet.getByText(assistant.fallback)).toBeVisible()
+  await page.unroute("/api/chat")
+  await stubChat(page, 200, reply)
+  await sheet.getByLabel(assistant.input).fill("Do you fix Fold screens?")
+  await sheet.getByLabel(assistant.input).press("Enter")
+  await expect(sheet.getByText("Yes, we repair Galaxy Z Fold inner screens.")).toBeVisible()
+})

@@ -56,14 +56,16 @@ function NavLinks({ menu }: { menu?: { open: boolean; onOpenChange: (open: boole
 }
 
 function MobileMenu() {
+  const [open, setOpen] = React.useState(false)
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="icon" className="bg-concrete" aria-label={nav.menu}>
           <Icon icon={Equal} size="lg" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" aria-describedby={undefined}>
+      {/* The nav lives in the layout, so a link inside the sheet would leave it open on the next page. */}
+      <SheetContent side="right" aria-describedby={undefined} onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
         <SheetTitle>{nav.menu}</SheetTitle>
         <nav aria-label={nav.label} className="flex flex-col">
           {nav.links.map((link) => (
