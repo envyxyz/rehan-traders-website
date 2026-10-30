@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, Star } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { BeforeAfter } from "@/components/before-after"
 import { HoursTable } from "@/components/hours-table"
@@ -12,6 +12,7 @@ import { Reveal } from "@/components/motion"
 import { OpenStatus } from "@/components/open-status"
 import { ReviewCarousel } from "@/components/review-carousel"
 import { ServiceCard } from "@/components/service-card"
+import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
@@ -139,16 +140,6 @@ function Process() {
         </Reveal>
       </Container>
     </Section>
-  )
-}
-
-function Stars({ rating, className }: { rating: number; className?: string }) {
-  return (
-    <span className={cn("flex gap-0.5 text-star", className)} role="img" aria-label={ui.stars(rating)}>
-      {[0, 1, 2, 3, 4].map((i) => (
-        <Star key={i} aria-hidden className={cn("size-4 fill-current", i >= Math.round(rating) && "opacity-30")} strokeWidth={0} />
-      ))}
-    </span>
   )
 }
 

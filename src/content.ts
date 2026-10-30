@@ -731,11 +731,6 @@ export const breadcrumbs = {
   label: "Breadcrumbs",
 } as const
 
-export const legal = {
-  privacyTitle: "Privacy",
-  termsTitle: "Terms",
-} as const
-
 export const repairsPage = {
   title: "Repairs",
   lede: "Phone and tablet repairs at Shop G-88, Hafeez Center, Lahore. Every repair starts with a free check, and when only the glass is cracked, only the glass is replaced.",
