@@ -1,16 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { MessageCircle } from "lucide-react"
 
 import { BookButton } from "@/components/book-button"
-import { ChatSheet } from "@/components/chat-launcher"
-import { Icon, WhatsAppIcon } from "@/components/icon"
+import { WhatsAppIcon } from "@/components/icon"
 import { Button } from "@/components/ui/button"
-import { actions, chat, site } from "@/content"
+import { actions, site } from "@/content"
 import { cn } from "@/lib/utils"
 
-/** Phones: glass bottom bar (Book a visit, WhatsApp, chat), shown once the hero has scrolled past. */
+/** Phones: glass bottom bar (Book a visit, WhatsApp), shown once the hero has scrolled past. */
 export function StickyBar() {
   const [shown, setShown] = React.useState(false)
 
@@ -37,11 +35,6 @@ export function StickyBar() {
           {actions.whatsapp}
         </a>
       </Button>
-      <ChatSheet>
-        <Button variant="icon" aria-label={chat.launcher}>
-          <Icon icon={MessageCircle} size="lg" />
-        </Button>
-      </ChatSheet>
     </div>
   )
 }

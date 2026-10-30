@@ -14,7 +14,7 @@ const loadPanel = () => import("@/components/chat-panel").then((m) => m.ChatPane
 // Not in the first page load: the assistant downloads on hover, focus or the first tap of a chat button.
 const ChatPanel = dynamic(loadPanel, { ssr: false })
 
-/** The glass chat sheet behind the desktop launcher and the phone StickyBar's chat icon. */
+/** The glass chat sheet behind the launcher button. */
 export function ChatSheet({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(false)
   return (
@@ -37,14 +37,14 @@ export function ChatSheet({ children }: { children: React.ReactNode }) {
   )
 }
 
-/** Desktop and tablet: glass "Ask a question" bottom right. Phones use the StickyBar's chat icon. */
+/** Glass chat button on every screen from page load: "Ask a question" on desktop, a round icon on phones, above the StickyBar. */
 export function ChatLauncher() {
   return (
-    <div className="fixed right-6 bottom-6 z-30 max-md:hidden">
+    <div className="fixed right-3 bottom-above-bar z-30 md:right-6 md:bottom-6">
       <ChatSheet>
-        <Button variant="glass">
+        <Button variant="glass" className="max-md:size-12 max-md:px-0">
           <Icon icon={MessageCircle} />
-          {assistant.title}
+          <span className="max-md:sr-only">{assistant.title}</span>
         </Button>
       </ChatSheet>
     </div>

@@ -18,6 +18,9 @@ type Msg = { role: "user" | "assistant"; content: string }
 // ponytail: module-level, so the chat survives closing and reopening the sheet; a reload starts fresh.
 let saved: Msg[] = []
 
+/** Finished replies only: a reply cut off before its first word is not history. */
+const answered = (m: Msg) => m.role === "user" || !!parseReply(m.content).body
+
 const fixed = (text: string) => `${text}\n>> actions: whatsapp call\n>> chips:`
 
 /** The assistant inside ChatSheet: streamed replies, quick-reply chips and Book / WhatsApp / Call from the model. */
@@ -26,7 +29,17 @@ export function ChatPanel() {
   const [draft, setDraft] = React.useState("")
   const [busy, setBusy] = React.useState(false)
   const log = React.useRef<HTMLDivElement>(null)
+  const request = React.useRef<AbortController>(null)
   const ids = React.useId()
+
+  // Closing the sheet mid-reply stops the stream and drops the empty placeholder it was filling.
+  React.useEffect(
+    () => () => {
+      request.current?.abort()
+      saved = saved.filter(answered)
+    },
+    []
+  )
 
   React.useEffect(() => {
     saved = messages
@@ -49,12 +62,14 @@ export function ChatPanel() {
     setBusy(true)
     const show = (content: string) => setMessages([...history, { role: "assistant", content }])
     let content = ""
+    const ctrl = (request.current = new AbortController())
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "content-type": "application/json" },
+        signal: ctrl.signal,
         // Only finished replies go back, without their button lines: the Worker caps both.
-        body: JSON.stringify({ messages: history.map((m) => (m.role === "user" ? m : { ...m, content: parseReply(m.content).body })) }),
+        body: JSON.stringify({ messages: history.filter(answered).map((m) => (m.role === "user" ? m : { ...m, content: parseReply(m.content).body })) }),
       })
       if (!res.ok || !res.body) throw new Error(String(res.status))
       const reader = res.body.pipeThrough(new TextDecoderStream()).getReader()
@@ -66,6 +81,7 @@ export function ChatPanel() {
       }
       if (!parseReply(content).body) throw new Error("empty")
     } catch {
+      if (ctrl.signal.aborted) return
       show(fixed(assistant.fallback))
     }
     if (history.filter((m) => m.role === "user").length >= MAX_TURNS) setMessages((m) => [...m, { role: "assistant", content: fixed(assistant.limit) }])

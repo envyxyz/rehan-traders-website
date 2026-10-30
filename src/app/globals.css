@@ -188,6 +188,7 @@
   --spacing-section: clamp(3.5rem, 2.757rem + 3.048vw, 5.5rem);
   --spacing-sheet: 92svh;      /* bottom sheet max height */
   --spacing-safe-bottom: max(0.75rem, env(safe-area-inset-bottom)); /* floating bars clear the home indicator */
+  --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button, clear of the sticky bar */
   --container-content: 70rem;  /* 1120px */
   --container-panel: 96rem;    /* hero panel cap, 1536px */
 
