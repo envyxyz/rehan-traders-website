@@ -19,9 +19,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { brands, modelsOf } from "@/lib/devices"
 import { Toaster } from "@/components/ui/sonner"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { actions, devices, estimate, faq, faults, hero, nav, seo, services, site, ui } from "@/content"
+import { actions, estimate, faq, faults, hero, nav, seo, services, site, ui } from "@/content"
 import { duration } from "@/lib/tokens"
 import { ToastDemo } from "./toast-demo"
 
@@ -87,6 +88,8 @@ function Block({ title, children }: { title: string; children: React.ReactNode }
     </div>
   )
 }
+
+const devices = brands.slice(0, 5).map((brand) => ({ brand, models: modelsOf(brand).slice(0, 4) }))
 
 export default function KitchenSink() {
   if (process.env.NODE_ENV === "production") notFound()
@@ -234,7 +237,7 @@ export default function KitchenSink() {
                 <CommandEmpty>{ui.noResults}</CommandEmpty>
                 {devices.map((d) => (
                   <CommandGroup key={d.brand} heading={d.brand}>
-                    {d.models.map((m) => <CommandItem key={m}><Icon icon={Smartphone} size="sm" />{m}</CommandItem>)}
+                    {d.models.map((m) => <CommandItem key={m} value={m}><Icon icon={Smartphone} size="sm" />{m}</CommandItem>)}
                   </CommandGroup>
                 ))}
               </CommandList>

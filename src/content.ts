@@ -136,7 +136,8 @@ export const actions = {
   book: "Book a visit",
   bookRepair: "Book this repair",
   whatsapp: "WhatsApp",
-  whatsappLabel: `Chat on WhatsApp, ${site.phone.display}`,
+  // Starts with the visible "WhatsApp" (WCAG 2.5.3 label in name).
+  whatsappLabel: `WhatsApp, chat on ${site.phone.display}`,
   call: "Call",
   directions: "Directions",
   allRepairs: "All repairs",
@@ -361,15 +362,6 @@ export const services: Service[] = [
     related: ["touch-glass-replacement", "screen-replacement", "battery-charging"],
   },
 ]
-
-// TODO(adnan): confirm model lists. Adnan: "all foldings, Samsung Flip and Fold, Pixel Fold" (PRD §11 q11).
-export const devices = [
-  { brand: "Samsung", models: ["Galaxy Z Fold", "Galaxy Z Flip", "Galaxy S series", "Galaxy A series", "Galaxy Tab"] },
-  { brand: "Apple", models: ["iPhone", "iPad"] },
-  { brand: "Google", models: ["Pixel", "Pixel Fold"] },
-  { brand: "OnePlus", models: ["OnePlus"] },
-  { brand: "Other", models: ["Other phone", "Other tablet"] },
-] as const
 
 export const faults = [
   "Cracked glass",
