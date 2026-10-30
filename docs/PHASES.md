@@ -178,3 +178,13 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - Home performance stays under 95 here (TBT about 300 to 450 ms at 4x CPU: hydration and the 3D fold; `content.ts` still ships whole to every page, about 40 KB gzip). `/visit` LCP shows a long element render delay on the storefront photo; cause not found.
   - Not deployed to Cloudflare (not logged in). `pnpm dev` itself was not run: Ameer's `next dev` and `wrangler dev` were already up on :3000 and :8787 (a `workerd` child of that wrangler was using a full CPU core; left alone). The wrangler flag and quiet output were checked on :8791.
   - The Apps Script `recentForPhone` fix is not live until `Code.gs` is pasted and redeployed.
+
+### 2026-10-30 · Go-live, track A (`docs/GO-LIVE.md`)
+- Shipped:
+  - "Get a quote in 5 minutes" is gone everywhere. `price.quote` is deleted; in `quote` mode `PriceLine` renders nothing (cards, `/repairs`, service pages) and the estimator shows no price line. `actions.quoteSent` is "Ticket created. We'll send your quote on WhatsApp."; the screen FAQ answer is "Message us on WhatsApp with your exact model and we'll send you a quote."; `bookLede` is "Book a visit to Shop G-88 or ask for a quote on WhatsApp." The chat prompt tells the assistant to send quote requests to WhatsApp and never to say how fast. `tests/e2e/no-quote-promise.spec.ts` fails if "5 minutes" returns on `/`, `/repairs`, a service page, `/estimate`, `/book`, the chat prompt or `/llms.txt`. `CLAUDE.md` rule 10, `PRODUCT.md` and `docs/PRD.md` match.
+  - `/llms.txt`: a force-static route handler built from `content.ts` (entity, address, phone, WhatsApp, hours, repairs with links, pages, the no-published-prices note, FAQ). `robots.txt` and `sitemap.xml` unchanged and correct (`/estimate` and every service slug listed; `/book/confirmed` and `/dev/*` not).
+  - JSON-LD: `storeSchema` gains `logo` (`public/images/logo.png`, the brand avatar) and `sameAs` from `site.sameAs` (Google Maps place URL only; Facebook waits for Adnan, see the TODO in `content.ts`). It now also renders on `/visit` and `/about`.
+  - Every route already had a unique title, description, canonical and OG entry (including `/estimate`); no change needed.
+  - `public/_headers`: `Strict-Transport-Security` removed; the Cloudflare zone owns HSTS (GO-LIVE B4).
+- Verified: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` (see the commit for the result), `out/robots.txt`, `out/sitemap.xml`, `out/llms.txt` and the JSON-LD in `out/index.html` read by hand. Screenshots of `/repairs` (1440 and 390, light and dark) in `design/go-live-2026-10-30/`.
+- Not done: track B (dashboards) is Ameer's. Nothing pushed (a push deploys to production).

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
 
-import { actions, assistant, estimator, price } from "../../src/content"
+import { actions, assistant, estimator } from "../../src/content"
 import { MAX_INPUT, MAX_TURNS, parseReply } from "../../src/lib/assistant"
 import { pickDevice } from "./helpers"
 
@@ -102,7 +102,6 @@ test("estimate: picking device and fault needs no model", async ({ page }) => {
 
   await expect(page.getByRole("main").getByText("Galaxy Z Fold and Flip", { exact: true })).toBeVisible()
   await expect(page.getByText(estimator.result.panel.maybe)).toBeVisible()
-  await expect(page.getByText(price.quote)).toBeVisible()
   const wa = new URL((await page.getByRole("link", { name: estimator.result.quote }).getAttribute("href"))!)
   expect(wa.searchParams.get("text")).toBe(estimator.whatsapp("Samsung Galaxy Z Fold5", "Fold or Flip inner screen"))
   await expect(page.getByRole("link", { name: actions.bookRepair })).toHaveAttribute("href", "/book?service=galaxy-z-fold-flip")

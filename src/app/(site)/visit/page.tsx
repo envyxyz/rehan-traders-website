@@ -6,6 +6,7 @@ import { CtaBand } from "@/components/cta-band"
 import { HoursTable } from "@/components/hours-table"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { Img } from "@/components/img"
+import { JsonLd } from "@/components/json-ld"
 import { InteractiveMap } from "@/components/interactive-map"
 import { Container, Section } from "@/components/layout"
 import { OpenStatus } from "@/components/open-status"
@@ -13,6 +14,7 @@ import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { actions, breadcrumbs, seo, site, ui, visit, visitPage } from "@/content"
+import { storeSchema } from "@/lib/schema"
 
 export const metadata: Metadata = {
   title: seo.visit.title,
@@ -24,6 +26,7 @@ export const metadata: Metadata = {
 export default function VisitPage() {
   return (
     <>
+      <JsonLd data={storeSchema} />
       <Section className="pt-28 lg:pt-36">
         <Container>
           <Breadcrumbs items={[{ label: breadcrumbs.visit }]} className="mb-8" />

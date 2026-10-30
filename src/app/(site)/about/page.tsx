@@ -3,10 +3,12 @@ import type { Metadata } from "next"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
 import { Img } from "@/components/img"
+import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
 import { aboutPage, breadcrumbs, home, seo } from "@/content"
+import { storeSchema } from "@/lib/schema"
 
 export const metadata: Metadata = {
   title: seo.about.title,
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={storeSchema} />
       <Section className="pt-28 lg:pt-36">
         <Container>
           <Breadcrumbs items={[{ label: breadcrumbs.about }]} className="mb-8" />

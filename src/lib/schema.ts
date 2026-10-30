@@ -23,6 +23,8 @@ export const storeSchema = {
   email: site.email,
   foundingDate: String(site.founded),
   image: `${site.url}/images/storefront-og.jpg`,
+  logo: `${site.url}${site.logo}`,
+  sameAs: site.sameAs,
   address: {
     "@type": "PostalAddress",
     streetAddress: site.address.lines.join(", ").replace(`, ${site.address.city}`, ""),

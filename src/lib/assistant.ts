@@ -7,7 +7,7 @@ import { estimator, faq, price, priceMode, process, reviews, services, site, typ
 export const MAX_TURNS = 12
 export const MAX_INPUT = 500
 
-const priceLine = (s: Service) => (priceMode === "from" && s.priceFrom !== undefined ? price.from(s.priceFrom) : price.quote)
+const priceLine = (s: Service) => (priceMode === "from" && s.priceFrom !== undefined ? price.from(s.priceFrom) : null)
 
 /** Everything the assistant may say, written from content.ts. Same text on every request, so the provider can cache it. */
 export const knowledge = [
@@ -23,11 +23,11 @@ export const knowledge = [
   `Outside Lahore: yes, devices can be sent by courier. Message on WhatsApp first; courier terms are arranged there.`,
   `Booking: on this website (Book a visit): pick the device, the fault and a visit time, then a name and mobile number. No account, no payment.`,
   priceMode === "quote"
-    ? `Prices: the shop does not publish prices, because part prices change daily. For any repair the answer is "${price.quote}" on WhatsApp.`
+    ? `Prices: the shop does not publish prices, because part prices change daily. For any repair, tell the customer to message the shop on WhatsApp with the exact model and the shop will send a quote. Never say how quickly the quote or the repair will come.`
     : `Prices: only the "From Rs" lines below. Anything else is quoted on WhatsApp.`,
   "",
   "## Repairs",
-  ...services.map((s) => `- ${s.title}: ${s.long} Faults: ${s.faults.join(", ")}. Price: ${priceLine(s)}.`),
+  ...services.map((s) => `- ${s.title}: ${s.long} Faults: ${s.faults.join(", ")}.${priceLine(s) ? ` Price: ${priceLine(s)}.` : ""}`),
   "",
   "## How a repair works",
   ...process.map((p, i) => `${i + 1}. ${p.title}: ${p.text}`),

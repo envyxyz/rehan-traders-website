@@ -11,7 +11,6 @@ export const priceMode: PriceMode = "quote"
 
 export const price = {
   from: (rs: number) => `From Rs ${rs.toLocaleString("en-PK")}`,
-  quote: "Get a quote in 5 minutes",
 } as const
 
 const phoneDial = "+923058874839"
@@ -40,6 +39,14 @@ export const site = {
   },
   geo: { lat: 31.5161006, lng: 74.3433894 },
   mapsUrl: "https://maps.google.com/?cid=7044160813583291979",
+  /**
+   * Confirmed profiles only, for JSON-LD sameAs. The Google Maps place page for now.
+   * TODO(adnan): confirm. The Facebook page (rehantraders0) joins this list once its phone and hours are fixed
+   * (it shows 0305 5875716 and "Always open"); it is left out until then.
+   */
+  sameAs: ["https://maps.google.com/?cid=7044160813583291979"],
+  /** Square brand avatar, public/images/logo.png. */
+  logo: "/images/logo.png",
   /** 24h times, Asia/Karachi. 0 = Sunday. */
   hours: {
     timezone: "Asia/Karachi",
@@ -145,7 +152,7 @@ export const actions = {
   allQuestions: "All questions",
   /** Phase 5: the button on the booking form / page opened by "Book this repair", and its success message. */
   getQuote: "Get a quote",
-  quoteSent: "Ticket Created. You'll be given a quote in 5 minutes.",
+  quoteSent: "Ticket created. We'll send your quote on WhatsApp.",
 } as const
 
 export const hero = {
@@ -272,7 +279,7 @@ export const services: Service[] = [
     faq: [
       { q: "When do I need a full screen replacement instead of touch glass?", a: "Full replacement is required when the screen has colored lines, black bleed, green tint, or no picture." },
       { q: "Do you repair both iPhone and Android displays?", a: "Yes. We replace screens on iPhone, Samsung, Google Pixel, OnePlus, and other brands." },
-      { q: "How can I get a quote for my screen?", a: "Message us on WhatsApp with your exact model to receive a quote in 5 minutes." },
+      { q: "How can I get a quote for my screen?", a: "Message us on WhatsApp with your exact model and we'll send you a quote." },
     ],
     related: ["touch-glass-replacement", "galaxy-z-fold-flip", "water-damage-data-recovery"],
   },
@@ -669,7 +676,7 @@ export const repairsPage = {
   faqTitle: "Questions about this repair",
   relatedTitle: "Related repairs",
   bookHeading: "Need this repair?",
-  bookLede: "Book a visit to Shop G-88 or get a quote in 5 minutes on WhatsApp.",
+  bookLede: "Book a visit to Shop G-88 or ask for a quote on WhatsApp.",
   allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
   priceTitle: "Price",
   viewDetails: "View details",

@@ -43,7 +43,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Booking: device, fault, visit time, name and phone. Saved and emailed to the shop, then WhatsApp opens with a prefilled message.
 - AI chat assistant: answers from the site's own content only. Primary model Claude Haiku via OpenRouter, fallback Gemini via Google AI Studio, final fallback a fixed reply with WhatsApp and call links. Replies in the language the customer writes in (English, Roman Urdu or Urdu script).
 - Google reviews and rating: 5 real reviews copied into content.ts with an as-of date, linking to the Google listing (no Places API: no billing).
-- Prices: launch in "Get a quote in 5 minutes" mode (Adnan). One switch in content.ts flips to "From Rs X" later; panel prices move fast, so the switch must stay one line.
+- Prices: launch in quote mode (Adnan): no price line is shown, quotes are given on WhatsApp, and no turnaround is promised. One switch in content.ts flips to "From Rs X" later; panel prices move fast, so the switch must stay one line.
 - All copy lives in `src/content.ts`. No copy in components.
 - Theme follows the device (prefers-color-scheme). Static background. Subtle motion only, reduced-motion respected.
 - Lighthouse 95+ on Performance, Accessibility, Best Practices and SEO, mobile.

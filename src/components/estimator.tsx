@@ -181,7 +181,7 @@ function Outcome({ result }: { result: Result }) {
               {estimator.result.guess}
             </Text>
           )}
-          <p className="font-display text-title-md tabular-nums text-ink">{price}</p>
+          {price && <p className="font-display text-title-md tabular-nums text-ink">{price}</p>}
           <div className="flex flex-wrap gap-2.5">
             {priceMode === "quote" && (
               <Button asChild size="lg" variant="whatsapp">
