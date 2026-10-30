@@ -27,17 +27,29 @@ export function PhotoPicker({
 }) {
   const input = React.useRef<HTMLInputElement>(null)
   const c = booking.fault
+  // Photos picked or uploading, counted when a file is taken: two quick drops share one limit, where `photos`
+  // would still be last render's list.
+  const taken = React.useRef(photos.length)
   const patch = (key: string, p: Partial<Photo>) => onChange((all) => all.map((x) => (x.key === key ? { ...x, ...p } : x)))
+  const drop = (key: string) => {
+    taken.current--
+    onChange((all) => {
+      const gone = all.find((x) => x.key === key)
+      if (gone) URL.revokeObjectURL(gone.preview)
+      return all.filter((x) => x !== gone)
+    })
+  }
 
   function add(files: FileList | null) {
     onError(null)
-    for (const file of [...(files ?? [])].slice(0, MAX_PHOTOS - photos.length)) {
+    for (const file of [...(files ?? [])].slice(0, MAX_PHOTOS - taken.current)) {
       const key = crypto.randomUUID()
+      taken.current++
       onChange((all) => [...all, { key, preview: URL.createObjectURL(file), progress: 0 }])
       uploadPhoto(file, (progress) => patch(key, { progress }))
         .then((id) => patch(key, { id, progress: 1 }))
         .catch(() => {
-          onChange((all) => all.filter((x) => x.key !== key))
+          drop(key)
           onError(c.uploadError)
         })
     }
@@ -54,7 +66,7 @@ export function PhotoPicker({
             <button
               type="button"
               aria-label={c.removePhoto}
-              onClick={() => onChange((all) => all.filter((x) => x.key !== p.key))}
+              onClick={() => drop(p.key)}
               className="absolute top-0 right-0 grid size-11 cursor-pointer place-items-center"
             >
               <span className="grid size-7 place-items-center rounded-pill bg-action text-on-action">

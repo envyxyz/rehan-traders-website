@@ -6,12 +6,12 @@ import { Search } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-/** Device search (booking). Inline list; cmdk handles filtering and keyboard. */
+/** Device search (booking). cmdk handles filtering and keyboard; the list sits inline or in a Popover. */
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
     <CommandPrimitive
       data-slot="command"
-      className={cn("flex w-full flex-col overflow-hidden rounded-lg border border-hairline bg-card text-ink", className)}
+      className={cn("flex w-full flex-col text-ink", className)}
       {...props}
     />
   )
@@ -19,7 +19,7 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
 
 function CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
-    <div className="flex items-center gap-3 border-b border-hairline px-4">
+    <div className="flex items-center gap-3 rounded-lg border border-hairline bg-paper px-4 focus-within:border-ink focus-within:bg-card">
       <Search aria-hidden className="size-5 shrink-0 text-steel" strokeWidth={1.75} />
       <CommandPrimitive.Input
         data-slot="command-input"
@@ -34,7 +34,7 @@ function CommandList({ className, ...props }: React.ComponentProps<typeof Comman
   return (
     <CommandPrimitive.List
       data-slot="command-list"
-      className={cn("max-h-72 scroll-py-1.5 overflow-y-auto p-1.5", className)}
+      className={cn("max-h-72 min-h-0 scroll-py-1.5 overflow-y-auto overscroll-contain p-1.5", className)}
       {...props}
     />
   )

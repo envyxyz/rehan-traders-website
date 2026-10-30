@@ -60,7 +60,7 @@ export function BookingSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       {/* No description: the flow's "Step 1 of 5" line sits under the title instead. */}
-      <SheetContent side="right" className="gap-2 pb-0" aria-describedby={undefined}>
+      <SheetContent side="right" className="gap-2 p-5 pb-0 sm:p-6 sm:pb-0" aria-describedby={undefined}>
         <SheetTitle>{svc ? svc.title : booking.title}</SheetTitle>
         {open && <BookingFlow service={svc?.slug} device={device} onDone={() => onOpenChange(false)} />}
       </SheetContent>

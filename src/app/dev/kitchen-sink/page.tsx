@@ -19,7 +19,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Toaster } from "@/components/ui/sonner"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { actions, devices, estimate, faq, faults, hero, nav, seo, services, site, ui } from "@/content"
 import { duration } from "@/lib/tokens"
 import { ToastDemo } from "./toast-demo"
@@ -91,6 +92,7 @@ export default function KitchenSink() {
   if (process.env.NODE_ENV === "production") notFound()
 
   return (
+    <TooltipProvider>
     <Section>
       <Container>
         <Heading as="h1" size="display-xl" rule className="mb-4">{seo.kitchenSink.title}</Heading>
@@ -228,7 +230,7 @@ export default function KitchenSink() {
             </RadioGroup>
             <Command>
               <CommandInput placeholder={ui.search} />
-              <CommandList>
+              <CommandList className="mt-2 rounded-lg border border-hairline bg-card">
                 <CommandEmpty>{ui.noResults}</CommandEmpty>
                 {devices.map((d) => (
                   <CommandGroup key={d.brand} heading={d.brand}>
@@ -297,6 +299,8 @@ export default function KitchenSink() {
           </div>
         </Block>
       </Container>
+      <Toaster />
     </Section>
+    </TooltipProvider>
   )
 }

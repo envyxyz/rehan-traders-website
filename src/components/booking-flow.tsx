@@ -89,6 +89,12 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
     problem: "",
   })
   const [photos, setPhotos] = React.useState<Photo[]>([])
+  // The previews are object URLs: free the rest when the flow closes (the picker frees each one it removes).
+  const shown = React.useRef(photos)
+  React.useEffect(() => {
+    shown.current = photos
+  }, [photos])
+  React.useEffect(() => () => shown.current.forEach((p) => URL.revokeObjectURL(p.preview)), [])
   const [days, setDays] = React.useState<BookingDay[]>([])
   const [error, setError] = React.useState<string | null>(null)
   const [sending, setSending] = React.useState(false)
@@ -135,6 +141,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
     if (step === "fault") {
       if (!fault) return setError(booking.fault.pickError)
       if (openFault && !problem) return setError(booking.fault.describeError)
+      if (/[^\P{Cc}\n\t]/u.test(problem)) return setError(booking.fault.problemError) // the Worker refuses control characters
       if (openFault && photos.some((p) => !p.id)) return setError(booking.fault.wait)
       // Slots are worked out when the step opens, so past times never show.
       const open = bookingDays(new Date(), site.hours, holidays)
@@ -225,7 +232,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         e.preventDefault()
         next()
       }}
-      className="flex flex-1 flex-col gap-5"
+      className="flex flex-1 flex-col gap-4"
     >
       {/* Where you are, in the lede's place under the sheet title, then the bars. */}
       <div>
@@ -270,6 +277,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
               <Textarea
                 id={`${ids}-problem`}
                 maxLength={500}
+                className="min-h-20"
                 placeholder={booking.fault.describePlaceholder}
                 value={draft.problem}
                 onChange={(e) => set({ problem: e.target.value })}
@@ -297,7 +305,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
                   const same = daySlots.find((s) => s.slice(11) === draft.slot?.slice(11))
                   set({ day, slot: same ?? daySlots[0] ?? null })
                 }}
-                className="flex-nowrap gap-1.5"
+                className="snap-x flex-nowrap gap-1.5 overflow-x-auto"
               >
                 {days.map((d) => {
                   const [weekday, day, month] = dayParts(d.date)
@@ -306,7 +314,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
                       key={d.date}
                       value={d.date}
                       aria-label={slotDay(d.date, tz)}
-                      className="h-auto min-w-0 flex-1 flex-col gap-1 rounded-md px-1 py-2.5 tabular-nums"
+                      className="h-auto min-w-11 flex-1 snap-start flex-col gap-1 rounded-md px-1 py-2.5 tabular-nums"
                     >
                       <span className="text-caption opacity-70">{weekday}</span>
                       <span className="text-title-lg">{day}</span>
@@ -400,7 +408,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
       {/* Honeypot: off-screen and out of the tab order, so only bots fill it. */}
       <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" aria-label={booking.details.honeypot} />
 
-      <div className="sticky bottom-0 -mx-1 mt-auto flex gap-2.5 bg-card px-1 py-3">
+      <div className="sticky bottom-0 -mx-1 mt-auto flex flex-wrap gap-2.5 bg-card px-1 py-3">
         {index > 0 && (
           <Button type="button" variant="line" size="lg" still onClick={back} disabled={sending}>
             {booking.back}
@@ -420,7 +428,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
             {actions.getQuote}
           </Button>
         )}
-        <Button type="submit" variant="outline" size="lg" still className="flex-1 justify-between" disabled={sending}>
+        <Button type="submit" variant="outline" size="lg" still className="min-w-32 flex-1 justify-between" disabled={sending}>
           {step !== "review" ? booking.next : sending ? booking.review.sending : draft.kind === "quote" ? actions.getQuote : booking.review.submit}
           <Icon icon={ArrowRight} />
         </Button>
