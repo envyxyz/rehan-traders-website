@@ -112,28 +112,28 @@ function Process() {
   const c = home.process
   return (
     <Section>
-      <Container className="grid items-center gap-12 lg:grid-cols-12">
-        <div className="lg:col-span-7">
+      <Container>
+        <div className="max-w-2xl">
           <Heading>{c.title}</Heading>
-          <ol className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
-            {process.map((step, i) => (
-              <li key={step.title}>
-                <Reveal delay={i * reveal.stagger}>
-                  <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-3 font-display text-title-md text-ink">{step.title}</h3>
-                  <Text tone="muted" size="body-sm" className="mt-1.5">
-                    {step.text}
-                  </Text>
-                </Reveal>
-              </li>
-            ))}
-          </ol>
         </div>
+        <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {process.map((step, i) => (
+            <li key={step.title}>
+              <Reveal delay={i * reveal.stagger}>
+                <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-3 font-display text-title-md text-ink">{step.title}</h3>
+                <Text tone="muted" size="body-sm" className="mt-1.5">
+                  {step.text}
+                </Text>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
         {/* The interactive job card and tamper seal */}
-        <Reveal className="relative mx-auto w-full max-w-lg lg:col-span-5">
-          <div className="rounded-2xl bg-panel p-4 sm:p-7">
+        <Reveal className="mt-12 flex justify-center">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-panel p-4 sm:p-8">
             <JobCard />
           </div>
         </Reveal>

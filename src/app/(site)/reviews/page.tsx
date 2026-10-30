@@ -15,39 +15,39 @@ export const metadata: Metadata = pageMeta({ title: seo.reviews.title, descripti
 export default function ReviewsPage() {
   return (
     <>
-      <Section className="flex min-h-svh flex-col justify-center pt-24 pb-12 lg:pt-32 lg:pb-16">
+      <Section className="pt-28 lg:pt-36">
         <Container>
-          <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
-            <Breadcrumbs items={[{ label: breadcrumbs.reviews }]} className="mb-6 flex justify-center" />
+          <Breadcrumbs items={[{ label: breadcrumbs.reviews }]} className="mb-8" />
 
-            <Heading as="h1" size="display-xl" rule centered>
-              {reviewsPage.title}
-            </Heading>
-            <Text tone="muted" size="body-md" className="mt-4">
-              {reviewsPage.lede}
-            </Text>
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <Heading as="h1" size="display-xl" rule>
+                {reviewsPage.title}
+              </Heading>
+              <Text tone="muted" size="body-md" className="mt-4 max-w-xl">
+                {reviewsPage.lede}
+              </Text>
 
-            <div className="mt-8 flex flex-col items-center gap-4">
-              <div className="flex items-center gap-3">
+              <p className="mt-8 flex items-center gap-3">
                 <b className="font-display text-display-lg text-ink tabular-nums">{reviews.rating.toFixed(1)}</b>
-                <div className="text-left">
+                <span>
                   <Stars rating={reviews.rating} />
                   <span className="mt-1 block font-display text-body-md font-bold text-ink">
                     {reviewsPage.starSummary(reviews.rating)}
                   </span>
-                </div>
-              </div>
-              <Button asChild size="lg" arrow className="mt-2">
+                </span>
+              </p>
+              <Button asChild size="lg" arrow className="mt-8">
                 <a href={reviews.url} target="_blank" rel="noopener noreferrer">
                   {reviewsPage.readAllOnGoogle}
                   <span className="sr-only">, {ui.externalLink}</span>
                 </a>
               </Button>
             </div>
-          </div>
 
-          <div className="mx-auto mt-10 w-full max-w-2xl">
-            <ReviewCarousel variant="all" />
+            <div>
+              <ReviewCarousel variant="all" />
+            </div>
           </div>
         </Container>
       </Section>
