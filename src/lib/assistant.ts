@@ -77,7 +77,7 @@ export function parseReply(raw: string) {
   return { body, actions: [...new Set(actions)] as ("book" | "whatsapp" | "call")[], chips }
 }
 
-const foldable = /galaxy z (fold|flip)|pixel.*fold|surface duo/i
+const foldable = /\bz\s?(fold|flip)|\b(fold|flip)\s?\d|pixel.*fold|surface duo/i
 const tablet = /ipad|galaxy tab|\btab\b|tablet|matepad|\bpad\b/i
 const apple = /iphone|apple/i
 

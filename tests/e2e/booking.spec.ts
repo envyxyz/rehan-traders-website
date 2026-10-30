@@ -15,7 +15,7 @@ const fault = (page: Page, name: string) => page.getByRole("button", { name, exa
 const next = (page: Page) => page.getByRole("button", { name: booking.next }).click()
 
 async function pickDeviceAndFault(page: Page, faultName = "Charging") {
-  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5")
+  await pickDevice(page, "Samsung Galaxy Z Fold5")
   await next(page)
   await fault(page, faultName).click()
   await next(page)
@@ -70,7 +70,7 @@ test("takes several faults, a description and a photo, and sends them", async ({
     return route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, job: "RT-0044" }) })
   })
   await page.goto("/book")
-  await pickDevice(page, "Apple", "13", "iPhone 13")
+  await pickDevice(page, "iPhone 13")
   await next(page)
   await fault(page, "Battery").click()
   await fault(page, "Charging").click()
@@ -106,7 +106,7 @@ test("shows each validation error, and Back keeps answers", async ({ page }) => 
   await next(page)
   await expect(page.locator("form").getByRole("alert")).toHaveText(booking.device.pickError)
   // Picking Apple lists its models (the brand is not in their names: "iPhone 13").
-  await pickDevice(page, "Apple", "13", "iPhone 13")
+  await pickDevice(page, "iPhone 13")
   await next(page)
   await next(page)
   await expect(page.locator("form").getByRole("alert")).toHaveText(booking.fault.pickError)
@@ -137,11 +137,9 @@ test("still confirms with a local reference when the Sheet is down", async ({ pa
   expect(decodeURIComponent(wa!)).toMatch(/Booking No\. WEB-/)
 })
 
-test("the iPhone repair fixes the brand to Apple", async ({ page }) => {
+test("a service page takes any typed device name", async ({ page }) => {
   await page.goto("/book?service=iphone")
-  await expect(page.getByLabel(booking.device.brand)).toBeDisabled()
-  await expect(page.getByLabel(booking.device.brand)).toHaveValue("Apple")
-  await pickDevice(page, null, "15 pro", "iPhone 15 Pro")
+  await pickDevice(page, "iPhone 15 Pro")
   await next(page)
   await expect(page.getByRole("heading", { name: booking.steps.fault.title })).toBeVisible()
 })
@@ -151,7 +149,7 @@ test("a Book button opens the booking sheet", async ({ page, isMobile }) => {
   await page.goto("/")
   await page.locator("#top").getByRole("link", { name: actions.book }).click()
   await expect(page.getByRole("dialog")).toBeVisible()
-  await expect(page.getByRole("dialog").getByLabel(booking.device.brand)).toBeVisible()
+  await expect(page.getByRole("dialog").getByLabel(booking.device.label)).toBeVisible()
   await expect(page).toHaveURL("/")
 })
 

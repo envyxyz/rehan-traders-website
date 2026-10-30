@@ -1,179 +1,57 @@
 "use client"
 
 import * as React from "react"
-import { Check } from "lucide-react"
 
-import { Icon } from "@/components/icon"
-import { Command, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover"
 import { booking } from "@/content"
-import { brandOf, brands, deviceName, isTablet, match, modelsOf, tabletBrands } from "@/lib/devices"
 
 const copy = booking.device
 const LIMIT = 60
-const typed = (q: string) => q.trim().slice(0, LIMIT)
 
-/** A dropdown you can type in: the list floats over the page, opens on focus, narrows as you type, and offers what you typed if it is not listed. */
-function Combo({
-  label,
-  placeholder,
-  options,
-  value,
-  onPick,
-  disabled,
-  invalid,
-  describedBy,
-}: {
-  label: string
-  placeholder: string
-  options: readonly string[]
-  value: string
-  onPick: (v: string) => void
-  disabled?: boolean
-  invalid?: boolean
-  describedBy?: string
-}) {
-  const [query, setQuery] = React.useState(value)
-  const [open, setOpen] = React.useState(false)
-  // The Sheet this field sits in, if any: the list is portaled into it (see PopoverContent).
-  const [sheet, setSheet] = React.useState<HTMLElement | null>(null)
-  const input = React.useRef<HTMLInputElement>(null)
-  // A new value from outside (picked, or cleared by a brand change) replaces what is typed.
-  const [seen, setSeen] = React.useState(value)
-  if (seen !== value) {
-    setSeen(value)
-    setQuery(value)
-  }
-  // Opened on a picked value: show the whole list, not just that one.
-  const shown = match(options, query === value ? "" : query).slice(0, LIMIT)
-  const own = typed(query)
-  const show = open && !disabled
-  // cmdk marks the input expanded and controlling its list even while the list is not mounted (axe: aria-valid-attr-value).
-  const listId = React.useRef<string | null>(null)
-  React.useEffect(() => {
-    const el = input.current
-    if (!el) return
-    listId.current ??= el.getAttribute("aria-controls")
-    el.setAttribute("aria-expanded", String(show))
-    if (show && listId.current) el.setAttribute("aria-controls", listId.current)
-    else el.removeAttribute("aria-controls")
-  }, [show])
-  const pick = (v: string) => {
-    onPick(v)
-    setQuery(v)
-    setOpen(false)
-  }
-
-  return (
-    <div className="flex flex-col gap-2">
-      {/* cmdk sets the input's id and names it with its own hidden label (Command label), so this one is for sight and clicks. */}
-      <Label aria-hidden onClick={() => input.current?.focus()}>
-        {label}
-      </Label>
-      <Command label={label} shouldFilter={false}>
-        <Popover open={show} onOpenChange={setOpen}>
-          <PopoverAnchor>
-            <CommandInput
-              ref={input}
-              placeholder={placeholder}
-              value={query}
-              disabled={disabled}
-              aria-invalid={invalid}
-              aria-describedby={describedBy}
-              onFocus={(e) => {
-                setSheet(e.currentTarget.closest<HTMLElement>("[data-slot=sheet-content]"))
-                setOpen(true)
-              }}
-              onBlur={() => {
-                setOpen(false)
-                setQuery(value)
-              }}
-              onValueChange={(v) => {
-                setQuery(v)
-                setOpen(true)
-              }}
-            />
-          </PopoverAnchor>
-          {/* Focus stays in the input: nothing moves focus in or out, and a press on an option must not blur it first. */}
-          <PopoverContent
-            container={sheet}
-            onOpenAutoFocus={(e) => e.preventDefault()}
-            onCloseAutoFocus={(e) => e.preventDefault()}
-            onInteractOutside={(e) => e.preventDefault()}
-            onMouseDown={(e) => e.preventDefault()}
-          >
-            <CommandList>
-              {shown.length > 0 && (
-                <CommandGroup>
-                  {shown.map((o) => (
-                    <CommandItem key={o} value={`pick:${o}`} onSelect={() => pick(o)} aria-checked={o === value}>
-                      <span className="flex-1">{o}</span>
-                      {o === value && <Icon icon={Check} />}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              )}
-              {own && !options.some((o) => o.toLowerCase() === own.toLowerCase()) && (
-                <CommandGroup heading={copy.notListed}>
-                  <CommandItem value={`typed:${own}`} onSelect={() => pick(own)}>
-                    {copy.useTyped(own)}
-                  </CommandItem>
-                </CommandGroup>
-              )}
-            </CommandList>
-          </PopoverContent>
-        </Popover>
-      </Command>
-    </div>
-  )
-}
-
-/** Brand, then model; both typeable. `lockedBrand` (the iPhone repair: Apple) fixes the first. Reports "" until a model is picked. */
-export function DevicePicker({
+/**
+ * The device, in the customer's own words ("Samsung Galaxy Z Fold8 Ultra"). No catalogue to keep up to date: a phone
+ * released tomorrow works the day it is typed. `repairFor()` reads the name to pick the service, and the shop sees
+ * exactly what was typed. Reports null until something is typed.
+ */
+export function DeviceField({
   value,
   onChange,
-  lockedBrand,
-  tabletsOnly,
   invalid,
   describedBy,
 }: {
   value: string | null
   onChange: (device: string | null) => void
-  lockedBrand?: string
-  /** The tablet repair: only brands that make tablets, and only their tablets. */
-  tabletsOnly?: boolean
-  /** The form's error is about the model: marks it invalid and points at the message. */
+  /** The form's error is about the device: marks the field invalid and points at the message. */
   invalid?: boolean
   describedBy?: string
 }) {
-  const [brand, setBrand] = React.useState(lockedBrand ?? (value ? (brandOf(value) ?? "") : ""))
-  const options = React.useMemo(() => modelsOf(brand).filter((m) => !tabletsOnly || isTablet(m)), [brand, tabletsOnly])
+  const id = React.useId()
+  // The raw text keeps its spaces while typing; only the trimmed text goes up. A device set from outside replaces it.
+  const [text, setText] = React.useState(value ?? "")
+  const [seen, setSeen] = React.useState(value)
+  if (seen !== value) {
+    setSeen(value)
+    if ((value ?? "") !== text.trim()) setText(value ?? "")
+  }
 
   return (
-    <div className="flex flex-col gap-4">
-      <Combo
-        label={copy.brand}
-        placeholder={copy.brandSearch}
-        options={tabletsOnly ? tabletBrands : brands}
-        value={brand}
-        disabled={!!lockedBrand}
-        onPick={(b) => {
-          if (b === brand) return
-          setBrand(b)
-          onChange(null)
+    <div className="flex flex-col gap-2">
+      <Label htmlFor={id}>{copy.label}</Label>
+      <Input
+        id={id}
+        value={text}
+        maxLength={LIMIT}
+        placeholder={copy.placeholder}
+        autoComplete="off"
+        autoCapitalize="words"
+        enterKeyHint="next"
+        aria-invalid={invalid}
+        aria-describedby={describedBy}
+        onChange={(e) => {
+          setText(e.target.value)
+          onChange(e.target.value.trim() || null)
         }}
-      />
-      <Combo
-        label={copy.model}
-        placeholder={brand ? copy.modelSearch : copy.brandFirst}
-        options={options}
-        value={value ?? ""}
-        disabled={!brand}
-        invalid={invalid}
-        describedBy={describedBy}
-        // A typed model gets its brand in front ("Nokia 3310"), the way listed ones read.
-        onPick={(m) => onChange(options.includes(m) ? m : deviceName(brand, m))}
       />
     </div>
   )

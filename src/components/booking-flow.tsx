@@ -4,7 +4,7 @@ import * as React from "react"
 import { useRouter } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 
-import { DevicePicker } from "@/components/device-picker"
+import { DeviceField } from "@/components/device-field"
 import { Icon } from "@/components/icon"
 import { Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
@@ -244,7 +244,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         </h2>
 
         {step === "device" && (
-          <DevicePicker value={draft.device} onChange={(device) => set({ device })} lockedBrand={svc?.brand} tabletsOnly={svc?.tablets} />
+          <DeviceField value={draft.device} onChange={(device) => set({ device })} />
         )}
 
         {step === "fault" && (

@@ -19,7 +19,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { brands, modelsOf } from "@/lib/devices"
 import { Toaster } from "@/components/ui/sonner"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { actions, estimate, faq, faults, hero, nav, seo, services, site, ui } from "@/content"
@@ -89,7 +88,10 @@ function Block({ title, children }: { title: string; children: React.ReactNode }
   )
 }
 
-const devices = brands.slice(0, 5).map((brand) => ({ brand, models: modelsOf(brand).slice(0, 4) }))
+const devices = [
+  { brand: "Apple", models: ["iPhone 15", "iPhone 15 Pro"] },
+  { brand: "Samsung", models: ["Galaxy S24", "Galaxy Z Fold5"] },
+]
 
 export default function KitchenSink() {
   if (process.env.NODE_ENV === "production") notFound()

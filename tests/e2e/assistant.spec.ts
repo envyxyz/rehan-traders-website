@@ -97,7 +97,7 @@ test("estimate: picking device and fault shows the repair in place of the form",
   const form = page.locator("form:visible")
   await form.getByRole("button", { name: estimator.submit }).click()
   await expect(form.getByRole("alert")).toHaveText(estimator.pickError)
-  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5", form)
+  await pickDevice(page, "Samsung Galaxy Z Fold5", form)
   await page.getByRole("radio", { name: "Fold or Flip inner screen" }).click()
   const card = page.locator("[data-slot=card]").first()
   const before = (await card.boundingBox())!
@@ -144,11 +144,11 @@ test("estimate: the Describe tab sends a quote ticket and lands on the confirmat
   await form.getByRole("button", { name: estimator.ticket.submit }).click()
   await expect(form.getByRole("alert")).toHaveText(booking.device.pickError)
   // The field with the error is marked and points at the message.
-  const model = form.getByRole("combobox", { name: booking.device.model })
+  const model = form.getByLabel(booking.device.label)
   await expect(model).toHaveAttribute("aria-invalid", "true")
   const errorId = (await form.getByRole("alert").getAttribute("id"))!
   await expect(model).toHaveAttribute("aria-describedby", errorId)
-  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5", form)
+  await pickDevice(page, "Samsung Galaxy Z Fold5", form)
   await form.getByRole("button", { name: estimator.ticket.submit }).click()
   await expect(form.getByRole("alert")).toHaveText(booking.details.nameError)
   await form.getByLabel(booking.details.name).fill("Ali Test")
@@ -183,7 +183,7 @@ test("estimate: the Describe tab falls back to a WhatsApp reference when the Wor
   await page.route("/api/book", (route) => route.fulfill({ status: 502, json: { ok: false, error: "webhook" } }))
   await page.goto("/estimate?tab=describe")
   const form = page.locator("form:visible")
-  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5", form)
+  await pickDevice(page, "Samsung Galaxy Z Fold5", form)
   await form.getByLabel(estimator.ticket.message).fill("Dead after a drop")
   await form.getByLabel(booking.details.name).fill("Ali Test")
   await form.getByLabel(booking.details.phone).fill("0300 1234567")

@@ -4,7 +4,7 @@ import * as React from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 
 import { BookButton } from "@/components/book-button"
-import { DevicePicker } from "@/components/device-picker"
+import { DeviceField } from "@/components/device-field"
 import { WhatsAppIcon } from "@/components/icon"
 import { PhotoPicker, type Photo } from "@/components/photo-picker"
 import { Text } from "@/components/typography"
@@ -118,7 +118,7 @@ function PickForm({ shown, onResult }: { shown: boolean; onResult: (r: Result) =
 
   return (
     <form noValidate onSubmit={submit} className="flex flex-1 flex-col gap-5">
-      <DevicePicker
+      <DeviceField
         value={device}
         invalid={!!error && !device}
         describedBy={error && !device ? `${ids}-error` : undefined}
@@ -260,7 +260,7 @@ function TicketForm({ q }: { q: string }) {
   const t = estimator.ticket
   return (
     <form noValidate onSubmit={submit} className="flex flex-1 flex-col gap-4">
-      <DevicePicker
+      <DeviceField
         value={device}
         invalid={invalid("device")}
         describedBy={describe("device")}

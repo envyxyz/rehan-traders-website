@@ -212,10 +212,6 @@ export type Service = {
   alt: string
   faq: { q: string; a: string }[]
   lead?: boolean
-  /** Device step: the brand dropdown is fixed to this one (src/data/devices.json brand name). */
-  brand?: string
-  /** Device search lists tablets only. */
-  tablets?: boolean
   howItWorks: { step: string; title: string; text: string }[]
   related: string[]
 }
@@ -275,7 +271,6 @@ export const services: Service[] = [
     faults: ["Screen", "Back glass", "Face ID", "Battery", "Charging", "Camera"],
     image: "iphone-back-glass",
     alt: "iPhone with its back glass being replaced",
-    brand: "Apple",
     howItWorks: [
       { step: "01", title: "Diagnostic check", text: "We test Face ID, display, battery health, and cameras on the job card." },
       { step: "02", title: "Bench repair", text: "Screens, back glass, battery swaps, or board faults are worked on at the bench." },
@@ -384,7 +379,6 @@ export const services: Service[] = [
     faults: ["Cracked glass", "Screen", "Battery", "Charging"],
     image: "ipad-screen",
     alt: "Tablet screen being repaired at the bench",
-    tablets: true,
     howItWorks: [
       { step: "01", title: "Tablet inspection", text: "We assess whether the digitizer glass or the underlying display panel is damaged." },
       { step: "02", title: "Bench repair", text: "Glass separation, display replacement, or battery service is performed at the bench." },
@@ -473,14 +467,9 @@ export const booking = {
     review: { name: "Review", title: "Check and confirm" },
   },
   device: {
-    brand: "Brand",
-    model: "Model",
-    brandSearch: "Type or pick a brand",
-    modelSearch: "Type or pick your model",
-    brandFirst: "Pick the brand first",
-    notListed: "Not listed",
-    useTyped: (q: string) => `Use "${q}"`,
-    pickError: "Pick your device to continue.",
+    label: "Device name",
+    placeholder: "Samsung Galaxy Z Fold8 Ultra",
+    pickError: "Type your device name to continue.",
   },
   fault: {
     label: "Fault",
@@ -680,7 +669,6 @@ export const home = {
   reviews: {
     title: "What customers say",
     summary: "on Google",
-    asOf: (date: string) => `As of ${date}`,
     show: (n: number, total: number) => `Show review ${n} of ${total}`,
     next: "Next review",
   },
@@ -746,8 +734,7 @@ export const repairsPage = {
 
 export const reviewsPage = {
   title: "Customer reviews",
-  lede: "Reviews from customers at Shop G-88, Hafeez Center. Copied directly from our Google Business Profile.",
-  asOfPrefix: "As of",
+  lede: "Reviews from customers at Shop G-88, Hafeez Center, dropped at our Google Business Profile.",
   viewOnGoogle: "View on Google Maps",
   readAllOnGoogle: "Read reviews on Google Maps",
   googleReview: "Google review",
@@ -1029,7 +1016,7 @@ export const estimator = {
   device: "Device",
   fault: "Fault",
   submit: "See the likely repair",
-  pickError: "Pick your device and the fault.",
+  pickError: "Type your device name and pick the fault.",
   /** The Describe tab: a quote ticket. Labels and errors shared with the booking flow come from `booking`. */
   ticket: {
     message: "Describe the problem",
