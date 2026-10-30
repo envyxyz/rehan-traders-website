@@ -77,6 +77,8 @@ export async function book(request: Request, env: BookEnv): Promise<Response> {
   if (request.method !== "POST") return fail(405, "method")
   // JSON only: a cross-site page cannot send this content type without a CORS preflight, which we never answer.
   if (!request.headers.get("content-type")?.startsWith("application/json")) return fail(415, "type")
+  // Refuse an oversized body by its declared length (bytes; up to 3 per character in UTF-8) before reading it.
+  if (Number(request.headers.get("content-length")) > MAX_BODY * 3) return fail(413, "size")
   const raw = await request.text()
   if (raw.length > MAX_BODY) return fail(413, "size")
 

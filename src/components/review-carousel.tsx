@@ -1,10 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { ArrowLeft, ArrowRight, Star } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 
 import { Icon } from "@/components/icon"
-import { home, reviews, reviewsPage, ui } from "@/content"
+import { Stars } from "@/components/stars"
+import { home, reviews, reviewsPage } from "@/content"
 import { cn } from "@/lib/utils"
 
 const copy = home.reviews
@@ -105,11 +106,7 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
                   <span className="text-steel">{r.date}</span>
                 </span>
               </span>
-              <span className="mt-1 flex shrink-0 gap-0.5 text-star" role="img" aria-label={ui.stars(r.rating)}>
-                {[0, 1, 2, 3, 4].map((s) => (
-                  <Star key={s} aria-hidden className={cn("size-4 fill-current", s >= r.rating && "opacity-30")} strokeWidth={0} />
-                ))}
-              </span>
+              <Stars rating={r.rating} className="mt-1 shrink-0" />
             </figcaption>
             <blockquote className="text-title-lg font-normal whitespace-pre-line text-ink text-pretty">{r.text}</blockquote>
           </figure>

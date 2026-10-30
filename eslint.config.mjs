@@ -14,10 +14,10 @@ const NO_RAW_COLOUR = [
 
 // An arbitrary value is `utility-[...]` NOT followed by `:` (that would be an arbitrary variant like data-[state=open]:).
 const ARBITRARY = "(?:^|[\\s:!])-?[a-z][a-z0-9-]*-\\[[^\\]\\s]+\\](?!:)"
+// Any string, not only className and cn()/cva() arguments: class strings kept in a const slipped past before.
 const NO_ARBITRARY_VALUE = [
-  [`JSXAttribute[name.name='className'] Literal[value=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
-  [`JSXAttribute[name.name='className'] TemplateElement[value.raw=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
-  [`CallExpression[callee.name=/^(cn|cva)$/] Literal[value=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
+  [`Literal[value=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
+  [`TemplateElement[value.raw=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
 ]
 
 const COPY = "Copy belongs in src/content.ts. Import it or take it as a prop."
@@ -41,5 +41,5 @@ export default defineConfig([
       "no-restricted-syntax": ["error", ...rules(NO_RAW_COLOUR, NO_ARBITRARY_VALUE, NO_LITERAL_COPY)],
     },
   },
-  globalIgnores([".next/**", "out/**", ".wrangler/**", "build/**", "next-env.d.ts", "design/**"]),
+  globalIgnores([".next/**", "out/**", ".wrangler/**", "build/**", "next-env.d.ts", "design/**", "src/lib/cn-tables.ts"]),
 ])
