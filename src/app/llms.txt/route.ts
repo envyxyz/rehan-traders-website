@@ -1,4 +1,4 @@
-import { faq, facts, priceMode, services, site } from "@/content"
+import { faq, facts, priceMode, reviews, services, site } from "@/content"
 
 export const dynamic = "force-static"
 
@@ -20,7 +20,7 @@ const pages = [
   { label: "Home", path: "/", note: "Landing page: hero, repair list, process, reviews, FAQ, CTA" },
   { label: "Repairs", path: "/repairs", note: "Every repair the shop lists, with links to individual repair pages" },
   { label: "Repair estimate", path: "/estimate", note: "Pick the device and the fault to see the likely repair, or create a quote ticket with the problem and up to 3 photos" },
-  { label: "Book a visit", path: "/book", note: "Choose a device, a fault and a visit time — no account needed" },
+  { label: "Book a visit", path: "/book", note: "Choose a device, a fault and a visit time; no account needed" },
   { label: "Visit", path: "/visit", note: "Directions, hours, Google Map embed and the four courier steps" },
   { label: "Reviews", path: "/reviews", note: "Customer reviews copied directly from Google Business Profile" },
   { label: "FAQ", path: "/faq", note: "Answers to common questions about repairs, pricing and visits" },
@@ -32,18 +32,21 @@ const body = [
   "",
   `> ${site.entity}`,
   "",
-  `${site.name} has been repairing phones and tablets since ${site.founded} at Hafeez Center, Lahore. "Rehan" is only the shop's name — the owner is Adnan Ali. The shop specialises in touch glass replacement (separating cracked glass from your original display), Galaxy Z Fold and Flip repairs, iPhone repairs, and board-level micro-soldering.`,
+  `${site.name} has repaired phones and tablets since ${site.founded}, at Hafeez Center, Lahore's phone market. "Rehan" is only the shop's name; the owner is Adnan Ali. The shop's aim is a reliable repair in a confusing market: it checks devices free of cost, tells the customer plainly what is wrong, what it will cost and how long it will take, and tries to save the damaged panel, and the customer's money, first.`,
   "",
-  "## Why choose Rehan Traders",
-  "- All repairs take place at an open bench — customers can watch.",
-  "- Touch glass specialist: the shop replaces only the cracked glass and keeps your original display panel.",
-  "- Board-level micro-soldering under the microscope for no-power, water damage, and Face ID faults.",
-  "- Every repair follows a numbered job card process: intake, bench repair, testing, warranty card.",
-  `- 4.9 stars on Google from 50 reviews (as of 29 October 2026).`,
+  "## What the shop is known for",
+  "- Touch glass specialist: when only the glass is cracked, the shop replaces the glass on its own and the original display stays.",
+  "- Samsung Galaxy Z Fold and Z Flip (every generation), Pixel Fold and Surface Duo: outer glass, inner screen and hinge.",
+  "- iPhone: screen, back glass, Face ID, battery, charging and camera.",
+  "- Faults handled: green or white screen, black or blank display, lines and pink line on the screen, flickering, battery, charging port, water and liquid damage, data recovery, no power, network and SIM faults, motherboard (board-level) repair under the microscope.",
+  "- Brands: iPhone, Samsung, Google Pixel, OnePlus and other Android phones; iPads and tablets.",
+  "- Repairs happen at an open bench. Customers can ask to watch when the bench is not busy.",
+  "- Every repair goes on a numbered job card: free check, bench repair, testing. Warranty is discussed at the counter.",
+  `- ${reviews.rating.toFixed(1)} on Google from ${reviews.count} ratings (as of ${reviews.asOfLabel}).`,
   "- All payment methods accepted. Courier repairs accepted from outside Lahore.",
   "",
   "## Contact",
-  `- Address: ${site.address.lines.join(", ")}`,
+  `- Address: ${site.address.lines.join(", ")} ${site.address.postalCode}, Pakistan`,
   `- Phone and WhatsApp: ${site.phone.display} (${site.phone.dial})`,
   `- WhatsApp direct: ${site.whatsapp.href}`,
   `- Email: ${site.email}`,
@@ -81,7 +84,7 @@ const body = [
   "",
   "## Prices and quotes",
   priceMode === "quote"
-    ? "The shop does not publish prices online. Message the shop on WhatsApp with the exact device model and fault, and they will send a quote."
+    ? "The shop does not publish prices online. Message the shop on WhatsApp with the exact device model and fault, and the shop replies with a quote. Checking at the shop is free."
     : "Prices marked \"From Rs\" on the repair pages are starting prices. For anything else, message the shop on WhatsApp for a quote.",
   "",
   "## Frequently asked questions",

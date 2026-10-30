@@ -32,12 +32,16 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Walk-in shop: Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54000. Coordinates 31.5161006, 74.3433894.
 - Hours: Monday to Saturday 11:00 AM to 10:00 PM, Friday prayer break 1:00 to 2:00 PM, closed Sundays and public holidays.
 - Courier repairs from outside Lahore: yes. Create a ticket on the site or call 0305 8874839, send photos of the phone on WhatsApp. If possible the shop quotes over the phone; otherwise the shop receives the phone, inspects and quotes it, repairs it once the customer agrees, and sends it back (Adnan, 30 Oct 2026). Delivery is the customer's choice and the customer pays: inside Lahore inDrive, Yango or any other ride service, nationwide TCS (Adnan, 30 Oct 2026). Packing guidance is not confirmed.
-- Warranty: depends on the type of repair, the model and the quality of parts the customer chooses, discussed right after the job is confirmed or the fault is diagnosed. The shop gives generous warranties. No length, no "lifetime", no "100%" (Adnan, 30 Oct 2026).
+- Warranty: not always given; discussed at the counter, and it varies with the model and the type of repair (Adnan, 31 Oct 2026). Depends on the quality of parts the customer chooses too. No length, no "lifetime", no "100%", no promise that a warranty card is always given.
 - Checking: free. The shop checks the device free of cost and tells you what the issue is, whether it can be repaired, what it will cost and how long it will take (Adnan, 30 Oct 2026).
 - iPhone batteries: if the customer chooses an original battery, the "Unknown Part" message can be removed and battery health shown. If the customer chooses a cheaper copy battery, the IC from the old original battery can be moved to the new one; in some very rare cases that is not possible and the shop says so after checking the phone. Batteries only: not screens, not True Tone, and no general "original parts" claim (Adnan, 30 Oct 2026).
 - Water-resistance seal: re-applied after a repair on request. Never claim the phone is water resistant afterwards (Adnan, 30 Oct 2026).
 - Risk during touch-glass separation: not published, by choice (Ameer, 30 Oct 2026). No page, FAQ, chat answer or llms file answers it.
 - Turnaround: depends on the type of repair, parts availability, and how rare and complex the model is. A normal panel (screen) change can take as little as 60 minutes; complex devices such as Galaxy Z Folds can take up to a day. Say "as little as" and "up to"; the 60 minutes belongs to a normal panel change only (Adnan, 30 Oct 2026).
+- Water damage: anywhere from 8 hours to several days, depending on how severe it is. Data recovery time depends on the situation (Adnan, 31 Oct 2026).
+- Hinges: the shop repairs Galaxy Z Fold and Z Flip hinges (Adnan, 31 Oct 2026).
+- Tablets: mainly iPads (Adnan, 31 Oct 2026).
+- Address: Shop G-88 line confirmed by Adnan, 31 Oct 2026. The Google listing is named "Rehan Traders & Mobile Repairing Shop"; the website and brand use "Rehan Traders" (schema alternateName carries the listing name).
 - Payment: all methods (cash, card, JazzCash, EasyPaisa, bank transfer).
 - Customers can watch the repair and take back removed parts, on request, when the bench is not busy. Swollen batteries are disposed of safely straight away.
 - Booking emails go to rehanmobiletraders@gmail.com.

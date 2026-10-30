@@ -1,3 +1,4 @@
+import { GoogleTagManager } from "@next/third-parties/google"
 import type { Metadata, Viewport } from "next"
 import { Google_Sans_Flex } from "next/font/google"
 
@@ -5,6 +6,9 @@ import { MotionProvider, SmoothScroll } from "@/components/motion"
 import { seo, site } from "@/content"
 import { themeColor } from "@/lib/tokens"
 import "./globals.css"
+
+// The site's one Google tag. GA4 (and any other Google tag) is set up inside this GTM container, not in code.
+const gtmId = "GTM-TBXL7JMX"
 
 // One variable family for headlines and body (weights 400–800). The opsz axis tightens
 // large headlines and opens small text automatically (font-optical-sizing: auto).
@@ -37,6 +41,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={googleSans.variable}>
+      <GoogleTagManager gtmId={gtmId} />
       <body>
         <MotionProvider>{children}</MotionProvider>
         <SmoothScroll />

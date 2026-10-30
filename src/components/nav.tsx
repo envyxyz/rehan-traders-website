@@ -143,9 +143,12 @@ function DesktopNav() {
     <header className="max-lg:hidden">
       <div ref={bar} inert={gone} className="pointer-events-none fixed inset-x-0 top-0 z-40 flex px-14 pt-7 pb-6 transition-opacity duration-(--duration-reveal) ease-out motion-reduce:transition-none">
         <div className="pointer-events-auto flex flex-1 items-center justify-between">
-          <Link href="/" aria-label={nav.home} className="flex items-center gap-2.25 font-display text-title-md font-extrabold tracking-tight text-ink">
-            <Mark className="size-7.5" />
-            <span>{site.name}</span>
+          <Link href="/" aria-label={nav.home} className="flex items-center gap-2.5 text-ink">
+            <Mark className="size-10" />
+            <span className="flex flex-col">
+              <span className="font-display text-title-md leading-none font-extrabold tracking-tight">{site.name}</span>
+              <span className="mt-1.5 text-caption leading-none text-steel">{site.descriptor}</span>
+            </span>
           </Link>
           <nav aria-label={nav.label} className="glass flex items-center gap-0.5 rounded-pill p-1.25">
             <NavLinks menu={{ open: menu, onOpenChange: setMenu }} />

@@ -155,7 +155,7 @@ function Stars({ rating, className }: { rating: number; className?: string }) {
 function Reviews() {
   const c = home.reviews
   return (
-    <Section tone="panel">
+    <Section>
       <Container className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
         <Reveal className="lg:col-span-5">
           <Heading>{c.title}</Heading>
@@ -221,7 +221,7 @@ function Visit() {
 
 function Faq() {
   return (
-    <Section>
+    <Section tone="panel">
       <Container className="grid gap-8 lg:grid-cols-12">
         <SectionHead title={home.faq.title} link={{ href: "/faq", label: actions.allQuestions }} className="lg:col-span-4 lg:flex-col lg:items-start lg:justify-start" />
         <Reveal className="lg:col-span-8">
@@ -246,8 +246,8 @@ export function HomeSections() {
       <Repairs />
       <BeforeAfterSection />
       <Process />
-      <Reviews />
       <Visit />
+      <Reviews />
       <Faq />
     </>
   )

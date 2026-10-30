@@ -27,7 +27,8 @@ export function pageMeta({ title, description, path, absolute, extra }: PageMeta
   return {
     title: absolute ? { absolute: title } : title,
     description,
-    alternates: { canonical: path },
+    // types: repeated because a page's alternates replace the root layout's, which would drop the llms.txt link.
+    alternates: { canonical: path, types: { "text/plain": "/llms.txt" } },
     openGraph: { title, description, url: path, siteName: site.name, type: "website", locale: "en_PK" },
     twitter: { card: "summary_large_image", title, description },
     ...extra,
@@ -45,7 +46,7 @@ function getFont(): Promise<Buffer> {
   return fontDataPromise
 }
 
-const brandDescriptor = "Mobile & Tab Repair Lab"
+const brandDescriptor = site.descriptor
 
 type OgCardOptions = {
   title: string
@@ -59,14 +60,14 @@ export async function createOgImage({ title, isHome, subtitle }: OgCardOptions):
   const mark = React.createElement(
     "svg",
     {
-      width: isHome ? "150" : "100",
-      height: isHome ? "150" : "100",
+      width: isHome ? "460" : "100",
+      height: isHome ? "460" : "100",
       viewBox: "0 0 256 256",
       fill: "none",
     },
     React.createElement("path", {
       d: "M40 220V89.0A44 44 0 0 1 84.0 45.0H172.0A44 44 0 0 1 216 89.0V112.0A30 30 0 0 1 186.0 142.0H171.7",
-      stroke: ogColors.ink,
+      stroke: ogColors.paper,
       strokeWidth: "26",
       strokeLinecap: "butt",
     }),
@@ -74,7 +75,7 @@ export async function createOgImage({ title, isHome, subtitle }: OgCardOptions):
       cx: "171.7",
       cy: "142.0",
       r: "13.0",
-      fill: ogColors.ink,
+      fill: ogColors.paper,
     }),
     React.createElement("path", {
       d: "M65.0 176.6L161.8 79.8A13.0 13.0 0 0 1 180.2 98.2L136.4 142.0L214.4 220L177.6 220L118.0 160.4L65.0 213.4Z",
@@ -85,19 +86,24 @@ export async function createOgImage({ title, isHome, subtitle }: OgCardOptions):
   const effectiveSubtitle = subtitle ?? (isHome ? brandDescriptor : undefined)
   const addressLine = `${site.address.short}, ${site.address.city} · ${site.phone.display}`
 
+  const base = { display: "flex", width: "100%", height: "100%", backgroundColor: ogColors.ink, color: ogColors.paper, fontFamily: "Archivo" }
+
+  // Home: the R mark alone, centred. WhatsApp and others crop the thumbnail to the middle square, so nothing else sits near the edges.
+  if (isHome) {
+    return new ImageResponse(React.createElement("div", { style: { ...base, alignItems: "center", justifyContent: "center" } }, mark), {
+      ...ogSize,
+      fonts: [{ name: "Archivo", data: fontData, weight: 700, style: "normal" }],
+    })
+  }
+
   const element = React.createElement(
     "div",
     {
       style: {
-        display: "flex",
+        ...base,
         flexDirection: "column",
         justifyContent: "space-between",
-        width: "100%",
-        height: "100%",
-        backgroundColor: ogColors.paper,
-        color: ogColors.ink,
         padding: "60px 80px",
-        fontFamily: "Archivo",
       },
     },
     // Top bar: RT Mark + optional brand name
@@ -144,7 +150,7 @@ export async function createOgImage({ title, isHome, subtitle }: OgCardOptions):
             fontWeight: 700,
             letterSpacing: "-0.035em",
             lineHeight: 1.05,
-            color: ogColors.ink,
+            color: ogColors.paper,
           },
         },
         title

@@ -7,7 +7,7 @@ import { track } from "@/lib/track"
 /**
  * Delegated document click listener for links with `data-track` attributes.
  * Allows server components to fire analytics without client conversion or inline onClick handlers.
- * Avoids double-firing by relying on `a[data-track]` selector and debounced `track()`.
+ * Links that already call track() in onClick must not also carry data-track, or one tap logs twice.
  */
 export function LinkTracker() {
   React.useEffect(() => {

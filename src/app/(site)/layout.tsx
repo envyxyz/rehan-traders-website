@@ -1,11 +1,8 @@
-import { GoogleAnalytics } from "@next/third-parties/google"
-
 import { ChatLauncher } from "@/components/chat-launcher"
 import { Footer } from "@/components/footer"
+import { LinkTracker } from "@/components/link-tracker"
 import { Nav } from "@/components/nav"
 import { StickyBar } from "@/components/sticky-bar"
-
-const gaId = process.env.NEXT_PUBLIC_GA_ID
 
 /**
  * Site chrome for every public page. /dev pages sit outside this group and get none.
@@ -20,7 +17,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <Footer />
       <StickyBar />
       <ChatLauncher />
-      {gaId ? <GoogleAnalytics gaId={gaId} /> : null}
+      <LinkTracker />
     </div>
   )
 }

@@ -17,6 +17,7 @@ export const storeSchema = {
   "@type": "MobilePhoneStore",
   "@id": storeId,
   name: site.name,
+  alternateName: site.googleName,
   url: site.url,
   description: site.entity,
   telephone: site.phone.dial,

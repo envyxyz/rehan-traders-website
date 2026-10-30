@@ -26,10 +26,10 @@ export const themeColor = { light: "#f5f5f2", dark: "#0b0b0b" } as const
 /** Saved ticket image: always the light brand palette, whatever the screen theme. Mirrors the light tokens. */
 export const ticketColors = { paper: "#f5f5f2", panel: "#e9e9e4", hairline: "#d9d9d4", ink: "#0e0e0e", steel: "#5e5e5a", signal: "#d7141a" } as const
 
-/** Open Graph image colours (ImageResponse cannot read CSS variables). */
+/** Open Graph image colours (ImageResponse cannot read CSS variables). The card is black, so steel is the dark-screen value. */
 export const ogColors = {
   paper: "#f5f5f2",
   ink: "#0e0e0e",
-  steel: "#5c5c58",
+  steel: "#a4a49f",
   signal: "#d7141a",
 } as const

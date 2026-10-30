@@ -12,7 +12,7 @@ export const dynamic = "force-static"
 function hr() { return "\n---\n\n" }
 
 const sections: string[] = [
-  `# ${site.name} — Full Site Content`,
+  `# ${site.name}: full site content`,
   "",
   `> This is the complete text content of ${site.url}, generated for AI systems. For a summary, see ${site.url}/llms.txt`,
   "",
@@ -21,7 +21,7 @@ const sections: string[] = [
   `Phone: ${site.phone.display} (${site.phone.dial})`,
   `WhatsApp: ${site.whatsapp.href}`,
   `Email: ${site.email}`,
-  `Address: ${site.address.lines.join(", ")}`,
+  `Address: ${site.address.lines.join(", ")} ${site.address.postalCode}, Pakistan`,
   `Hours: ${site.hours.oneLine}. ${site.hours.fridayBreak}. ${site.hours.holidays}.`,
   `Founded: ${site.founded}`,
   `Google Maps: ${site.mapsUrl}`,
@@ -53,7 +53,7 @@ const sections: string[] = [
     `### How it works`,
     ...s.howItWorks.map((step) => `${step.step}. **${step.title}** — ${step.text}`),
     "",
-    `### Questions about ${s.title.toLowerCase()}`,
+    `### ${s.title}: questions`,
     ...s.faq.map((f) => `Q: ${f.q}\nA: ${f.a}\n`),
     ...(s.related.length > 0 ? [
       `### Related repairs`,
@@ -116,7 +116,7 @@ const sections: string[] = [
   `## Prices and Quotes`,
   "",
   priceMode === "quote"
-    ? "The shop does not publish fixed prices online. Customers message the shop on WhatsApp with their exact device model and fault, and the shop sends a customized quote based on part availability and fault severity."
+    ? "The shop does not publish prices online. Message the shop on WhatsApp with the exact device model and fault, and the shop replies with a quote. Checking at the shop is free."
     : "Prices marked 'From Rs' on repair pages are starting prices. Message the shop on WhatsApp for an exact quote.",
 
   hr(),
@@ -147,7 +147,7 @@ const sections: string[] = [
   `## Customer Reviews`,
   `URL: ${site.url}/reviews`,
   "",
-  `${reviews.rating} stars on Google from ${reviews.count} reviews (as of ${reviews.asOfLabel}).`,
+  `${reviews.rating.toFixed(1)} on Google from ${reviews.count} ratings (as of ${reviews.asOfLabel}).`,
   "",
   reviewsPage.lede,
   "",
@@ -193,7 +193,7 @@ const sections: string[] = [
   hr(),
 
   // ── Privacy ───────────────────────────────────────────────────────────
-  `## Privacy Policy`,
+  `## ${privacyPage.title}`,
   `URL: ${site.url}/privacy`,
   "",
   privacyPage.lastUpdated,
@@ -203,7 +203,7 @@ const sections: string[] = [
   hr(),
 
   // ── Terms ─────────────────────────────────────────────────────────────
-  `## Terms of Service`,
+  `## ${termsPage.title}`,
   `URL: ${site.url}/terms`,
   "",
   termsPage.lastUpdated,

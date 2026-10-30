@@ -17,6 +17,10 @@ const phoneDial = "+923058874839"
 
 export const site = {
   name: "Rehan Traders",
+  /** Brand descriptor from the logo lockup (../growth/Brand/DESIGN.md). */
+  descriptor: "Mobile & Tab Repair Lab",
+  /** The name on the Google listing (Adnan, 31 Oct 2026). Schema alternateName, so search ties the two together. */
+  googleName: "Rehan Traders & Mobile Repairing Shop",
   url: "https://rehanmobiletraders.com",
   entity:
     "Rehan Traders is a phone and tablet repair lab at Shop G-88, Ground Floor, Hafeez Center, Gulberg III, Lahore.",
@@ -29,7 +33,7 @@ export const site = {
   },
   email: "rehanmobiletraders@gmail.com", // Adnan, PRD §11 q8
   address: {
-    // TODO(adnan): confirm this exact line (Business Profile marks it "to confirm")
+    // Adnan confirmed the address, 31 Oct 2026
     lines: ["Shop G-88, Ground Floor", "Hafeez Center, Main Boulevard", "Block E1, Gulberg III, Lahore"],
     short: "Shop G-88, Hafeez Center",
     city: "Lahore",
@@ -88,9 +92,9 @@ const delivery = "Send it however suits you: inside Lahore, inDrive, Yango or an
  */
 export const facts = {
   warranty:
-    "Rehan Traders gives generous warranties. The warranty depends on the type of repair, the model and the quality of parts you choose, and is discussed right after the job is confirmed or after the fault is diagnosed.",
+    "Rehan Traders discusses warranty at the counter. Whether a repair carries one, and its terms, depends on the model, the type of repair and the quality of parts you choose.",
   turnaround:
-    "Repair time at Rehan Traders, Hafeez Center, Lahore depends on the type of repair, parts availability, and how rare and complex the model is. A normal screen panel change can be done in as little as 60 minutes.",
+    "Repair time at Rehan Traders, Hafeez Center, Lahore depends on the type of repair, parts availability, and how rare and complex the model is. A normal screen (panel) change can take as little as 60 minutes.",
   turnaroundFold:
     "Complex devices such as Galaxy Z Folds can take up to a day.",
   courier: `Rehan Traders repairs phones sent by courier from outside Lahore. Create a ticket on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp. If possible the shop quotes over the phone. Otherwise you send the phone, the shop inspects it and quotes, repairs it once you agree, and sends it back. ${delivery}`,
@@ -183,7 +187,7 @@ export const actions = {
 
 export const hero = {
   title: "Cracked glass? Fixed at G‑88.", // ‑ is a non-breaking hyphen: "G-88" never splits
-  lede: "Phone and tablet repairs at an open bench in Hafeez Center, Lahore. Touch glass, Fold and Flip, iPhone, boards.",
+  lede: "A reliable repair in a confusing market. Rehan Traders checks your phone free of cost and tries to save your panel, and your money, first. Touch glass, Galaxy Z Fold and Flip, iPhone and board repairs in Hafeez Center, Lahore.",
   proof: (rating: number) => ({ rating: rating.toFixed(1), rest: "on Google" }),
   jobCard: {
     heading: "Repair job card",
@@ -208,7 +212,7 @@ export const jobCardContent = {
     jobNo: { label: "Job no.", aria: "Job number", initial: "RT-2849" },
     date: { label: "Date", aria: "Date", initial: "12-11-2024" },
     device: { label: "Device", aria: "Device model", initial: "iPhone 13 Pro Max" },
-    warranty: { label: "Warranty to", aria: "Warranty to", initial: "6 Months" },
+    warranty: { label: "Warranty to", aria: "Warranty to", initial: "As agreed" },
   },
   sealAlt: "Rehan Traders tamper seal",
 } as const
@@ -236,20 +240,20 @@ export const services: Service[] = [
     slug: "touch-glass-replacement",
     title: "Touch glass replacement",
     short: "Cracked glass replaced on its own. Your original display stays.",
-    long: "We separate the cracked top glass from the display under heat and vacuum, fit new glass and laminate it back. The display underneath is the one your phone came with.",
+    long: "Rehan Traders first checks that the display under the cracked glass still works. If it does, the glass is separated from the display under heat and vacuum and new glass is laminated on. You keep the display your phone came with and pay for new glass, not a whole new screen.",
     faults: ["Cracked glass", "Scratched glass", "Touch not working"],
     image: "glass-separation",
     alt: "Technician separating cracked glass from a phone display at the bench",
     lead: true,
     howItWorks: [
-      { step: "01", title: "Intake check", text: "We check the display to verify the panel underneath has no ink spots or colored lines." },
+      { step: "01", title: "Free check", text: "We check the display under the glass for black spots or colored lines." },
       { step: "02", title: "Glass separation", text: "Under heat and vacuum, the cracked outer glass is separated from the display." },
       { step: "03", title: "Lamination", text: "A fresh glass layer is aligned and laminated to your original display panel." },
-      { step: "04", title: "Testing and pouch", text: "Touch response is tested across the entire surface, then sealed in a protective pouch." },
+      { step: "04", title: "Testing and pouch", text: "Touch is tested across the whole screen, then the phone is sealed in a pouch." },
     ],
     faq: [
       { q: "Will my original display be kept?", a: "Yes. Touch glass replacement keeps the display your phone came with. Only the cracked outer glass is changed." },
-      { q: "What if the screen has black spots or colored lines?", a: "If the screen shows lines or dark patches, the panel underneath is damaged. That requires a full screen replacement." },
+      { q: "What if the screen has black spots or colored lines?", a: "Lines or dark patches mean the panel under the glass is damaged, and the phone needs a screen replacement instead. The free check at Rehan Traders tells you which one your phone needs." },
       { q: "Can I watch the glass replacement at the bench?", a: "Yes, on request, when the bench is not busy." },
     ],
     related: ["screen-replacement", "galaxy-z-fold-flip", "iphone"],
@@ -257,22 +261,22 @@ export const services: Service[] = [
   {
     slug: "galaxy-z-fold-flip",
     title: "Galaxy Z Fold and Flip",
-    short: "Outer glass, inner screen and hinge for every Fold and Flip.",
-    long: "Fold and Flip outer glass, inner panel and hinge repairs. We try to recover the damaged panel first and replace it only when it cannot be saved.",
+    short: "Outer glass, inner screen and hinge for every Galaxy Z Fold and Z Flip.",
+    long: "Outer glass, inner screen and hinge repairs for every Galaxy Z Fold and Z Flip, plus Pixel Fold and Surface Duo. The shop tries to save the damaged panel first and replaces it only when it cannot be saved.",
     faults: ["Outer glass", "Inner screen", "Hinge", "Blank display", "Lines on screen"],
     image: "fold-inner-panel",
     alt: "Galaxy Z Fold opened on the bench with its inner panel exposed",
     lead: true,
     howItWorks: [
       { step: "01", title: "Hinge and display inspection", text: "We inspect hinge tension, frame alignment, and inner flexible panel condition." },
-      { step: "02", title: "Panel recovery priority", text: "We try to save the original flexible display first before considering replacement." },
+      { step: "02", title: "Panel recovery priority", text: "We try to save the original inner screen before replacing it." },
       { step: "03", title: "Bench repair", text: "Outer glass, inner panel connections, or hinge mechanisms are repaired at the open bench." },
       { step: "04", title: "Folding test and pouch", text: "We verify opening angles and touch response across the fold line before sealing." },
     ],
     faq: [
       { q: "Which Fold and Flip models do you repair?", a: "We repair every Samsung Galaxy Z Fold and Galaxy Z Flip generation, Pixel Fold, and Surface Duo." },
-      { q: "Can a blank inner screen be saved without full replacement?", a: "Yes. In many cases we can recover the display panel or resolve flexible cable faults." },
-      { q: "Do you repair stiff or stuck hinges?", a: "Yes. We clean and service Fold and Flip hinges at the bench." },
+      { q: "Can a blank inner screen be saved without full replacement?", a: "It depends on the fault. Rehan Traders checks the phone free of cost and tries to save the inner panel before replacing it. If it cannot be saved, the shop tells you plainly." },
+      { q: "Do you repair stiff or stuck hinges?", a: "Yes. Rehan Traders repairs Galaxy Z Fold and Z Flip hinges at the bench." },
       { q: "How long does a Galaxy Z Fold repair take?", a: "A Galaxy Z Fold repair can take up to a day, depending on the repair, parts availability and the model." },
     ],
     related: ["touch-glass-replacement", "screen-replacement", "board-repair"],
@@ -288,7 +292,7 @@ export const services: Service[] = [
     howItWorks: [
       { step: "01", title: "Diagnostic check", text: "We test Face ID, display, battery health, and cameras on the job card." },
       { step: "02", title: "Bench repair", text: "Screens, back glass, battery swaps, or board faults are worked on at the bench." },
-      { step: "03", title: "Component calibration", text: "Sensors, touch response, and Face ID alignment are verified." },
+      { step: "03", title: "Function check", text: "Touch and sensors are checked after the repair." },
       { step: "04", title: "Testing and sealing", text: "Every repaired iPhone is tested and placed in a protective pouch for collection." },
     ],
     faq: [
@@ -303,21 +307,21 @@ export const services: Service[] = [
     slug: "screen-replacement",
     title: "Screen replacement",
     short: "Lines, black, green or flickering screens replaced.",
-    long: "When the display itself is damaged: lines, pink or green screens, black or blank displays and flicker.",
+    long: "When the display itself is damaged, with lines, a pink or green screen, a black or blank display or flicker, the screen is replaced. If only the glass is cracked, touch glass replacement keeps your original display instead.",
     faults: ["Lines on screen", "Black or blank display", "Green or white screen", "Flickering"],
     image: "screen-replacement", // no Phase 2 job yet: shows the placeholder,
     alt: "Phone with its display panel removed on the bench",
     howItWorks: [
       { step: "01", title: "Panel assessment", text: "We confirm whether the fault is in the display panel or motherboard output." },
-      { step: "02", title: "Assembly removal", text: "The damaged screen assembly is taken off at the bench." },
-      { step: "03", title: "New display installation", text: "A fresh display panel is fitted and calibrated." },
+      { step: "02", title: "Screen removal", text: "The damaged screen is taken off at the bench." },
+      { step: "03", title: "New screen fitted", text: "The new screen is fitted and connected." },
       { step: "04", title: "Display testing and pouch", text: "Brightness, touch response, and color balance are checked before sealing." },
     ],
     faq: [
       { q: "When do I need a full screen replacement instead of touch glass?", a: "Full replacement is required when the screen has colored lines, black bleed, green tint, or no picture." },
       { q: "Do you repair both iPhone and Android displays?", a: "Yes. We replace screens on iPhone, Samsung, Google Pixel, OnePlus, and other brands." },
-      { q: "How can I get a quote for my screen?", a: "Message us on WhatsApp with your exact model and we'll send you a quote." },
-      { q: "How long does a screen replacement take?", a: "A normal panel (screen) change can be done in as little as 60 minutes, depending on parts and model." },
+      { q: "How can I get a quote for my screen?", a: `Send your exact model and a photo of the screen on WhatsApp to ${site.phone.display}, and the shop replies with a quote. Checking at the shop is free.` },
+      { q: "How long does a screen replacement take?", a: "A normal screen change at Rehan Traders can take as little as 60 minutes, depending on parts and the model." },
     ],
     related: ["touch-glass-replacement", "galaxy-z-fold-flip", "water-damage-data-recovery"],
   },
@@ -333,7 +337,7 @@ export const services: Service[] = [
       { step: "01", title: "Power testing", text: "We measure current draw, charging rate, and battery degradation at the bench." },
       { step: "02", title: "Component repair", text: "Degraded batteries or damaged charging flex boards are replaced." },
       { step: "03", title: "Thermal and voltage check", text: "The device is charged and monitored for stable voltage and temperature." },
-      { step: "04", title: "Safe disposal and pouch", text: "Swollen batteries are safely disposed of straight away. The phone is sealed." },
+      { step: "04", title: "Safe disposal and pouch", text: "Swollen batteries are disposed of safely straight away, and the phone is sealed in a pouch." },
     ],
     faq: [
       { q: "What do you do with swollen batteries?", a: "Swollen batteries are removed carefully and disposed of straight away for safety." },
@@ -358,15 +362,15 @@ export const services: Service[] = [
       { step: "04", title: "Board testing", text: "Circuits are checked for short circuits before final assembly." },
     ],
     faq: [
-      { q: "What should I do if my phone dropped in water?", a: "Turn it off immediately. Do not connect a charger. Bring it to G-88 as soon as possible." },
-      { q: "Can you recover data if the phone does not power on?", a: "Yes. Our priority is repairing essential power lines to recover your personal data." },
-      { q: "How long does water damage cleaning take?", a: "Turnaround depends on the extent of corrosion found on the board." }, // TODO(adnan): confirm typical water damage diagnostic turnaround
+      { q: "What should I do if my phone dropped in water?", a: "Turn it off straight away and do not connect a charger. Bring it to Shop G-88, Hafeez Center, as soon as you can." },
+      { q: "Can you recover data if the phone does not power on?", a: "It depends on the damage. Rehan Traders checks the board first and tries to get your data back. The free check tells you what can be saved." },
+      { q: "How long does a water damage repair take?", a: "It depends on how severe the damage is: anywhere from 8 hours to several days. Data recovery time also depends on the phone's condition." }, // Adnan, 31 Oct 2026
     ],
     related: ["board-repair", "screen-replacement", "battery-charging"],
   },
   {
     slug: "board-repair",
-    title: "Board repair",
+    title: "Motherboard repair",
     short: "Board-level faults found and fixed under the microscope.",
     long: "Motherboard faults, network and SIM faults, Face ID and no-power faults diagnosed and repaired under the microscope.",
     faults: ["No power", "No network or SIM", "Face ID", "Camera", "Vibration"],
@@ -375,34 +379,34 @@ export const services: Service[] = [
     howItWorks: [
       { step: "01", title: "Microscope inspection", text: "The logic board is examined under the microscope for burnt chips and damaged lines." },
       { step: "02", title: "Circuit diagnostics", text: "Power lines and short circuits are traced with digital multimeters and schematics." },
-      { step: "03", title: "Micro-soldering", text: "Damaged chips, micro-capacitors, and power ICs are replaced with precision heat." },
+      { step: "03", title: "Micro-soldering", text: "Damaged chips, small capacitors and power ICs are replaced by micro-soldering." },
       { step: "04", title: "Full diagnostic test", text: "Network, power management, and logic lines are verified before sealing." },
     ],
     faq: [
-      { q: "What is board-level repair?", a: "It is repairing individual micro-components on the phone logic board rather than replacing the board." },
-      { q: "Can you fix a phone that does not turn on at all?", a: "Yes. We locate short circuits and replace damaged power management chips." },
+      { q: "What is board-level repair?", a: "Board-level repair fixes the damaged part on the phone's motherboard, such as one chip, instead of replacing the whole board." },
+      { q: "Can you fix a phone that does not turn on at all?", a: "Rehan Traders checks it free of cost first. A phone that will not turn on often has a short circuit or a failed power chip, which can be found under the microscope and replaced. If it cannot be fixed, the shop tells you plainly." },
       { q: "Can I watch the board repair under the microscope?", a: "Yes, on request, when the bench is not busy." },
     ],
     related: ["water-damage-data-recovery", "iphone", "battery-charging"],
   },
   {
     slug: "ipad-tablet",
-    title: "iPad and tablets",
+    title: "iPad and tablet repair",
     short: "Tablet glass, screens, batteries and charging.",
-    long: "iPad and tablet glass, screens, batteries and charging repairs. Very old, obsolete tablets are not taken in.",
+    long: "Mainly iPad repairs: glass, screens, batteries and charging. Very old, obsolete tablets are not taken in.",
     faults: ["Cracked glass", "Screen", "Battery", "Charging"],
     image: "ipad-screen",
     alt: "Tablet screen being repaired at the bench",
     howItWorks: [
-      { step: "01", title: "Tablet inspection", text: "We assess whether the digitizer glass or the underlying display panel is damaged." },
+      { step: "01", title: "Tablet inspection", text: "We check whether only the glass is cracked or the display under it is damaged too." },
       { step: "02", title: "Bench repair", text: "Glass separation, display replacement, or battery service is performed at the bench." },
-      { step: "03", title: "Touch digitizer testing", text: "Touch response and pencil tracking are tested across all screen quadrants." },
+      { step: "03", title: "Touch digitizer testing", text: "Touch is tested across the whole screen." },
       { step: "04", title: "Cleaning and pouch", text: "The tablet is cleaned, inspected, and sealed in a protective pouch." },
     ],
     faq: [
-      { q: "Which tablet brands do you repair?", a: "We repair Apple iPad and Samsung Galaxy Tab devices. Very old, obsolete tablets are not accepted." },
+      { q: "Which tablet brands do you repair?", a: "Rehan Traders mainly repairs Apple iPads. For another tablet, ask on WhatsApp first. Very old, obsolete tablets are not accepted." },
       { q: "Can you fix tablet charging ports?", a: "Yes. We repair loose USB-C and Lightning charging ports on tablets." },
-      { q: "Can you replace only the glass on an iPad?", a: "On models with separate outer glass digitizers, yes. On laminated models, we check feasibility at the bench." },
+      { q: "Can you replace only the glass on an iPad?", a: "It depends on the model. Rehan Traders checks your iPad free of cost and tells you whether the glass can be replaced on its own." },
     ],
     related: ["touch-glass-replacement", "screen-replacement", "battery-charging"],
   },
@@ -579,10 +583,10 @@ export const booking = {
 } as const
 
 export const process = [
-  { title: "Job card at the counter", text: "Your device, fault and contact are written on a numbered job card." },
+  { title: "Free check at the counter", text: "The shop tells you what is wrong, what it will cost and how long it will take. If you go ahead, your device goes on a numbered job card." },
   { title: "Repaired at the open bench", text: "The work happens at the bench in the shop. Ask to watch when it is not busy." },
   { title: "Tested and sealed", text: "Every repair is tested, then sealed in a pouch until you collect it." },
-  { title: "Warranty card", text: "You leave with a warranty card for the repair. The warranty depends on the repair and is agreed when the job is confirmed." },
+  { title: "Warranty at the counter", text: "Any warranty is discussed at the counter. It varies with the model and the type of repair." },
 ] as const
 
 export const faq = [
@@ -596,7 +600,7 @@ export const faq = [
   },
   {
     q: "Do you give a warranty on repairs?",
-    a: `Yes. ${facts.warranty}`,
+    a: `It depends on the repair. ${facts.warranty}`,
   },
   {
     q: "How long does a phone repair take at Rehan Traders?",
@@ -628,17 +632,17 @@ export const faq = [
   },
   {
     q: "How can I pay?",
-    a: "All payment methods are accepted.",
+    a: "Rehan Traders accepts all payment methods: cash, card, JazzCash, EasyPaisa and bank transfer.",
   },
   {
     q: "Where is Rehan Traders and when is it open?",
-    a: `Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore. It is open ${site.hours.oneLine}. ${site.hours.fridayBreak}. ${site.hours.holidays}.`,
+    a: `Rehan Traders is at ${site.address.lines.join(", ")} ${site.address.postalCode}, Pakistan. It is open ${site.hours.oneLine}. ${site.hours.fridayBreak}. ${site.hours.holidays}.`,
   },
 ] as const
 
 export const visit = {
-  title: "Visit G-88",
-  directions: "Ground floor of Hafeez Center, Main Boulevard, Gulberg III.", // TODO(adnan): confirm walking directions to G-88
+  title: "Visit Shop G-88",
+  directions: "Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore.", // TODO(adnan): confirm walking directions to G-88
   mapTitle: "Google Map showing Rehan Traders at Hafeez Center, Lahore",
   /** "Embed a map" from the listing's Share menu: no API key, no billing. */
   mapEmbed:
@@ -734,7 +738,7 @@ export const legal = {
 
 export const repairsPage = {
   title: "Repairs",
-  lede: "Phone and tablet repair services at Shop G-88, Hafeez Center. Touch glass, Fold and Flip, iPhone, batteries and board repairs.",
+  lede: "Phone and tablet repairs at Shop G-88, Hafeez Center, Lahore. Every repair starts with a free check, and when only the glass is cracked, only the glass is replaced.",
   whatWeFix: "What we fix",
   howItWorks: "How it works",
   faqTitle: "Questions about this repair",
@@ -748,7 +752,7 @@ export const repairsPage = {
 
 export const reviewsPage = {
   title: "Customer reviews",
-  lede: "Reviews from customers at Shop G-88, Hafeez Center, dropped at our Google Business Profile.",
+  lede: "Reviews that customers of Rehan Traders, Shop G-88, Hafeez Center, left on Google.",
   viewOnGoogle: "View on Google Maps",
   readAllOnGoogle: "Read reviews on Google Maps",
   googleReview: "Google review",
@@ -762,16 +766,16 @@ export const reviewsPage = {
 
 export const visitPage = {
   title: "Visit Shop G-88",
-  lede: "Find us on the ground floor of Hafeez Center, Main Boulevard, Gulberg III, Lahore.",
+  lede: "Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54000, Pakistan.",
   directionsTitle: "How to find Shop G-88",
   floorLabel: "Floor",
   floorValue: "Ground Floor",
   shopLabel: "Shop number",
   shopValue: "Shop G-88",
   buildingLabel: "Building",
-  buildingValue: "Hafeez Center, Main Boulevard, Gulberg III, Lahore",
+  buildingValue: "Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore",
   entranceLabel: "Entrance",
-  entranceValue: "Enter through the main front entrance on Main Boulevard. Walk straight down the ground floor corridor towards the center-back.",
+  entranceValue: "Enter Hafeez Center from Main Boulevard. Shop G-88 is on the ground floor.", // TODO(adnan): confirm the entrance and walking route
   landmarksLabel: "Landmarks",
   landmarksValue: "Ground floor corridor near the central stairs.", // TODO(adnan): confirm exact walking landmarks and entrance gate
   hoursTitle: "Shop hours",
@@ -792,7 +796,7 @@ export const visitPage = {
 
 export const faqPage = {
   title: "Frequently asked questions",
-  lede: "Answers to common questions about our repair services, pricing, parts, and visiting Shop G-88.",
+  lede: "Plain answers about repairs, quotes, warranty, repair time and visiting Shop G-88, Hafeez Center.",
   generalTitle: "General questions",
   serviceTitle: "Service questions",
   stillHaveQuestions: "Have a question not answered here?",
@@ -801,21 +805,21 @@ export const faqPage = {
 
 export const aboutPage = {
   title: "About Rehan Traders",
-  lede: "Phone and tablet repair lab at Shop G-88, Hafeez Center, Lahore. Repairing devices since 2009.",
+  lede: `${site.entity} Hafeez Center is Lahore's phone market, and getting a reliable repair there can be confusing. The shop's aim is to make repairing easy.`,
   sinceTitle: "Since 2009",
-  sinceText: "Rehan Traders has been repairing phones since 2009. Today the shop is Shop G-88 in Hafeez Center, Lahore.",
+  sinceText: "Rehan Traders has repaired phones since 2009. Every job starts with a free check: the shop tells you plainly what is wrong, whether it can be fixed, what it will cost and how long it will take. Then you decide.",
   benchTitle: "The open repair bench",
-  benchText: "All repairs take place at our open bench in Shop G-88. Customers can watch their devices being repaired under the microscope when the bench is not busy.",
+  benchText: "Repairs happen at the open bench in Shop G-88, which has a microscope for board work. Ask to watch when the bench is not busy, and ask for your old parts back if you want them. Swollen batteries are the exception: the shop disposes of them straight away.",
   adnanTitle: "Adnan Ali",
   adnanRole: "Owner", // Adnan, PRD §11; his title as a technician is not confirmed
-  adnanText: "The shop is run by its owner, Adnan Ali. His main priority is to save your damaged display.",
-  panelTitle: "We try to save your original panel first",
-  panelText: "Our main priority is always to save your damaged display. If the front glass cracks but the display still functions, we separate and replace only the glass under heat and vacuum. Your factory display panel remains on your phone.",
+  adnanText: "The shop is run by its owner, Adnan Ali. Saving the customer's damaged panel is the shop's main priority.",
+  panelTitle: "We try to save your panel, and your money, first",
+  panelText: "When the glass is cracked but the display still works, the shop separates the cracked glass under heat and vacuum and replaces the glass alone. The display your phone came with stays, and you pay for glass rather than a new screen. When the panel itself is damaged, the shop tells you that plainly too.",
   processTitle: "The job card process",
   processText: "Every repair follows the same four steps.",
   processSteps: [
     { step: "01", title: "Job card intake", text: "Your device and fault are recorded on a numbered job card at the counter." },
-    { step: "02", title: "Open bench repair", text: "Work happens at the open bench under the microscope." },
+    { step: "02", title: "Open bench repair", text: "Work happens at the open bench in the shop." },
     { step: "03", title: "Testing and sealing", text: "The repair is tested, then sealed in a protective pouch." },
     { step: "04", title: "Handover", text: "You collect your sealed phone with the completed job card." },
   ],
@@ -828,7 +832,7 @@ export const aboutPage = {
 } as const
 
 export const privacyPage = {
-  title: "Privacy Policy",
+  title: "Privacy policy",
   lede: "Plain English explanation of what information we collect and how we handle it.",
   lastUpdated: "Last updated: 29 October 2026",
   sections: [
@@ -858,7 +862,7 @@ export const privacyPage = {
 } as const
 
 export const termsPage = {
-  title: "Terms of Service",
+  title: "Terms of service",
   lede: "Plain English terms covering repair bookings, estimates, bench services, and collection.",
   lastUpdated: "Last updated: 29 October 2026",
   sections: [
@@ -888,7 +892,7 @@ export const termsPage = {
 export const states = {
   error: {
     title: "Something went wrong",
-    lede: "An error occurred while loading this page. Please try again or reach the shop directly.",
+    lede: "This page did not load. Try again, or contact the shop directly.",
     retry: "Try again",
     whatsapp: "Message on WhatsApp",
     call: "Call 0305 8874839",
@@ -899,7 +903,7 @@ export const states = {
   notFound: {
     title: "Page not found",
     code: "404",
-    lede: "The page you requested does not exist or has been moved.",
+    lede: "This page does not exist or has moved.",
     home: "Back to home",
     repairs: "View all repairs",
   },
@@ -907,9 +911,9 @@ export const states = {
 
 export const seo = {
   home: {
-    title: "Rehan Traders · Phone and tablet repair at Hafeez Center, Lahore",
+    title: "Rehan Traders · Mobile repair at Hafeez Center, Lahore",
     description:
-      "Phone and tablet repair lab at Shop G-88, Hafeez Center, Lahore: touch glass replacement, Galaxy Z Fold and Flip, iPhone, iPad and board repairs. Book a visit or get a quote on WhatsApp.",
+      "Phone and tablet repair at Shop G-88, Hafeez Center, Lahore. Free checking, touch glass replacement with your display kept, Galaxy Z Fold and Flip, iPhone.",
   },
   titleTemplate: "%s · Rehan Traders",
   /** Alt text for the share image; keep in step with src/app/opengraph-image.alt.txt. */
@@ -920,36 +924,36 @@ export const seo = {
   },
   bookConfirmed: { title: "Booking confirmed", description: "Your Rehan Traders booking." },
   repairs: {
-    title: "Phone and tablet repairs",
-    description: "Touch glass replacement, Galaxy Z Fold and Flip, iPhone, screens, batteries, and board repair at Shop G-88, Hafeez Center, Lahore.",
+    title: "Phone and tablet repairs in Lahore",
+    description: "Touch glass replacement, Galaxy Z Fold and Flip, iPhone, screens, batteries, water damage and motherboard repair at Shop G-88, Hafeez Center, Lahore.",
   },
   reviews: {
     title: "Customer reviews",
-    description: `Read customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore. ${reviews.rating.toFixed(1)} on Google.`,
+    description: `Customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore: ${reviews.rating.toFixed(1)} on Google. Reviews copied from Google as written.`,
   },
   visit: {
     title: "Visit Shop G-88",
-    description: "Directions, shop hours and location for Rehan Traders at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Lahore.",
+    description: "Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore. Open Monday to Saturday 11:00 AM to 10:00 PM.",
   },
   faq: {
     title: "Frequently asked questions",
-    description: "Answers about phone repairs, touch glass replacement, screen replacement, and pricing at Rehan Traders, Hafeez Center, Lahore.",
+    description: "Free checking, warranty, repair time, quotes and courier repairs at Rehan Traders, Shop G-88, Hafeez Center, Lahore, answered plainly.",
   },
   about: {
-    title: "About Rehan Traders",
-    description: "Phone and tablet repair lab at Hafeez Center, Lahore, since 2009. Open bench, touch glass specialist, led by Adnan Ali.",
+    title: "About the shop at Hafeez Center, Lahore",
+    description: "Rehan Traders, Shop G-88, Hafeez Center, has repaired phones since 2009. Run by Adnan Ali, the shop tries to save your panel, and your money, first.",
   },
   privacy: {
-    title: "Privacy Policy",
+    title: "Privacy policy",
     description: "Privacy policy for Rehan Traders. How booking and chat information is handled in plain English.",
   },
   terms: {
-    title: "Terms of Service",
+    title: "Terms of service",
     description: "Terms of service for phone and tablet repair bookings and bench services at Rehan Traders.",
   },
   service: (title: string, short: string) => ({
     title: `${title} in Lahore`,
-    description: `${short} Fixed at Shop G-88, Hafeez Center, Lahore. Book a visit or WhatsApp 0305 8874839.`,
+    description: `${short} Rehan Traders, Shop G-88, Hafeez Center, Lahore. Free checking. WhatsApp ${site.phone.display}.`,
   }),
   notFound: { title: "Page not found", description: "This page does not exist." },
   kitchenSink: { title: "Kitchen sink" },
@@ -994,7 +998,7 @@ export const assistant = {
   greeting: chat.greeting,
   /** Shown when every model is down, the turn cap is hit, or the reply breaks off. */
   fallback: chat.fallback,
-  limit: "That's all this chat can take. WhatsApp or call the shop to carry on.",
+  limit: "That's all this chat can take. Message the shop on WhatsApp or call to continue.",
   disclosure: "Answers come from this site only. For a price or anything else, the shop replies on WhatsApp.",
   input: "Your question",
   placeholder: "Type in English or Urdu",
@@ -1007,6 +1011,8 @@ export const assistant = {
   chips: ["Can you fix a Fold inner screen?", "Touch glass ki price kya hai?", "When are you open?", "Where is G-88?"],
   actions: { book: actions.book, whatsapp: actions.whatsapp, call: actions.call },
   whatsappText: "Assalam o alaikum. I have a question about a repair.",
+  /** The "custom form" link inside a reply: the Describe it tab (name, number, device, message, photos). */
+  formHref: "/estimate?tab=describe",
 } as const
 
 export type EstimateFault = {

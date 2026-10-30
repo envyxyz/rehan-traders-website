@@ -210,3 +210,17 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - More confirmed facts (Adnan, 30 Oct 2026) in `facts`: free checking, warranty depends on repair, model and parts quality, delivery (inDrive, Yango or any ride service inside Lahore; TCS nationwide; the customer pays), iPhone battery and "Unknown Part" (batteries only), water-resistance seal on request. They feed `/faq` (and its JSON-LD), the iPhone and battery service FAQs, the courier section, chat knowledge and both llms routes. The risk during touch-glass separation is deliberately not published (recorded in `PRODUCT.md` and PRD §12).
   - New e2e: `tests/e2e/reviews.spec.ts`, `tests/e2e/faq.spec.ts`, and checks for the field errors and the hidden Fault line.
 - Not done: nothing committed or pushed.
+
+### 2026-10-31 · Phase 8: SEO, AI search and analytics
+- Shipped:
+  - One Google tag: GTM container `GTM-TBXL7JMX` through `@next/third-parties` (loads after hydration). `track()` pushes custom events to the dataLayer; GA4 is configured inside GTM (steps in `docs/LAUNCH.md`). The direct GA4 loader and `NEXT_PUBLIC_GA_ID` are gone, so page views are not counted twice. CSP allows Google Tag Manager and GA4.
+  - Click tracking: `LinkTracker` mounted in the site layout; every call, WhatsApp and directions link carries `data-track` and `data-track-from`, so `call_click`, `whatsapp_click` and `directions_click` fire with a location slug only.
+  - Per-route Open Graph and Twitter images with `next/og`, generated at build (static export).
+  - Metadata on every route keeps the `llms.txt` alternate link; breadcrumbs JSON-LD is escaped through `JsonLd`; the store schema carries the Google listing name as `alternateName`.
+  - Site-wide copy pass: Adnan's motto (a reliable repair in a confusing market; tries to save your panel, and your money, first) in the home hero and the About story, shown elsewhere through facts (free check, glass replaced on its own). Name, address, phone and hours match the Business Profile master record. One glossary for glass, display, panel, estimate and quote. Invented or unconfirmed lines removed (llms-full quote wording, a "6 Months" warranty on the job card demo, Face ID on Fold, Apple Pencil, a data-recovery method).
+  - Adnan's answers of 31 Oct 2026: water damage 8 hours to several days; data recovery depends; warranty not always given, discussed at the counter; hinges repaired; tablets mainly iPads; address confirmed. Recorded in `PRODUCT.md`.
+  - Desktop logo: mark, name and "Mobile & Tab Repair Lab" descriptor.
+  - Service images and the before/after pair: the Phase 2 AI stand-ins exported, plus a new `screen-replacement` (agy). Real photos replace them later via `scripts/images/export.mjs`.
+  - `docs/LAUNCH.md`: Search Console, Bing, IndexNow (Crawler Hints), Business Profile link with UTM, GTM and GA4 setup, DebugView, key events.
+- Results: lint and typecheck pass; the export builds. Lighthouse mobile on all 18 routes: SEO 100, Accessibility 100, Best Practices 100; Performance 64 to 74 on an uncompressed local server (still the Phase 3 CPU issue, Phase 9). JSON-LD parses everywhere, no AggregateRating. Rich Results test needs a signed-in browser: in `docs/LAUNCH.md`. Screenshots: `design/phase-8/`.
+- Left: GA4 tags inside GTM, Search Console and Bing verification, DebugView check (all Phase 10). Adnan: walking route to G-88, registered name/NTN.
