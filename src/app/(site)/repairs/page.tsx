@@ -12,15 +12,11 @@ import { PriceLine } from "@/components/price-line"
 import { Heading, Text } from "@/components/typography"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { actions, breadcrumbs, repairsPage, seo, services } from "@/content"
-import { cn } from "@/lib/utils"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.repairs.title, description: seo.repairs.description, path: "/repairs" })
 
 export default function RepairsIndexPage() {
-  const leads = services.filter((s) => s.lead)
-  const rest = services.filter((s) => !s.lead)
-
   return (
     <>
       <Section className="pt-28 lg:pt-36">
@@ -35,19 +31,19 @@ export default function RepairsIndexPage() {
             </Text>
           </div>
 
-          <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-6">
-            {[...leads, ...rest].map((s, i) => (
-              <li key={s.slug} className={cn(s.lead ? "lg:col-span-3" : "lg:col-span-2")}>
+          <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {services.map((s, i) => (
+              <li key={s.slug}>
                 <Card className="flex h-full flex-col overflow-hidden p-0">
                   <Img
                     name={s.image}
                     alt={s.alt}
                     priority={i === 0}
-                    sizes={s.lead ? "(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 368px, (min-width: 768px) 50vw, 100vw"}
-                    className={cn("w-full", s.lead ? "aspect-16/10" : "aspect-4/3")}
+                    sizes="(min-width: 1024px) 340px, (min-width: 768px) 50vw, 100vw"
+                    className="w-full aspect-4/3"
                   />
                   <div className="flex flex-1 flex-col p-6">
-                    <CardTitle as="h2" className={cn(s.lead ? "text-title-lg" : "text-title-md")}>{s.title}</CardTitle>
+                    <CardTitle as="h2" className="text-title-md">{s.title}</CardTitle>
                     <CardDescription className="mt-2 line-clamp-2">{s.short}</CardDescription>
                     <PriceLine priceFrom={s.priceFrom} className="mt-4" />
 

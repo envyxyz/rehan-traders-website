@@ -189,7 +189,7 @@
   --spacing-sheet: 92svh;      /* bottom sheet max height */
   --spacing-safe-bottom: max(0.75rem, env(safe-area-inset-bottom)); /* floating bars clear the home indicator */
   --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button, clear of the sticky bar */
-  --container-content: 70rem;  /* 1120px */
+  --container-content: 90rem;  /* 1440px */
   --container-panel: 96rem;    /* hero panel cap, 1536px */
   --container-estimate: 34rem; /* the /estimate card: one width for both tabs and the result, 544px */
 

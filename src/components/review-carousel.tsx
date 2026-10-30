@@ -31,7 +31,7 @@ const noSubscribe = () => () => {}
  * - `home` (default): cross-fades every 5 s through a fresh random 10 of the written reviews per visit (the clearest
  *   ones most often). The static HTML shows the first 10; the draw happens after load. Pauses on hover and focus,
  *   and does not auto-advance under reduced motion. Dots and the arrow step by hand.
- * - `all`: the /reviews page. Every review in its listed order, centred, no autoplay. Prev and next arrows, a counter,
+ * - `all`: the /reviews page. Every review in its listed order, no autoplay. Prev and next arrows, a counter,
  *   arrow keys and a swipe step by hand. Every review is in the static HTML either way (stacked in one grid cell).
  */
 export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" }) {
@@ -92,30 +92,31 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
             inert={i !== index}
             className={cn(
               "col-start-1 row-start-1 m-0 flex flex-col gap-5 rounded-lg border border-hairline bg-card p-7 text-body transition-opacity duration-(--duration-base) ease-out sm:p-9",
-              all && "items-center text-center",
               i === index ? "opacity-100" : "pointer-events-none opacity-0"
             )}
           >
-            <span className="flex gap-0.5 text-star" role="img" aria-label={ui.stars(r.rating)}>
-              {[0, 1, 2, 3, 4].map((s) => (
-                <Star key={s} aria-hidden className={cn("size-4 fill-current", s >= r.rating && "opacity-30")} strokeWidth={0} />
-              ))}
-            </span>
-            <blockquote className="text-title-lg font-normal whitespace-pre-line text-ink text-pretty">{r.text}</blockquote>
-            <figcaption className={cn("mt-auto flex items-center gap-3 text-body-sm", all && "text-left")}>
-              <span aria-hidden className="grid size-10 place-items-center rounded-pill bg-concrete font-display text-title-md text-ink">
-                {r.author[0]}
+            <figcaption className="flex items-start justify-between gap-4 text-body-sm">
+              <span className="flex items-center gap-3">
+                <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-pill bg-concrete font-display text-title-md text-ink">
+                  {r.author[0]}
+                </span>
+                <span>
+                  <span className="block font-semibold text-ink">{r.author}</span>
+                  <span className="text-steel">{r.date}</span>
+                </span>
               </span>
-              <span>
-                <span className="block font-semibold text-ink">{r.author}</span>
-                <span className="text-steel">{r.date}</span>
+              <span className="mt-1 flex shrink-0 gap-0.5 text-star" role="img" aria-label={ui.stars(r.rating)}>
+                {[0, 1, 2, 3, 4].map((s) => (
+                  <Star key={s} aria-hidden className={cn("size-4 fill-current", s >= r.rating && "opacity-30")} strokeWidth={0} />
+                ))}
               </span>
             </figcaption>
+            <blockquote className="text-title-lg font-normal whitespace-pre-line text-ink text-pretty">{r.text}</blockquote>
           </figure>
         ))}
       </div>
       {all ? (
-        <div className="mt-3 flex items-center justify-center gap-4">
+        <div className="mt-3 flex items-center gap-4">
           <button
             type="button"
             onClick={() => step(-1)}

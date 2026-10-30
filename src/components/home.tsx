@@ -186,9 +186,6 @@ function Reviews() {
               <span className="mt-1 block text-body-sm text-body">{c.summary}</span>
             </span>
           </p>
-          <p className="mt-2 text-caption text-steel">
-            <time dateTime={reviews.asOf}>{c.asOf(reviews.asOfLabel)}</time>
-          </p>
           <a href={reviews.url} target="_blank" rel="noopener noreferrer" className={cn(textLink, "mt-4")}>
             {actions.readReviews}
             <span className="sr-only">, {ui.externalLink}</span>

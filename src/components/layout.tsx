@@ -2,9 +2,9 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-/** 1120px content column, 16px gutters on phones, 24px from tablet up. */
+/** 1440px content column, 16px gutters on phones, 24px on tablets, 40px from desktop up. */
 export function Container({ className, ...props }: React.ComponentProps<"div">) {
-  return <div className={cn("mx-auto w-full max-w-content px-4 md:px-6", className)} {...props} />
+  return <div className={cn("mx-auto w-full max-w-content px-4 md:px-6 lg:px-10", className)} {...props} />
 }
 
 const tones = {
