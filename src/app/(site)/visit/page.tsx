@@ -65,7 +65,7 @@ export default function VisitPage() {
 
               <div className="mt-10">
                 <h2 className="font-display text-title-md text-ink">{visitPage.hoursTitle}</h2>
-                <HoursTable className="mt-4" />
+                <HoursTable ink className="mt-4" />
               </div>
             </div>
 
@@ -96,7 +96,7 @@ export default function VisitPage() {
 
               <div className="mt-8 space-y-4">
                 <Card className="p-5">
-                  <span className="font-display text-caption font-bold text-signal">
+                  <span className="font-display text-caption font-bold text-steel">
                     {visitPage.entranceLabel}
                   </span>
                   <Text tone="body" size="body-sm" className="mt-1">
@@ -105,7 +105,7 @@ export default function VisitPage() {
                 </Card>
 
                 <Card className="p-5">
-                  <span className="font-display text-caption font-bold text-signal">
+                  <span className="font-display text-caption font-bold text-steel">
                     {visitPage.floorLabel}
                   </span>
                   <Text tone="body" size="body-sm" className="mt-1">
@@ -114,7 +114,7 @@ export default function VisitPage() {
                 </Card>
 
                 <Card className="p-5">
-                  <span className="font-display text-caption font-bold text-signal">
+                  <span className="font-display text-caption font-bold text-steel">
                     {visitPage.landmarksLabel}
                   </span>
                   <Text tone="body" size="body-sm" className="mt-1">
@@ -146,7 +146,7 @@ export default function VisitPage() {
         <Container>
           <div className="max-w-2xl">
             <div className="flex items-center gap-2">
-              <Icon icon={Package} className="text-signal" />
+              <Icon icon={Package} />
               <Heading as="h2">{visitPage.courierTitle}</Heading>
             </div>
             <Text tone="muted" className="mt-3">
@@ -189,7 +189,7 @@ export default function VisitPage() {
             </p>
             <div className="mt-4">
               <Button asChild variant="whatsapp">
-                <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
+                <a href={site.whatsapp.href}>
                   <WhatsAppIcon />
                   {visitPage.courierAction}
                 </a>

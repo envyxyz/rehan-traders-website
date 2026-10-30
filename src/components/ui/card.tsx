@@ -13,8 +13,9 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"h3">) {
-  return <h3 data-slot="card-title" className={cn("font-display text-title-md text-ink", className)} {...props} />
+/** An h3 by default; `as="h2"` where the cards sit directly under the page's h1. */
+function CardTitle({ className, as: Tag = "h3", ...props }: React.ComponentProps<"h3"> & { as?: "h2" | "h3" }) {
+  return <Tag data-slot="card-title" className={cn("font-display text-title-md text-ink", className)} {...props} />
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<"p">) {

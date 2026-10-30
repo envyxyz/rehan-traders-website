@@ -61,7 +61,7 @@ export default function ReviewsPage() {
               </div>
             </div>
 
-            <p className="mt-4 text-caption text-steel-soft">
+            <p className="mt-4 text-caption text-steel">
               {ui.disclaimerReviews}
             </p>
           </div>
@@ -90,7 +90,7 @@ export default function ReviewsPage() {
                       {rev.text}
                     </Text>
                   </div>
-                  <div className="mt-6 border-t border-hairline pt-3 text-caption text-steel-soft">
+                  <div className="mt-6 border-t border-hairline pt-3 text-caption text-steel">
                     {reviewsPage.googleReview}
                   </div>
                 </Card>

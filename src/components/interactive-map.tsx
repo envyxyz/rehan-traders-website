@@ -42,7 +42,7 @@ export function InteractiveMap({
           onClick={() => setActive(true)}
           className="cursor-pointer gap-2 shadow-float"
         >
-          <Icon icon={MapPin} className="text-signal" />
+          <Icon icon={MapPin} />
           <span>{visitPage.mapPrompt}</span>
         </Button>
       </div>

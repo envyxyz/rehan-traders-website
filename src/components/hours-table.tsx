@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils"
 
 const noSubscribe = () => () => {}
 
-/** Compact hours; the row covering today gets the 4px Signal Red bar once the client knows the day in Lahore. */
-export function HoursTable({ className }: { className?: string }) {
+/** Compact hours; the row covering today gets a 4px bar (Signal Red, or ink with `ink` where a page already has its red line) once the client knows the day in Lahore. */
+export function HoursTable({ className, ink }: { className?: string; ink?: boolean }) {
   // Undefined in the static HTML; the client fills in today's weekday after hydration.
   const today = React.useSyncExternalStore(noSubscribe, () => weekdayIn(new Date(), site.hours.timezone), () => undefined)
   const current = today === undefined ? -1 : visit.hours.findLastIndex((row) => (row.days as readonly number[]).includes(today))
@@ -26,7 +26,7 @@ export function HoursTable({ className }: { className?: string }) {
                 scope="row"
                 className={cn(
                   "border-l-4 py-2.5 pl-3 text-left font-normal text-steel",
-                  isToday ? "border-signal font-semibold text-ink" : "border-transparent"
+                  isToday ? cn(ink ? "border-ink" : "border-signal", "font-semibold text-ink") : "border-transparent"
                 )}
               >
                 {row.label}

@@ -6,7 +6,7 @@ import { WhatsAppIcon } from "@/components/icon"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { actions, site, states } from "@/content"
+import { site, states } from "@/content"
 
 export default function ErrorBoundary({
   reset,
@@ -28,7 +28,7 @@ export default function ErrorBoundary({
             {states.error.retry}
           </Button>
           <Button asChild size="lg" variant="whatsapp">
-            <a href={site.whatsapp.href} aria-label={actions.whatsappLabel}>
+            <a href={site.whatsapp.href}>
               <WhatsAppIcon />
               {states.error.whatsapp}
             </a>

@@ -7,6 +7,7 @@ import { BookButton } from "@/components/book-button"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { JsonLd } from "@/components/json-ld"
 import { Img } from "@/components/img"
 import { Container, Section } from "@/components/layout"
 import { PriceLine } from "@/components/price-line"
@@ -15,6 +16,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { actions, breadcrumbs, repairsPage, seo, services, site } from "@/content"
+import { faqSchema, serviceSchema } from "@/lib/schema"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -49,6 +51,8 @@ export default async function ServicePage({ params }: PageProps) {
 
   return (
     <>
+      <JsonLd data={serviceSchema(service)} />
+      {service.faq.length > 0 && <JsonLd data={faqSchema(service.faq)} />}
       <Section className="pt-28 lg:pt-36">
         <Container>
           <Breadcrumbs

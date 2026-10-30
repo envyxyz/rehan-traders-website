@@ -50,7 +50,7 @@ export default function RepairsIndexPage() {
                     className={cn("w-full", s.lead ? "aspect-16/10" : "aspect-4/3")}
                   />
                   <div className="flex flex-1 flex-col p-6">
-                    <CardTitle className={cn(s.lead ? "text-title-lg" : "text-title-md")}>{s.title}</CardTitle>
+                    <CardTitle as="h2" className={cn(s.lead ? "text-title-lg" : "text-title-md")}>{s.title}</CardTitle>
                     <CardDescription className="mt-2 line-clamp-2">{s.short}</CardDescription>
                     <PriceLine priceFrom={s.priceFrom} className="mt-4" />
 

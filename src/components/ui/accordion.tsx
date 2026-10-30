@@ -12,24 +12,27 @@ function AccordionItem({ className, ...props }: React.ComponentProps<typeof Acco
   return <AccordionPrimitive.Item data-slot="accordion-item" className={cn("border-b border-hairline", className)} {...props} />
 }
 
-function AccordionTrigger({ className, children, ...props }: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {
+/** Each question is a heading: h3 by default, `as="h2"` where the list sits directly under the page's h1. */
+function AccordionTrigger({ className, children, as: Tag = "h3", ...props }: React.ComponentProps<typeof AccordionPrimitive.Trigger> & { as?: "h2" | "h3" }) {
   return (
-    <AccordionPrimitive.Header className="flex">
-      <AccordionPrimitive.Trigger
-        data-slot="accordion-trigger"
-        className={cn(
-          "group flex min-h-14 flex-1 cursor-pointer items-center justify-between gap-4 py-4 text-left font-display text-title-md text-ink",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        <Plus
-          aria-hidden
-          strokeWidth={1.75}
-          className="size-5 shrink-0 text-steel transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-45"
-        />
-      </AccordionPrimitive.Trigger>
+    <AccordionPrimitive.Header asChild>
+      <Tag className="flex">
+        <AccordionPrimitive.Trigger
+          data-slot="accordion-trigger"
+          className={cn(
+            "group flex min-h-14 flex-1 cursor-pointer items-center justify-between gap-4 py-4 text-left font-display text-title-md text-ink",
+            className
+          )}
+          {...props}
+        >
+          {children}
+          <Plus
+            aria-hidden
+            strokeWidth={1.75}
+            className="size-5 shrink-0 text-steel transition-transform duration-(--duration-base) ease-out group-data-[state=open]:rotate-45"
+          />
+        </AccordionPrimitive.Trigger>
+      </Tag>
     </AccordionPrimitive.Header>
   )
 }
