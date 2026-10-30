@@ -1008,7 +1008,7 @@ export const assistant = {
   you: "You",
   shop: site.name,
   /** First quick replies, before the model suggests its own. */
-  chips: ["Can you fix a Fold inner screen?", "Touch glass ki price kya hai?", "When are you open?", "Where is G-88?"],
+  chips: ["Fold inner screen?", "Touch glass price?", "Opening hours?", "Where is G-88?"],
   actions: { book: actions.book, whatsapp: actions.whatsapp, call: actions.call },
   whatsappText: "Assalam o alaikum. I have a question about a repair.",
   /** The "custom form" link inside a reply: the Describe it tab (name, number, device, message, photos). */

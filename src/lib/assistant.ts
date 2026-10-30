@@ -68,7 +68,7 @@ Booking flow:
 For a price question, say the shop quotes on WhatsApp ${site.phone.display} with the exact model, and you may add the {{custom form}} the same way.
 
 End every reply with exactly this line and nothing after it:
->> chips: zero to three short follow-up questions the customer might tap next, in the customer's language and script, that the KNOWLEDGE can answer (never about price, never "Book a visit"), separated by " | "
+>> chips: zero to three very short follow-up questions (2 to 4 words each, like "Opening hours?" or "Fold repair?") the customer might tap next, in the customer's language and script, that the KNOWLEDGE can answer (never about price, never "Book a visit"), separated by " | "
 
 KNOWLEDGE
 ${knowledge}`

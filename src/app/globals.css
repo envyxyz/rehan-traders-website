@@ -319,7 +319,7 @@
 /* Arrow buttons: an inverted copy of the button (label and arrow) sits on top, clipped to a circle on the chip
    (centre 23px from the right, radius 15px). Hover grows the circle until it covers the button, so whatever the circle
    has passed over is inverted and the rest is not. Percent radius, so it covers any button width.
-   The base fill is clipped 1px inside a transparent border and the copy reaches 1px past it, so no light fringe shows
+   The base fill is clipped 1px inside a transparent border and the copy reaches 1px past it (2px with its own border, so the lift's sub-pixel offset never leaves a dark edge on the top and left), so no light fringe shows
    where the two rounded edges meet. The copy inherits the button's layout, so it lines up with the label. */
 @layer components {
   [data-slot="button"]:has(> .btn-fill) {
@@ -331,13 +331,13 @@
   }
   .btn-fill {
     position: absolute;
-    inset: -1px;
+    inset: -2px;
     display: inherit;
     align-items: inherit;
     justify-content: inherit;
     gap: inherit;
     padding: inherit;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     border-radius: inherit;
     clip-path: circle(0.9375rem at calc(100% - 1.4375rem) 50%);
     transition: clip-path var(--duration-fill) var(--ease-in-out);

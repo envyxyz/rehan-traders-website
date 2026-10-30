@@ -20,7 +20,7 @@ export function ChatSheet({
       <SheetContent
         side="right"
         glass
-        className="gap-3 pb-4"
+        className="gap-3 pb-6"
         onCloseAutoFocus={(e) => {
           e.preventDefault()
           returnFocus.current?.focus()

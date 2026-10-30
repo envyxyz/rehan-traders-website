@@ -142,11 +142,11 @@ export function ChatPanel() {
         })}
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-hairline px-6 pt-4">
+      <div className="flex shrink-0 flex-col gap-3 border-t border-hairline px-6 pt-4">
         {chips.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {chips.map((c) => (
-              <Button key={c} type="button" variant="line" dir="auto" className="h-auto min-h-11 py-2 text-left whitespace-normal" onClick={() => void send(c)}>
+              <Button key={c} type="button" variant="line" dir="auto" className="h-auto min-h-11 px-3.5 py-2 text-left text-caption whitespace-normal" onClick={() => void send(c)}>
                 {c}
               </Button>
             ))}
@@ -157,7 +157,11 @@ export function ChatPanel() {
             e.preventDefault()
             void send(draft)
           }}
-          className="flex items-center gap-2"
+          // One pill: the field and the round send button share it, so every corner is concentric with the sheet's.
+          className={cn(
+            "flex items-center gap-2 rounded-pill border border-hairline bg-paper p-1.5 pl-5 transition-colors duration-(--duration-fast) focus-within:border-ink focus-within:bg-card focus-within:ring-3 focus-within:ring-ink/12",
+            tooLong && "border-error ring-3 ring-error/15"
+          )}
         >
           <Label htmlFor={`${ids}-q`} className="sr-only">
             {assistant.input}
@@ -165,6 +169,7 @@ export function ChatPanel() {
           <Input
             id={`${ids}-q`}
             dir="auto"
+            className="h-11 border-0 bg-transparent px-0 focus-visible:bg-transparent focus-visible:ring-0 aria-invalid:ring-0"
             autoComplete="off"
             enterKeyHint="send"
             placeholder={assistant.placeholder}
@@ -174,8 +179,8 @@ export function ChatPanel() {
             aria-invalid={tooLong}
             aria-describedby={tooLong ? `${ids}-err` : undefined}
           />
-          <Button type="submit" variant="icon" size="lg" aria-label={assistant.send} disabled={busy || atLimit || tooLong || !draft.trim()} className="bg-action text-on-action hover:bg-action-active">
-            <Icon icon={ArrowUp} size="lg" />
+          <Button type="submit" variant="icon" size="md" aria-label={assistant.send} disabled={busy || atLimit || tooLong || !draft.trim()} className="bg-action text-on-action hover:bg-action-active">
+            <Icon icon={ArrowUp} />
           </Button>
         </form>
         {tooLong && (
@@ -213,7 +218,8 @@ function Bubble({ role, children, footer }: { role: Msg["role"]; children: React
     <div
       dir="auto"
       className={cn(
-        "max-w-5/6 overflow-hidden rounded-lg text-body-md",
+        // shrink-0: in a scrolling flex column the bubbles must never squash to fit; the log scrolls instead.
+        "max-w-5/6 shrink-0 overflow-hidden rounded-lg text-body-md",
         role === "user" ? "self-end bg-action text-on-action" : "self-start border border-hairline bg-card text-body"
       )}
     >
