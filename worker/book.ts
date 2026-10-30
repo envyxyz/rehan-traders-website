@@ -38,13 +38,13 @@ const Booking = z
         const picked = f.split(", ")
         return picked.every((p) => faultNames.has(p)) && new Set(picked).size === picked.length && (picked.length === 1 || !picked.some((p) => openFaults.includes(p)))
       }),
-    /** The customer's words, with "Not sure" or "Not mentioned here". Like the device name, plus line breaks. */
+    /** The customer's words, with "Not sure" or "Not mentioned here". Any text, line breaks and tabs included; the Apps Script neutralises formulas and escapes HTML. */
     problem: z
       .string()
       .trim()
       .min(1)
       .max(500)
-      .regex(/^(?![=+\-@])(?:[^<>\p{Cc}]|\n)+$/u)
+      .regex(/^(?:[^\p{Cc}]|[\n\t])+$/u)
       .optional(),
     photos: z.array(driveId).max(3).optional(),
     slot: z.string().max(32).nullable(),

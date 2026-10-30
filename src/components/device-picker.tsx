@@ -32,6 +32,8 @@ function Combo({
 }) {
   const [query, setQuery] = React.useState(value)
   const [open, setOpen] = React.useState(false)
+  // The Sheet this field sits in, if any: the list is portaled into it (see PopoverContent).
+  const [sheet, setSheet] = React.useState<HTMLElement | null>(null)
   const input = React.useRef<HTMLInputElement>(null)
   // A new value from outside (picked, or cleared by a brand change) replaces what is typed.
   const [seen, setSeen] = React.useState(value)
@@ -73,7 +75,10 @@ function Combo({
               placeholder={placeholder}
               value={query}
               disabled={disabled}
-              onFocus={() => setOpen(true)}
+              onFocus={(e) => {
+                setSheet(e.currentTarget.closest<HTMLElement>("[data-slot=sheet-content]"))
+                setOpen(true)
+              }}
               onBlur={() => {
                 setOpen(false)
                 setQuery(value)
@@ -86,6 +91,7 @@ function Combo({
           </PopoverAnchor>
           {/* Focus stays in the input: nothing moves focus in or out, and a press on an option must not blur it first. */}
           <PopoverContent
+            container={sheet}
             onOpenAutoFocus={(e) => e.preventDefault()}
             onCloseAutoFocus={(e) => e.preventDefault()}
             onInteractOutside={(e) => e.preventDefault()}
