@@ -133,14 +133,15 @@ export async function upload(request: Request, env: BookEnv): Promise<Response> 
   if (!request.headers.get("content-type")?.startsWith("application/json")) return fail(415, "type")
   if (Number(request.headers.get("content-length") ?? 0) > MAX_PHOTO) return fail(413, "size")
   const raw = await request.text()
-  if (raw.length > MAX_PHOTO || !raw.startsWith('{"data":"')) return fail(400, "invalid")
+  if (raw.length > MAX_PHOTO || !raw.startsWith('{"data":"') || !raw.endsWith("}")) return fail(400, "invalid")
   if (!env.BOOKING_WEBHOOK_URL || !env.BOOKING_WEBHOOK_SECRET) return fail(502, "webhook")
   try {
     const res = await fetch(env.BOOKING_WEBHOOK_URL, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      // The secret and action go in front of the client's own fields, so the photo is never parsed here.
-      body: `{"secret":${JSON.stringify(env.BOOKING_WEBHOOK_SECRET)},"action":"upload",${raw.slice(1)}`,
+      // The secret and action go after the client's own fields, so they win (the last duplicate key does) and
+      // the photo is never parsed here.
+      body: `${raw.slice(0, -1)},"secret":${JSON.stringify(env.BOOKING_WEBHOOK_SECRET)},"action":"upload"}`,
       signal: AbortSignal.timeout(UPLOAD_TIMEOUT_MS),
     })
     const out = (await res.json()) as { ok?: boolean; id?: unknown; error?: unknown }
