@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
 
-import { actions, assistant, chat, estimator, price } from "../../src/content"
+import { actions, assistant, estimator, price } from "../../src/content"
 import { MAX_INPUT, MAX_TURNS, parseReply } from "../../src/lib/assistant"
 import { pickDevice } from "./helpers"
 
@@ -10,13 +10,10 @@ const reply = "Yes, we repair Galaxy Z Fold inner screens.\n>> actions: book wha
 const stubChat = (page: Page, status: number, body: string) =>
   page.route("/api/chat", (route) => route.fulfill({ status, contentType: "text/plain; charset=utf-8", body }))
 
-async function openChat(page: Page, isMobile: boolean) {
-  await page.goto("/")
-  if (isMobile) {
-    // Phones: the StickyBar's chat icon, shown once the hero has scrolled past.
-    await page.mouse.wheel(0, 2000)
-    await page.getByRole("button", { name: chat.launcher }).click()
-  } else await page.getByRole("button", { name: assistant.title }).click()
+async function openChat(page: Page, load = true) {
+  if (load) await page.goto("/")
+  // The launcher is there from page load: a round icon on phones, "Ask a question" on desktop.
+  await page.getByRole("button", { name: assistant.title }).click()
   await expect(page.getByRole("dialog", { name: assistant.title })).toBeVisible()
   return page.getByRole("dialog", { name: assistant.title })
 }
@@ -39,9 +36,9 @@ test("the assistant is not in the home page's first load", async ({ page }) => {
   expect(scripts.some((s) => s.includes("/api/chat"))).toBe(false)
 })
 
-test("chat streams a reply with chips and handoff buttons", async ({ page, isMobile }) => {
+test("chat streams a reply with chips and handoff buttons", async ({ page }) => {
   await stubChat(page, 200, reply)
-  const sheet = await openChat(page, isMobile)
+  const sheet = await openChat(page)
   await expect(sheet.getByText(assistant.greeting)).toBeVisible()
   await sheet.getByRole("button", { name: assistant.chips[0] }).click()
   await expect(sheet.getByText("Yes, we repair Galaxy Z Fold inner screens.")).toBeVisible()
@@ -61,9 +58,31 @@ test("chat streams a reply with chips and handoff buttons", async ({ page, isMob
   expect(sent!.messages[1].content).not.toContain(">>")
 })
 
-test("chat falls back to WhatsApp and call when the Worker fails", async ({ page, isMobile }) => {
+test("closing the sheet mid-reply does not break the next message", async ({ page }) => {
+  await page.route("/api/chat", async (route) => {
+    await new Promise((r) => setTimeout(r, 1500)) // still "typing" when the sheet closes
+    await route.fulfill({ status: 200, contentType: "text/plain", body: reply }).catch(() => {})
+  })
+  const sheet = await openChat(page)
+  await sheet.getByRole("button", { name: assistant.chips[0] }).click()
+  await page.keyboard.press("Escape")
+  await expect(sheet).toBeHidden()
+
+  let sent: { messages: { role: string; content: string }[] } | null = null
+  await page.route("/api/chat", (route) => {
+    sent = route.request().postDataJSON()
+    return route.fulfill({ status: 200, contentType: "text/plain", body: reply })
+  })
+  const again = await openChat(page, false)
+  await again.getByLabel(assistant.input).fill("Where is G-88?")
+  await again.getByLabel(assistant.input).press("Enter")
+  await expect(again.getByText("Yes, we repair Galaxy Z Fold inner screens.")).toBeVisible()
+  expect(sent!.messages.every((m) => m.role === "user" || m.content.length > 0)).toBe(true)
+})
+
+test("chat falls back to WhatsApp and call when the Worker fails", async ({ page }) => {
   await stubChat(page, 500, "")
-  const sheet = await openChat(page, isMobile)
+  const sheet = await openChat(page)
   await sheet.getByLabel(assistant.input).fill("Hello")
   await sheet.getByRole("button", { name: assistant.send }).click()
   await expect(sheet.getByText(assistant.fallback)).toBeVisible()
