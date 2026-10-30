@@ -20,7 +20,9 @@ export function InteractiveMap({
   if (active) {
     return (
       <div className={cn("overflow-hidden rounded-xl bg-band", className)}>
+        {/* Focus moves into the map that replaced the button, instead of dropping to the page. */}
         <iframe
+          ref={(map) => map?.focus()}
           src={visit.mapEmbed}
           title={visit.mapTitle}
           loading="eager"

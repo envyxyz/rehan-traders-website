@@ -244,7 +244,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         </h2>
 
         {step === "device" && (
-          <DeviceField value={draft.device} onChange={(device) => set({ device })} />
+          <DeviceField value={draft.device} onChange={(device) => set({ device })} describedBy={error ? `${ids}-error` : undefined} />
         )}
 
         {step === "fault" && (
@@ -276,6 +276,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
                 value={draft.problem}
                 onChange={(e) => set({ problem: e.target.value })}
                 aria-invalid={error === booking.fault.describeError}
+                aria-describedby={error === booking.fault.describeError ? `${ids}-error` : undefined}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -393,7 +394,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         )}
 
         {error && !detailsError && (
-          <p role="alert" className="text-body-sm text-error">
+          <p id={`${ids}-error`} role="alert" className="text-body-sm text-error">
             {error}
           </p>
         )}
