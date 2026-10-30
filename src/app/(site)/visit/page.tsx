@@ -188,7 +188,7 @@ export default function VisitPage() {
               {visitPage.courierNotice}
             </p>
             <div className="mt-4">
-              <Button asChild variant="whatsapp">
+              <Button asChild variant="whatsapp" className="h-auto min-h-13 whitespace-normal py-3 text-left">
                 <a href={site.whatsapp.href}>
                   <WhatsAppIcon />
                   {visitPage.courierAction}

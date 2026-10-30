@@ -50,8 +50,8 @@ export default function ReviewsPage() {
                   </time>
                 </p>
               </div>
-              <div className="sm:ml-auto">
-                <Button asChild size="lg" arrow>
+              <div className="max-w-full sm:ml-auto">
+                <Button asChild size="lg" arrow className="h-auto min-h-13 whitespace-normal py-3 text-left">
                   <a href={reviews.url} target="_blank" rel="noopener noreferrer">
                     {reviewsPage.readAllOnGoogle(reviews.count)}
                     <span className="sr-only">, {ui.externalLink}</span>

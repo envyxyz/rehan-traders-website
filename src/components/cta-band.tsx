@@ -13,7 +13,7 @@ export function CtaBand() {
       <Container>
         <Reveal className="flex flex-col gap-8 rounded-xl bg-band px-6 py-12 md:px-14 md:py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
           <Heading className="text-on-band">{cta.title}</Heading>
-          <div className="flex shrink-0 gap-2.5">
+          <div className="flex flex-wrap gap-2.5 lg:shrink-0">
             <BookButton size="lg" variant="inverse" arrow className="flex-1 sm:flex-none">
               {actions.book}
             </BookButton>

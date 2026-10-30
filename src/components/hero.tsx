@@ -21,7 +21,7 @@ export function Hero() {
   return (
     <section id="top" className="flex min-h-svh p-2 sm:p-3">
       <div className="mx-auto grid w-full max-w-panel flex-1 content-start overflow-hidden rounded-xl bg-panel px-5 pt-22 pb-2 sm:px-6 sm:pt-26 sm:pb-4 lg:grid-cols-2 lg:content-center lg:items-center lg:gap-8 lg:px-12 lg:pt-28 lg:pb-12 xl:px-20">
-        <div>
+        <div className="min-w-0">
           <p {...rise(0)}>
             <span className="flex items-center gap-2 text-caption text-steel">
               <span className="flex gap-0.5 text-star" role="img" aria-label={ui.stars(reviews.rating)}>
@@ -40,7 +40,7 @@ export function Hero() {
           <Text tone="muted" className={`mt-4 max-w-120 ${rise(1).className}`} style={rise(1).style}>
             {hero.lede}
           </Text>
-          <div className={`mt-7 flex gap-2.5 ${rise(2).className}`} style={rise(2).style}>
+          <div className={`mt-7 flex flex-wrap gap-2.5 ${rise(2).className}`} style={rise(2).style}>
             <BookButton size="lg" arrow className="flex-1 sm:flex-none">
               {actions.book}
             </BookButton>

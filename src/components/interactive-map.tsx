@@ -40,7 +40,7 @@ export function InteractiveMap({
           size="lg"
           variant="glass"
           onClick={() => setActive(true)}
-          className="cursor-pointer gap-2 shadow-float"
+          className="h-auto min-h-13 max-w-full cursor-pointer gap-2 py-3 whitespace-normal shadow-float"
         >
           <Icon icon={MapPin} />
           <span>{visitPage.mapPrompt}</span>
