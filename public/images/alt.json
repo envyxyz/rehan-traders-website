@@ -36,10 +36,10 @@
   },
   "storefront": {
     "alt": "Shopfront of Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore",
-    "width": 1920,
-    "height": 1920,
+    "width": 1200,
+    "height": 896,
     "placeholder": false,
-    "ai": false
+    "ai": true
   },
   "iphone-back-glass": {
     "alt": "iPhone with its back glass removed, showing the frame and charging coil",
@@ -47,5 +47,75 @@
     "height": 1921,
     "placeholder": false,
     "ai": false
+  },
+  "glass-separation": {
+    "alt": "Cracked front glass being separated from a phone display on a heated plate",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "fold-inner-panel": {
+    "alt": "Inner folding panel lifted out of a Samsung Galaxy Z Fold during repair",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "battery-swap": {
+    "alt": "Old phone battery being lifted out of an opened smartphone",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "charging-port": {
+    "alt": "USB-C charging port of a phone being cleaned with fine tweezers",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "board-microscope": {
+    "alt": "Phone logic board under the microscope during board-level repair",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "wet-board-cleaning": {
+    "alt": "Water-damaged phone board being cleaned with a brush and alcohol",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "ipad-screen": {
+    "alt": "Cracked iPad screen being lifted off with a suction cup",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "placeholder-before": {
+    "alt": "Placeholder: phone with shattered front glass before repair",
+    "width": 1200,
+    "height": 896,
+    "placeholder": true,
+    "ai": true
+  },
+  "placeholder-after": {
+    "alt": "Placeholder: the same phone with new front glass after repair",
+    "width": 1200,
+    "height": 896,
+    "placeholder": true,
+    "ai": true
+  },
+  "screen-replacement": {
+    "alt": "A new display being fitted to a phone, the old screen with green lines beside it",
+    "width": 1264,
+    "height": 848,
+    "placeholder": false,
+    "ai": true
   }
 }

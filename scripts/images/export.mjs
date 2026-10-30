@@ -1,6 +1,6 @@
 // Contact sheet and web export for the masters in scripts/images/out/. Run from the website root:
 //   node scripts/images/export.mjs --sheet   numbered contact sheet -> scripts/images/out/sheet.jpg
-//   node scripts/images/export.mjs           public/images/<name>-<w>.avif|webp, <name>-og.jpg, alt.json
+//   node scripts/images/export.mjs [name ...] public/images/<name>-<w>.avif|webp, <name>-og.jpg, alt.json (named images only: the rest of alt.json stays)
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -42,8 +42,10 @@ if (process.argv.includes('--sheet')) {
 }
 
 await mkdir(PUB, { recursive: true });
-const alt = {};
+const only = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+const alt = only.length ? JSON.parse(await readFile(path.join(PUB, 'alt.json'), 'utf8')) : {};
 for (const j of jobs) {
+  if (only.length && !only.includes(j.name)) continue;
   const file = masterOf(j.name);
   if (!file) {
     console.warn(`  skip ${j.name}: no master yet (run run.mjs)`);
@@ -52,7 +54,7 @@ for (const j of jobs) {
   const side = JSON.parse(await readFile(path.join(OUT, j.name + '.json'), 'utf8').catch(() => '{}'));
   // XMP travels with every file: what it shows, and an IPTC flag that it is AI-made (Google reads DigitalSourceType).
   // Clean-ups of a real photo are "composite"; new scenes are fully generated.
-  const edit = !j.prompt.startsWith('New') && !j.sources[0].startsWith('out:');
+  const edit = !j.prompt.startsWith('New') && !!j.sources[0] && !j.sources[0].startsWith('out:');
   const type = side.model === 'photo' ? 'digitalCapture' : edit ?'compositeWithTrainedAlgorithmicMedia' : 'trainedAlgorithmicMedia';
   const xmp = `<x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" Iptc4xmpExt:DigitalSourceType="http://cv.iptc.org/newscodes/digitalsourcetype/${type}"><dc:title><rdf:Alt><rdf:li xml:lang="x-default">${esc(j.alt)}</rdf:li></rdf:Alt></dc:title><dc:creator><rdf:Seq><rdf:li>Rehan Traders</rdf:li></rdf:Seq></dc:creator><dc:rights><rdf:Alt><rdf:li xml:lang="x-default">© Rehan Traders, Hafeez Center, Lahore</rdf:li></rdf:Alt></dc:rights></rdf:Description></rdf:RDF></x:xmpmeta>`;
   const meta = await sharp(file).metadata();

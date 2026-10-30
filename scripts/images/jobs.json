@@ -50,8 +50,8 @@
     "sources": [
       "../growth/Photos/Edited/rehan-traders-lahore_01_storefront.jpg"
     ],
-    "aspect": "3:2",
-    "prompt": "Using the attached photo, keep this exact shopfront recognisable: the same sign layout and text, the same glass display wall and the same camera angle. Clean it up only: straighten the perspective, even out the light, remove glare and dirt from the glass, tidy the displays so products sit in neat rows, and remove clutter at the edges of the frame. Do not change or invent any sign text.",
+    "aspect": "4:3",
+    "prompt": "Using the attached photo as the reference, create a clean, professional, straight-on architectural photograph of this one shopfront, in black and white (monochrome, rich tonal range, no colour at all). Keep the shop itself recognisable: the same green fascia board (rendered in grey) with the large OPPO logo and the small text G-88 and TAB HOUSE & REHAN TRADERS LAB, the same glass display wall with tablets and boxes in neat rows, the glass door and the Rehan Traders R-logo poster on the lower door. Fix the framing: the fascia board and logo must be perfectly level and straight, the camera square-on at eye level, vertical lines vertical, no tilt. Remove everything that is not this shop: delete the broken, dirty walls and pillars on the left and right, the neighbouring shops with their displays and signs, the hanging phone-case stands, the people, the jerry can, the loose cables and the STOP AT NOTHING signs above. Replace the sides with plain, clean, softly lit wall so the shopfront stands alone and centred with even margins. Evenly lit, no glare, no dirt, no grain. Do not invent any new text or logos; keep existing sign text spelled exactly as it is.",
     "alt": "Shopfront of Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore"
   },
   {
@@ -67,6 +67,13 @@
     "aspect": "3:2",
     "prompt": "Close-up of a technician's gloved hands, no face, lifting the inner folding screen out of an opened Samsung Galaxy Z Fold that lies flat, holding the flexible panel by its edges. Matte charcoal ESD mat, clean light-grey bench, no logos.",
     "alt": "Inner folding panel lifted out of a Samsung Galaxy Z Fold during repair"
+  },
+  {
+    "name": "screen-replacement",
+    "sources": ["scripts/images/out/glass-separation.png"],
+    "aspect": "3:2",
+    "prompt": "Same bench, red silicone mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, fitting a new complete display panel onto an opened Android smartphone; the old display with green vertical lines lies face-up beside it. A plastic opening pick and a precision screwdriver nearby.",
+    "alt": "A new display being fitted to a phone, the old screen with green lines beside it"
   },
   {
     "name": "iphone-back-glass",
