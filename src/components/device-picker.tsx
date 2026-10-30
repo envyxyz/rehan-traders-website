@@ -22,6 +22,8 @@ function Combo({
   value,
   onPick,
   disabled,
+  invalid,
+  describedBy,
 }: {
   label: string
   placeholder: string
@@ -29,6 +31,8 @@ function Combo({
   value: string
   onPick: (v: string) => void
   disabled?: boolean
+  invalid?: boolean
+  describedBy?: string
 }) {
   const [query, setQuery] = React.useState(value)
   const [open, setOpen] = React.useState(false)
@@ -75,6 +79,8 @@ function Combo({
               placeholder={placeholder}
               value={query}
               disabled={disabled}
+              aria-invalid={invalid}
+              aria-describedby={describedBy}
               onFocus={(e) => {
                 setSheet(e.currentTarget.closest<HTMLElement>("[data-slot=sheet-content]"))
                 setOpen(true)
@@ -129,12 +135,17 @@ export function DevicePicker({
   onChange,
   lockedBrand,
   tabletsOnly,
+  invalid,
+  describedBy,
 }: {
   value: string | null
   onChange: (device: string | null) => void
   lockedBrand?: string
   /** The tablet repair: only brands that make tablets, and only their tablets. */
   tabletsOnly?: boolean
+  /** The form's error is about the model: marks it invalid and points at the message. */
+  invalid?: boolean
+  describedBy?: string
 }) {
   const [brand, setBrand] = React.useState(lockedBrand ?? (value ? (brandOf(value) ?? "") : ""))
   const options = React.useMemo(() => modelsOf(brand).filter((m) => !tabletsOnly || isTablet(m)), [brand, tabletsOnly])
@@ -159,6 +170,8 @@ export function DevicePicker({
         options={options}
         value={value ?? ""}
         disabled={!brand}
+        invalid={invalid}
+        describedBy={describedBy}
         // A typed model gets its brand in front ("Nokia 3310"), the way listed ones read.
         onPick={(m) => onChange(options.includes(m) ? m : deviceName(brand, m))}
       />

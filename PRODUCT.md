@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-Next.js (App Router) + React + TypeScript, Tailwind CSS v4, shadcn/ui, Motion (Framer Motion) for subtle animation, 21st.dev components where they fit. Static export hosted free on Cloudflare Workers at rehanmobiletraders.com, with a small Worker for booking and AI. Chosen by Ameer on 28 Oct 2026 over a Vite SPA (weak SEO) and Astro (harder shadcn/21st wiring). Hosting must be free (Vercel Hobby is non-commercial); Google Cloud billing is not available.
+Next.js (App Router) + React + TypeScript, Tailwind CSS v4, shadcn/ui, Motion (Framer Motion) for subtle animation, 21st.dev components where they fit. Static export hosted free on Cloudflare Workers at rehanmobiletraders.com, with a small Worker for booking and chat. Chosen by Ameer on 28 Oct 2026 over a Vite SPA (weak SEO) and Astro (harder shadcn/21st wiring). Hosting must be free (Vercel Hobby is non-commercial); Google Cloud billing is not available.
 
 ## Users
 
@@ -31,7 +31,13 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 
 - Walk-in shop: Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54000. Coordinates 31.5161006, 74.3433894.
 - Hours: Monday to Saturday 11:00 AM to 10:00 PM, Friday prayer break 1:00 to 2:00 PM, closed Sundays and public holidays.
-- Courier repairs from outside Lahore: yes (terms not confirmed yet).
+- Courier repairs from outside Lahore: yes. Create a ticket on the site or call 0305 8874839, send photos of the phone on WhatsApp. If possible the shop quotes over the phone; otherwise the shop receives the phone, inspects and quotes it, repairs it once the customer agrees, and sends it back (Adnan, 30 Oct 2026). Delivery is the customer's choice and the customer pays: inside Lahore inDrive, Yango or any other ride service, nationwide TCS (Adnan, 30 Oct 2026). Packing guidance is not confirmed.
+- Warranty: depends on the type of repair, the model and the quality of parts the customer chooses, discussed right after the job is confirmed or the fault is diagnosed. The shop gives generous warranties. No length, no "lifetime", no "100%" (Adnan, 30 Oct 2026).
+- Checking: free. The shop checks the device free of cost and tells you what the issue is, whether it can be repaired, what it will cost and how long it will take (Adnan, 30 Oct 2026).
+- iPhone batteries: if the customer chooses an original battery, the "Unknown Part" message can be removed and battery health shown. If the customer chooses a cheaper copy battery, the IC from the old original battery can be moved to the new one; in some very rare cases that is not possible and the shop says so after checking the phone. Batteries only: not screens, not True Tone, and no general "original parts" claim (Adnan, 30 Oct 2026).
+- Water-resistance seal: re-applied after a repair on request. Never claim the phone is water resistant afterwards (Adnan, 30 Oct 2026).
+- Risk during touch-glass separation: not published, by choice (Ameer, 30 Oct 2026). No page, FAQ, chat answer or llms file answers it.
+- Turnaround: depends on the type of repair, parts availability, and how rare and complex the model is. A normal panel (screen) change can take as little as 60 minutes; complex devices such as Galaxy Z Folds can take up to a day. Say "as little as" and "up to"; the 60 minutes belongs to a normal panel change only (Adnan, 30 Oct 2026).
 - Payment: all methods (cash, card, JazzCash, EasyPaisa, bank transfer).
 - Customers can watch the repair and take back removed parts, on request, when the bench is not busy. Swollen batteries are disposed of safely straight away.
 - Booking emails go to rehanmobiletraders@gmail.com.
@@ -41,9 +47,10 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 ## Capabilities and Constraints
 
 - Booking: device, fault, visit time, name and phone. Saved and emailed to the shop, then WhatsApp opens with a prefilled message.
+- Quote ticket: the Describe tab on /estimate sends name, number, device, message and up to 3 photos through the booking pipeline as a quote request; the shop replies on WhatsApp.
 - AI chat assistant: answers from the site's own content only. Primary model Claude Haiku via OpenRouter, fallback Gemini via Google AI Studio, final fallback a fixed reply with WhatsApp and call links. Replies in the language the customer writes in (English, Roman Urdu or Urdu script).
 - Google reviews and rating: 5 real reviews copied into content.ts with an as-of date, linking to the Google listing (no Places API: no billing).
-- Prices: launch in quote mode (Adnan): no price line is shown, quotes are given on WhatsApp, and no turnaround is promised. One switch in content.ts flips to "From Rs X" later; panel prices move fast, so the switch must stay one line.
+- Prices: launch in quote mode (Adnan): no price line is shown and quotes are given on WhatsApp. Never promise how fast a quote comes. One switch in content.ts flips to "From Rs X" later; panel prices move fast, so the switch must stay one line.
 - All copy lives in `src/content.ts`. No copy in components.
 - Theme follows the device (prefers-color-scheme). Static background. Subtle motion only, reduced-motion respected.
 - Lighthouse 95+ on Performance, Accessibility, Best Practices and SEO, mobile.
@@ -63,7 +70,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Google: 4.9 from 47 reviews. Reviews mention a Galaxy S22 Ultra water-damage fix with data recovered and a Galaxy Z Fold4 blank display fix.
 - Service list: `../growth/Documents/Business Profile.html` section 02.
 - Adnan's answers of 28 Oct 2026: `docs/PRD.md` §11.
-- Not confirmed, never invent: prices, warranty length, turnaround times, number of repairs, registered name/NTN, courier terms, original-parts claims.
+- Not confirmed, never invent: prices, warranty length in days or months or its terms, any turnaround beyond the 30 Oct 2026 answer, number of repairs, registered name/NTN, courier packing guidance, general original-parts claims, anything on the risk of touch-glass separation.
 
 ## Product Principles
 

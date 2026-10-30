@@ -6,17 +6,13 @@ import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
 import { estimator } from "@/content"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: estimator.seo.title,
-  description: estimator.seo.description,
-  alternates: { canonical: "/estimate" },
-  openGraph: { title: estimator.seo.title, description: estimator.seo.description, url: "/estimate" },
-}
+export const metadata: Metadata = pageMeta({ title: estimator.seo.title, description: estimator.seo.description, path: "/estimate" })
 
 export default function EstimatePage() {
   return (
-    <Section className="pt-28 lg:pt-40">
+    <Section className="pt-28 lg:pt-32">
       <Container className="grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
         <div>
           <Heading as="h1" size="display-xl" rule>
@@ -26,8 +22,8 @@ export default function EstimatePage() {
             {estimator.lede}
           </Text>
         </div>
-        <Card className="min-w-0 p-5 sm:p-7">
-          {/* The static HTML has the picker; the client reads ?q= from the homepage box and runs it. */}
+        <Card className="w-full max-w-estimate min-w-0 p-5 sm:p-7 lg:justify-self-end">
+          {/* The static HTML has the picker; the client reads ?q= from the homepage box and opens the Describe tab with it. */}
           <Suspense fallback={<Estimator />}>
             <EstimatorFromUrl />
           </Suspense>

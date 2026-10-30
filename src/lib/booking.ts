@@ -78,3 +78,33 @@ export function normalizePhone(input: string) {
 
 /** "+923001234567" → "0300 1234567". */
 export const displayPhone = (e164: string) => `0${e164.slice(3, 6)} ${e164.slice(6)}`
+
+// ─── Browser side: shared by the BookingFlow and the quote ticket form on /estimate ──────────────────────────────
+
+/** sessionStorage key: the confirmation page reads the booking from here, so nothing personal goes in a URL. */
+export const BOOKING_KEY = "rt-booking"
+
+// Module-level so the React compiler sees this as an event-time read, not a render-time one.
+export const now = () => Date.now()
+
+/** 5 bookings per device per hour (localStorage), before the Sheet's own 5 per number per hour. */
+export const BOOKING_LIMIT = 5
+const HOUR = 3_600_000
+const LIMIT_KEY = "rt-bookings"
+export const recentBookings = () => {
+  try {
+    return (JSON.parse(localStorage.getItem(LIMIT_KEY) ?? "[]") as number[]).filter((t) => now() - t < HOUR)
+  } catch {
+    return []
+  }
+}
+/** Counts one saved booking against the hourly limit. */
+export const rememberBooking = () => {
+  try {
+    localStorage.setItem(LIMIT_KEY, JSON.stringify([...recentBookings(), now()]))
+  } catch {
+    // Private mode can refuse storage; the Sheet's own limit still applies.
+  }
+}
+/** Shown when the Sheet could not be reached: "WEB-" and six characters of the time, never a job number. */
+export const localRef = () => `WEB-${now().toString(36).toUpperCase().slice(-6)}`

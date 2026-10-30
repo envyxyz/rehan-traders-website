@@ -14,15 +14,25 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem, TogglePill } from "@/components/ui/radio-group"
 import { TimeWheel } from "@/components/time-wheel"
 import { actions, booking, faults, holidays, priceMode, services, site, type BookingSummary } from "@/content"
-import { bookingDays, displayPhone, normalizePhone, slotDay, slotLabel, type BookingDay } from "@/lib/booking"
+import {
+  BOOKING_KEY,
+  BOOKING_LIMIT,
+  bookingDays,
+  displayPhone,
+  localRef,
+  normalizePhone,
+  now,
+  recentBookings,
+  rememberBooking,
+  slotDay,
+  slotLabel,
+  type BookingDay,
+} from "@/lib/booking"
 import { track } from "@/lib/track"
 import { cn } from "@/lib/utils"
 
 const STEPS = ["device", "fault", "time", "details", "review"] as const
 type Step = (typeof STEPS)[number]
-
-/** sessionStorage key: the confirmation page reads the booking from here, so nothing personal goes in a URL. */
-export const BOOKING_KEY = "rt-booking"
 
 type Draft = {
   device: string | null
@@ -37,22 +47,6 @@ type Draft = {
 }
 
 const tz = site.hours.timezone
-// Module-level so the React compiler sees these as event-time reads, not render-time ones.
-const now = () => Date.now()
-
-/** 5 bookings per device per hour (localStorage), before the Sheet's own 5 per number per hour. */
-const LIMIT = 5
-const HOUR = 3_600_000
-const LIMIT_KEY = "rt-bookings"
-const recentBookings = () => {
-  try {
-    return (JSON.parse(localStorage.getItem(LIMIT_KEY) ?? "[]") as number[]).filter((t) => now() - t < HOUR)
-  } catch {
-    return []
-  }
-}
-/** Shown when the Sheet could not be reached: "WEB-" and six characters of the time, never a job number. */
-const localRef = () => `WEB-${now().toString(36).toUpperCase().slice(-6)}`
 
 const openFaults: readonly string[] = booking.fault.open
 /** Tap a fault pill: on or off. An open choice ("Not sure") stands alone; picking a listed fault drops it. */
@@ -167,7 +161,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
   }
 
   async function submit() {
-    if (recentBookings().length >= LIMIT) return setError(booking.review.limit)
+    if (recentBookings().length >= BOOKING_LIMIT) return setError(booking.review.limit)
     setSending(true)
     const body = {
       kind: draft.kind,
@@ -211,7 +205,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
     }
     track("book_submit", { kind: summary.kind, saved: summary.saved })
     try {
-      if (job) localStorage.setItem(LIMIT_KEY, JSON.stringify([...recentBookings(), now()]))
+      if (job) rememberBooking()
       sessionStorage.setItem(BOOKING_KEY, JSON.stringify(summary))
     } catch {
       // Private mode can refuse storage; the confirmation page then shows its fallback.

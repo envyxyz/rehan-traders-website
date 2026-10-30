@@ -5,13 +5,9 @@ import { CtaBand } from "@/components/cta-band"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { breadcrumbs, privacyPage, seo } from "@/content"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.privacy.title,
-  description: seo.privacy.description,
-  alternates: { canonical: "/privacy" },
-  openGraph: { title: seo.privacy.title, description: seo.privacy.description, url: "/privacy" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.privacy.title, description: seo.privacy.description, path: "/privacy" })
 
 export default function PrivacyPage() {
   return (

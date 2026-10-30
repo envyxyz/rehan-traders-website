@@ -77,6 +77,32 @@ export const site = {
   courier: true, // Adnan, PRD §11 q6: courier and out-of-city repairs
 } as const
 
+/** How a courier repair travels (Adnan, 30 Oct 2026). The customer chooses; the customer pays. */
+const delivery = "Send it however suits you: inside Lahore, inDrive, Yango or any other ride service; nationwide, TCS. You pay for delivery."
+
+/**
+ * Warranty, turnaround and courier, as Adnan answered on 30 Oct 2026 (PRD §11). One sentence each, written to be quoted
+ * alone, and reused by the FAQ, the visit page, llms.txt and the chat assistant. No warranty length, no "guaranteed", no
+ * general "original parts" claim (the battery line is only about what the customer chooses). The 60 minutes belongs to a
+ * normal panel (screen) change only.
+ */
+export const facts = {
+  warranty:
+    "Rehan Traders gives generous warranties. The warranty depends on the type of repair, the model and the quality of parts you choose, and is discussed right after the job is confirmed or after the fault is diagnosed.",
+  turnaround:
+    "Repair time at Rehan Traders, Hafeez Center, Lahore depends on the type of repair, parts availability, and how rare and complex the model is. A normal screen panel change can be done in as little as 60 minutes.",
+  turnaroundFold:
+    "Complex devices such as Galaxy Z Folds can take up to a day.",
+  courier: `Rehan Traders repairs phones sent by courier from outside Lahore. Create a ticket on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp. If possible the shop quotes over the phone. Otherwise you send the phone, the shop inspects it and quotes, repairs it once you agree, and sends it back. ${delivery}`,
+  check:
+    "Rehan Traders checks your device free of cost at Shop G-88, Hafeez Center, Lahore. The shop tells you what the issue is, whether it can be repaired, what it will cost and how long it will take.",
+  delivery,
+  battery:
+    "On an iPhone, if you choose an original battery, the \"Unknown Part\" message can be removed and battery health is shown. If you choose a cheaper copy battery, the IC from your old original battery can be moved to the new one. In some very rare cases this is not possible, and the shop tells you after checking the phone.",
+  seal: "Rehan Traders re-applies the water-resistance seal after a repair on request.",
+  quote: `Send photos of the phone and its model on WhatsApp to ${site.phone.display}, or create a ticket with photos on the Repair estimate page of this website. You can also visit Rehan Traders at Shop G-88, Ground Floor, Hafeez Center, Lahore. The shop replies with a quote; prices are not published online.`,
+} as const
+
 // Typed in by hand (static site, no Places API). Update rating, count and asOf together.
 // Copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings, 32 with text (the other 18 are
 // stars only and are left out). Text exactly as written; `date` is Google's relative date as of `asOf`. Ameer's own
@@ -148,7 +174,7 @@ export const actions = {
   call: "Call",
   directions: "Directions",
   allRepairs: "All repairs",
-  readReviews: (count: number) => `Read all ${count} on Google`,
+  readReviews: "Read all reviews on Google",
   allQuestions: "All questions",
   /** Phase 5: the button on the booking form / page opened by "Book this repair", and its success message. */
   getQuote: "Get a quote",
@@ -158,7 +184,7 @@ export const actions = {
 export const hero = {
   title: "Cracked glass? Fixed at G‑88.", // ‑ is a non-breaking hyphen: "G-88" never splits
   lede: "Phone and tablet repairs at an open bench in Hafeez Center, Lahore. Touch glass, Fold and Flip, iPhone, boards.",
-  proof: (rating: number, count: number) => ({ rating: rating.toFixed(1), rest: `on Google · ${count} reviews` }),
+  proof: (rating: number) => ({ rating: rating.toFixed(1), rest: "on Google" }),
   jobCard: {
     heading: "Repair job card",
     number: "No. RT-0427",
@@ -237,6 +263,7 @@ export const services: Service[] = [
       { q: "Which Fold and Flip models do you repair?", a: "We repair every Samsung Galaxy Z Fold and Galaxy Z Flip generation, Pixel Fold, and Surface Duo." },
       { q: "Can a blank inner screen be saved without full replacement?", a: "Yes. In many cases we can recover the display panel or resolve flexible cable faults." },
       { q: "Do you repair stiff or stuck hinges?", a: "Yes. We clean and service Fold and Flip hinges at the bench." },
+      { q: "How long does a Galaxy Z Fold repair take?", a: "A Galaxy Z Fold repair can take up to a day, depending on the repair, parts availability and the model." },
     ],
     related: ["touch-glass-replacement", "screen-replacement", "board-repair"],
   },
@@ -259,6 +286,7 @@ export const services: Service[] = [
       { q: "Can you replace cracked iPhone back glass?", a: "Yes. We remove the broken back glass and install new glass at the bench." },
       { q: "Do you fix Face ID faults?", a: "Yes. Face ID sensors and dot projector faults are diagnosed under the microscope." },
       { q: "Can I get my old parts back?", a: "Yes, on request, provided the part is safe to return. Swollen batteries are disposed of immediately." },
+      { q: "Will my iPhone show \"Unknown Part\" after a battery change?", a: facts.battery },
     ],
     related: ["touch-glass-replacement", "battery-charging", "board-repair"],
   },
@@ -280,6 +308,7 @@ export const services: Service[] = [
       { q: "When do I need a full screen replacement instead of touch glass?", a: "Full replacement is required when the screen has colored lines, black bleed, green tint, or no picture." },
       { q: "Do you repair both iPhone and Android displays?", a: "Yes. We replace screens on iPhone, Samsung, Google Pixel, OnePlus, and other brands." },
       { q: "How can I get a quote for my screen?", a: "Message us on WhatsApp with your exact model and we'll send you a quote." },
+      { q: "How long does a screen replacement take?", a: "A normal panel (screen) change can be done in as little as 60 minutes, depending on parts and model." },
     ],
     related: ["touch-glass-replacement", "galaxy-z-fold-flip", "water-damage-data-recovery"],
   },
@@ -301,6 +330,7 @@ export const services: Service[] = [
       { q: "What do you do with swollen batteries?", a: "Swollen batteries are removed carefully and disposed of straight away for safety." },
       { q: "Can a loose charging port be repaired without replacement?", a: "We clean compacted lint and dust first. If the pins are broken, we replace the port." },
       { q: "Can I take my old battery home?", a: "Yes, on request, as long as the battery is not swollen or leaking." },
+      { q: "Will my iPhone show \"Unknown Part\" after a battery change?", a: facts.battery },
     ],
     related: ["iphone", "board-repair", "ipad-tablet"],
   },
@@ -419,6 +449,16 @@ export type BookingSummary = {
   problem?: string
 }
 
+/** The faults that are not a fault: "Not sure", and the one the ticket form sends ("Not mentioned here"). */
+const openFaults = ["Not sure", "Not mentioned here"] as const
+
+/**
+ * Whether a ticket or WhatsApp text shows its Fault line. When the customer's own words are there with an open
+ * fault, "Fault: Not mentioned here" says nothing and the Problem line says it all. The Worker and the Sheet still
+ * get the open fault.
+ */
+export const showsFault = (b: Pick<BookingSummary, "fault" | "problem">) => !(b.problem && (openFaults as readonly string[]).includes(b.fault))
+
 export const booking = {
   title: "Book a visit",
   lede: "Four quick questions. No account, no payment.",
@@ -446,7 +486,7 @@ export const booking = {
     label: "Fault",
     pickError: "Pick what's wrong to continue.",
     /** Always offered after the service's faults; both open the description and photos. */
-    open: ["Not sure", "Not mentioned here"],
+    open: openFaults,
     describe: "Describe the problem",
     describePlaceholder: "What happened, and what does it do now?",
     describeError: "Describe the problem to continue.",
@@ -494,12 +534,12 @@ export const booking = {
     error: "Something in the form was not accepted. Go back, check it and try again.",
     limit: "That is 5 bookings in the last hour. Try again later, or message the shop on WhatsApp.",
   },
-  /** Prefilled WhatsApp text: job number, device, fault, time and name. */
+  /** Prefilled WhatsApp text: job number, device, fault (or the problem), time and name. */
   whatsapp: (b: BookingSummary) =>
     [
       `Assalam o alaikum. ${b.kind === "quote" ? "Quote request" : "Booking"} No. ${b.ref}`,
       `Device: ${b.device}`,
-      `Fault: ${b.fault}`,
+      showsFault(b) && `Fault: ${b.fault}`,
       b.problem && `Problem: ${b.problem}`,
       b.visit && `Visit: ${b.visit}`,
       `Name: ${b.name}`,
@@ -539,36 +579,58 @@ export const process = [
   { title: "Job card at the counter", text: "Your device, fault and contact are written on a numbered job card." },
   { title: "Repaired at the open bench", text: "The work happens at the bench in the shop. Ask to watch when it is not busy." },
   { title: "Tested and sealed", text: "Every repair is tested, then sealed in a pouch until you collect it." },
-  // TODO(adnan): confirm warranty terms before this step says more (PRD §11 q1)
-  { title: "Warranty card", text: "You leave with a warranty card for the repair." },
+  { title: "Warranty card", text: "You leave with a warranty card for the repair. The warranty depends on the repair and is agreed when the job is confirmed." },
 ] as const
 
 export const faq = [
   {
-    q: "Can you replace only the glass and keep my original display?",
-    a: "Yes. Touch glass replacement is our speciality. We change the cracked glass and keep the display your phone came with.",
+    q: "Can you replace only the broken glass and keep my original display?",
+    a: "Yes, when the display still works. Rehan Traders separates the cracked glass from the display under heat and vacuum and laminates new glass onto the display your phone came with. Lines, dark patches or no picture mean the panel itself is damaged and needs a screen replacement.",
+  },
+  {
+    q: "Is checking my phone free?",
+    a: `Yes. ${facts.check}`,
+  },
+  {
+    q: "Do you give a warranty on repairs?",
+    a: `Yes. ${facts.warranty}`,
+  },
+  {
+    q: "How long does a phone repair take at Rehan Traders?",
+    a: `${facts.turnaround} ${facts.turnaroundFold}`,
+  },
+  {
+    q: "How long does a Galaxy Z Fold repair take?",
+    a: "A Galaxy Z Fold repair at Rehan Traders, Hafeez Center, Lahore can take up to a day, depending on parts availability and how complex the model is.",
+  },
+  {
+    q: "How do I get a price for my repair?",
+    a: `Send photos of the device and its model on WhatsApp to ${site.phone.display}, or send the problem with photos through the form on the Estimate page, and Rehan Traders replies with a quote. You can also bring the device to Shop G-88, Ground Floor, Hafeez Center, Lahore.`,
+  },
+  {
+    q: "Can I send my phone by courier from outside Lahore?",
+    a: `Yes. Create a ticket on the website or call ${site.phone.display}, then send photos of the phone on WhatsApp. If possible, Rehan Traders quotes over the phone; otherwise you send the phone to Shop G-88, Hafeez Center, Lahore, where it is inspected and quoted, repaired once you agree, and sent back. ${facts.delivery}`,
+  },
+  {
+    q: "Will my iPhone show \"Unknown Part\" after a battery change?",
+    a: facts.battery,
+  },
+  {
+    q: "Do you re-seal the phone after a repair?",
+    a: `Yes, on request. ${facts.seal}`,
   },
   {
     q: "Can I watch my phone being repaired?",
-    a: "Yes, on request, when the bench is not busy. During rush hours it may not be possible.",
-  },
-  {
-    q: "Do I get my old parts back?",
-    a: "Yes, if you ask and the part is safe to return. Swollen batteries are disposed of straight away for safety.",
-  },
-  {
-    q: "Do you repair phones from outside Lahore?",
-    a: "Yes. Send your phone by courier. Message us on WhatsApp first.",
+    a: "Yes. Repairs happen at the open bench at Rehan Traders, Hafeez Center, Lahore, and you can ask to watch when the bench is not busy. You can also ask for your old parts back, except swollen batteries, which are disposed of straight away for safety.",
   },
   {
     q: "How can I pay?",
     a: "All payment methods are accepted.",
   },
   {
-    q: "When are you open?",
-    a: `${site.hours.oneLine}. ${site.hours.fridayBreak}. ${site.hours.holidays}.`,
+    q: "Where is Rehan Traders and when is it open?",
+    a: `Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore. It is open ${site.hours.oneLine}. ${site.hours.fridayBreak}. ${site.hours.holidays}.`,
   },
-  // TODO(adnan): confirm warranty length and turnaround times before adding those questions
 ] as const
 
 export const visit = {
@@ -586,16 +648,16 @@ export const visit = {
     { label: "Friday prayer break", value: "1 to 2 PM", days: [5] },
     { label: "Sunday and public holidays", value: "Closed", days: [0] },
   ],
-  courier: "Outside Lahore? Send it by courier.", // TODO(adnan): courier terms (PRD §12 q4)
-  courierLink: "Message us on WhatsApp",
+  courier: "Outside Lahore? We repair phones sent by courier.",
+  courierLink: "See the four steps",
 } as const
 
 export const estimate = {
   title: "Not sure what's wrong?",
   label: "Describe the problem",
-  lede: "Not in the list? Describe it and see the likely repair.",
+  lede: "Describe it, add photos if you like, and the shop replies on WhatsApp with a quote.",
   placeholder: "My Fold's inner screen has a black line",
-  submit: "Get an estimate",
+  submit: "Continue",
 } as const
 
 /** Homepage section copy, in PRD §5 order. */
@@ -617,7 +679,7 @@ export const home = {
   },
   reviews: {
     title: "What customers say",
-    summary: (count: number) => `on Google from ${count} reviews`,
+    summary: "on Google",
     asOf: (date: string) => `As of ${date}`,
     show: (n: number, total: number) => `Show review ${n} of ${total}`,
     next: "Next review",
@@ -689,6 +751,11 @@ export const reviewsPage = {
   viewOnGoogle: "View on Google Maps",
   readAllOnGoogle: (count: number) => `Read all ${count} reviews on Google Maps`,
   googleReview: "Google review",
+  carouselLabel: "Customer reviews, use the left and right arrow keys to move between them",
+  carouselRole: "carousel",
+  prev: "Previous review",
+  next: "Next review",
+  counter: (n: number, total: number) => `${n} of ${total}`,
   starSummary: (rating: number, count: number) => `${rating.toFixed(1)} out of 5 stars from ${count} Google reviews`,
 } as const
 
@@ -710,13 +777,16 @@ export const visitPage = {
   mapPrompt: "Tap to load interactive Google Map",
   mapLoading: "Loading map...",
   mapAlt: "Rehan Traders storefront at Hafeez Center",
-  courierTitle: "Courier repairs",
-  courierLede: "We accept courier repairs from customers outside Lahore.",
-  courierNotice: "Courier terms and packing guidelines to be confirmed.", // TODO(adnan): confirm courier partners, packing guidelines, and return shipping terms
-  courierStep1: "Message us on WhatsApp with your device model and problem.",
-  courierStep2: "Pack your device securely before handing it to the courier.",
-  courierStep3: "We inspect your device at the bench and confirm the repair with you.",
-  courierAction: "Message on WhatsApp before sending",
+  courierTitle: "Can I send my phone by courier from outside Lahore?",
+  courierLede: "Yes. Rehan Traders repairs phones sent by courier from outside Lahore. It takes four steps.",
+  courierSteps: [
+    { title: "Create a ticket", text: `Create a ticket on this website, or call ${site.phone.display}.` },
+    { title: "Send photos", text: "Send photos of the phone on WhatsApp." },
+    { title: "Quote by phone", text: "If possible, we give you a quote over the phone." },
+    { title: "Inspect, repair, return", text: "Otherwise you send the phone, we inspect it and quote, repair it once you agree, and send it back." },
+  ],
+  courierDelivery: delivery,
+  courierActions: { ticket: "Create a ticket", whatsapp: "Send photos on WhatsApp", call: `Call ${site.phone.display}` },
 } as const
 
 export const faqPage = {
@@ -772,7 +842,7 @@ export const privacyPage = {
     {
       title: "AI chat data",
       // TODO(adnan): confirm. The providers' own terms decide whether they keep or train on what they receive.
-      text: "When you use the chat assistant or the repair estimator, your message is sent to AI providers (Anthropic through OpenRouter, Google AI Studio and Groq) to write a reply. This site does not store these messages. Do not type your name, number or other private details into them.",
+      text: "When you use the chat assistant, your message is sent to AI providers (Anthropic through OpenRouter, Google AI Studio and Groq) to write a reply. This site does not store these messages. Do not type your name, number or other private details into them.",
     },
     {
       title: "Data storage and security",
@@ -838,9 +908,11 @@ export const seo = {
   home: {
     title: "Rehan Traders · Phone and tablet repair at Hafeez Center, Lahore",
     description:
-      "Touch glass replacement, Galaxy Z Fold and Flip, iPhone and board repairs at Shop G-88, Hafeez Center, Lahore. Book a visit or WhatsApp 0305 8874839.",
+      "Phone and tablet repair lab at Shop G-88, Hafeez Center, Lahore: touch glass replacement, Galaxy Z Fold and Flip, iPhone, iPad and board repairs. Book a visit or get a quote on WhatsApp.",
   },
   titleTemplate: "%s · Rehan Traders",
+  /** Alt text for the share image; keep in step with src/app/opengraph-image.alt.txt. */
+  shareImageAlt: "Rehan Traders, Mobile & Tab Repair Lab, Shop G-88, Hafeez Center, Lahore",
   book: {
     title: "Book a visit",
     description: "Book a repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time.",
@@ -949,20 +1021,22 @@ export const estimator = {
   seo: {
     title: "Repair estimate",
     description:
-      "Not sure what's wrong with your phone or tablet? Pick the device and fault, or describe it, and see the likely repair at Rehan Traders, Hafeez Center, Lahore.",
+      "Pick your device and the fault to see the likely repair, or send the problem with photos. Rehan Traders, Hafeez Center, Lahore replies with a quote on WhatsApp.",
   },
   title: "Repair estimate",
-  lede: "Pick your device and the fault, or describe the problem in your own words. You'll see the likely repair and how to get a price.",
+  lede: "Pick a device and fault to see the likely repair, or send the problem with photos and the shop replies with a quote on WhatsApp.",
   mode: { label: "How do you want to tell us?", pick: "Pick device and fault", describe: "Describe it" },
   device: "Device",
   fault: "Fault",
-  describe: estimate.label,
-  describePlaceholder: estimate.placeholder,
-  describeHint: "English, Roman Urdu or Urdu. Don't include your name or number.",
-  submit: estimate.submit,
-  working: "Reading your problem",
+  submit: "See the likely repair",
   pickError: "Pick your device and the fault.",
-  describeError: "Describe the problem in a few words.",
+  /** The Describe tab: a quote ticket. Labels and errors shared with the booking flow come from `booking`. */
+  ticket: {
+    message: "Describe the problem",
+    placeholder: estimate.placeholder,
+    hint: "Your name and number go only to the shop.",
+    submit: "Create ticket",
+  },
   result: {
     title: "Likely repair",
     device: "Device",
@@ -971,12 +1045,10 @@ export const estimator = {
       kept: "Your original display stays: only the cracked glass is replaced.",
       maybe: "The shop tries to save the damaged panel first and replaces it only when it cannot be saved.",
     },
-    guess: "This is a guess from your description. The shop confirms it when they see the device.",
-    unknownDevice: "Your device",
     quote: "Get a quote on WhatsApp",
     other: "That doesn't match a repair we list. Ask on WhatsApp and the shop will tell you.",
+    again: "Start again",
   },
-  unavailable: `The estimator isn't working right now. WhatsApp or call us on ${site.phone.display}.`,
   whatsapp: (device: string, fault: string) => `Assalam o alaikum. Quote please.\nDevice: ${device}\nFault: ${fault}`,
   faults: [
     { slug: "cracked-glass", label: "Cracked glass, screen still works", service: "touch-glass-replacement", panel: "kept" },

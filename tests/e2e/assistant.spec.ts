@@ -1,10 +1,10 @@
 import { expect, test, type Page } from "@playwright/test"
 
-import { actions, assistant, estimator } from "../../src/content"
+import { actions, assistant, booking, estimator } from "../../src/content"
 import { MAX_INPUT, MAX_TURNS, parseReply } from "../../src/lib/assistant"
 import { pickDevice } from "./helpers"
 
-// UI tests stub /api/chat and /api/estimate, so they cost nothing and do not depend on a model.
+// UI tests stub /api/chat and /api/book, so they cost nothing and do not depend on a model.
 // scripts/chat-evals.mjs tests the real models.
 const reply = "Yes, we repair Galaxy Z Fold inner screens.\n>> actions: book whatsapp\n>> chips: When are you open? | Where is G-88?"
 const stubChat = (page: Page, status: number, body: string) =>
@@ -90,48 +90,121 @@ test("chat falls back to WhatsApp and call when the Worker fails", async ({ page
   await expect(sheet.getByRole("link", { name: /0305 8874839/ })).toBeVisible()
 })
 
-test("estimate: picking device and fault needs no model", async ({ page }) => {
-  let called = false
-  await page.route("/api/estimate", (route) => ((called = true), route.abort()))
+test("estimate: picking device and fault shows the repair in place of the form", async ({ page }) => {
+  const errors: string[] = []
+  page.on("pageerror", (e) => errors.push(String(e)))
   await page.goto("/estimate")
-  await page.getByRole("button", { name: estimator.submit }).click()
-  await expect(page.locator("form").getByRole("alert")).toHaveText(estimator.pickError)
-  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5")
+  const form = page.locator("form:visible")
+  await form.getByRole("button", { name: estimator.submit }).click()
+  await expect(form.getByRole("alert")).toHaveText(estimator.pickError)
+  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5", form)
   await page.getByRole("radio", { name: "Fold or Flip inner screen" }).click()
-  await page.getByRole("button", { name: estimator.submit }).click()
+  const card = page.locator("[data-slot=card]").first()
+  const before = (await card.boundingBox())!
+  const fixed = (page.viewportSize()?.width ?? 0) >= 1024 // from lg the card keeps one height; below it, each panel has its own
+  await form.getByRole("button", { name: estimator.submit }).dblclick() // a double click must not crash the page
 
   await expect(page.getByRole("main").getByText("Galaxy Z Fold and Flip", { exact: true })).toBeVisible()
   await expect(page.getByText(estimator.result.panel.maybe)).toBeVisible()
+  const after = (await card.boundingBox())!
+  if (fixed) expect(after.height).toBe(before.height) // the card keeps its size
+  else expect(after.height).toBeLessThan(before.height) // no empty space under a short result
   const wa = new URL((await page.getByRole("link", { name: estimator.result.quote }).getAttribute("href"))!)
   expect(wa.searchParams.get("text")).toBe(estimator.whatsapp("Samsung Galaxy Z Fold5", "Fold or Flip inner screen"))
   await expect(page.getByRole("link", { name: actions.bookRepair })).toHaveAttribute("href", "/book?service=galaxy-z-fold-flip")
-  expect(called).toBe(false)
+
+  // Start again brings the form back, and a second result works too.
+  await page.getByRole("button", { name: estimator.result.again }).click()
+  await expect(page.locator("form:visible").getByRole("button", { name: estimator.submit })).toBeVisible()
+  await page.getByRole("radio", { name: "Hinge" }).click()
+  await page.locator("form:visible").getByRole("button", { name: estimator.submit }).click()
+  await expect(page.getByRole("heading", { name: estimator.result.title })).toBeVisible()
+  expect(errors).toEqual([])
 
   // Book this repair opens the booking with the device already picked.
   await page.getByRole("link", { name: actions.bookRepair }).click()
   await expect(page.getByRole("dialog").getByText("Galaxy Z Fold and Flip")).toBeVisible()
 })
 
-test("estimate: a description from the homepage box runs on arrival", async ({ page }) => {
-  await page.route("/api/estimate", (route) =>
-    route.fulfill({ json: { ok: true, device: "iPhone 13", faultSlug: "screen-damaged", confidence: "medium", provider: "stub" } })
-  )
-  await page.goto("/estimate?q=iphone%2013%20screen%20has%20green%20lines")
-  // An iPhone screen fault moves to the iPhone repair; a guess says so.
-  await expect(page.getByRole("main").getByText("iPhone repair", { exact: true })).toBeVisible()
-  await expect(page.getByText(estimator.result.guess)).toBeVisible()
+test("estimate: the Describe tab sends a quote ticket and lands on the confirmation", async ({ page }) => {
+  let sent: Record<string, unknown> | null = null
+  let posts = 0
+  await page.route("/api/book", async (route) => {
+    posts++
+    sent = route.request().postDataJSON()
+    await new Promise((r) => setTimeout(r, 300)) // slow enough for a second click to arrive
+    await route.fulfill({ json: { ok: true, job: "RT-0099" } })
+  })
+  // The homepage box opens this tab with its message prefilled and sends nothing by itself.
+  await page.goto("/estimate?q=Fold%20inner%20screen%20has%20a%20black%20line")
+  const form = page.locator("form:visible")
+  await expect(form.getByLabel(estimator.ticket.message)).toHaveValue("Fold inner screen has a black line")
+  expect(posts).toBe(0)
+
+  await form.getByRole("button", { name: estimator.ticket.submit }).click()
+  await expect(form.getByRole("alert")).toHaveText(booking.device.pickError)
+  // The field with the error is marked and points at the message.
+  const model = form.getByRole("combobox", { name: booking.device.model })
+  await expect(model).toHaveAttribute("aria-invalid", "true")
+  const errorId = (await form.getByRole("alert").getAttribute("id"))!
+  await expect(model).toHaveAttribute("aria-describedby", errorId)
+  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5", form)
+  await form.getByRole("button", { name: estimator.ticket.submit }).click()
+  await expect(form.getByRole("alert")).toHaveText(booking.details.nameError)
+  await form.getByLabel(booking.details.name).fill("Ali Test")
+  await form.getByLabel(booking.details.phone).fill("0300 1234567")
+  await page.waitForTimeout(3100) // the Worker refuses a form filled in under 3 seconds
+  await form.getByRole("button", { name: estimator.ticket.submit }).dblclick() // one request, however fast you click
+
+  await expect(page).toHaveURL("/book/confirmed")
+  expect(posts).toBe(1)
+  expect(sent).toMatchObject({
+    kind: "quote",
+    slot: null,
+    device: "Samsung Galaxy Z Fold5",
+    fault: booking.fault.open[1],
+    problem: "Fold inner screen has a black line",
+    name: "Ali Test",
+    phone: "0300 1234567",
+    website: "",
+  })
+  expect(sent).not.toHaveProperty("service")
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(booking.confirmed.quoteTitle)
+  await expect(page.getByText("RT-0099")).toBeVisible()
+  const text = new URL((await page.getByRole("link", { name: booking.confirmed.send }).getAttribute("href"))!).searchParams.get("text")!
+  expect(text).toContain("Quote request No. RT-0099")
+  expect(text).toContain("Problem: Fold inner screen has a black line")
+  expect(text).not.toContain("Fault:") // "Not mentioned here" says nothing next to the problem
+  await expect(page.getByText(booking.review.fault, { exact: true })).toHaveCount(0)
+  await expect(page.getByText("Fold inner screen has a black line")).toBeVisible()
 })
 
-test("estimate: falls back to WhatsApp and call when every model is down", async ({ page }) => {
-  await page.route("/api/estimate", (route) => route.fulfill({ status: 503, json: { ok: false, error: "unavailable" } }))
+test("estimate: the Describe tab falls back to a WhatsApp reference when the Worker is down", async ({ page }) => {
+  await page.route("/api/book", (route) => route.fulfill({ status: 502, json: { ok: false, error: "webhook" } }))
+  await page.goto("/estimate?tab=describe")
+  const form = page.locator("form:visible")
+  await pickDevice(page, "Samsung", "z fold5", "Samsung Galaxy Z Fold5", form)
+  await form.getByLabel(estimator.ticket.message).fill("Dead after a drop")
+  await form.getByLabel(booking.details.name).fill("Ali Test")
+  await form.getByLabel(booking.details.phone).fill("0300 1234567")
+  await page.waitForTimeout(3100)
+  await form.getByRole("button", { name: estimator.ticket.submit }).click()
+  await expect(page).toHaveURL("/book/confirmed")
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(booking.confirmed.failedTitle)
+  await expect(page.getByText(/^WEB-/)).toBeVisible()
+})
+
+test("estimate: switching tabs does not move the card (from lg up)", async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 0) < 1024, "below lg each panel has its own height")
   await page.goto("/estimate")
+  const card = page.locator("[data-slot=card]").first()
+  const pick = (await card.boundingBox())!
   await page.getByRole("radio", { name: estimator.mode.describe }).click()
-  await page.getByLabel(estimator.describe).fill("phone fell in water")
-  await page.getByRole("button", { name: estimator.submit }).click()
-  await expect(page.getByText(estimator.unavailable)).toBeVisible()
+  const describe = (await card.boundingBox())!
+  expect(describe).toEqual(pick)
 })
 
-test.describe("POST /api/chat and /api/estimate", () => {
+test.describe("POST /api/chat", () => {
   const user = (content: string) => ({ role: "user", content })
   test("refuse bad input before any model is called", async ({ page }) => {
     const turns = Array.from({ length: MAX_TURNS * 2 }, (_, i) => (i % 2 ? { role: "assistant", content: "ok" } : user("hi")))
@@ -145,8 +218,7 @@ test.describe("POST /api/chat and /api/estimate", () => {
       { messages: [user("hi")], extra: 1 },
     ])
       expect((await page.request.post("/api/chat", { data: bad })).status(), JSON.stringify(bad).slice(0, 80)).toBe(400)
-    expect((await page.request.post("/api/estimate", { data: { text: "x".repeat(MAX_INPUT + 1) } })).status()).toBe(400)
-    expect((await page.request.post("/api/estimate", { data: { text: "ok", extra: 1 } })).status()).toBe(400)
+    expect((await page.request.post("/api/estimate", { data: { text: "ok" } })).status()).toBe(404) // the AI estimate is gone
     expect((await page.request.get("/api/chat")).status()).toBe(405)
   })
 })

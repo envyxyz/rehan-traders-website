@@ -10,13 +10,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, faq, faqPage, seo, site } from "@/content"
 import { faqSchema } from "@/lib/schema"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.faq.title,
-  description: seo.faq.description,
-  alternates: { canonical: "/faq" },
-  openGraph: { title: seo.faq.title, description: seo.faq.description, url: "/faq" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.faq.title, description: seo.faq.description, path: "/faq" })
 
 export default function FaqPage() {
   return (

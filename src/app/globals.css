@@ -191,6 +191,7 @@
   --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button, clear of the sticky bar */
   --container-content: 70rem;  /* 1120px */
   --container-panel: 96rem;    /* hero panel cap, 1536px */
+  --container-estimate: 34rem; /* the /estimate card: one width for both tabs and the result, 544px */
 
   /* Radii: 18px cards, 28px panels, pills for controls. */
   --radius-xs: 0.25rem;

@@ -17,7 +17,7 @@ const rise = (step: number) => ({
 
 /** 100svh inset panel: copy left, CSS fold right. */
 export function Hero() {
-  const proof = hero.proof(reviews.rating, reviews.count)
+  const proof = hero.proof(reviews.rating)
   return (
     <section id="top" className="flex min-h-svh p-2 sm:p-3">
       {/* The panel always fills the window (the fixed nav sits inside it at any width); only the content is capped. */}
@@ -57,9 +57,6 @@ export function Hero() {
               className={`mt-6 flex flex-wrap gap-x-5 gap-y-1.5 text-caption text-steel ${rise(3).className}`}
               style={rise(3).style}
             >
-              <a href={site.phone.href} className="font-display text-body-sm font-bold text-ink no-underline">
-                {site.phone.display}
-              </a>
               <span>{site.address.short}</span>
               <OpenStatus />
             </div>

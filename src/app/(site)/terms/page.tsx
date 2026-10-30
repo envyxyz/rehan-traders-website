@@ -5,13 +5,9 @@ import { CtaBand } from "@/components/cta-band"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { breadcrumbs, seo, termsPage } from "@/content"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.terms.title,
-  description: seo.terms.description,
-  alternates: { canonical: "/terms" },
-  openGraph: { title: seo.terms.title, description: seo.terms.description, url: "/terms" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.terms.title, description: seo.terms.description, path: "/terms" })
 
 export default function TermsPage() {
   return (

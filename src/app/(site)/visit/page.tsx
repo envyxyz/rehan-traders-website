@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { ArrowUpRight, Package } from "lucide-react"
+import { ArrowUpRight, Phone } from "lucide-react"
+import Link from "next/link"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
@@ -15,13 +16,9 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { actions, breadcrumbs, seo, site, ui, visit, visitPage } from "@/content"
 import { storeSchema } from "@/lib/schema"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: seo.visit.title,
-  description: seo.visit.description,
-  alternates: { canonical: "/visit" },
-  openGraph: { title: seo.visit.title, description: seo.visit.description, url: "/visit" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.visit.title, description: seo.visit.description, path: "/visit" })
 
 export default function VisitPage() {
   return (
@@ -145,60 +142,52 @@ export default function VisitPage() {
         </Container>
       </Section>
 
-      {/* Courier repairs */}
-      <Section>
+      {/* Courier repairs: four numbered steps, then the three ways to start. */}
+      <Section id="courier">
         <Container>
           <div className="max-w-2xl">
-            <div className="flex items-center gap-2">
-              <Icon icon={Package} />
-              <Heading as="h2">{visitPage.courierTitle}</Heading>
-            </div>
+            <Heading as="h2">{visitPage.courierTitle}</Heading>
             <Text tone="muted" className="mt-3">
               {visitPage.courierLede}
             </Text>
           </div>
 
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
-            <Card className="p-6">
-              <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
-                01
-              </span>
-              <Text tone="body" size="body-sm" className="mt-3">
-                {visitPage.courierStep1}
-              </Text>
-            </Card>
+          <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {visitPage.courierSteps.map((step, i) => (
+              <li key={step.title}>
+                <Card className="h-full p-6">
+                  <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-3 font-display text-title-md text-ink">{step.title}</h3>
+                  <Text tone="body" size="body-sm" className="mt-1.5">
+                    {step.text}
+                  </Text>
+                </Card>
+              </li>
+            ))}
+          </ol>
 
-            <Card className="p-6">
-              <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
-                02
-              </span>
-              <Text tone="body" size="body-sm" className="mt-3">
-                {visitPage.courierStep2}
-              </Text>
-            </Card>
+          <Text tone="muted" size="body-sm" className="mt-5 max-w-2xl">
+            {visitPage.courierDelivery}
+          </Text>
 
-            <Card className="p-6">
-              <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
-                03
-              </span>
-              <Text tone="body" size="body-sm" className="mt-3">
-                {visitPage.courierStep3}
-              </Text>
-            </Card>
-          </div>
-
-          <div className="mt-8 rounded-xl border border-hairline bg-concrete p-5 sm:p-6">
-            <p className="text-caption font-semibold text-steel">
-              {visitPage.courierNotice}
-            </p>
-            <div className="mt-4">
-              <Button asChild variant="whatsapp" className="h-auto min-h-13 whitespace-normal py-3 text-left">
-                <a href={site.whatsapp.href}>
-                  <WhatsAppIcon />
-                  {visitPage.courierAction}
-                </a>
-              </Button>
-            </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button asChild size="lg" arrow>
+              <Link href="/estimate?tab=describe">{visitPage.courierActions.ticket}</Link>
+            </Button>
+            <Button asChild size="lg" variant="whatsapp">
+              <a href={site.whatsapp.href}>
+                <WhatsAppIcon />
+                {visitPage.courierActions.whatsapp}
+              </a>
+            </Button>
+            <Button asChild size="lg" variant="line">
+              <a href={site.phone.href}>
+                <Icon icon={Phone} />
+                {visitPage.courierActions.call}
+              </a>
+            </Button>
           </div>
         </Container>
       </Section>

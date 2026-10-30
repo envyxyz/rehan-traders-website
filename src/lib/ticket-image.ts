@@ -1,4 +1,4 @@
-import { booking, site, type BookingSummary } from "../content"
+import { booking, showsFault, site, type BookingSummary } from "../content"
 import { ticketColors as C } from "./tokens"
 
 const SIZE = 1080
@@ -13,6 +13,37 @@ function fit(ctx: CanvasRenderingContext2D, text: string, weight: number, max: n
   let t = text
   while (t.length > 1 && ctx.measureText(`${t}…`).width > width) t = t.slice(0, -1)
   return `${t}…`
+}
+
+/** `text` as lines of at most `width`, broken at spaces (or anywhere in a long word); the last line is cut with an ellipsis when it runs out of lines. */
+function wrap(ctx: CanvasRenderingContext2D, text: string, width: number, maxLines: number) {
+  const words = text.replace(/\s+/g, " ").trim().split(" ")
+  const lines: string[] = []
+  let line = ""
+  for (let word of words) {
+    while (ctx.measureText(word).width > width) {
+      // A word wider than the line: split it where it fits.
+      let cut = word.length - 1
+      while (cut > 1 && ctx.measureText(word.slice(0, cut)).width > width) cut--
+      if (line) lines.push(line)
+      lines.push(word.slice(0, cut))
+      line = ""
+      word = word.slice(cut)
+    }
+    const next = line ? `${line} ${word}` : word
+    if (!line || ctx.measureText(next).width <= width) line = next
+    else {
+      lines.push(line)
+      line = word
+    }
+  }
+  if (line) lines.push(line)
+  if (lines.length <= maxLines) return lines
+  const kept = lines.slice(0, maxLines)
+  let last = kept[maxLines - 1]
+  while (last.length > 1 && ctx.measureText(`${last}…`).width > width) last = last.slice(0, -1)
+  kept[maxLines - 1] = `${last}…`
+  return kept
 }
 
 /**
@@ -76,12 +107,20 @@ export async function ticketImage(b: BookingSummary): Promise<Blob> {
 
   // Details: two columns, label over value, then the address across.
   const half = (inner - 32) / 2
-  const rows: [string, string][] = [
-    [booking.review.device, b.device],
-    [booking.review.fault, b.fault],
-    [c.visit, b.visit ?? booking.review.quoteVisit],
-    [booking.review.name, b.name],
-  ]
+  // A quote with the customer's words drops the Fault ("Not mentioned here") and the visit ("no visit booked") to
+  // make room for the problem itself.
+  const asked = b.kind === "quote" && !!b.problem
+  const rows: [string, string][] = asked
+    ? [
+        [booking.review.device, b.device],
+        [booking.review.name, b.name],
+      ]
+    : [
+        [booking.review.device, b.device],
+        ...(showsFault(b) ? [[booking.review.fault, b.fault] as [string, string]] : []),
+        [c.visit, b.visit ?? booking.review.quoteVisit],
+        [booking.review.name, b.name],
+      ]
   rows.forEach(([label, value], i) => {
     const lx = x + (i % 2) * (half + 32)
     const ly = tear + 80 + Math.floor(i / 2) * 130
@@ -91,7 +130,17 @@ export async function ticketImage(b: BookingSummary): Promise<Blob> {
     ctx.fillStyle = C.ink
     ctx.fillText(fit(ctx, value, 700, 40, 26, half, family), lx, ly + 50)
   })
-  const ay = tear + 80 + 260
+  let ay = tear + 80 + Math.ceil(rows.length / 2) * 130
+  if (asked) {
+    ctx.fillStyle = C.steel
+    ctx.font = `500 28px ${family}`
+    ctx.fillText(booking.review.problem, x, ay)
+    ctx.fillStyle = C.ink
+    ctx.font = `500 30px ${family}`
+    const lines = wrap(ctx, b.problem!, inner, 3)
+    lines.forEach((l, i) => ctx.fillText(l, x, ay + 46 + i * 42))
+    ay += 46 + (lines.length - 1) * 42 + 62
+  }
   ctx.fillStyle = C.steel
   ctx.font = `500 28px ${family}`
   ctx.fillText(c.where, x, ay)

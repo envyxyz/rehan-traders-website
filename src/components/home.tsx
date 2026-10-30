@@ -59,7 +59,7 @@ function Repairs() {
   )
 }
 
-/** Under the repairs: a fault not in the list goes to /estimate, which runs the description on arrival (PRD §5.6). */
+/** Under the repairs: a fault not in the list goes to /estimate, which opens the Describe tab with it prefilled and sends nothing (PRD §5.6). */
 function Estimate() {
   return (
     <Reveal className="mt-4 grid gap-5 rounded-xl border border-hairline bg-card p-6 sm:p-8 lg:grid-cols-12 lg:items-center lg:gap-10">
@@ -183,14 +183,14 @@ function Reviews() {
             <b className="font-display text-display-lg text-ink tabular-nums">{reviews.rating.toFixed(1)}</b>
             <span>
               <Stars rating={reviews.rating} />
-              <span className="mt-1 block text-body-sm text-body">{c.summary(reviews.count)}</span>
+              <span className="mt-1 block text-body-sm text-body">{c.summary}</span>
             </span>
           </p>
           <p className="mt-2 text-caption text-steel">
             <time dateTime={reviews.asOf}>{c.asOf(reviews.asOfLabel)}</time>
           </p>
           <a href={reviews.url} target="_blank" rel="noopener noreferrer" className={cn(textLink, "mt-4")}>
-            {actions.readReviews(reviews.count)}
+            {actions.readReviews}
             <span className="sr-only">, {ui.externalLink}</span>
             <Icon icon={ArrowUpRight} size="sm" />
           </a>
@@ -232,9 +232,9 @@ function Visit() {
           </Button>
           <Text size="body-sm" tone="muted" className="mt-5">
             {visit.courier}{" "}
-            <a href={site.whatsapp.href} className="text-ink underline underline-offset-4">
+            <Link href="/visit#courier" className="text-ink underline underline-offset-4">
               {visit.courierLink}
-            </a>
+            </Link>
           </Text>
         </Reveal>
       </Container>

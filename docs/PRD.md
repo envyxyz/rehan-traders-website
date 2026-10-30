@@ -50,7 +50,7 @@ Launch (indexable unless noted):
 /repairs/water-damage-data-recovery Liquid damage, dead phones, data recovery
 /repairs/board-repair               Board-level (microscope) repair
 /repairs/ipad-tablet                iPad and tablets
-/estimate                           AI repair estimator
+/estimate                           Repair estimate (pick device and fault) and quote ticket form
 /book                               Booking flow (also opens as a sheet anywhere)
 /book/confirmed                     Confirmation with job number (noindex)
 /reviews                            Google rating and reviews, link to Google
@@ -100,9 +100,9 @@ Floating: on phones a glass bottom bar (Book a visit · WhatsApp · chat icon) a
 - Runs in the Cloudflare Worker (`/api/chat`) with the AI SDK. The widget is lazy-loaded on first interaction or idle, never in the initial bundle.
 - Rate limited per IP (Cloudflare rate-limiting rule on `/api/*`); no logs of message content beyond what the providers keep; disclosed in `/privacy`.
 
-### 6.3 AI repair estimator (`/estimate`)
-- Two paths on one page: pick device + fault, or type the problem in your own words. The AI maps free text to a fault category and device using the same knowledge, then shows the likely repair, whether the original panel may be saved, the price line from `content.ts` (in quote mode: **Get a quote on WhatsApp** with the device and fault prefilled; never a number it made up), and **Book this repair**.
-- Same provider chain and limits as the chat.
+### 6.3 Repair estimate and quote ticket (`/estimate`)
+- Two tabs in one fixed-size card. **Pick device and fault** shows the likely repair from `content.ts` (whether the original panel may be saved, **Get a quote on WhatsApp** with the device and fault prefilled, **Book this repair**; never a number). **Describe it** is a ticket form (name, mobile number, brand and model, message, up to 3 photos) that posts to `/api/book` as a `quote` with no service. The shop gets the email with the photos and replies on WhatsApp. The AI estimate was removed on 30 Oct 2026 because it was inaccurate.
+- The homepage "Describe the problem" box opens the Describe tab with the message prefilled and sends nothing by itself.
 
 ### 6.4 Google reviews
 - Google Cloud billing is not available, so no Places API. Rating, count and 5 real reviews (author first name and initial, date, stars, text) are copied from the Google Business Profile into `content.ts` with an `asOf` date, refreshed by hand monthly.
@@ -151,12 +151,25 @@ These are confirmed and can go on the site:
 - **Coverage:** every Galaxy Z Fold and Z Flip generation, Pixel Fold, Surface Duo; iPhones (panels, back glass); water damage; tablets except very old, obsolete models. The shop tries to save the damaged panel first.
 - **Founded:** 2009.
 
+Answered 30 Oct 2026 (former §12 q1, q2 and q4):
+- **Warranty:** depends on the type of repair, the model and the quality of parts the customer chooses. It is discussed right after the job is confirmed or the fault is diagnosed. The shop gives generous warranties. No length, no "lifetime", no "100%".
+- **Turnaround:** depends on the type of repair, parts availability, and how rare and complex the model is. A normal panel (screen) change can be done in as little as 60 minutes; complex devices such as Galaxy Z Folds can take up to a day. Never "guaranteed"; the 60 minutes applies only to a normal panel change.
+- **Courier repairs (outside Lahore):** available. Create a ticket on the site or call 0305 8874839, and send photos of the phone on WhatsApp. If possible the shop quotes over the phone; otherwise the shop receives the phone, inspects and quotes it, repairs it once the customer agrees, and sends it back. Delivery is the customer's choice and the customer pays: inside Lahore inDrive, Yango or any other ride service, nationwide TCS.
+- **Checking:** free. The shop checks the device free of cost and tells you what the issue is, whether it can be repaired, what it will cost and how long it will take.
+- **iPhone battery and "Unknown Part":** with an original battery the message can be removed and battery health shown. With a cheaper copy battery the IC from the old original battery can be moved to the new one; in some very rare cases that is not possible and the shop tells you after checking the phone. Batteries only.
+- **Water-resistance seal:** re-applied after a repair on request. No claim that the phone is water resistant afterwards.
+- **Risk during touch-glass separation:** not published, by choice (Ameer, 30 Oct 2026).
+
 ## 12. Still open
 
 Nothing below goes on the site until answered.
-1. Warranty: length and what it covers.
-2. Typical turnaround per repair (glass, screen, battery, port, Fold inner screen).
+1. ~~Warranty~~ Answered 30 Oct 2026 (section 11): depends on the repair, the model and the quality of parts the customer chooses. No number of days is given.
+2. ~~Typical turnaround~~ Answered 30 Oct 2026 (section 11): as little as 60 minutes for a normal panel change, up to a day for complex devices. No other times.
 3. Registered business name and NTN (footer and schema).
-4. Courier terms: which courier, who pays each way, how to pack.
+4. ~~Courier terms~~ Answered 30 Oct 2026 (section 11): the steps, the customer's choice of ride service inside Lahore or TCS nationwide, and the customer pays. Still open: how to pack.
 5. "iPhone Duo" in the answer: there is no such phone. Assumed Microsoft Surface Duo; confirm.
 6. Real before-and-after photos of a finished job (customer permission), plus the shot list in the plan PDF.
+7. ~~Checking fee~~ Answered 30 Oct 2026 (section 11): checking is free.
+8. ~~iPhone battery "Unknown Part"~~ Answered 30 Oct 2026 (section 11), batteries only.
+9. ~~Water-resistance seal~~ Answered 30 Oct 2026 (section 11): re-applied on request.
+10. Risk during touch-glass separation: not published, by choice (30 Oct 2026). Do not answer it on the site.

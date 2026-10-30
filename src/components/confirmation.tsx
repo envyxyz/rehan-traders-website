@@ -4,13 +4,16 @@ import * as React from "react"
 import Link from "next/link"
 import { CalendarPlus, Download } from "lucide-react"
 
-import { BOOKING_KEY } from "@/components/booking-flow"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { actions, booking, site, type BookingSummary } from "@/content"
+import { actions, booking, showsFault, site, type BookingSummary } from "@/content"
+import { BOOKING_KEY } from "@/lib/booking"
 import { ticketImage } from "@/lib/ticket-image"
 import { track } from "@/lib/track"
+
+/** The job number whose ticket image was already downloaded on arrival. */
+const AUTO_KEY = "rt-ticket-saved"
 
 const noSubscribe = () => () => {}
 const readBooking = () => {
@@ -87,6 +90,21 @@ export function Confirmation() {
     }
   }, [b])
 
+  // On a desktop browser the ticket image downloads once, on arrival. Phones keep the Save ticket button (iOS needs the tap).
+  // The ref stops the dev double-run; the stored job number stops a reload from downloading it again.
+  const auto = React.useRef(false)
+  React.useEffect(() => {
+    if (!file || !b || auto.current) return
+    auto.current = true
+    try {
+      if (sessionStorage.getItem(AUTO_KEY) === b.ref) return
+      sessionStorage.setItem(AUTO_KEY, b.ref)
+    } catch {
+      // Storage refused: download anyway, once per visit to this page.
+    }
+    if (matchMedia("(pointer: fine)").matches) download(file)
+  }, [file, b])
+
   if (raw === undefined) return null
 
   if (!b)
@@ -135,7 +153,7 @@ export function Confirmation() {
           <dl className="grid grid-cols-2 gap-x-6 gap-y-5 lg:grid-cols-4">
             {[
               [booking.review.device, b.device],
-              [booking.review.fault, b.fault],
+              ...(showsFault(b) ? [[booking.review.fault, b.fault]] : []),
               [c.visit, b.visit ?? booking.review.quoteVisit],
               [booking.review.name, b.name],
             ].map(([label, value]) => (
@@ -144,6 +162,12 @@ export function Confirmation() {
                 <dd className="mt-0.5 text-body-md font-semibold break-words text-ink">{value}</dd>
               </div>
             ))}
+            {b.problem && (
+              <div className="col-span-2 min-w-0 lg:col-span-4">
+                <dt className="text-body-sm text-steel">{booking.review.problem}</dt>
+                <dd className="mt-0.5 text-body-md break-words whitespace-pre-line text-ink">{b.problem}</dd>
+              </div>
+            )}
             <div className="col-span-2 lg:col-span-4">
               <dt className="text-body-sm text-steel">{c.where}</dt>
               <dd className="mt-0.5 text-body-md text-ink">{site.address.lines.join(", ")}</dd>

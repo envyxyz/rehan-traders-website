@@ -6,13 +6,9 @@ import { HomeSections } from "@/components/home"
 import { JsonLd } from "@/components/json-ld"
 import { seo } from "@/content"
 import { storeSchema } from "@/lib/schema"
+import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = {
-  title: { absolute: seo.home.title },
-  description: seo.home.description,
-  alternates: { canonical: "/" },
-  openGraph: { title: seo.home.title, description: seo.home.description, url: "/" },
-}
+export const metadata: Metadata = pageMeta({ title: seo.home.title, description: seo.home.description, path: "/", absolute: true })
 
 export default function Home() {
   return (

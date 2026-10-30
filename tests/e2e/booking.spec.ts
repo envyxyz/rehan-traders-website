@@ -198,6 +198,20 @@ test("the Worker takes ordinary punctuation in the description and refuses contr
     expect((await send(text)).status).toBe(200)
     expect(forwarded.problem).toBe(text)
     expect((await send("bad\u0007bell")).status).toBe(400)
+
+    // The quote ticket on /estimate has no service: allowed for an open fault with the customer's words, nothing else.
+    const ticket = (extra: object) =>
+      book(
+        new Request("https://x/api/book", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ kind: "quote", device: "iPhone 13", fault: "Not mentioned here", problem: "Dead after a drop", slot: null, name: "QA", phone: "0300 1234567", website: "", elapsed: 5000, ...extra }),
+        }),
+        env
+      )
+    expect((await ticket({})).status).toBe(200)
+    expect((await ticket({ problem: undefined })).status).toBe(400) // no words
+    expect((await ticket({ fault: "Battery" })).status).toBe(400) // a listed fault still needs a service
   } finally {
     globalThis.fetch = real
   }

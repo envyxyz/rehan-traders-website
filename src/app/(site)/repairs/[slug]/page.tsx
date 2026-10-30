@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { actions, breadcrumbs, repairsPage, seo, services, site } from "@/content"
 import { faqSchema, serviceSchema } from "@/lib/schema"
+import { pageMeta } from "@/lib/page-meta"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -32,14 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!service) return {}
 
   const meta = seo.service(service.title, service.short)
-  const canonical = `/repairs/${service.slug}`
-
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: { canonical },
-    openGraph: { title: meta.title, description: meta.description, url: canonical },
-  }
+  return pageMeta({ title: meta.title, description: meta.description, path: `/repairs/${service.slug}` })
 }
 
 export default async function ServicePage({ params }: PageProps) {

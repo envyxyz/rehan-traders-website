@@ -65,7 +65,10 @@ const Booking = z
   })
   .strict()
   .refine((b) => !openFaults.includes(b.fault) || !!b.problem)
-  .refine((b) => (b.kind === "quote" ? b.slot === null && !!b.service : b.slot !== null && isBookableSlot(b.slot, new Date(), site.hours, holidays)))
+  // A quote has no slot. It names a service, or (the ticket form on /estimate) is an open fault with the customer's words.
+  .refine((b) =>
+    b.kind === "quote" ? b.slot === null && (!!b.service || (openFaults.includes(b.fault) && !!b.problem)) : b.slot !== null && isBookableSlot(b.slot, new Date(), site.hours, holidays)
+  )
 
 const fail = (status: number, error: string) => Response.json({ ok: false, error }, { status })
 

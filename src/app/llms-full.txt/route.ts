@@ -1,4 +1,4 @@
-import { aboutPage, faq, faqPage, priceMode, privacyPage, repairsPage, reviews, reviewsPage, services, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
+import { aboutPage, faq, facts, faqPage, priceMode, privacyPage, repairsPage, reviews, reviewsPage, services, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
 
 export const dynamic = "force-static"
 
@@ -27,6 +27,9 @@ const sections: string[] = [
   `Google Maps: ${site.mapsUrl}`,
   `Payment: ${site.payments}`,
   `Courier repairs: ${site.courier ? "Accepted from outside Lahore" : "Not available"}`,
+  `Warranty: ${facts.warranty}`,
+  `Repair time: ${facts.turnaround} ${facts.turnaroundFold}`,
+  `Checking: ${facts.check}`,
 
   hr(),
 
@@ -72,6 +75,44 @@ const sections: string[] = [
   hr(),
 
   // ── Prices and quotes ─────────────────────────────────────────────────
+  `## Warranty`,
+  "",
+  facts.warranty,
+
+  hr(),
+
+  `## How Long a Repair Takes`,
+  "",
+  facts.turnaround,
+  facts.turnaroundFold,
+
+  hr(),
+
+  `## Is Checking Free?`,
+  "",
+  facts.check,
+
+  hr(),
+
+  `## iPhone Battery and the Unknown Part Message`,
+  "",
+  facts.battery,
+
+  hr(),
+
+  `## Water-Resistance Seal After a Repair`,
+  "",
+  facts.seal,
+
+  hr(),
+
+  `## How to Get a Quote`,
+  `URL: ${site.url}/estimate`,
+  "",
+  facts.quote,
+
+  hr(),
+
   `## Prices and Quotes`,
   "",
   priceMode === "quote"
@@ -95,11 +136,10 @@ const sections: string[] = [
   `### Shop hours`,
   ...visit.hours.map((h) => `- ${h.label}: ${h.value}`),
   "",
-  `### Courier repairs`,
+  `### ${visitPage.courierTitle}`,
   visitPage.courierLede,
-  `1. ${visitPage.courierStep1}`,
-  `2. ${visitPage.courierStep2}`,
-  `3. ${visitPage.courierStep3}`,
+  ...visitPage.courierSteps.map((step, i) => `${i + 1}. ${step.text}`),
+  visitPage.courierDelivery,
 
   hr(),
 
