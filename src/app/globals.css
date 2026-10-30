@@ -526,7 +526,7 @@
   }
   /* Everything below the first screen skips style, layout and paint until it nears the viewport, so the first
      layout is the hero's alone. "auto" keeps the size once seen. */
-  main > section:not(:first-child), footer {
+  main > section:not(:first-child) {
     content-visibility: auto;
     contain-intrinsic-size: auto 40rem;
   }

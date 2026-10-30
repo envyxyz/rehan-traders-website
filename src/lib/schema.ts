@@ -43,7 +43,8 @@ export const serviceSchema = (s: Service) => ({
   serviceType: s.title,
   description: s.long,
   url: `${site.url}/repairs/${s.slug}`,
-  provider: { "@id": storeId },
+  // Named here too: the full store node is only on the home page.
+  provider: { "@type": "MobilePhoneStore", "@id": storeId, name: site.name, url: site.url },
   areaServed: site.address.city,
 })
 
