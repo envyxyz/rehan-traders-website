@@ -1,22 +1,22 @@
 import Link from "next/link"
 import { ArrowRight, ArrowUpRight, Star } from "lucide-react"
 
-import { BookButton } from "@/components/book-button"
 import { BeforeAfter } from "@/components/before-after"
 import { HoursTable } from "@/components/hours-table"
-import { Icon, WhatsAppIcon } from "@/components/icon"
+import { Icon } from "@/components/icon"
 import { Img } from "@/components/img"
+import { InteractiveMap } from "@/components/interactive-map"
 import { Container, Section } from "@/components/layout"
 import { Reveal } from "@/components/motion"
 import { OpenStatus } from "@/components/open-status"
 import { ReviewCarousel } from "@/components/review-carousel"
+import { ServiceCard } from "@/components/service-card"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { actions, estimate, faq, home, process, reviews, services, site, ui, visit, type Service } from "@/content"
+import { actions, estimate, faq, home, process, reviews, services, site, ui, visit, visitPage } from "@/content"
 import { reveal } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
@@ -34,26 +34,6 @@ function SectionHead({ title, link, className }: { title: string; link?: { href:
         </Link>
       )}
     </div>
-  )
-}
-
-function ServiceCard({ service, lead }: { service: Service; lead?: boolean }) {
-  return (
-    <Card className="h-full gap-0 overflow-hidden p-0">
-      <Img
-        name={service.image}
-        alt={service.alt}
-        sizes={lead ? "(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw" : "(min-width: 1024px) 368px, (min-width: 768px) 50vw, 100vw"}
-        className={cn("w-full", lead ? "aspect-16/10" : "aspect-4/3")}
-      />
-      <div className="flex flex-1 flex-col gap-3 p-6">
-        <CardTitle className={cn(lead && "text-title-lg")}>{service.title}</CardTitle>
-        <CardDescription className="mb-2 line-clamp-2">{service.short}</CardDescription>
-        <BookButton service={service.slug} variant="line" className="mt-auto self-start">
-          {actions.bookRepair}
-        </BookButton>
-      </div>
-    </Card>
   )
 }
 
@@ -79,10 +59,7 @@ function Repairs() {
   )
 }
 
-/**
- * Under the repairs: a fault not in the list goes to the shop on WhatsApp. A plain GET form to wa.me, whose `text`
- * parameter prefills the chat, so it works without JS. Switches to /estimate once the estimator ships (PRD §6.3).
- */
+/** Under the repairs: a fault not in the list goes to /estimate, which runs the description on arrival (PRD §5.6). */
 function Estimate() {
   return (
     <Reveal className="mt-4 grid gap-5 rounded-xl border border-hairline bg-card p-6 sm:p-8 lg:grid-cols-12 lg:items-center lg:gap-10">
@@ -92,13 +69,12 @@ function Estimate() {
           {estimate.lede}
         </Text>
       </div>
-      <form action={site.whatsapp.href} method="get" target="_blank" className="flex flex-col gap-2.5 sm:flex-row lg:col-span-7">
+      <form action="/estimate" method="get" className="flex flex-col gap-2.5 sm:flex-row lg:col-span-7">
         <Label htmlFor="estimate-q" className="sr-only">
           {estimate.label}
         </Label>
-        <Input id="estimate-q" name="text" required maxLength={500} placeholder={estimate.placeholder} autoComplete="off" />
-        <Button type="submit" size="lg" variant="whatsapp" className="sm:shrink-0">
-          <WhatsAppIcon />
+        <Input id="estimate-q" name="q" required minLength={3} maxLength={500} placeholder={estimate.placeholder} autoComplete="off" />
+        <Button type="submit" size="lg" className="sm:shrink-0">
           {estimate.submit}
         </Button>
       </form>
@@ -231,15 +207,11 @@ function Visit() {
   return (
     <Section tone="panel" id="visit">
       <Container className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
-        {/* Keyless Google embed, lazy (below the fold). Dark styling is a CSS filter on the iframe. */}
-        <Reveal className="overflow-hidden rounded-xl bg-band lg:col-span-6">
-          <iframe
-            src={visit.mapEmbed}
-            title={visit.mapTitle}
-            loading="lazy"
-            referrerPolicy="strict-origin-when-cross-origin"
-            className="map-dark aspect-4/3 w-full border-0"
-          />
+        {/* Tap to load: nothing from google.com/maps until then (PRD §8). */}
+        <Reveal className="lg:col-span-6">
+          <InteractiveMap>
+            <Img name="storefront" alt={visitPage.mapAlt} sizes="(min-width: 1024px) 560px, 100vw" className="size-full object-cover" />
+          </InteractiveMap>
         </Reveal>
         <Reveal className="lg:col-span-6 lg:pl-4">
           <Heading>{visit.title}</Heading>

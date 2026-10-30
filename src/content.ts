@@ -451,6 +451,7 @@ export const booking = {
     describe: "Describe the problem",
     describePlaceholder: "What happened, and what does it do now?",
     describeError: "Describe the problem to continue.",
+    problemError: "The description has a character we cannot send. Retype it as plain text.",
     photos: "Photos, up to 3 (optional)",
     addPhoto: "Add a photo",
     removePhoto: "Remove photo",
@@ -593,9 +594,9 @@ export const visit = {
 export const estimate = {
   title: "Not sure what's wrong?",
   label: "Describe the problem",
-  lede: "Not in the list? Describe it and send it to the shop on WhatsApp.",
+  lede: "Not in the list? Describe it and see the likely repair.",
   placeholder: "My Fold's inner screen has a black line",
-  submit: "Ask on WhatsApp",
+  submit: "Get an estimate",
 } as const
 
 /** Homepage section copy, in PRD §5 order. */
