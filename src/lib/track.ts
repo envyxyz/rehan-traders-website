@@ -1,5 +1,3 @@
-import { sendGTMEvent } from "@next/third-parties/google"
-
 export type Events = {
   book_start: { service?: string }
   book_step: { step: string; index: number }
@@ -13,10 +11,28 @@ export type Events = {
   price_view: { service?: string; priceFrom?: number }
 }
 
+declare global {
+  interface Window {
+    dataLayer?: Record<string, unknown>[]
+  }
+}
+
+/** GTM reads this queue when it loads, so events pushed before that are still sent. */
+const dataLayer = () => (window.dataLayer ??= [])
+
 /**
  * Analytics event. Never pass personal data (names, numbers, free text): only step names, slugs and flags.
  * Pushed to the GTM dataLayer as a custom event; a GA4 event tag in the container sends it on (docs/LAUNCH.md).
  */
 export function track<E extends keyof Events>(name: E, params: Events[E]) {
-  sendGTMEvent({ event: name, ...params })
+  dataLayer().push({ event: name, ...params })
+}
+
+/** GTM's own snippet, minus the inline script: start the queue, then add gtm.js. */
+export function loadGtm(id: string) {
+  dataLayer().push({ "gtm.start": Date.now(), event: "gtm.js" })
+  const script = document.createElement("script")
+  script.async = true
+  script.src = `https://www.googletagmanager.com/gtm.js?id=${id}`
+  document.head.append(script)
 }

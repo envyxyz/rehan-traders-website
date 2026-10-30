@@ -1,22 +1,15 @@
 "use client"
 
 import * as React from "react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import * as m from "motion/react-m"
 import { ChevronDown, Equal, Phone } from "lucide-react"
 
-import { Icon, WhatsAppIcon } from "@/components/icon"
+import { Icon } from "@/components/icon"
 import { Mark } from "@/components/logo"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { actions, nav, services, site } from "@/content"
+import { nav, site } from "@/content"
 import { spring } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
@@ -24,80 +17,44 @@ const ISLAND_AT = 80 // phones: px of scroll before the bar gathers into the isl
 const BAR_FADE = 240 // desktop: px of scroll over which the top bar fades out
 
 const linkClass = "inline-flex h-11 items-center gap-1 rounded-pill px-3.5 font-display text-nav text-ink active:bg-concrete"
+// No outline utilities: the global :focus-visible ring applies (`outline-none` here used to hide it for keyboard users too).
+const triggerClass = cn(linkClass, "cursor-pointer")
+const repairs = nav.links.find((link) => link.href === "/repairs")!
+const repairsFace = (
+  <>
+    {repairs.label}
+    <Icon icon={ChevronDown} size="sm" className="text-steel" />
+  </>
+)
+const menuButton = (
+  <Button variant="icon" className="bg-concrete" aria-label={nav.menu}>
+    <Icon icon={Equal} size="lg" />
+  </Button>
+)
+
+// The Radix menu and sheet load after hydration, out of the first load; until then the same triggers show, inert.
+const RepairsMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.RepairsMenu), {
+  ssr: false,
+  loading: () => (
+    <button type="button" className={triggerClass}>
+      {repairsFace}
+    </button>
+  ),
+})
+const MobileMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.MobileMenu), { ssr: false, loading: () => menuButton })
 
 /** Repairs opens the 8 repairs; the other links are plain. `menu` controls the Repairs menu (the top bar's). */
 function NavLinks({ menu }: { menu?: { open: boolean; onOpenChange: (open: boolean) => void } }) {
   return nav.links.map((link) =>
-    link.href === "/repairs" ? (
-      <DropdownMenu key={link.href} modal={false} {...menu}>
-        <DropdownMenuTrigger className={cn(linkClass, "cursor-pointer outline-none focus-visible:outline-2")}>
-          {link.label}
-          <Icon icon={ChevronDown} size="sm" className="text-steel" />
-        </DropdownMenuTrigger>
-        {/* The top bar's menu fades with the bar (--nav-fade, set on scroll), so it never floats on after the bar. */}
-        <DropdownMenuContent align="start" sideOffset={12} style={menu && { opacity: "var(--nav-fade, 1)", transition: "opacity var(--duration-reveal) var(--ease-out)" }}>
-          {services.map((s) => (
-            <DropdownMenuItem key={s.slug} asChild>
-              <Link href={`/repairs/${s.slug}`}>{s.title}</Link>
-            </DropdownMenuItem>
-          ))}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link href={link.href}>{actions.allRepairs}</Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    link === repairs ? (
+      <RepairsMenu key={link.href} href={link.href} className={triggerClass} menu={menu}>
+        {repairsFace}
+      </RepairsMenu>
     ) : (
       <Link key={link.href} href={link.href} className={linkClass}>
         {link.label}
       </Link>
     )
-  )
-}
-
-function MobileMenu() {
-  return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="icon" className="bg-concrete" aria-label={nav.menu}>
-          <Icon icon={Equal} size="lg" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="right" aria-describedby={undefined}>
-        <SheetTitle>{nav.menu}</SheetTitle>
-        <nav aria-label={nav.label} className="flex flex-col">
-          {nav.links.map((link) => (
-            <React.Fragment key={link.href}>
-              <Link href={link.href} className="flex min-h-12 items-center font-display text-title-lg text-ink">
-                {link.label}
-              </Link>
-              {link.href === "/repairs" && (
-                <ul className="mb-2 border-l border-hairline pl-4">
-                  {services.map((s) => (
-                    <li key={s.slug}>
-                      <Link href={`/repairs/${s.slug}`} className="flex min-h-11 items-center text-body-md text-body">
-                        {s.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </React.Fragment>
-          ))}
-        </nav>
-        <div className="mt-auto grid gap-2.5 pt-4">
-          <Button asChild size="lg" arrow>
-            <Link href="/book">{actions.book}</Link>
-          </Button>
-          <Button asChild size="lg" variant="whatsapp">
-            <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="nav">
-              <WhatsAppIcon />
-              {actions.whatsapp}
-            </a>
-          </Button>
-        </div>
-      </SheetContent>
-    </Sheet>
   )
 }
 
@@ -228,7 +185,7 @@ function MobileNav() {
           <m.div layout transition={spring.layout}>
             <CallButton compact />
           </m.div>
-          <MobileMenu />
+          <MobileMenu trigger={menuButton} />
         </m.nav>
       </m.div>
     </header>
