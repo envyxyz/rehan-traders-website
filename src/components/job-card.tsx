@@ -15,19 +15,14 @@ export interface JobCardProps {
 }
 
 export function JobCard({ className, withSeal = true }: JobCardProps) {
-  // Pre-filled interactive editable fields
-  const [jobNo, setJobNo] = React.useState<string>(jobCardContent.fields.jobNo.initial)
-  const [date, setDate] = React.useState<string>(jobCardContent.fields.date.initial)
-  const [device, setDevice] = React.useState<string>(jobCardContent.fields.device.initial)
-  const [warrantyTo, setWarrantyTo] = React.useState<string>(jobCardContent.fields.warranty.initial)
-
   // 3D subtle mouse movement state
   const [tilt, setTilt] = React.useState({ rx: 0, ry: 0 })
   const [isHovered, setIsHovered] = React.useState(false)
   const cardRef = React.useRef<HTMLDivElement>(null)
 
-  const handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current || matchMedia("(prefers-reduced-motion: reduce)").matches) return
+  // Mouse only: a tap has no "leave", so on touch the tilt would stick.
+  const handlePointerMove = React.useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse" || !cardRef.current || matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const rect = cardRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
@@ -39,11 +34,11 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
     setTilt({ rx, ry })
   }, [])
 
-  const handleMouseEnter = React.useCallback(() => {
-    setIsHovered(true)
+  const handlePointerEnter = React.useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse") setIsHovered(true)
   }, [])
 
-  const handleMouseLeave = React.useCallback(() => {
+  const handlePointerLeave = React.useCallback(() => {
     setIsHovered(false)
     setTilt({ rx: 0, ry: 0 })
   }, [])
@@ -52,9 +47,9 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
     <div
       className={cn("relative mx-auto w-full select-none", className)}
       style={{ perspective: "1000px" }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onPointerMove={handlePointerMove}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
     >
       {/* Interactive 3D Card with subtle tilt */}
       <div
@@ -108,105 +103,20 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
 
           {/* Center: Large bold phone number */}
           <div className="my-4 sm:my-5 md:my-6">
-            <span className="block font-display text-display-md font-bold tracking-tight text-device-ink tabular-nums">
+            <span className="block font-display text-display-md font-bold tracking-tight whitespace-nowrap text-device-ink tabular-nums">
               {jobCardContent.phone}
             </span>
           </div>
 
-          {/* Bottom: 2x2 grid with Typewriter Font input fields */}
-          <div className="grid grid-cols-2 gap-x-5 gap-y-3 sm:gap-x-8 sm:gap-y-4">
-            {/* Job no. */}
-            <div className="flex flex-col">
-              <label
-                htmlFor="rt-card-job-no"
-                className="text-micro font-medium text-device-steel sm:text-caption"
-              >
-                {jobCardContent.fields.jobNo.label}
-              </label>
-              <input
-                id="rt-card-job-no"
-                type="text"
-                value={jobNo}
-                onChange={(e) => setJobNo(e.target.value)}
-                spellCheck={false}
-                aria-label={jobCardContent.fields.jobNo.aria}
-                className="w-full border-b border-device-rule bg-transparent pb-1 pt-0.5 text-caption font-bold text-device-ink transition-colors focus:border-device-ink focus:outline-none sm:text-body-sm"
-                style={{
-                  fontFamily: "'Courier New', Courier, ui-monospace, monospace",
-                  letterSpacing: "0.03em",
-                }}
-              />
-            </div>
-
-            {/* Date */}
-            <div className="flex flex-col">
-              <label
-                htmlFor="rt-card-date"
-                className="text-micro font-medium text-device-steel sm:text-caption"
-              >
-                {jobCardContent.fields.date.label}
-              </label>
-              <input
-                id="rt-card-date"
-                type="text"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                spellCheck={false}
-                aria-label={jobCardContent.fields.date.aria}
-                className="w-full border-b border-device-rule bg-transparent pb-1 pt-0.5 text-caption font-bold text-device-ink transition-colors focus:border-device-ink focus:outline-none sm:text-body-sm"
-                style={{
-                  fontFamily: "'Courier New', Courier, ui-monospace, monospace",
-                  letterSpacing: "0.03em",
-                }}
-              />
-            </div>
-
-            {/* Device */}
-            <div className="flex flex-col">
-              <label
-                htmlFor="rt-card-device"
-                className="text-micro font-medium text-device-steel sm:text-caption"
-              >
-                {jobCardContent.fields.device.label}
-              </label>
-              <input
-                id="rt-card-device"
-                type="text"
-                value={device}
-                onChange={(e) => setDevice(e.target.value)}
-                spellCheck={false}
-                aria-label={jobCardContent.fields.device.aria}
-                className="w-full border-b border-device-rule bg-transparent pb-1 pt-0.5 text-caption font-bold text-device-ink transition-colors focus:border-device-ink focus:outline-none sm:text-body-sm"
-                style={{
-                  fontFamily: "'Courier New', Courier, ui-monospace, monospace",
-                  letterSpacing: "0.03em",
-                }}
-              />
-            </div>
-
-            {/* Warranty to */}
-            <div className="flex flex-col">
-              <label
-                htmlFor="rt-card-warranty"
-                className="text-micro font-medium text-device-steel sm:text-caption"
-              >
-                {jobCardContent.fields.warranty.label}
-              </label>
-              <input
-                id="rt-card-warranty"
-                type="text"
-                value={warrantyTo}
-                onChange={(e) => setWarrantyTo(e.target.value)}
-                spellCheck={false}
-                aria-label={jobCardContent.fields.warranty.aria}
-                className="w-full border-b border-device-rule bg-transparent pb-1 pt-0.5 text-caption font-bold text-device-ink transition-colors focus:border-device-ink focus:outline-none sm:text-body-sm"
-                style={{
-                  fontFamily: "'Courier New', Courier, ui-monospace, monospace",
-                  letterSpacing: "0.03em",
-                }}
-              />
-            </div>
-          </div>
+          {/* Bottom: the card's fields, one column on a phone so every value fits on its line. */}
+          <dl className="grid grid-cols-1 gap-x-5 gap-y-3 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-4">
+            {Object.values(jobCardContent.fields).map((field) => (
+              <div key={field.label} className="flex flex-col">
+                <dt className="text-micro font-medium text-device-steel sm:text-caption">{field.label}</dt>
+                <dd className="border-b border-device-rule pt-0.5 pb-1 font-typewriter text-caption font-bold tracking-wide text-device-ink sm:text-body-sm">{field.initial}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
 

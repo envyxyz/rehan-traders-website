@@ -67,12 +67,12 @@ export default function RepairsIndexPage() {
           </ul>
 
           <h2 className="mt-16 font-display text-title-md text-ink">{repairsPage.problemsTitle}</h2>
-          <ul className="mt-4 grid gap-x-8 md:grid-cols-2">
+          <ul className="mt-4 grid gap-x-8 gap-y-1 md:grid-cols-2">
             {problems.map((p) => (
               <li key={p.problem}>
                 <Link
                   href={`/repairs/${p.service}`}
-                  className="flex min-h-11 items-center text-body-sm text-ink underline-offset-4 hover:underline"
+                  className="flex min-h-11 items-center py-2 text-body-sm text-ink underline-offset-4 hover:underline"
                 >
                   {p.problem}
                 </Link>

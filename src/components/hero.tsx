@@ -25,7 +25,7 @@ export function Hero() {
           <div className="min-w-0">
             <p {...rise(0)}>
               <span className="flex items-center gap-2 text-caption text-steel">
-                <Stars rating={reviews.rating} className="[&_svg]:size-3.25" />
+                <Stars rating={reviews.rating} small />
                 <span>
                   <b className="font-display text-body-sm font-bold text-ink">{proof.rating}</b> {proof.rest}
                 </span>

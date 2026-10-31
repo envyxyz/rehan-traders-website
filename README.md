@@ -2,6 +2,16 @@
 
 Marketing site, booking flow, and AI repair assistant for Rehan Traders, a phone and tablet repair lab at Shop G-88, Hafeez Center, Lahore. Live at [rehanmobiletraders.com](https://rehanmobiletraders.com).
 
+## Status (31 Oct 2026)
+
+Live at https://rehanmobiletraders.com. Pushing `main` deploys through Cloudflare Workers Builds.
+
+- Phases 0 to 9: shipped. Tests, audits and known gaps are in `docs/QA.md`; Lighthouse performance remains under the 0.95 target.
+- Phase 10 (go live): the site, `www` redirect, `/api/*` rate limit, Search Console sitemap and indexing requests are done. What is left needs a dashboard sign-in or Adnan: `docs/LAUNCH.md`.
+- Phase 11 (after launch): `/courier` page and the problem index on `/repairs`. The rest of the menu has not started.
+- Phase 12 (phone UX): sheets follow the on-screen keyboard, 44px targets, review carousel swipe, chat button and sticky bar no longer cover content, `tests/e2e/phone.spec.ts`.
+- NAP and search: `docs/launch/nap.md`, `docs/launch/search-plan.md`, and the dated report in `../growth/Reports/`.
+
 ## Stack
 
 Next.js static export (App Router, React 19, TypeScript, Tailwind CSS v4, shadcn/ui, Motion, Lenis), served by a Cloudflare Worker on the free plan. The Worker in `worker/` handles only `/api/*`:
@@ -16,7 +26,7 @@ Next.js static export (App Router, React 19, TypeScript, Tailwind CSS v4, shadcn
 - **AI Agent Discoverability**: Implements the [llmstxt.org](https://llmstxt.org) standard with `/llms.txt` (structured shop facts and services) and `/llms-full.txt` (full page content bundle for instant LLM grounding).
 - **Social Previews**: Dynamic per-route 1200×630 OpenGraph and Twitter card image generators (`opengraph-image.tsx` and `twitter-image.tsx`) rendered at build time with brand typography, route badges, and contextual titles.
 - **Crawler Access**: Configured `robots.txt` explicitly permitting Googlebot, ChatGPT (`ChatGPT-User`, `OAI-SearchBot`), Perplexity (`PerplexityBot`), Claude (`Claude-SearchBot`), Bingbot, and Applebot.
-- **Interactive Components & Tracking**: 3D interactive repair Job Card with realistic subtle tilt, editable fields, and tamper seal; delegated link tracking (`data-track`) for zero-overhead analytics.
+- **Interactive Components & Tracking**: Repair Job Card with a subtle tilt (mouse only) and tamper seal; delegated link tracking (`data-track`) for zero-overhead analytics.
 
 ## Run it
 
@@ -51,7 +61,7 @@ The site is a Cloudflare Worker with static assets: the export in `out/` is serv
 
 ## Business Facts & Policies (30 Oct 2026)
 
-- **Warranty**: Warranties depend on the repair type, agreed upon intake / diagnosis. Generous terms without empty marketing claims.
+- **Warranty**: Not always given. Discussed at the counter; it varies with the model, the repair and the parts chosen.
 - **Turnaround**: Standard screen / panel replacement in as little as 60 minutes; complex foldable devices (Galaxy Z Fold/Flip) up to one day depending on parts availability.
 - **Courier**: Nationwide courier repairs accepted. Customers submit a quote ticket on `/estimate` or contact via WhatsApp/phone before dispatch.
 - **Open Bench**: All diagnostics and micro-soldering repairs take place at an open bench in Shop G-88, Hafeez Center.

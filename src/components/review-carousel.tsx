@@ -32,7 +32,8 @@ const noSubscribe = () => () => {}
  * One Google review at a time. Two uses, one component:
  * - `home` (default): cross-fades every 5 s through a fresh random 10 of the written reviews per visit (the clearest
  *   ones most often). The static HTML shows the first 10; the draw happens after load. Pauses on hover and focus,
- *   and does not auto-advance under reduced motion. Dots and the arrow step by hand.
+ *   and does not auto-advance under reduced motion. A swipe and the arrows step by hand, plus dots from `sm` up (ten
+ *   44px dots do not fit a phone, which gets the counter instead).
  * - `all`: the /reviews page. Every review in its listed order, no autoplay. Prev and next arrows, a counter,
  *   arrow keys and a swipe step by hand. Every review is in the static HTML either way (stacked in one grid cell).
  */
@@ -71,19 +72,15 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
             }
           : undefined
       }
-      onPointerDown={all ? (e) => (swipe.current = e.pointerType === "touch" ? e.clientX : null) : undefined}
-      onPointerCancel={all ? () => (swipe.current = null) : undefined}
-      onPointerUp={
-        all
-          ? (e) => {
-              if (swipe.current === null) return
-              const dx = e.clientX - swipe.current
-              swipe.current = null
-              if (Math.abs(dx) > SWIPE_PX) step(dx < 0 ? 1 : -1)
-            }
-          : undefined
-      }
-      className={cn(all && "touch-pan-y rounded-lg outline-offset-4")}
+      onPointerDown={(e) => (swipe.current = e.pointerType === "touch" ? e.clientX : null)}
+      onPointerCancel={() => (swipe.current = null)}
+      onPointerUp={(e) => {
+        if (swipe.current === null) return
+        const dx = e.clientX - swipe.current
+        swipe.current = null
+        if (Math.abs(dx) > SWIPE_PX) step(dx < 0 ? 1 : -1)
+      }}
+      className={cn("touch-pan-y", all && "rounded-lg outline-offset-4")}
     >
       {/* All cards share one grid cell, so the box is as tall as the longest review and never jumps. */}
       <div className="grid">
@@ -109,24 +106,23 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
               </span>
               <Stars rating={r.rating} className="mt-1 shrink-0" />
             </figcaption>
-            <blockquote className="text-title-lg font-normal whitespace-pre-line text-ink text-pretty">{r.text}</blockquote>
+            <blockquote className="text-body-md font-normal sm:text-title-lg sm:font-normal whitespace-pre-line text-ink text-pretty">{r.text}</blockquote>
           </figure>
         ))}
       </div>
-      {all ? (
-        <div className="mt-3 flex items-center gap-4">
-          <Button type="button" variant="icon" onClick={() => step(-1)} aria-label={reviewsPage.prev}>
-            <Icon icon={ArrowLeft} />
-          </Button>
-          <p aria-live="polite" className="min-w-16 text-center text-body-sm text-steel tabular-nums">
-            {reviewsPage.counter(index + 1, items.length)}
-          </p>
-          <Button type="button" variant="icon" onClick={() => step(1)} aria-label={reviewsPage.next}>
-            <Icon icon={ArrowRight} />
-          </Button>
-        </div>
-      ) : (
-        <div className="mt-3 flex items-center gap-1">
+      <div className={cn("mt-3 flex items-center gap-4 max-sm:justify-between", !all && "sm:hidden")}>
+        <Button type="button" variant="icon" onClick={() => step(-1)} aria-label={reviewsPage.prev}>
+          <Icon icon={ArrowLeft} />
+        </Button>
+        <p aria-live={all ? "polite" : undefined} className="min-w-16 text-center text-body-sm text-steel tabular-nums">
+          {reviewsPage.counter(index + 1, items.length)}
+        </p>
+        <Button type="button" variant="icon" onClick={() => step(1)} aria-label={reviewsPage.next}>
+          <Icon icon={ArrowRight} />
+        </Button>
+      </div>
+      {!all && (
+        <div className="mt-3 flex items-center gap-1 max-sm:hidden">
           {items.map((r, i) => (
             <button
               key={r.author + r.text}
@@ -136,7 +132,7 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
               aria-current={i === index}
               className="grid size-11 cursor-pointer place-items-center"
             >
-              <span className={cn("h-1 rounded-pill", i === index ? "w-6 bg-ink" : "w-2 bg-steel-soft")} />
+              <span className={cn("h-1 rounded-pill", i === index ? "w-6 bg-ink" : "w-2 bg-steel")} />
             </button>
           ))}
           <Button type="button" variant="icon" onClick={() => step(1)} aria-label={copy.next} className="ml-auto">

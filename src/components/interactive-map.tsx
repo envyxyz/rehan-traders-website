@@ -30,7 +30,7 @@ export function InteractiveMap({
           title={visit.mapTitle}
           loading="eager"
           referrerPolicy="strict-origin-when-cross-origin"
-          className="map-dark aspect-4/3 w-full border-0"
+          className="aspect-4/3 w-full border-0 dark:map-dark"
         />
       </div>
     )

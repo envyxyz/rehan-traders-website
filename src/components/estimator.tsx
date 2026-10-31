@@ -16,7 +16,7 @@ import { actions, booking, estimator, priceMode, site, type BookingSummary } fro
 import { MAX_INPUT, repairFor } from "@/lib/assistant"
 import { BOOKING_KEY, BOOKING_LIMIT, localRef, normalizePhone, now, recentBookings, rememberBooking } from "@/lib/booking"
 import { track } from "@/lib/track"
-import { cn } from "@/lib/utils"
+import { cn, nextField } from "@/lib/utils"
 
 type Mode = "pick" | "describe"
 type Result = { device: string; faultSlug: string }
@@ -259,7 +259,7 @@ function TicketForm({ q }: { q: string }) {
   const describe = (f: string) => (invalid(f) ? `${ids}-error` : undefined)
   const t = estimator.ticket
   return (
-    <form noValidate onSubmit={submit} className="flex flex-1 flex-col gap-4">
+    <form noValidate onKeyDown={nextField} onSubmit={submit} className="flex flex-1 flex-col gap-4">
       <DeviceField
         value={device}
         invalid={invalid("device")}
@@ -297,6 +297,8 @@ function TicketForm({ q }: { q: string }) {
           <Input
             id={`${ids}-name`}
             autoComplete="name"
+            autoCapitalize="words"
+            enterKeyHint="next"
             maxLength={60}
             value={name}
             onChange={(e) => {
@@ -314,6 +316,7 @@ function TicketForm({ q }: { q: string }) {
             type="tel"
             inputMode="tel"
             autoComplete="tel"
+            enterKeyHint="send"
             maxLength={20}
             placeholder={booking.details.phonePlaceholder}
             value={phone}
@@ -379,11 +382,11 @@ function Outcome({ result, onAgain }: { result: Result; onAgain: () => void }) {
         <Text>{estimator.result.other}</Text>
       )}
       <div inert={!armed} className="flex flex-wrap justify-end gap-2.5 lg:mt-auto">
-        <Button type="button" size="lg" variant="line" onClick={onAgain}>
+        <Button type="button" size="lg" variant="line" className="max-sm:w-full" onClick={onAgain}>
           {estimator.result.again}
         </Button>
         {(priceMode === "quote" || !service) && (
-          <Button asChild size="lg" variant="whatsapp">
+          <Button asChild size="lg" variant="whatsapp" className="max-sm:w-full">
             <a href={quote} data-track="whatsapp" data-track-from="estimate">
               <WhatsAppIcon />
               {estimator.result.quote}
@@ -391,7 +394,7 @@ function Outcome({ result, onAgain }: { result: Result; onAgain: () => void }) {
           </Button>
         )}
         {service && (
-          <BookButton size="lg" variant={priceMode === "quote" ? "line" : "ink"} service={service.slug} device={result.device}>
+          <BookButton size="lg" variant={priceMode === "quote" ? "line" : "ink"} className="max-sm:w-full" service={service.slug} device={result.device}>
             {actions.bookRepair}
           </BookButton>
         )}

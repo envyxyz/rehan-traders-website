@@ -110,7 +110,7 @@
     --glass: rgb(30 30 29 / 0.6);
     --glass-rim: rgb(255 255 255 / 0.16);
     --glass-depth: rgb(0 0 0 / 0.5);
-    --scrim: rgb(0 0 0 / 0.55);
+    --scrim: rgb(0 0 0 / 0.28);  /* light enough that text behind an open sheet keeps 4.5:1 on the dark page */
     --floor: rgb(0 0 0 / 0.6);
     --float: rgb(0 0 0 / 0.7);
   }
@@ -148,6 +148,7 @@
 
   --font-display: var(--font-google-sans), Arial, sans-serif;
   --font-sans: var(--font-google-sans), -apple-system, "Segoe UI", sans-serif;
+  --font-typewriter: "Courier New", Courier, ui-monospace, monospace; /* the job card's typewriter fields only */
 
   /* Fluid type: phone (390px) to desktop (1440px), rem + clamp. */
   --text-display-xl: clamp(2.25rem, 1.646rem + 2.476vw, 3.875rem);
@@ -303,6 +304,21 @@
     background: var(--card);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+  }
+}
+
+/* Sheets: above the on-screen keyboard. --vv-top and --vv-bottom come from visualViewport (SheetContent); 0 without a keyboard. */
+@utility sheet-fit {
+  top: calc(0.5rem + var(--vv-top, 0px));
+  bottom: calc(0.5rem + var(--vv-bottom, 0px));
+}
+
+/* Floating phone chrome steps aside while a field has focus: it would ride over the field or under the keyboard. */
+@utility typing-hidden {
+  @media (width < 48rem) {
+    html:has(input:focus, textarea:focus) & {
+      display: none;
+    }
   }
 }
 
@@ -527,6 +543,8 @@
   html {
     scrollbar-color: var(--steel-soft) transparent;
     -webkit-text-size-adjust: 100%;
+    /* Tap feedback in the palette, not the browser's blue-grey. */
+    -webkit-tap-highlight-color: color-mix(in oklab, var(--ink) 10%, transparent);
     /* Focus and anchor jumps stop clear of the fixed nav, and on phones of the bottom bar (WCAG 2.4.11). */
     scroll-padding-top: 5rem;
     @media (width < 48rem) {
@@ -539,11 +557,18 @@
   h1, h2, h3, h4 {
     @apply text-ink;
   }
+  /* No double-tap zoom wait on controls; pinch zoom stays. */
+  a, button, label, summary, [role="radio"] {
+    touch-action: manipulation;
+  }
   /* Everything below the first screen skips style, layout and paint until it nears the viewport, so the first
-     layout is the hero's alone. "auto" keeps the size once seen. */
-  main > section:not(:first-child) {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 40rem;
+     layout is the hero's alone. "auto" keeps the size once seen. Not on phones: sections there run far taller than the
+     placeholder, and Back then restored the scroll position thousands of pixels off. */
+  @media (width >= 48rem) {
+    main > section:not(:first-child) {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 40rem;
+    }
   }
   ::selection {
     background: var(--signal);

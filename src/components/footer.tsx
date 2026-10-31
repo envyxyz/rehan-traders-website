@@ -8,7 +8,7 @@ import { Reveal } from "@/components/motion"
 import { footer, nav, services, site, actions, ui } from "@/content"
 
 const groupTitle = "font-display text-title-md text-on-band"
-const linkClass = "inline-flex min-h-11 items-center text-on-band-soft no-underline hover:text-on-band"
+const linkClass = "inline-flex min-h-11 min-w-11 items-center text-on-band-soft no-underline hover:text-on-band"
 
 function Group({ title, className, children }: { title: string; className?: string; children: React.ReactNode }) {
   return (
@@ -26,12 +26,12 @@ export function Footer() {
       <Container>
         <Reveal className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-12">
           <div className="sm:col-span-2 lg:col-span-3">
-            <Link href="/" aria-label={nav.home} className="inline-flex items-center gap-2.5 font-display text-title-lg font-extrabold text-on-band no-underline">
+            <Link href="/" aria-label={nav.home} className="-my-1.5 inline-flex min-h-11 items-center gap-2.5 font-display text-title-lg font-extrabold text-on-band no-underline">
               <Mark className="size-8" />
               {site.name}
             </Link>
             <p className="mt-4 max-w-xs text-pretty">{site.entity}</p>
-            <a href={site.phone.href} className="mt-6 block font-display text-display-md text-on-band no-underline" data-track="call" data-track-from="footer">
+            <a href={site.phone.href} className="mt-4 -mb-2 flex min-h-11 w-fit items-center font-display text-display-md text-on-band no-underline" data-track="call" data-track-from="footer">
               {site.phone.display}
             </a>
           </div>

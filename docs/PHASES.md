@@ -240,3 +240,14 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 - `/repairs`: "What's wrong with your phone?" list under the cards, driven by `problems` in `content.ts` (English text only), each item linking to its repair page.
 - Checks: typecheck, lint, build pass; pages and no-quote-promise e2e 22 passed; axe `/courier` and `/repairs` 8 passed. Links 44px tall at 390 and 1440, light and dark (only the shared breadcrumb "Home" link is smaller). Screenshots: `design/phase-11/`.
 - Not done: nothing pushed or merged. Repair-page FAQ answers unchanged.
+
+### 2026-10-31 · Phase 12: phone UX
+- Sheets: the close button stays put while a long sheet scrolls (one inner scroller); sheets follow `visualViewport`, so the booking and chat footers stay above the iOS keyboard; `interactive-widget=resizes-content` for Android. The menu's Book and WhatsApp actions dock at the bottom on short phones. Dark scrim 0.55 to 0.28, so text behind an open sheet keeps 4.5:1 (axe flagged it intermittently).
+- Floating chrome: the chat button sits at the bottom corner and rises only while the sticky bar shows; bar and chat button step aside while a field has focus. The booking Next row is docked in the sheet only, so on `/book` it no longer slides under the bar.
+- Back on phones returns to the right place: `content-visibility` is desktop only (restored position was about 3,500px off on home).
+- Reviews: swipe on the home carousel too; under `sm`, arrows and a counter instead of ten narrow dots; smaller quote text on phones.
+- Job card: the fields are now plain text (one column on phones), not fake inputs that raised the keyboard, zoomed iOS and clipped values. Tilt is mouse only. New token `--font-typewriter`.
+- Forms: the keyboard's next key moves from name to number; `enterKeyHint` and `autoCapitalize` on the fields. Chat bubbles wrap long unbroken words; chips make way while typing.
+- Map: inverted in dark only (it was dark in light mode too). Targets to 44px with no visual change: breadcrumbs, logos, footer phone, service card titles. The footer phone link no longer spans the whole row. `/repairs` problem rows get spacing, wrapped lines included. Nav ignores scroll jitter under 8px and returns on focus. Tap highlight from the palette. CSP allows the Cloudflare beacon.
+- Tests: `tests/e2e/phone.spec.ts`. Screenshots: `design/phase-12/` (`before/`, `after/`, flows in each).
+- Not verified on a real device: keyboard behaviour was tested with short viewports and a stubbed `visualViewport`, not iOS or Android hardware.
