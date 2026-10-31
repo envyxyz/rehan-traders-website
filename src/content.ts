@@ -187,9 +187,11 @@ export const actions = {
 
 export const hero = {
   title: "Cracked glass? Fixed at G‑88.", // ‑ is a non-breaking hyphen: "G-88" never splits
-  lede: "A reliable repair in a confusing market. Rehan Traders checks your phone free of cost and tries to save your panel, and your money, first. Touch glass, Galaxy Z Fold and Flip, iPhone and board repairs in Hafeez Center, Lahore.",
-  // Ameer, 31 Oct 2026. TODO(adnan): confirm the count, "certified" and 2009.
-  track: "10,000+ Certified Repairs since 2009",
+  /** Tablet and up only: a phone starts the lede at "Rehan Traders checks". */
+  ledeLead: "A reliable repair in a confusing market. ",
+  lede: "Rehan Traders checks your phone free of cost and tries to save your panel, and your money, first. Touch glass, Galaxy Z Fold and Flip, iPhone and board repairs in Hafeez Center, Lahore.",
+  // Confirmed by Ameer, 1 Nov 2026.
+  track: "10,000+ Certified Repairs",
   proof: (rating: number) => ({ before: `Rated ${rating.toFixed(1)} on`, link: "Google Maps" }),
   /** The 3D fold: status bar on its screen, and the label of the button that folds and opens it. */
   fold: { time: "11:00", network: "5G", close: "Fold the phone", open: "Open the phone" },

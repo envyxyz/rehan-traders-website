@@ -42,9 +42,11 @@ type ButtonProps = React.ComponentProps<"button"> &
     arrow?: boolean
     /** Arrow button without the hover fill and lift, for buttons inside a working flow (the booking sheet). */
     still?: boolean
+    /** Arrow button, size lg: full width on a phone with the label centred and the chip at the right edge. */
+    wide?: boolean
   }
 
-function Button({ className, variant, size, asChild = false, arrow = false, still = false, children, ...props }: ButtonProps) {
+function Button({ className, variant, size, asChild = false, arrow = false, still = false, wide = false, children, ...props }: ButtonProps) {
   const fill = arrow && !still
   const inverse = variant === "inverse"
   const Comp = asChild ? Slot.Root : "button"
@@ -53,7 +55,7 @@ function Button({ className, variant, size, asChild = false, arrow = false, stil
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size }), arrow && "relative isolate pr-2", still && "hover:translate-y-0", className)}
+      className={cn(buttonVariants({ variant, size }), arrow && "relative isolate pr-2", wide && "btn-wide w-full justify-between pl-2 sm:w-auto sm:justify-center sm:pl-6", still && "hover:translate-y-0", className)}
       {...props}
     >
       <Slot.Slottable>{children}</Slot.Slottable>

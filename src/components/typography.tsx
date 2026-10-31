@@ -3,6 +3,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 const headingSizes = {
+  "display-hero": "text-display-hero",
   "display-xl": "text-display-xl",
   "display-lg": "text-display-lg",
   "display-md": "text-display-md",

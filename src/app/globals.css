@@ -137,6 +137,11 @@
   --font-typewriter: "Courier New", Courier, ui-monospace, monospace; /* the job card's typewriter fields only */
 
   /* Fluid type: phone (390px) to desktop (1440px), rem + clamp. */
+  /* The home hero only: as wide as the column allows ("Cracked glass?" is about 7.2em), on a phone and beside the fold. */
+  --text-display-hero: min(5rem, max(min(11.2vw, 2.75rem), 5.5vw));
+  --text-display-hero--line-height: 1.02;
+  --text-display-hero--letter-spacing: -0.025em;
+  --text-display-hero--font-weight: 800;
   --text-display-xl: clamp(2.25rem, 1.646rem + 2.476vw, 3.875rem);
   --text-display-xl--line-height: 1.02;
   --text-display-xl--letter-spacing: -0.025em;
@@ -177,6 +182,7 @@
   --spacing: 0.25rem;
   --spacing-section: clamp(3.5rem, 2.757rem + 3.048vw, 5.5rem);
   --spacing-sheet: 92svh;      /* bottom sheet max height */
+  --spacing-hero-gap: clamp(1.5rem, 3.5svh, 2.25rem); /* between hero copy groups: taller screens breathe more */
   --spacing-safe-bottom: max(0.75rem, env(safe-area-inset-bottom)); /* floating bars clear the home indicator */
   --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button */
   --container-content: 90rem;  /* 1440px */
@@ -367,6 +373,15 @@
   @media (prefers-reduced-motion: reduce) {
     .btn-fill {
       transition-duration: var(--duration-fast);
+    }
+  }
+  /* Full-width on a phone (the `wide` prop): a spacer the chip's size balances the chip, so the label is truly centred and the chip keeps the right edge. */
+  @media (width < 40rem) {
+    .btn-wide::before,
+    .btn-wide > .btn-fill::before {
+      content: "";
+      flex-shrink: 0;
+      width: 1.875rem;
     }
   }
 }

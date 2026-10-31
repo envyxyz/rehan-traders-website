@@ -36,6 +36,8 @@ export function Fold3D() {
     const start = () => {
       load.current = () => {} // once
       WAKE.forEach((e) => removeEventListener(e, start))
+      // No WebGL: the poster stays and three.js never loads (its renderer logs an error before it throws).
+      if (!document.createElement("canvas").getContext("webgl2")) return
       import("@/components/fold-scene")
         .then(({ createFold }) => createFold(canvas.current!))
         .then((f) => {

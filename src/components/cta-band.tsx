@@ -13,11 +13,11 @@ export function CtaBand() {
       <Container>
         <Reveal className="flex flex-col gap-8 rounded-xl bg-band px-6 py-12 md:px-14 md:py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
           <Heading className="text-on-band">{cta.title}</Heading>
-          <div className="flex flex-wrap gap-2.5 lg:shrink-0">
-            <BookButton size="lg" variant="inverse" arrow className="flex-1 sm:flex-none">
+          <div className="grid gap-3 sm:flex sm:flex-wrap lg:shrink-0">
+            <BookButton size="lg" variant="inverse" arrow wide>
               {actions.book}
             </BookButton>
-            <Button asChild size="lg" variant="whatsapp" className="flex-1 sm:flex-none">
+            <Button asChild size="lg" variant="whatsapp">
               <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="cta">
                 <WhatsAppIcon />
                 {actions.whatsapp}

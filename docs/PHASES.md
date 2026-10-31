@@ -261,4 +261,4 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 
 ## Owner fixes, 31 Oct 2026
 
-Hero proof and hours line, nav with About, FAQ and Contact, phone lockup and menu, repair cards, one-screen page openings, real fold sounds (`public/sounds`), external links in new tabs. "10,000+ Certified Repairs since 2009" came from Ameer and waits on Adnan.
+Hero proof and hours line, nav with About, FAQ and Contact, phone lockup and menu, repair cards, one-screen page openings, real fold sounds (`public/sounds`), external links in new tabs. "10,000+ Certified Repairs" confirmed by Ameer on 1 Nov 2026; "since 2009" left out of the hero.
