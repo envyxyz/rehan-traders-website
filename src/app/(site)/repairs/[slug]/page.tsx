@@ -89,7 +89,7 @@ export default async function ServicePage({ params }: PageProps) {
               <Img
                 name={service.image}
                 alt={service.alt}
-                sizes="(min-width: 1024px) 480px, 100vw"
+                sizes="(min-width: 1024px) 480px, calc(100vw - 2rem)"
                 className="aspect-4/3 w-full rounded-xl border border-hairline"
                 priority
               />
@@ -187,7 +187,7 @@ export default async function ServicePage({ params }: PageProps) {
                     <Img
                       name={rel.image}
                       alt={rel.alt}
-                      sizes="(min-width: 1024px) 360px, (min-width: 768px) 50vw, 100vw"
+                      sizes="(min-width: 1440px) 437px, (min-width: 1024px) calc(33.33vw - 2.67rem), (min-width: 768px) calc(33.33vw - 2rem), calc(100vw - 2rem)"
                       className="aspect-16/10 w-full"
                     />
                     <div className="flex flex-1 flex-col p-6">
@@ -196,7 +196,8 @@ export default async function ServicePage({ params }: PageProps) {
                       <div className="mt-auto pt-4 flex items-center justify-between gap-2">
                         <Link
                           href={`/repairs/${rel.slug}`}
-                          className="font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
+                          aria-label={repairsPage.viewDetailsOf(rel.title)}
+                          className="inline-flex min-h-11 items-center font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
                         >
                           {repairsPage.viewDetails}
                         </Link>

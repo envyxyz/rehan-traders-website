@@ -343,7 +343,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
                 aria-describedby={detailsError && !nameOk ? `${ids}-name-error` : undefined}
               />
               {detailsError && !nameOk && (
-                <p id={`${ids}-name-error`} className="text-body-sm text-error">
+                <p id={`${ids}-name-error`} role="alert" className="text-body-sm text-error">
                   {booking.details.nameError}
                 </p>
               )}
@@ -363,7 +363,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
                 aria-describedby={`${ids}-phone-hint${detailsError && !phone ? ` ${ids}-phone-error` : ""}`}
               />
               {detailsError && !phone && (
-                <p id={`${ids}-phone-error`} className="text-body-sm text-error">
+                <p id={`${ids}-phone-error`} role="alert" className="text-body-sm text-error">
                   {booking.details.phoneError}
                 </p>
               )}

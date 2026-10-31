@@ -25,7 +25,7 @@ function Screen({ mark }: { mark?: boolean }) {
           {jobCard.status}
         </div>
       </div>
-      {mark && <Mark tone="device" className="fold-mark text-(--device-paper)" />}
+      {mark && <Mark tone="device" className="fold-mark text-device-paper" />}
     </div>
   )
 }
@@ -44,7 +44,7 @@ export function Fold3D() {
             <div className="fold-cover">
               <div className="fold-time">{hero.fold.time}</div>
               <div className="fold-date">{hero.fold.date}</div>
-              <Mark tone="device" className="text-(--device-paper)" />
+              <Mark tone="device" className="text-device-paper" />
             </div>
           </div>
         </div>
