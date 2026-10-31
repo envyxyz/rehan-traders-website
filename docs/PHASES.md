@@ -231,3 +231,6 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 - Docs: `docs/launch/nap.md`, `docs/launch/search-plan.md`.
 - Found: Google has no pages of the site indexed. Search Console comes first.
 - Left: everything in `docs/LAUNCH.md` that needs a dashboard sign-in, real booking test, Lighthouse on production, Android check, Adnan's questions (`../growth/Notes/Questions for Adnan.md`).
+### 2026-10-31 · Phase 9: tests and audits
+- Shipped: Playwright e2e and axe on every route (light and dark, desktop and phone), Lighthouse CI config, CSP in `public/_headers`, approved look fixes, audit fixes, 720w images, GTM after load, `src/app/loading.tsx` removed, `/api/health`, kitchen sink out of the production export. Runbook in `docs/GO-LIVE.md`, checklist in `docs/LAUNCH.md`, SEO audit in `docs/launch/seo-audit.md`.
+- Results and gaps: `docs/QA.md`. Lighthouse performance stays under 0.95 and home JS over the 120 KB budget; Ameer chose to document that gap.
