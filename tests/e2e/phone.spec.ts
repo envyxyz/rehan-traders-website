@@ -33,7 +33,7 @@ test.describe("phone", () => {
     }
   })
 
-  test("the menu's close button and actions stay on screen on a short phone", async ({ page }) => {
+  test("the menu's close button, Book, Call and WhatsApp stay on screen on a short phone", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 640 })
     await page.goto("/")
     await expect(page.getByRole("button", { name: nav.menu })).toHaveAttribute("aria-haspopup", "dialog")
@@ -43,6 +43,20 @@ test.describe("phone", () => {
     await sheet.locator("nav").evaluate((el) => el.parentElement?.scrollTo(0, 9999))
     await expect(sheet.getByRole("button", { name: ui.close })).toBeInViewport()
     await expect(sheet.getByRole("link", { name: actions.book })).toBeInViewport()
+    await expect(sheet.getByRole("link", { name: nav.call })).toBeInViewport()
+    await expect(sheet.getByRole("link", { name: actions.whatsappLabel })).toBeInViewport()
+  })
+
+  test("every repair in the Repairs list is reachable on a short phone", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 560 })
+    await page.goto("/")
+    await expect(page.getByRole("button", { name: nav.menu })).toHaveAttribute("aria-haspopup", "dialog")
+    await page.getByRole("button", { name: nav.menu }).click()
+    const sheet = page.getByRole("dialog")
+    await sheet.getByRole("button", { name: "Repairs", exact: true }).click()
+    await expect(sheet.getByRole("button", { name: nav.back })).toBeInViewport()
+    await sheet.getByRole("list").getByRole("link").last().scrollIntoViewIfNeeded()
+    await expect(sheet.getByRole("list").getByRole("link").last()).toBeInViewport()
   })
 
   test("the keyboard's next key moves from name to number", async ({ page }) => {

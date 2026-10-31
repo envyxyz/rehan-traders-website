@@ -1,23 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { LazyMotion, MotionConfig } from "motion/react"
 
 import { reveal } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
-
-// Wait for an idle moment so the features chunk never competes with first paint and hydration.
-const idle = () => new Promise<void>((done) => ("requestIdleCallback" in window ? requestIdleCallback(() => done()) : setTimeout(done, 200)))
-const loadFeatures = () => idle().then(() => import("@/lib/motion-features")).then((mod) => mod.default)
-
-/** LazyMotion keeps the motion bundle out of the first load; `m.*` components only (the nav island). */
-export function MotionProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <LazyMotion features={loadFeatures} strict>
-      <MotionConfig reducedMotion="user">{children}</MotionConfig>
-    </LazyMotion>
-  )
-}
 
 /**
  * Fade + 8px rise, once, at 15% visible: the `rise` keyframes (globals.css) started by an IntersectionObserver, so

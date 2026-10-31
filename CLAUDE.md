@@ -19,7 +19,7 @@ Brand assets live one level up: `../growth/Brand/` (logo SVGs, print kit, tamper
 
 ## Stack
 
-Next.js (App Router) · React · TypeScript strict · Tailwind CSS v4 · shadcn/ui · Motion (`motion/react`) · Lenis · lucide-react · AI SDK · Zod · Playwright · Lighthouse CI · **pnpm** · **Cloudflare Workers, free plan**: the Next.js static export (`out/`) is served as static assets, and a small Worker in `worker/` handles only `/api/*` (booking, chat, estimator). Hosting must stay free.
+Next.js (App Router) · React · TypeScript strict · Tailwind CSS v4 · shadcn/ui · three.js (hero fold, loaded on first interaction) · Lenis · lucide-react · AI SDK · Zod · Playwright · Lighthouse CI · **pnpm** · **Cloudflare Workers, free plan**: the Next.js static export (`out/`) is served as static assets, and a small Worker in `worker/` handles only `/api/*` (booking, chat, estimator). Hosting must stay free.
 
 Check current docs with context7 before using any library API. Do not add a dependency for something a few lines or the platform already does.
 

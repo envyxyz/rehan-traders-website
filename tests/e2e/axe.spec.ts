@@ -62,6 +62,8 @@ for (const scheme of ["light", "dark"] as const) {
     test("axe phone menu sheet", async ({ page, isMobile }) => {
       test.skip(!isMobile, "the menu sheet is the phone nav")
       await page.goto("/")
+      // The sheet is a next/dynamic chunk; until it loads the button is an inert placeholder and a click is lost.
+      await expect(page.getByRole("button", { name: nav.menu })).toHaveAttribute("aria-haspopup", "dialog")
       await page.getByRole("button", { name: nav.menu }).click()
       await expect(page.getByRole("dialog", { name: nav.menu })).toBeVisible()
       await scan(page)

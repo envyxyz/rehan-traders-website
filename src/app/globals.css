@@ -52,29 +52,11 @@
   --floor: rgb(14 14 14 / 0.22);   /* soft floor shadow under floating objects */
   --float: rgb(14 14 14 / 0.45);   /* the one floating shadow */
 
-  /* The CSS fold (hero). A physical object: same colours in light and dark. */
-  --device-glass: #0a0a0a;
-  --device-frame: #8e8e92;
-  --device-frame-edge: #5b5b5f;
-  --device-hinge-dark: #4a4a4e;
-  --device-hinge-light: #a9a9ae;
-  --device-hinge-mid: #5c5c60;
-  --device-screen-glow: #26201f;
-  --device-screen: #0c0c0c;
-  --device-cover-glow: #2a2525;
-  --device-back-light: #3a3a3e;
-  --device-back-dark: #1c1c1f;
-  --device-lens: #3b4a66;
-  --device-lens-dark: #050505;
-  --device-lens-ring: #77777b;
-  --device-glare: rgb(255 255 255 / 0.16);
-  --device-glare-soft: rgb(255 255 255 / 0.07);
+  /* The job card and the 3D fold's screens: a physical object, same colours in light and dark. */
   --device-paper: #f5f5f2;
   --device-ink: #0e0e0e;
-  --device-label: #6e6e6a;
   --device-steel: #5e5e5a;
   --device-rule: #d9d9d4;
-  --device-ok: #2e7d4f;
   --device-red: #d7141a;
 }
 
@@ -192,7 +174,7 @@
   --spacing-section: clamp(3.5rem, 2.757rem + 3.048vw, 5.5rem);
   --spacing-sheet: 92svh;      /* bottom sheet max height */
   --spacing-safe-bottom: max(0.75rem, env(safe-area-inset-bottom)); /* floating bars clear the home indicator */
-  --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button, clear of the sticky bar */
+  --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button */
   --container-content: 90rem;  /* 1440px */
   --container-panel: 96rem;    /* hero panel cap, 1536px */
   --container-estimate: 34rem; /* the /estimate card: one width for both tabs and the result, 544px */
@@ -210,14 +192,13 @@
 
   /* Motion. JS mirrors these in src/lib/motion.ts. */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);       /* reveals, copy entrances */
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* the fold */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* the arrow button fill */
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);   /* nav hide/show, sheets */
   --duration-press: 100ms;
   --duration-fast: 200ms;
   --duration-base: 350ms;
   --duration-fill: 700ms;  /* arrow button: chip colour filling the button, and its lift */
   --duration-reveal: 700ms;
-  --duration-fold: 1400ms;
 
   /* Hero copy: 8px rise and fade. Callers stagger with animation-delay. */
   --animate-rise: rise var(--duration-reveal) var(--ease-out) both;
@@ -314,6 +295,14 @@
 }
 
 /* Floating phone chrome steps aside while a field has focus: it would ride over the field or under the keyboard. */
+/* Scrolls, without a visible bar (the chat log). */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @utility typing-hidden {
   @media (width < 48rem) {
     html:has(input:focus, textarea:focus) & {
@@ -374,166 +363,31 @@
   }
 }
 
-/* ---------- Fold3D: CSS 3D Galaxy Z Fold (hero). Closed on load, opens into a V facing the copy. ---------- */
+/* ---------- Fold3D: the hero's 3D fold (fold-3d.tsx). Square, so the poster and the canvas frame it alike at every size. ---------- */
 @layer components {
   .fold-stage {
     position: relative;
-    display: grid;
-    place-items: center;
+    display: block;
+    isolation: isolate; /* the floor shadow sits under the canvas, not under the hero panel */
+    aspect-ratio: 1;
     height: 18.5rem;
-    perspective: 110rem;
+    margin-inline: auto;
     @media (width >= 30rem) { height: 22rem; }
     @media (width >= 64rem) { height: min(36rem, 70svh); }
   }
   .fold-stage::after {
     content: "";
     position: absolute;
-    bottom: 6%;
+    z-index: -1;
+    bottom: 8%;
     left: 50%;
-    width: 46%;
+    width: 52%;
     height: 1.5rem;
     translate: -50% 0;
     background: radial-gradient(closest-side, var(--floor), transparent);
     filter: blur(0.4rem);
   }
-  .fold {
-    --w: 5.75rem;
-    position: relative;
-    width: calc(var(--w) * 2);
-    height: calc(var(--w) * 2.25);
-    transform-style: preserve-3d;
-    transform: rotateY(14deg) rotateX(5deg);
-    animation: fold-hover 6s ease-in-out 2.4s infinite;
-    @media (width >= 30rem) { --w: 6.75rem; }
-    @media (width >= 64rem) { --w: clamp(9.5rem, 6rem + 7vw, 13.5rem); }
-  }
-  .fold-half {
-    position: absolute;
-    top: 0;
-    width: var(--w);
-    height: 100%;
-    transform-style: preserve-3d;
-    animation: var(--duration-fold) var(--ease-in-out) 0.6s forwards;
-  }
-  .fold-l { left: 0; transform-origin: right center; transform: rotateY(180deg); animation-name: fold-open-l; }
-  .fold-r { left: var(--w); transform-origin: left center; transform: rotateY(0deg); animation-name: fold-open-r; }
-  .fold-face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border-radius: calc(var(--w) * 0.1);
-    overflow: hidden;
-    background: var(--device-glass);
-    box-shadow: 0 0 0 0.3rem var(--device-frame), 0 0 0 0.36rem var(--device-frame-edge);
-  }
-  .fold-l .fold-in { border-top-right-radius: 0.25rem; border-bottom-right-radius: 0.25rem; }
-  .fold-r .fold-in { border-top-left-radius: 0.25rem; border-bottom-left-radius: 0.25rem; }
-  .fold-out { transform: rotateY(180deg) translateZ(1px); }
-  .fold-face::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(115deg, var(--device-glare) 0%, transparent 38%, transparent 70%, var(--device-glare-soft) 100%);
-  }
-  .fold-hinge {
-    position: absolute;
-    top: 0.4rem;
-    bottom: 0.4rem;
-    left: calc(var(--w) - 0.3rem);
-    width: 0.6rem;
-    border-radius: 0.3rem;
-    background: linear-gradient(90deg, var(--device-hinge-dark), var(--device-hinge-light) 45%, var(--device-hinge-mid));
-    transform: translateZ(-0.3rem);
-  }
-  /* One screen spans both halves; the right half shows its right side. */
-  .fold-screen {
-    position: absolute;
-    top: 0;
-    width: calc(var(--w) * 2);
-    height: 100%;
-    padding: calc(var(--w) * 0.12);
-    background: radial-gradient(120% 70% at 30% 0%, var(--device-screen-glow) 0%, var(--device-screen) 60%);
-    color: var(--device-paper);
-  }
-  .fold-r .fold-screen { left: calc(var(--w) * -1); }
-  .fold-status { display: flex; justify-content: space-between; font: 600 calc(var(--w) * 0.07) / 1 var(--font-display); opacity: 0.85; }
-  .fold-card {
-    margin-top: calc(var(--w) * 0.28);
-    background: var(--device-paper);
-    color: var(--device-ink);
-    border-radius: calc(var(--w) * 0.08);
-    padding: calc(var(--w) * 0.09);
-  }
-  .fold-card-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding-bottom: calc(var(--w) * 0.05);
-    border-bottom: 1.5px solid var(--device-ink);
-    font: 700 calc(var(--w) * 0.045) / 1 var(--font-display);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--device-steel);
-  }
-  .fold-card-head b { font: 800 calc(var(--w) * 0.085) / 1 var(--font-display); letter-spacing: 0; color: var(--device-red); text-transform: none; }
-  .fold-row {
-    display: flex;
-    justify-content: space-between;
-    padding: calc(var(--w) * 0.05) 0;
-    border-bottom: 1px solid var(--device-rule);
-    font: 500 calc(var(--w) * 0.058) / 1.2 var(--font-sans);
-  }
-  .fold-row span:first-child { color: var(--device-label); }
-  .fold-ok {
-    margin-top: calc(var(--w) * 0.07);
-    display: flex;
-    align-items: center;
-    gap: calc(var(--w) * 0.04);
-    font: 700 calc(var(--w) * 0.06) / 1 var(--font-display);
-    color: var(--device-ok);
-  }
-  .fold-ok i { width: calc(var(--w) * 0.06); height: calc(var(--w) * 0.06); border-radius: 50%; background: var(--device-ok); }
-  .fold-mark { position: absolute; bottom: calc(var(--w) * 0.14); left: calc(var(--w) * 0.12); width: calc(var(--w) * 0.16); opacity: 0.9; }
-  .fold-cover {
-    position: absolute;
-    inset: 0;
-    padding: calc(var(--w) * 0.16) calc(var(--w) * 0.12);
-    background: radial-gradient(90% 60% at 50% 15%, var(--device-cover-glow), var(--device-glass) 70%);
-    color: var(--device-paper);
-    text-align: center;
-  }
-  .fold-time { font: 600 calc(var(--w) * 0.3) / 1 var(--font-display); letter-spacing: -0.02em; margin-top: calc(var(--w) * 0.1); }
-  .fold-date { font: 500 calc(var(--w) * 0.065) / 1 var(--font-sans); opacity: 0.7; margin-top: calc(var(--w) * 0.05); }
-  .fold-cover svg { width: calc(var(--w) * 0.22); height: auto; margin: calc(var(--w) * 0.9) auto 0; }
-  .fold-back { position: absolute; inset: 0; background: linear-gradient(150deg, var(--device-back-light), var(--device-back-dark)); }
-  .fold-cam {
-    position: absolute;
-    top: calc(var(--w) * 0.1);
-    right: calc(var(--w) * 0.1);
-    width: calc(var(--w) * 0.26);
-    padding: calc(var(--w) * 0.03);
-    display: grid;
-    gap: calc(var(--w) * 0.03);
-  }
-  .fold-cam i {
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, var(--device-lens), var(--device-lens-dark) 55%);
-    box-shadow: 0 0 0 calc(var(--w) * 0.012) var(--device-lens-ring);
-  }
-
-  /* Reduced motion: shown open and still. */
-  @media (prefers-reduced-motion: reduce) {
-    .fold, .fold-half { animation: none !important; }
-    .fold-l { transform: rotateY(52deg); }
-    .fold-r { transform: rotateY(-52deg); }
-  }
 }
-
-@keyframes fold-open-l { to { transform: rotateY(52deg); } }
-@keyframes fold-open-r { to { transform: rotateY(-52deg); } }
-@keyframes fold-hover { 50% { translate: 0 -0.375rem; } }
 
 /* ---------- Base and browser surfaces ---------- */
 @layer base {
@@ -545,7 +399,7 @@
     -webkit-text-size-adjust: 100%;
     /* Tap feedback in the palette, not the browser's blue-grey. */
     -webkit-tap-highlight-color: color-mix(in oklab, var(--ink) 10%, transparent);
-    /* Focus and anchor jumps stop clear of the fixed nav, and on phones of the bottom bar (WCAG 2.4.11). */
+    /* Focus and anchor jumps stop clear of the fixed nav, and on phones of the chat button (WCAG 2.4.11). */
     scroll-padding-top: 5rem;
     @media (width < 48rem) {
       scroll-padding-bottom: var(--spacing-above-bar);

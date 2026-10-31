@@ -14,7 +14,7 @@ const rise = (step: number) => ({
   style: { animationDelay: `${step * heroStagger}s` },
 })
 
-/** 100svh inset panel: copy left, CSS fold right. */
+/** 100svh inset panel: copy left, 3D fold right. */
 export function Hero() {
   const proof = hero.proof(reviews.rating)
   return (

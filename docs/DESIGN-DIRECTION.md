@@ -41,7 +41,7 @@ One authored moment (the fold opening), then quiet.
 
 Primitives (shadcn, restyled to tokens): Button (ink, line, whatsapp, glass; md/lg; icon-only), Badge/Chip, Card, Sheet/Drawer, Dialog, DropdownMenu, Command (device search), RadioGroup (fault and time chips), Accordion, Tooltip, Toast (sonner), Input, Label, Form messages. Scrollbars and selection themed in CSS.
 
-Composed: Container, Section, Nav (top/island/mobile), MobileMenu, Footer, StickyBar (phones), ChatLauncher + ChatPanel, Fold3D, JobCard, TamperSeal, ServiceCard (image, title, description, price line, Book button), BeforeAfter, ProcessSteps, ReviewCard + Rating, OpenStatus, HoursTable, MapCard, CtaBand, FaqList, BookingFlow, Estimator, PriceLine.
+Composed: Container, Section, Nav (top/island/mobile), MobileMenu, Footer, ChatLauncher + ChatPanel, Fold3D, JobCard, TamperSeal, ServiceCard (image, title, description, price line, Book button), BeforeAfter, ProcessSteps, ReviewCard + Rating, OpenStatus, HoursTable, MapCard, CtaBand, FaqList, BookingFlow, Estimator, PriceLine.
 
 21st.dev: pull candidates for BeforeAfter, Accordion, and the nav island; restyle to tokens, never ship their default look.
 

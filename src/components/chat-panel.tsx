@@ -46,7 +46,8 @@ export function ChatPanel() {
 
   React.useEffect(() => {
     saved = messages
-    log.current?.scrollTo({ top: log.current.scrollHeight })
+    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches
+    log.current?.scrollTo({ top: log.current.scrollHeight, behavior: smooth ? "smooth" : "auto" })
   }, [messages])
 
   const turns = messages.filter((m) => m.role === "user").length
@@ -93,7 +94,7 @@ export function ChatPanel() {
 
   return (
     <div className="-mx-6 flex min-h-0 flex-1 flex-col border-t border-hairline">
-      <div ref={log} role="log" aria-busy={busy} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-6 py-4">
+      <div ref={log} role="log" aria-busy={busy} className="no-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-6 py-4">
         <Bubble role="assistant">{assistant.greeting}</Bubble>
         {messages.map((m, i) => {
           const { body, buttons } = m.role === "assistant" ? parseReply(m.content) : { body: m.content, buttons: [] as ("whatsapp" | "call")[] }

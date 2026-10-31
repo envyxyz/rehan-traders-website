@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next"
 import { Google_Sans_Flex } from "next/font/google"
 
 import { GoogleTagManager } from "@/components/gtm"
-import { MotionProvider, SmoothScroll } from "@/components/motion"
+import { SmoothScroll } from "@/components/motion"
 import { seo, site } from "@/content"
 import { themeColor } from "@/lib/tokens"
 import "./globals.css"
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={googleSans.variable}>
       <body>
-        <MotionProvider>{children}</MotionProvider>
+        {children}
         <SmoothScroll />
         <GoogleTagManager gtmId={gtmId} />
       </body>

@@ -2,7 +2,6 @@ import { ChatLauncher } from "@/components/chat-launcher"
 import { Footer } from "@/components/footer"
 import { LinkTracker } from "@/components/link-tracker"
 import { Nav } from "@/components/nav"
-import { StickyBar } from "@/components/sticky-bar"
 import { ui } from "@/content"
 
 /**
@@ -24,7 +23,6 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <Footer />
-      <StickyBar />
       <ChatLauncher />
       <LinkTracker />
     </div>

@@ -407,7 +407,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
       {/* Honeypot: off-screen and out of the tab order, so only bots fill it. */}
       <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" aria-label={booking.details.honeypot} />
 
-      {/* Docked in the sheet only: on /book the page's StickyBar owns the bottom of the screen. */}
+      {/* Docked at the foot of the sheet only; on /book the buttons follow the form. */}
       <div className={cn("-mx-1 mt-auto flex flex-wrap gap-2.5 bg-card px-1 py-3", onDone && "sticky bottom-0")}>
         {index > 0 && (
           <Button type="button" variant="line" size="lg" still onClick={back} disabled={sending}>

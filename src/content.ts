@@ -167,6 +167,8 @@ export const nav = {
   ],
   call: `Call ${site.phone.display}`,
   menu: "Menu",
+  /** Phones: back from the Repairs list to the menu. */
+  back: "Back",
   home: `${site.name} home`,
   label: "Main",
 
@@ -192,18 +194,8 @@ export const hero = {
   title: "Cracked glass? Fixed at G‑88.", // ‑ is a non-breaking hyphen: "G-88" never splits
   lede: "A reliable repair in a confusing market. Rehan Traders checks your phone free of cost and tries to save your panel, and your money, first. Touch glass, Galaxy Z Fold and Flip, iPhone and board repairs in Hafeez Center, Lahore.",
   proof: (rating: number) => ({ rating: rating.toFixed(1), rest: "on Google" }),
-  jobCard: {
-    heading: "Repair job card",
-    number: "No. RT-0427",
-    rows: [
-      { label: "Device", value: "Galaxy Z Fold5" },
-      { label: "Fault", value: "Inner screen" },
-      { label: "Visit", value: "Today, 6:30 PM" },
-    ],
-    status: "Booked at G-88",
-  },
-  /** Decorative screens on the CSS fold (aria-hidden). */
-  fold: { time: "11:00", date: "Tuesday, 28 October", network: "5G" },
+  /** The 3D fold: status bar on its screen, and the label of the button that folds and opens it. */
+  fold: { time: "11:00", network: "5G", close: "Fold the phone", open: "Open the phone" },
 } as const
 
 export const jobCardContent = {

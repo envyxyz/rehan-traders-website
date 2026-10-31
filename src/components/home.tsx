@@ -132,10 +132,10 @@ function Process() {
             </li>
           ))}
         </ol>
-        {/* The interactive job card and tamper seal */}
+        {/* The interactive job card; the tamper seal stays on /about */}
         <Reveal className="mt-12 flex justify-center">
           <div className="relative w-full max-w-2xl rounded-xl bg-panel p-4 sm:p-8">
-            <JobCard />
+            <JobCard withSeal={false} />
           </div>
         </Reveal>
       </Container>

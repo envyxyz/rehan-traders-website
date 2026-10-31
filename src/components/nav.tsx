@@ -3,17 +3,15 @@
 import * as React from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import * as m from "motion/react-m"
-import { ChevronDown, Equal, Phone } from "lucide-react"
+import { ChevronDown, Menu, Phone } from "lucide-react"
 
 import { Icon } from "@/components/icon"
 import { Mark } from "@/components/logo"
 import { Button } from "@/components/ui/button"
 import { nav, site } from "@/content"
-import { spring } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
-const ISLAND_AT = 80 // phones: px of scroll before the bar gathers into the island
+const HIDE_AFTER = 80 // phones: px of scroll before the header may hide, so it never leaves the top of a page
 const SCROLL_SLOP = 8 // phones: px of travel before a direction counts, so a thumb's jitter does not flick the nav
 const BAR_FADE = 240 // desktop: px of scroll over which the top bar fades out
 
@@ -29,7 +27,7 @@ const repairsFace = (
 )
 const menuButton = (
   <Button variant="icon" className="bg-concrete" aria-label={nav.menu}>
-    <Icon icon={Equal} size="lg" />
+    <Icon icon={Menu} size="lg" />
   </Button>
 )
 
@@ -59,7 +57,7 @@ function NavLinks({ menu }: { menu?: { open: boolean; onOpenChange: (open: boole
   )
 }
 
-/** Phone button: number on the bar, icon only in the island and on phones. */
+/** Phone button: number on the bar, icon only in the island. */
 function CallButton({ compact }: { compact?: boolean }) {
   return (
     <Button asChild className={compact ? "w-11 px-0" : undefined}>
@@ -133,20 +131,20 @@ function DesktopNav() {
 }
 
 /**
- * Below lg: logo and name left, glass pill of the phone button and menu right.
- * After 80px it gathers into one centred glass island (Motion layout spring, no bounce).
- * It hides on scroll down and returns on scroll up.
+ * Below lg: the mark (home) left, the menu button right. Transparent at the top of the page, solid with a hairline once
+ * scrolled. It slides up out of view on scroll down and back on scroll up.
  */
 function MobileNav() {
-  const [island, setIsland] = React.useState(false)
+  const [scrolled, setScrolled] = React.useState(false)
   const [hidden, setHidden] = React.useState(false)
 
   React.useEffect(() => {
     let last = scrollY
     const onScroll = () => {
-      const y = scrollY
-      setIsland(y > ISLAND_AT)
-      if (y <= ISLAND_AT) setHidden(false)
+      // Clamped: iOS bounces past the end of the page, and the bounce back would read as a scroll up.
+      const y = Math.min(scrollY, document.documentElement.scrollHeight - innerHeight)
+      setScrolled(y > 0)
+      if (y <= HIDE_AFTER) setHidden(false)
       else if (Math.abs(y - last) >= SCROLL_SLOP) setHidden(y > last)
       else return
       last = y
@@ -159,38 +157,15 @@ function MobileNav() {
   return (
     <header
       className={cn(
-        "pointer-events-none fixed inset-x-0 top-0 z-40 flex px-5 pt-5 pb-6 transition-transform duration-base ease-drawer sm:px-7 sm:pt-7 lg:hidden",
-        island && "pt-3.5 sm:pt-3.5",
+        "fixed inset-x-0 top-0 z-40 flex h-16 items-center justify-between border-b border-transparent px-5 transition duration-base ease-drawer motion-reduce:transition-none sm:px-7 lg:hidden",
+        scrolled && "border-hairline bg-paper",
         hidden && "-translate-y-full focus-within:translate-y-0"
       )}
     >
-      <m.div
-        layout
-        transition={spring.layout}
-        style={{ borderRadius: 9999 }}
-        className={cn(
-          "pointer-events-auto flex items-center gap-1",
-          island ? "glass mx-auto p-1.25 pl-3" : "flex-1 justify-between"
-        )}
-      >
-        <m.div layout="position" transition={spring.layout}>
-          <Link href="/" aria-label={nav.home} className={cn("flex min-h-11 items-center gap-2.25 font-display text-title-md font-extrabold tracking-tight text-ink", island && "-mx-2.25 min-w-11 justify-center")}>
-            <Mark className={island ? "size-6.5" : "size-7.5"} />
-            {!island && <span>{site.name}</span>}
-          </Link>
-        </m.div>
-        <m.nav
-          layout="position"
-          transition={spring.layout}
-          aria-label={nav.label}
-          className={cn("flex items-center gap-0.5 rounded-pill", !island && "glass p-1.25")}
-        >
-          <m.div layout transition={spring.layout}>
-            <CallButton compact />
-          </m.div>
-          <MobileMenu trigger={menuButton} />
-        </m.nav>
-      </m.div>
+      <Link href="/" aria-label={nav.home} className="-ml-1.5 flex size-11 items-center justify-center text-ink">
+        <Mark className="size-8" />
+      </Link>
+      <MobileMenu trigger={menuButton} />
     </header>
   )
 }
