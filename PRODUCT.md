@@ -29,7 +29,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 
 ## Operating Context
 
-- Walk-in shop: Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54000. Coordinates 31.5161006, 74.3433894.
+- Walk-in shop: Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54660. Coordinates 31.5161006, 74.3433894.
 - Hours: Monday to Saturday 11:00 AM to 10:00 PM, Friday prayer break 1:00 to 2:00 PM, closed Sundays and whenever Hafeez Center closes (Eid and Ashura; national days stay open). Adnan, 31 Oct 2026: the shop opens when Hafeez Center does.
 - Courier repairs from outside Lahore: yes. Create a ticket on the site or call 0305 8874839, send photos of the phone on WhatsApp. If possible the shop quotes over the phone; otherwise the shop receives the phone, inspects and quotes it, repairs it once the customer agrees, and sends it back (Adnan, 30 Oct 2026). Delivery is the customer's choice and the customer pays: inside Lahore inDrive, Yango or any other ride service, nationwide TCS (Adnan, 30 Oct 2026). Packing guidance is not confirmed.
 - Warranty: not always given; discussed at the counter, and it varies with the model and the type of repair (Adnan, 31 Oct 2026). Depends on the quality of parts the customer chooses too. No length, no "lifetime", no "100%", no promise that a warranty card is always given.

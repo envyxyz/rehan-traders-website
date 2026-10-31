@@ -38,7 +38,7 @@ export const site = {
     short: "Shop G-88, Hafeez Center",
     city: "Lahore",
     region: "Punjab",
-    postalCode: "54000",
+    postalCode: "54660",
     country: "PK",
   },
   geo: { lat: 31.5161006, lng: 74.3433894 },
@@ -843,7 +843,7 @@ export const reviewsPage = {
 
 export const visitPage = {
   title: "Visit Shop G-88",
-  lede: "Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54000, Pakistan.",
+  lede: "Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54660, Pakistan.",
   directionsTitle: "How to find Shop G-88",
   floorLabel: "Floor",
   floorValue: "Ground Floor",
