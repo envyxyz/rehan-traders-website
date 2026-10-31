@@ -14,7 +14,7 @@ export const dynamic = "force-static"
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   // Bump this date when meaningful site content changes (copy, services, images).
-  const lastModified = "2026-10-30"
+  const lastModified = "2026-10-31"
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {

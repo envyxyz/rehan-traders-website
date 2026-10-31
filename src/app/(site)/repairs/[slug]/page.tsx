@@ -15,7 +15,7 @@ import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
-import { actions, breadcrumbs, repairsPage, seo, services, site } from "@/content"
+import { actions, breadcrumbs, repairsPage, services, site } from "@/content"
 import { faqSchema, serviceSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
@@ -32,8 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const service = services.find((s) => s.slug === slug)
   if (!service) return {}
 
-  const meta = seo.service(service.title, service.short)
-  return pageMeta({ title: meta.title, description: meta.description, path: `/repairs/${service.slug}` })
+  return pageMeta({ title: service.seo.title, description: service.seo.description, path: `/repairs/${service.slug}` })
 }
 
 export default async function ServicePage({ params }: PageProps) {
