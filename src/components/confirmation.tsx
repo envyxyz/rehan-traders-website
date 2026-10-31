@@ -189,7 +189,7 @@ export function Confirmation() {
               </Button>
             )}
             <Button asChild size="lg" variant="whatsapp">
-              <a href={site.whatsapp.withText(booking.whatsapp(b))} onClick={() => track("whatsapp_click", { from: "book_confirmed" })}>
+              <a href={site.whatsapp.withText(booking.whatsapp(b))} target="_blank" rel="noopener noreferrer" onClick={() => track("whatsapp_click", { from: "book_confirmed" })}>
                 <WhatsAppIcon />
                 {c.send}
               </a>

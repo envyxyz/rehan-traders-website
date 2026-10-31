@@ -64,19 +64,12 @@ export const site = {
       { day: 0, label: "Sunday", open: null, close: null },
     ],
     oneLine: "Monday to Saturday 11:00 AM to 10:00 PM, Sunday closed",
+    short: "Mon - Sat: 11:00 AM to 10:00 PM",
     /** Footer, one phrase per line. */
     lines: ["Monday to Saturday", "11:00 AM to 10:00 PM", "Friday break 1:00 to 2:00 PM", "Sunday closed"],
     fridayBreak: "Friday prayer break 1:00 to 2:00 PM",
     // Adnan, 31 Oct 2026: the shop opens whenever Hafeez Center does, so it closes only when the building closes.
     holidays: "Closed only when Hafeez Center closes, such as Eid and Ashura",
-  },
-  status: {
-    openNow: "Open now",
-    closesAt: (time: string) => `closes ${time}`,
-    closedNow: "Closed now",
-    opensAt: (when: string) => `opens ${when}`,
-    prayerBreak: "Prayer break",
-    tomorrow: "tomorrow",
   },
   payments: "All payment methods accepted", // Adnan, PRD §11 q4
   courier: true, // Adnan, PRD §11 q6: courier and out-of-city repairs
@@ -163,7 +156,9 @@ export const nav = {
     { label: "Repairs", href: "/repairs" },
     { label: "Estimate", href: "/estimate" },
     { label: "Reviews", href: "/reviews" },
-    { label: "Visit", href: "/visit" },
+    { label: "About", href: "/about" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Contact", href: "/visit" },
   ],
   call: `Call ${site.phone.display}`,
   menu: "Menu",
@@ -193,7 +188,9 @@ export const actions = {
 export const hero = {
   title: "Cracked glass? Fixed at G‑88.", // ‑ is a non-breaking hyphen: "G-88" never splits
   lede: "A reliable repair in a confusing market. Rehan Traders checks your phone free of cost and tries to save your panel, and your money, first. Touch glass, Galaxy Z Fold and Flip, iPhone and board repairs in Hafeez Center, Lahore.",
-  proof: (rating: number) => ({ rating: rating.toFixed(1), rest: "on Google" }),
+  // Ameer, 31 Oct 2026. TODO(adnan): confirm the count, "certified" and 2009.
+  track: "10,000+ Certified Repairs since 2009",
+  proof: (rating: number) => ({ before: `Rated ${rating.toFixed(1)} on`, link: "Google Maps" }),
   /** The 3D fold: status bar on its screen, and the label of the button that folds and opens it. */
   fold: { time: "11:00", network: "5G", close: "Fold the phone", open: "Open the phone" },
 } as const

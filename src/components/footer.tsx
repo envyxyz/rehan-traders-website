@@ -6,6 +6,7 @@ import { Container } from "@/components/layout"
 import { Mark } from "@/components/logo"
 import { Reveal } from "@/components/motion"
 import { footer, nav, services, site, actions, ui } from "@/content"
+import { cn } from "@/lib/utils"
 
 const groupTitle = "font-display text-title-md text-on-band"
 const linkClass = "inline-flex min-h-11 min-w-11 items-center text-on-band-soft no-underline hover:text-on-band"
@@ -66,10 +67,10 @@ export function Footer() {
                 </p>
               ))}
               <p className="flex flex-col">
-                <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} className={linkClass} data-track="whatsapp" data-track-from="footer">
+                <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} className={cn(linkClass, "underline underline-offset-4")} data-track="whatsapp" data-track-from="footer">
                   {actions.whatsapp}
                 </a>
-                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className={`${linkClass} gap-1 underline-offset-4 hover:underline`} data-track="directions" data-track-from="footer">
+                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className={cn(linkClass, "gap-1 underline underline-offset-4")} data-track="directions" data-track-from="footer">
                   {footer.directions}
                   <span className="sr-only">, {ui.externalLink}</span>
                   <Icon icon={ArrowUpRight} size="sm" />

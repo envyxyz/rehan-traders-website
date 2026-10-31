@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from "@playwright/test"
 
-import { actions, nav, services, site } from "../../src/content"
+import { actions, jobCardContent, nav, services, site, ui } from "../../src/content"
 import { routes } from "./routes"
 
 // The nav renders twice (desktop bar and island, phone header); only the visible one counts per project.
@@ -62,14 +62,15 @@ test("desktop: scrolling swaps the top bar for the island, and the hidden one le
   await expect(page).toHaveURL("/reviews")
 })
 
-test("phone: the header is the mark and a menu button, with no call button and no island", async ({ page, isMobile }) => {
+test("phone: the header is the lockup, a call button and a menu button, with no island", async ({ page, isMobile }) => {
   test.skip(!isMobile, "desktop uses the top bar")
   await page.goto("/")
   const header = phone(page)
   await expect(header.getByRole("link", { name: nav.home })).toBeVisible()
   await expect(header.getByRole("button", { name: nav.menu })).toBeVisible()
-  await expect(header.getByRole("link", { name: nav.call })).toHaveCount(0)
-  await expect(header.getByRole("link")).toHaveCount(1)
+  await expect(header.getByRole("link", { name: nav.call })).toHaveAttribute("href", site.phone.href)
+  await expect(header.getByRole("link")).toHaveCount(2)
+  await expect(header.getByRole("link", { name: nav.home })).toContainText(`${jobCardContent.brandFirst}${jobCardContent.brandSecond}`)
   await expect(header.locator(".glass")).toHaveCount(0)
   // Transparent at the top of the page, solid paper with a hairline once scrolled.
   const background = () => header.evaluate((el) => getComputedStyle(el).backgroundColor)
@@ -106,16 +107,22 @@ test("phone: the menu sheet opens, lists every page, closes on Escape and gives 
   await expect(sheet).toBeVisible()
   await expect(sheet.getByRole("button", { name: repairs.label, exact: true })).toBeVisible()
   for (const link of links) await expect(sheet.getByRole("link", { name: link.label, exact: true })).toHaveAttribute("href", link.href)
-  await expect(sheet.getByRole("link", { name: actions.book })).toHaveAttribute("href", "/book")
-  // Call and WhatsApp sit side by side under Book a visit.
+  await expect(sheet.getByRole("link", { name: actions.book })).toHaveCount(0)
+  await expect(sheet.getByText(site.address.short)).toBeVisible()
+  await expect(sheet.getByText(site.hours.short)).toBeVisible()
+  // Call and WhatsApp sit side by side under the address and hours.
   const call = sheet.getByRole("link", { name: nav.call })
   const whatsapp = sheet.getByRole("link", { name: actions.whatsappLabel })
   await expect(call).toHaveAttribute("href", site.phone.href)
   await expect(call).toHaveText(actions.call)
   await expect(whatsapp).toHaveAttribute("href", site.whatsapp.href)
-  const [callBox, whatsappBox, bookBox] = await Promise.all([call.boundingBox(), whatsapp.boundingBox(), sheet.getByRole("link", { name: actions.book }).boundingBox()])
+  await expect(whatsapp).toHaveAttribute("target", "_blank")
+  await expect(whatsapp).toHaveAttribute("rel", "noopener noreferrer")
+  const [callBox, whatsappBox] = await Promise.all([call.boundingBox(), whatsapp.boundingBox()])
   expect(callBox!.y).toBeCloseTo(whatsappBox!.y, 0)
-  expect(callBox!.y).toBeGreaterThan(bookBox!.y)
+  // The header strip (title and X) has a hairline below it.
+  const strip = sheet.getByRole("heading", { name: nav.menu }).locator("xpath=..")
+  expect(await strip.evaluate((el) => getComputedStyle(el).borderBottomWidth)).toBe("1px")
 
   // Focus stays inside the sheet while it is open.
   for (let i = 0; i < 6; i++) await page.keyboard.press("Tab")
@@ -136,7 +143,7 @@ test("phone: Repairs opens the list (All repairs, then the eight repairs); Back 
   const repairsButton = sheet.getByRole("button", { name: repairs.label, exact: true })
   const back = sheet.getByRole("button", { name: nav.back })
   const list = sheet.getByRole("list")
-  const panel = back.locator("xpath=..") // the sliding panel; it is inert while the main list shows
+  const panel = back.locator("xpath=../..") // the sliding panel (Back sits in its header strip); it is inert while the main list shows
   await expect(panel).toHaveAttribute("inert", "")
 
   await repairsButton.click()
@@ -146,6 +153,9 @@ test("phone: Repairs opens the list (All repairs, then the eight repairs); Back 
   const items = list.getByRole("link")
   await expect(items).toHaveText([actions.allRepairs, ...services.map((s) => s.title)])
   await expect(items.first()).toHaveAttribute("href", repairs.href)
+  // All repairs looks like the entries below it, and the X still closes from this panel.
+  expect(await items.first().evaluate((el) => getComputedStyle(el).fontWeight)).toBe(await items.nth(1).evaluate((el) => getComputedStyle(el).fontWeight))
+  await expect(sheet.getByRole("button", { name: ui.close })).toBeVisible()
   for (const [i, s] of services.entries()) await expect(items.nth(i + 1)).toHaveAttribute("href", `/repairs/${s.slug}`)
 
   await back.click()

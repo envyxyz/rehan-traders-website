@@ -107,7 +107,7 @@ export function ChatPanel() {
                 !streaming && buttons.length > 0 ? (
                   <>
                     {buttons.includes("whatsapp") && (
-                      <a href={site.whatsapp.withText(assistant.whatsappText)} className={attached} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
+                      <a href={site.whatsapp.withText(assistant.whatsappText)} target="_blank" rel="noopener noreferrer" className={attached} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
                         <WhatsAppIcon />
                         {assistant.actions.whatsapp}
                       </a>
@@ -210,7 +210,7 @@ function withPhoneLink(text: string) {
   return (
     <>
       {text.slice(0, at)}
-      <a href={site.whatsapp.withText(assistant.whatsappText)} className={inline} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
+      <a href={site.whatsapp.withText(assistant.whatsappText)} target="_blank" rel="noopener noreferrer" className={inline} onClick={() => track("chat_handoff", { action: "whatsapp" })} data-track="whatsapp" data-track-from="chat">
         {site.phone.display}
       </a>
       {text.slice(at + site.phone.display.length)}

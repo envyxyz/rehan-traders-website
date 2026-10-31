@@ -95,7 +95,7 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
         {/* Right Side: Off-white crisp card content */}
         <div className="col-span-7 flex flex-col justify-between bg-device-paper p-5 sm:p-7 md:p-8 text-device-ink">
           {/* Top Row: Rehan Traders Brand Lockup + QR Code */}
-          <div className="flex items-start justify-between gap-4">
+          <div className="hidden items-start justify-between gap-4 sm:flex">
             <div className="flex items-center gap-2.5">
               <Mark tone="signal" className="size-7 text-device-ink sm:size-8" />
               <div className="font-display text-body-sm font-extrabold leading-none tracking-tight text-device-ink sm:text-body-md">

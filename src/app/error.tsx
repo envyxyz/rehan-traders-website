@@ -28,7 +28,7 @@ export default function ErrorBoundary({
             {states.error.retry}
           </Button>
           <Button asChild size="lg" variant="whatsapp">
-            <a href={site.whatsapp.href}>
+            <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer">
               <WhatsAppIcon />
               {states.error.whatsapp}
             </a>

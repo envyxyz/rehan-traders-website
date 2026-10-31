@@ -12,7 +12,7 @@ export const metadata: Metadata = pageMeta({ title: estimator.seo.title, descrip
 
 export default function EstimatePage() {
   return (
-    <Section className="pt-28 lg:pt-32">
+    <Section first>
       <Container className="grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
         <div>
           <Heading as="h1" size="display-xl" rule>

@@ -25,9 +25,9 @@ export default function VisitPage() {
   return (
     <>
       <JsonLd data={storeSchema} />
-      <Section className="pt-28 lg:pt-36">
+      <Section first>
         <Container>
-          <Breadcrumbs items={[{ label: breadcrumbs.visit }]} className="mb-8" />
+          <Breadcrumbs items={[{ label: breadcrumbs.visit }]} className="mb-3" />
 
           <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
             <div className="lg:col-span-6">
@@ -57,7 +57,7 @@ export default function VisitPage() {
                   </a>
                 </Button>
                 <Button asChild size="lg" variant="whatsapp">
-                  <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="visit">
+                  <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="visit">
                     <WhatsAppIcon />
                     {actions.whatsapp}
                   </a>

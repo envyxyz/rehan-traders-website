@@ -15,9 +15,9 @@ export const metadata: Metadata = pageMeta({ title: seo.reviews.title, descripti
 export default function ReviewsPage() {
   return (
     <>
-      <Section className="flex min-h-svh flex-col justify-center pt-28 pb-12 lg:pt-36 lg:pb-16">
+      <Section first className="flex flex-col justify-center pb-12 lg:pb-16">
         <Container>
-          <Breadcrumbs items={[{ label: breadcrumbs.reviews }]} className="mb-8" />
+          <Breadcrumbs items={[{ label: breadcrumbs.reviews }]} className="mb-3" />
 
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div>

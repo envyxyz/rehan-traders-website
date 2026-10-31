@@ -258,3 +258,7 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 - Sticky Book/WhatsApp bar removed everywhere. Motion removed (its only user was the island). Home job card has no seal; it tilts with the gyroscope on phones. Chat log scrolls smoothly without a visible bar. Wrangler dev logs warnings only.
 - Checks: build, lint, typecheck pass; fold, nav, phone and job-card e2e passed against dev. Full e2e and the Lighthouse comparison were stopped early (machine load); baseline before the change: home 55, about 74, repairs 77, visit 74 (mobile, noisy).
 - Not verified on a real phone: gyroscope feel, iOS permission prompt, snap on phone speakers.
+
+## Owner fixes, 31 Oct 2026
+
+Hero proof and hours line, nav with About, FAQ and Contact, phone lockup and menu, repair cards, one-screen page openings, real fold sounds (`public/sounds`), external links in new tabs. "10,000+ Certified Repairs since 2009" came from Ameer and waits on Adnan.

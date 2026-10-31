@@ -55,6 +55,9 @@ export function RepairsMenu({
 
 const repairs = nav.links.find((link) => link.href === "/repairs")!
 const row = "flex min-h-12 w-full items-center font-display text-title-lg text-ink"
+// The header strip of both panels (Menu, Back): the same height, type, separator and tint. The sheet's X sits in its right end.
+const bar = "flex h-17 shrink-0 items-center border-b border-hairline bg-sheet-bar px-6 font-display text-title-lg text-ink"
+const entry = "flex min-h-11 items-center text-body-md text-body"
 const rise = "animate-rise motion-reduce:animate-none"
 const delay = (i: number) => ({ animationDelay: `${menuStagger.start + i * menuStagger.step}s` })
 
@@ -82,9 +85,11 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
     >
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       {/* The nav lives in the layout, so a link inside the sheet would leave it open on the next page. */}
-      <SheetContent side="right" aria-describedby={undefined} onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
-        <SheetTitle>{nav.menu}</SheetTitle>
-        <nav aria-label={nav.label} inert={sub} className="flex flex-col">
+      <SheetContent side="right" aria-describedby={undefined} className="gap-0 bg-sheet-body p-0" onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
+        <div className={bar}>
+          <SheetTitle>{nav.menu}</SheetTitle>
+        </div>
+        <nav aria-label={nav.label} inert={sub} className="flex flex-col px-6 pt-2">
           {nav.links.map((link, i) =>
             link === repairs ? (
               <button key={link.href} ref={repairsButton} type="button" className={cn(row, "cursor-pointer justify-between", rise)} style={delay(i)} onClick={() => show(true)}>
@@ -98,10 +103,11 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
             )
           )}
         </nav>
-        <div inert={sub} className="sticky bottom-0 -mx-6 -mb-6 mt-auto grid gap-2.5 bg-card px-6 pt-4 pb-6">
-          <Button asChild size="lg" arrow>
-            <Link href="/book">{actions.book}</Link>
-          </Button>
+        <div inert={sub} className="sticky bottom-0 mt-auto grid gap-2.5 bg-sheet-body px-6 pt-4 pb-6">
+          <p className="flex flex-col text-caption text-steel">
+            <span>{site.address.short}</span>
+            <span>{site.hours.short}</span>
+          </p>
           <div className="grid grid-cols-2 gap-2.5">
             <Button asChild size="lg" variant="line" className="px-4">
               <a href={site.phone.href} aria-label={nav.call} data-track="call" data-track-from="nav">
@@ -110,7 +116,7 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
               </a>
             </Button>
             <Button asChild size="lg" variant="whatsapp" className="px-4">
-              <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="nav">
+              <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="nav">
                 <WhatsAppIcon />
                 {actions.whatsapp}
               </a>
@@ -121,23 +127,25 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
         <div
           inert={!sub}
           className={cn(
-            "absolute inset-0 flex flex-col overflow-y-auto overscroll-contain bg-card px-6 pt-3 pb-6 transition-transform duration-base ease-drawer motion-reduce:transition-none",
+            "absolute inset-0 flex flex-col overflow-y-auto overscroll-contain bg-sheet-body transition-transform duration-base ease-drawer motion-reduce:transition-none",
             !sub && "translate-x-full"
           )}
         >
-          <Button ref={backButton} type="button" variant="line" className="w-fit" onClick={() => show(false)}>
-            <Icon icon={ChevronLeft} />
-            {nav.back}
-          </Button>
-          <ul className="mt-4 flex flex-col">
+          <div className={bar}>
+            <button ref={backButton} type="button" className="-ml-1.5 flex min-h-11 cursor-pointer items-center gap-1 pr-3 pl-1" onClick={() => show(false)}>
+              <Icon icon={ChevronLeft} size="xl" />
+              {nav.back}
+            </button>
+          </div>
+          <ul className="flex flex-col px-6 pt-2 pb-6">
             <li>
-              <Link href={repairs.href} className={cn(row, sub && rise)} style={delay(0)}>
+              <Link href={repairs.href} className={cn(entry, sub && rise)} style={delay(0)}>
                 {actions.allRepairs}
               </Link>
             </li>
             {services.map((s, i) => (
               <li key={s.slug}>
-                <Link href={`/repairs/${s.slug}`} className={cn("flex min-h-11 items-center text-body-md text-body", sub && rise)} style={delay(i + 1)}>
+                <Link href={`/repairs/${s.slug}`} className={cn(entry, sub && rise)} style={delay(i + 1)}>
                   {s.title}
                 </Link>
               </li>

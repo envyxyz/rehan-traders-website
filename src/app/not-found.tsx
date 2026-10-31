@@ -12,7 +12,7 @@ export default function NotFound() {
     <>
       <Nav />
       <main>
-        <Section className="flex min-h-svh flex-col justify-center pt-32 lg:pt-36">
+        <Section first className="flex flex-col justify-center">
           <Container className="text-center">
             <span aria-hidden className="block font-display text-display-xl font-extrabold text-signal tabular-nums">
               {states.notFound.code}

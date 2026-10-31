@@ -17,9 +17,9 @@ export default function CourierPage() {
   return (
     <>
       <JsonLd data={faqSchema(courierPage.faq)} />
-      <Section className="pt-28 lg:pt-36">
+      <Section first>
         <Container>
-          <Breadcrumbs items={[{ label: breadcrumbs.courier }]} className="mb-8" />
+          <Breadcrumbs items={[{ label: breadcrumbs.courier }]} className="mb-3" />
 
           <div className="max-w-2xl">
             <Heading as="h1" size="display-xl" rule>

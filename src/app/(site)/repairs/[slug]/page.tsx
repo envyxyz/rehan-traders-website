@@ -11,10 +11,10 @@ import { JsonLd } from "@/components/json-ld"
 import { Img } from "@/components/img"
 import { Container, Section } from "@/components/layout"
 import { PriceLine } from "@/components/price-line"
+import { ServiceCard } from "@/components/service-card"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { actions, breadcrumbs, repairsPage, services, site } from "@/content"
 import { faqSchema, serviceSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
@@ -46,17 +46,17 @@ export default async function ServicePage({ params }: PageProps) {
     <>
       <JsonLd data={serviceSchema(service)} />
       {service.faq.length > 0 && <JsonLd data={faqSchema(service.faq)} />}
-      <Section className="pt-28 lg:pt-36">
+      <Section first>
         <Container>
           <Breadcrumbs
             items={[
               { label: breadcrumbs.repairs, href: "/repairs" },
               { label: service.title },
             ]}
-            className="mb-8"
+            className="mb-3"
           />
 
-          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+          <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-7">
               <Heading as="h1" size="display-xl" rule>
                 {service.title}
@@ -73,6 +73,8 @@ export default async function ServicePage({ params }: PageProps) {
                 <Button asChild size="lg" variant="whatsapp">
                   <a
                     href={site.whatsapp.withText(service.title)}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     data-track="whatsapp"
                     data-track-from="repair"
                     aria-label={actions.whatsappLabel}
@@ -169,10 +171,12 @@ export default async function ServicePage({ params }: PageProps) {
         <Section>
           <Container>
             <div className="flex items-end justify-between gap-4">
-              <Heading as="h2">{repairsPage.relatedTitle}</Heading>
+              <Heading as="h2" size="display-md" className="min-w-0 sm:text-display-lg">
+                {repairsPage.relatedTitle}
+              </Heading>
               <Link
                 href="/repairs"
-                className="inline-flex min-h-11 items-center gap-1.5 font-display text-button text-ink underline-offset-4 hover:underline"
+                className="inline-flex min-h-11 items-center gap-1.5 font-display text-button whitespace-nowrap text-ink underline-offset-4 hover:underline"
               >
                 {actions.allRepairs}
                 <Icon icon={ArrowRight} size="sm" />
@@ -182,30 +186,7 @@ export default async function ServicePage({ params }: PageProps) {
             <ul className="mt-8 grid gap-6 md:grid-cols-3">
               {relatedServices.map((rel) => (
                 <li key={rel.slug}>
-                  <Card className="flex h-full flex-col justify-between overflow-hidden p-0">
-                    <Img
-                      name={rel.image}
-                      alt={rel.alt}
-                      sizes="(min-width: 1440px) 437px, (min-width: 1024px) calc(33.33vw - 2.67rem), (min-width: 768px) calc(33.33vw - 2rem), calc(100vw - 2rem)"
-                      className="aspect-16/10 w-full"
-                    />
-                    <div className="flex flex-1 flex-col p-6">
-                      <CardTitle className="text-title-md">{rel.title}</CardTitle>
-                      <CardDescription className="mt-2 line-clamp-2">{rel.short}</CardDescription>
-                      <div className="mt-auto pt-4 flex items-center justify-between gap-2">
-                        <Link
-                          href={`/repairs/${rel.slug}`}
-                          aria-label={repairsPage.viewDetailsOf(rel.title)}
-                          className="inline-flex min-h-11 items-center font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
-                        >
-                          {repairsPage.viewDetails}
-                        </Link>
-                        <BookButton service={rel.slug} variant="line">
-                          {actions.bookRepair}
-                        </BookButton>
-                      </div>
-                    </div>
-                  </Card>
+                  <ServiceCard service={rel} />
                 </li>
               ))}
             </ul>

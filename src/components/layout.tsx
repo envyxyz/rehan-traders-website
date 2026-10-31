@@ -16,8 +16,13 @@ const tones = {
 /** One idea per band. 56px rhythm on phones, 88px on desktop. */
 export function Section({
   tone = "paper",
+  first,
   className,
   ...props
-}: React.ComponentProps<"section"> & { tone?: keyof typeof tones }) {
-  return <section className={cn("py-section", tones[tone], className)} {...props} />
+}: React.ComponentProps<"section"> & {
+  tone?: keyof typeof tones
+  /** A page's opening section: clears the fixed nav and fills the screen, so nothing below it shows before a scroll. */
+  first?: boolean
+}) {
+  return <section className={cn("py-section", first && "min-h-svh pt-20 lg:pt-28", tones[tone], className)} {...props} />
 }

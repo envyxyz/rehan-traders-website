@@ -23,14 +23,18 @@ export function Hero() {
       <div className="flex flex-1 overflow-hidden rounded-xl bg-panel">
         <div className="mx-auto grid w-full max-w-panel content-start px-5 pt-22 pb-2 sm:px-6 sm:pt-26 sm:pb-4 lg:grid-cols-2 lg:content-center lg:items-center lg:gap-8 lg:px-12 lg:pt-28 lg:pb-12 xl:px-20">
           <div className="min-w-0">
-            <p {...rise(0)}>
-              <span className="flex items-center gap-2 text-caption text-steel">
+            <div {...rise(0)}>
+              <p className="mb-2 font-display text-caption font-bold text-ink">{hero.track}</p>
+              <p className="flex items-center gap-2 text-caption text-steel">
                 <Stars rating={reviews.rating} small />
                 <span>
-                  <b className="font-display text-body-sm font-bold text-ink">{proof.rating}</b> {proof.rest}
+                  {proof.before}{" "}
+                  <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4" data-track="directions" data-track-from="hero">
+                    {proof.link}
+                  </a>
                 </span>
-              </span>
-            </p>
+              </p>
+            </div>
             <Heading as="h1" size="display-xl" rule className="mt-4.5">
               {hero.title}
             </Heading>
@@ -42,7 +46,7 @@ export function Hero() {
                 {actions.book}
               </BookButton>
               <Button asChild size="lg" variant="whatsapp" className="flex-1 sm:flex-none">
-                <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="hero">
+                <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="hero">
                   <WhatsAppIcon />
                   {actions.whatsapp}
                 </a>
@@ -52,7 +56,7 @@ export function Hero() {
               className={`mt-6 flex flex-wrap gap-x-5 gap-y-1.5 text-caption text-steel ${rise(3).className}`}
               style={rise(3).style}
             >
-              <span>{site.address.short}</span>
+              <span className="text-signal-active">{site.address.short}</span>
               <OpenStatus />
             </div>
           </div>

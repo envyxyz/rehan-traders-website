@@ -60,7 +60,7 @@ function Button({ className, variant, size, asChild = false, arrow = false, stil
       {arrow && (
         <span
           aria-hidden
-          className={cn("grid size-7.5 place-items-center rounded-pill", inverse ? "bg-band text-on-band" : "bg-on-action text-action")}
+          className={cn("grid size-7.5 shrink-0 place-items-center rounded-pill", inverse ? "bg-band text-on-band" : "bg-on-action text-action")}
         >
           <ArrowUpRight className="size-4" strokeWidth={1.75} />
         </span>

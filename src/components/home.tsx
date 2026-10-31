@@ -24,13 +24,15 @@ import { cn } from "@/lib/utils"
 
 const textLink = "inline-flex min-h-11 items-center gap-1.5 font-display text-button text-ink underline-offset-4 hover:underline"
 
-/** Heading with an optional text link on the right (desktop) or below it (phones). */
+/** Heading with an optional text link on the right, on one row at any width. */
 function SectionHead({ title, link, className }: { title: string; link?: { href: string; label: string }; className?: string }) {
   return (
-    <div className={cn("flex flex-wrap items-end justify-between gap-x-8 gap-y-2", className)}>
-      <Heading>{title}</Heading>
+    <div className={cn("flex items-end justify-between gap-x-4 gap-y-2 sm:gap-x-8", className)}>
+      <Heading size="display-md" className="min-w-0 sm:text-display-lg">
+        {title}
+      </Heading>
       {link && (
-        <Link href={link.href} className={textLink}>
+        <Link href={link.href} className={cn(textLink, "whitespace-nowrap")}>
           {link.label}
           <Icon icon={ArrowRight} size="sm" />
         </Link>

@@ -18,9 +18,9 @@ export default function AboutPage() {
   return (
     <>
       <JsonLd data={storeSchema} />
-      <Section className="pt-28 lg:pt-36">
+      <Section first>
         <Container>
-          <Breadcrumbs items={[{ label: breadcrumbs.about }]} className="mb-8" />
+          <Breadcrumbs items={[{ label: breadcrumbs.about }]} className="mb-3" />
 
           <div className="max-w-3xl">
             <Heading as="h1" size="display-xl" rule>

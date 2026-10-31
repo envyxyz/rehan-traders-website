@@ -269,39 +269,7 @@ function coverScreen(k: Ink) {
   return c
 }
 
-/** A short closing snap: a filtered click, its echo, and a low thump that drops in pitch. */
-function snap(ctx: AudioContext) {
-  const t = ctx.currentTime
-  const thump = ctx.createOscillator()
-  const tg = ctx.createGain()
-  thump.frequency.setValueAtTime(150, t)
-  thump.frequency.exponentialRampToValueAtTime(52, t + 0.12)
-  tg.gain.setValueAtTime(0.0001, t)
-  tg.gain.exponentialRampToValueAtTime(0.55, t + 0.004)
-  tg.gain.exponentialRampToValueAtTime(0.0001, t + 0.18)
-  thump.connect(tg).connect(ctx.destination)
-  thump.start(t)
-  thump.stop(t + 0.2)
-  for (const [at, hz, gain] of [
-    [0, 2400, 0.4],
-    [0.035, 3800, 0.12],
-  ]) {
-    const len = Math.round(ctx.sampleRate * 0.03)
-    const buf = ctx.createBuffer(1, len, ctx.sampleRate)
-    const d = buf.getChannelData(0)
-    for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 4
-    const src = ctx.createBufferSource()
-    src.buffer = buf
-    const band = ctx.createBiquadFilter()
-    band.type = "bandpass"
-    band.frequency.value = hz
-    band.Q.value = 1.4
-    const g = ctx.createGain()
-    g.gain.value = gain
-    src.connect(band).connect(g).connect(ctx.destination)
-    src.start(t + at)
-  }
-}
+const CLICK_VOLUME = 1 // the files are already quiet (peak about -14 dBFS); tune here
 
 export async function createFold(canvas: HTMLCanvasElement) {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -392,22 +360,41 @@ export async function createFold(canvas: HTMLCanvasElement) {
   const OPEN_END = 150 + FOLD * 0.9 + 450
   let closed = false
   let since = -Infinity
-  let snapped = true
+  let click: "open" | "close" | null = null // the sound still to play
   let audio: AudioContext | null = null
+  // The real click files, fetched and decoded on first use. No audio or a failed fetch just leaves the fold silent.
+  const clicks = new Map<string, Promise<AudioBuffer>>()
+  const load = (name: string) => {
+    let p = clicks.get(name)
+    if (!p) clicks.set(name, (p = fetch(`/sounds/fold-${name}.mp3`).then((r) => r.arrayBuffer()).then((b) => audio!.decodeAudioData(b))))
+    p.catch(() => clicks.delete(name))
+    return p
+  }
+  const play = (ctx: AudioContext, name: string) =>
+    load(name)
+      .then((buffer) => {
+        const src = ctx.createBufferSource()
+        const gain = ctx.createGain()
+        gain.gain.value = CLICK_VOLUME
+        src.buffer = buffer
+        src.connect(gain).connect(ctx.destination)
+        src.start()
+      })
+      .catch(() => {})
   const tilt = { x: 0, y: 0, tx: 0, ty: 0 }
   let glowOnly = false
 
   function update(now: number, dt: number) {
     const e = now - since
+    if (click && e >= (closed ? SNAP_AT : 150 + FOLD * 0.9)) {
+      if (audio) void play(audio, click) // the halves meet
+      click = null
+    }
     let fold: number, inner: number, cover: number, kick = 0
     if (closed) {
       inner = 1 - clamp01(e / FADE)
       fold = easeIn(clamp01((e - FADE * 0.8) / FOLD))
       cover = clamp01((e - SNAP_AT - 120) / 700)
-      if (e >= SNAP_AT && !snapped) {
-        snapped = true
-        if (audio) snap(audio)
-      }
       // A small settle after the snap.
       if (!reduced && e > SNAP_AT) kick = Math.sin((e - SNAP_AT) / 30) * Math.exp(-(e - SNAP_AT) / 90) * 0.012
     } else {
@@ -480,8 +467,9 @@ export async function createFold(canvas: HTMLCanvasElement) {
       if (now - since < (closed ? CLOSE_END : OPEN_END)) return null
       closed = !closed
       since = now
-      snapped = false
       audio = ctx
+      click = ctx ? (closed ? "close" : "open") : null
+      if (click) load(click).catch(() => {}) // fetch now, play when the halves meet
       wake()
       return closed
     },

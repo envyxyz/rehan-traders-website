@@ -8,7 +8,7 @@ import { ChevronDown, Menu, Phone } from "lucide-react"
 import { Icon } from "@/components/icon"
 import { Mark } from "@/components/logo"
 import { Button } from "@/components/ui/button"
-import { nav, site } from "@/content"
+import { jobCardContent, nav, site } from "@/content"
 import { cn } from "@/lib/utils"
 
 const HIDE_AFTER = 80 // phones: px of scroll before the header may hide, so it never leaves the top of a page
@@ -131,7 +131,7 @@ function DesktopNav() {
 }
 
 /**
- * Below lg: the mark (home) left, the menu button right. Transparent at the top of the page, solid with a hairline once
+ * Below lg: the lockup (home) left, the call and menu buttons right. Transparent at the top of the page, solid with a hairline once
  * scrolled. It slides up out of view on scroll down and back on scroll up.
  */
 function MobileNav() {
@@ -162,10 +162,21 @@ function MobileNav() {
         hidden && "-translate-y-full focus-within:translate-y-0"
       )}
     >
-      <Link href="/" aria-label={nav.home} className="-ml-1.5 flex size-11 items-center justify-center text-ink">
-        <Mark className="size-8" />
+      <Link href="/" aria-label={nav.home} className="-ml-1.5 flex h-11 items-center gap-2 px-1.5 text-ink">
+        <Mark className="size-9" />
+        <span className="flex flex-col font-display text-title-md leading-none font-extrabold tracking-tight">
+          <span>{jobCardContent.brandFirst}</span>
+          <span>{jobCardContent.brandSecond}</span>
+        </span>
       </Link>
-      <MobileMenu trigger={menuButton} />
+      <div className="flex items-center gap-2">
+        <Button asChild variant="icon" className="bg-concrete">
+          <a href={site.phone.href} aria-label={nav.call} data-track="call" data-track-from="nav">
+            <Icon icon={Phone} size="lg" />
+          </a>
+        </Button>
+        <MobileMenu trigger={menuButton} />
+      </div>
     </header>
   )
 }

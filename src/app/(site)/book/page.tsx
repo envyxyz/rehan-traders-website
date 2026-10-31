@@ -16,8 +16,8 @@ export const metadata: Metadata = pageMeta({ title: seo.book.title, description:
 
 export default function BookPage() {
   return (
-    <Section className="pt-28 lg:pt-40">
-      <Container className="grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
+    <Section first className="flex flex-col">
+      <Container className="flex flex-1 flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-16">
         <div>
           <Heading as="h1" size="display-xl" rule>
             {booking.title}
@@ -27,7 +27,7 @@ export default function BookPage() {
           </Text>
           <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-caption text-steel max-lg:hidden">
             <Button asChild variant="whatsapp">
-              <a href={site.whatsapp.href} aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="book">
+              <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="book">
                 <WhatsAppIcon />
                 {actions.whatsapp}
               </a>
@@ -35,11 +35,11 @@ export default function BookPage() {
             <a href={site.phone.href} className="font-display text-body-sm font-bold text-ink no-underline" data-track="call" data-track-from="book">
               {site.phone.display}
             </a>
-            <span>{site.address.short}</span>
+            <span className="text-signal-active">{site.address.short}</span>
             <OpenStatus />
           </div>
         </div>
-        <Card className="min-w-0 p-5 sm:p-7">
+        <Card className="min-w-0 p-5 max-md:flex-1 sm:p-7">
           {/* The static HTML has the plain flow; the client reads ?service= and narrows it. */}
           <Suspense fallback={<BookingFlow />}>
             <BookFromUrl />

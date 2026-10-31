@@ -12,9 +12,9 @@ export const metadata: Metadata = pageMeta({ title: seo.terms.title, description
 export default function TermsPage() {
   return (
     <>
-      <Section className="pt-28 lg:pt-36">
+      <Section first>
         <Container>
-          <Breadcrumbs items={[{ label: breadcrumbs.terms }]} className="mb-8" />
+          <Breadcrumbs items={[{ label: breadcrumbs.terms }]} className="mb-3" />
 
           <div className="max-w-2xl">
             <Heading as="h1" size="display-xl" rule>

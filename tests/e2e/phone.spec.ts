@@ -33,7 +33,7 @@ test.describe("phone", () => {
     }
   })
 
-  test("the menu's close button, Book, Call and WhatsApp stay on screen on a short phone", async ({ page }) => {
+  test("the menu's close button, Call and WhatsApp stay on screen on a short phone", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 640 })
     await page.goto("/")
     await expect(page.getByRole("button", { name: nav.menu })).toHaveAttribute("aria-haspopup", "dialog")
@@ -42,7 +42,6 @@ test.describe("phone", () => {
     await expect(sheet).toBeVisible()
     await sheet.locator("nav").evaluate((el) => el.parentElement?.scrollTo(0, 9999))
     await expect(sheet.getByRole("button", { name: ui.close })).toBeInViewport()
-    await expect(sheet.getByRole("link", { name: actions.book })).toBeInViewport()
     await expect(sheet.getByRole("link", { name: nav.call })).toBeInViewport()
     await expect(sheet.getByRole("link", { name: actions.whatsappLabel })).toBeInViewport()
   })

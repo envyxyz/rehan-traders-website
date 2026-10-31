@@ -36,7 +36,7 @@ export function CourierSteps({ from }: { from: string }) {
           <Link href="/estimate?tab=describe">{visitPage.courierActions.ticket}</Link>
         </Button>
         <Button asChild size="lg" variant="whatsapp">
-          <a href={site.whatsapp.href} data-track="whatsapp" data-track-from={from}>
+          <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" data-track="whatsapp" data-track-from={from}>
             <WhatsAppIcon />
             {visitPage.courierActions.whatsapp}
           </a>

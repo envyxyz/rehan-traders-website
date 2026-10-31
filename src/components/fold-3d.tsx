@@ -73,7 +73,7 @@ export function Fold3D() {
     <button
       type="button"
       aria-label={closed ? hero.fold.open : hero.fold.close}
-      className="fold-stage cursor-pointer rounded-xl"
+      className="fold-stage cursor-pointer rounded-xl not-focus-visible:outline-none"
       onClick={() => {
         askTilt()
         // Made inside the tap, so the browser lets it play the snap. No audio is fine: the fold still works.

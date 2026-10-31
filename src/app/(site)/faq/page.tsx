@@ -18,9 +18,9 @@ export default function FaqPage() {
   return (
     <>
       <JsonLd data={faqSchema(faq)} />
-      <Section className="pt-28 lg:pt-36">
+      <Section first>
         <Container>
-          <Breadcrumbs items={[{ label: breadcrumbs.faq }]} className="mb-8" />
+          <Breadcrumbs items={[{ label: breadcrumbs.faq }]} className="mb-3" />
 
           <div className="max-w-2xl">
             <Heading as="h1" size="display-xl" rule>
@@ -49,7 +49,7 @@ export default function FaqPage() {
               <h2 className="font-display text-title-md text-ink">{faqPage.stillHaveQuestions}</h2>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Button asChild variant="whatsapp">
-                  <a href={site.whatsapp.href} data-track="whatsapp" data-track-from="faq">
+                  <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" data-track="whatsapp" data-track-from="faq">
                     <WhatsAppIcon />
                     {faqPage.askWhatsApp}
                   </a>
