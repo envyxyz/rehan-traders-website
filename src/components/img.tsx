@@ -40,6 +40,7 @@ export function Img({ name, alt, sizes, className, priority }: ImgProps) {
         height={meta[name]?.height}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
         decoding="async"
         className={cn("object-cover", className)}
       />

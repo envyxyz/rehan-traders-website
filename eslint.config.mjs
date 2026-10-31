@@ -20,6 +20,14 @@ const NO_ARBITRARY_VALUE = [
   [`TemplateElement[value.raw=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
 ]
 
+// Default Tailwind steps that the @theme reset in globals.css removed: they compile to nothing, so the element silently
+// loses the style (rounded-2xl once left the job card panel square). Our steps: rounded-xs..xl/pill, text-display-*, ...
+const RESET = "(?:^|[\\s:!])-?(?:rounded(?:-[a-z]{1,2})?-[2-4]xl|text-(?:xs|sm|base|lg|[2-9]?xl)|shadow-(?:2xs|xs|sm|md|lg|xl|2xl)|font-(?:mono|serif))(?![\\w-])"
+const NO_RESET_SCALE = [
+  [`Literal[value=/${RESET}/]`, "Tailwind default step that our @theme reset removed: it renders nothing. Use a token from globals.css."],
+  [`TemplateElement[value.raw=/${RESET}/]`, "Tailwind default step that our @theme reset removed: it renders nothing. Use a token from globals.css."],
+]
+
 const COPY = "Copy belongs in src/content.ts. Import it or take it as a prop."
 const COPY_ATTR = "JSXAttribute[name.name=/^(aria-label|aria-description|alt|title|placeholder)$/]"
 const NO_LITERAL_COPY = [
@@ -38,7 +46,7 @@ export default defineConfig([
   {
     files: ["src/components/**/*.{ts,tsx}", "src/app/**/*.{ts,tsx}"],
     rules: {
-      "no-restricted-syntax": ["error", ...rules(NO_RAW_COLOUR, NO_ARBITRARY_VALUE, NO_LITERAL_COPY)],
+      "no-restricted-syntax": ["error", ...rules(NO_RAW_COLOUR, NO_ARBITRARY_VALUE, NO_RESET_SCALE, NO_LITERAL_COPY)],
     },
   },
   globalIgnores([".next/**", "out/**", ".wrangler/**", "build/**", "next-env.d.ts", "design/**", "src/lib/cn-tables.ts"]),

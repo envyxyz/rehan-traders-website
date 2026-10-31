@@ -50,7 +50,7 @@ export default function AboutPage() {
               <Img
                 name={aboutPage.images.team}
                 alt={aboutPage.images.teamAlt}
-                sizes="(min-width: 1024px) 560px, 100vw"
+                sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
                 className="aspect-4/3 w-full rounded-xl border border-hairline"
                 priority
               />
@@ -67,7 +67,7 @@ export default function AboutPage() {
               <Img
                 name={aboutPage.images.bench}
                 alt={aboutPage.images.benchAlt}
-                sizes="(min-width: 1024px) 560px, 100vw"
+                sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
                 className="aspect-4/3 w-full rounded-xl border border-hairline"
               />
             </div>
@@ -117,7 +117,7 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-12 flex justify-center">
-            <div className="relative w-full max-w-2xl rounded-2xl bg-panel p-4 sm:p-8">
+            <div className="relative w-full max-w-2xl rounded-xl bg-panel p-4 sm:p-8">
               <JobCard />
             </div>
           </div>
