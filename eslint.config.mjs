@@ -41,5 +41,5 @@ export default defineConfig([
       "no-restricted-syntax": ["error", ...rules(NO_RAW_COLOUR, NO_ARBITRARY_VALUE, NO_LITERAL_COPY)],
     },
   },
-  globalIgnores([".next/**", "out/**", ".wrangler/**", "build/**", "next-env.d.ts", "design/**", "src/lib/cn-tables.ts"]),
+  globalIgnores([".next/**", "out/**", ".wrangler/**", "build/**", "next-env.d.ts", "design/**", "src/lib/cn-tables.ts", ".claude/**"]),
 ])

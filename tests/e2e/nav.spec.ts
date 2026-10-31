@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test"
+import { expect, test, type Locator, type Page } from "@playwright/test"
 
 import { actions, nav, services, site } from "../../src/content"
 
@@ -8,11 +8,17 @@ const phone = (page: Page) => page.locator("header").nth(1)
 const stickyBar = (page: Page) => page.locator("div.glass.fixed", { has: page.getByRole("link", { name: actions.book }) })
 const links = nav.links.filter((l) => l.href !== "/repairs")
 
+// The Radix menu and the phone sheet are next/dynamic chunks that load after hydration. Until then the same-looking buttons
+// are inert placeholders, and a click or Enter on one is lost. The loaded triggers carry aria-haspopup; wait for it.
+const repairsLoaded = (trigger: Locator) => expect(trigger).toHaveAttribute("aria-haspopup", "menu")
+const sheetLoaded = (opener: Locator) => expect(opener).toHaveAttribute("aria-haspopup", "dialog")
+
 test("desktop: the top bar links go to their pages, and Repairs opens the eight repairs", async ({ page, isMobile }) => {
   test.skip(isMobile, "phones use the menu sheet")
   await page.goto("/")
   const bar = desktop(page).locator(":scope > div nav")
   await expect(bar.getByRole("link", { name: nav.call })).toHaveAttribute("href", site.phone.href)
+  await repairsLoaded(bar.getByRole("button", { name: "Repairs" }))
   await bar.getByRole("button", { name: "Repairs" }).click()
   const menu = page.getByRole("menu")
   await expect(menu.getByRole("menuitem")).toHaveCount(services.length + 1)
@@ -31,6 +37,7 @@ test("desktop: a repair in the Repairs menu opens its page, by keyboard", async 
   test.skip(isMobile, "phones use the menu sheet")
   await page.goto("/")
   const trigger = desktop(page).locator(":scope > div nav").getByRole("button", { name: "Repairs" })
+  await repairsLoaded(trigger)
   await trigger.focus()
   await page.keyboard.press("Enter")
   await expect(page.getByRole("menu")).toBeVisible()
@@ -55,6 +62,7 @@ test("phone: the menu sheet opens, lists every page, closes on Escape and gives 
   test.skip(!isMobile, "desktop uses the top bar")
   await page.goto("/")
   const opener = page.getByRole("button", { name: nav.menu })
+  await sheetLoaded(opener)
   await opener.click()
   const sheet = page.getByRole("dialog", { name: nav.menu })
   await expect(sheet).toBeVisible()
@@ -76,6 +84,7 @@ test("phone: a menu link navigates and closes the sheet", async ({ page, isMobil
   test.skip(!isMobile, "desktop uses the top bar")
   for (const link of links) {
     await page.goto("/")
+    await sheetLoaded(page.getByRole("button", { name: nav.menu }))
     await page.getByRole("button", { name: nav.menu }).click()
     await page.getByRole("dialog", { name: nav.menu }).getByRole("link", { name: link.label, exact: true }).click()
     await expect(page).toHaveURL(link.href)

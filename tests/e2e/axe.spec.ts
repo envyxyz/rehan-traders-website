@@ -13,6 +13,8 @@ async function scan(page: Page) {
   await page.waitForLoadState("load")
   await page.evaluate(() => document.fonts.ready)
   await page.waitForTimeout(400)
+  // Looping animations are left alone. A sheet's overlay fades in over the page behind it; scanning mid-fade reads the page's contrast through a half-opaque overlay.
+  await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running" || a.effect?.getComputedTiming().iterations === Infinity))
   const { violations } = await new AxeBuilder({ page }).withTags(tags).analyze()
   expect(
     violations.map((v) => `${v.id} (${v.impact}): ${v.help}\n${v.nodes.map((n) => `  ${n.target.join(" ")}`).join("\n")}`),
