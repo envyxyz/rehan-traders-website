@@ -15,3 +15,7 @@ const walk = (dir) => {
   }
 }
 walk("out")
+// The kitchen sink is for `pnpm dev` only; robots.txt hides /dev/ from crawlers, so it must not ship at all.
+rmSync("out/dev", { recursive: true, force: true })
+rmSync("out/dev.html", { force: true })
+rmSync("out/dev.txt", { force: true })
