@@ -1,5 +1,7 @@
 # NAP audit: name, address, phone, hours
 
+Latest check: `../growth/Reports/2026-10-31 NAP Report/NAP Report.md`, which supersedes this table where they differ (mobilemarket.pk is classifieds, hafeez-center.com.pk has no shop directory, BusinessList.pk is paid, Instagram is @rehantraders.lab).
+
 Checked 31 Oct 2026 (Phase 10, branch `p10-search`). Sources: headless browser visits to each listing (logged out, Lahore location), agy Google searches, and the earlier checks in `../.agency/raw/` (19 and 23 Oct). Screens and page text are in the session scratchpad, not in the repo.
 
 ## Canonical NAP (copy exactly)
