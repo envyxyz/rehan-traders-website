@@ -67,7 +67,7 @@ export const site = {
     /** Footer, one phrase per line. */
     lines: ["Monday to Saturday", "11:00 AM to 10:00 PM", "Sunday closed"],
     fridayBreak: "Friday prayer break 1:00 to 2:00 PM",
-    holidays: "Closed on public holidays",
+    holidays: "Closed on Eid and Ashura, when Hafeez Center closes",
   },
   status: {
     openNow: "Open now",
@@ -117,7 +117,9 @@ export const reviews = {
   count: 50,
   asOf: "2026-10-29",
   asOfLabel: "29 October 2026",
-  url: site.mapsUrl, // TODO(adnan): confirm the Google reviews link (needs listing access)
+  // The listing page shows every review. The write-a-review link (https://g.page/r/CUvWWzrw4sFhEBE/review) is for
+  // QR cards and WhatsApp follow-ups, not for "Read reviews".
+  url: site.mapsUrl,
   /** Reviews shown per visit, drawn at random (weighted) from `items`. */
   show: 10,
   items: [
@@ -423,26 +425,26 @@ export const faults = [
   "Back glass",
 ] as const
 
-// Pakistan's public holidays: no booking slots on these dates. Fixed-date holidays are certain; Eid, Ashura and
-// 12 Rabi ul Awal follow the moon, so their dates are estimates. Update them when the government announces them.
-// TODO(adnan): confirm the shop closes on every one of these days. Extend the list before August 2027.
+// Days Hafeez Center closes: no booking slots on these dates. The shop opens whenever Hafeez Center does (Adnan,
+// 31 Oct 2026), so national days stay open. Eid and Ashura follow the moon: these dates are estimates, update them
+// when the government announces them. Extend the list before May 2028.
 export const holidays = [
-  { date: "2026-11-09", name: "Iqbal Day" },
-  { date: "2026-12-25", name: "Quaid-e-Azam Day" },
-  { date: "2027-02-05", name: "Kashmir Solidarity Day" },
   { date: "2027-03-10", name: "Eid ul Fitr (estimate)" },
   { date: "2027-03-11", name: "Eid ul Fitr (estimate)" },
   { date: "2027-03-12", name: "Eid ul Fitr (estimate)" },
-  { date: "2027-03-23", name: "Pakistan Day" },
-  { date: "2027-05-01", name: "Labour Day" },
   { date: "2027-05-17", name: "Eid ul Adha (estimate)" },
   { date: "2027-05-18", name: "Eid ul Adha (estimate)" },
   { date: "2027-05-19", name: "Eid ul Adha (estimate)" },
-  { date: "2027-05-28", name: "Youm-e-Takbeer" },
   { date: "2027-06-15", name: "Ashura (estimate)" },
   { date: "2027-06-16", name: "Ashura (estimate)" },
-  { date: "2027-08-14", name: "Independence Day" },
-  { date: "2027-08-15", name: "12 Rabi ul Awal (estimate)" },
+  { date: "2028-02-27", name: "Eid ul Fitr (estimate)" },
+  { date: "2028-02-28", name: "Eid ul Fitr (estimate)" },
+  { date: "2028-02-29", name: "Eid ul Fitr (estimate)" },
+  { date: "2028-05-05", name: "Eid ul Adha (estimate)" },
+  { date: "2028-05-06", name: "Eid ul Adha (estimate)" },
+  { date: "2028-05-07", name: "Eid ul Adha (estimate)" },
+  { date: "2028-06-03", name: "Ashura (estimate)" },
+  { date: "2028-06-04", name: "Ashura (estimate)" },
 ] as const
 
 /** What the booking flow carries to the confirmation page and the WhatsApp text. */
@@ -653,7 +655,7 @@ export const visit = {
   hours: [
     { label: "Monday to Saturday", value: "11 AM to 10 PM", days: [1, 2, 3, 4, 5, 6] },
     { label: "Friday prayer break", value: "1 to 2 PM", days: [5] },
-    { label: "Sunday and public holidays", value: "Closed", days: [0] },
+    { label: "Sunday, Eid and Ashura", value: "Closed", days: [0] },
   ],
   courier: "Outside Lahore? We repair phones sent by courier.",
   courierLink: "See the four steps",
@@ -731,11 +733,6 @@ export const breadcrumbs = {
   label: "Breadcrumbs",
 } as const
 
-export const legal = {
-  privacyTitle: "Privacy",
-  termsTitle: "Terms",
-} as const
-
 export const repairsPage = {
   title: "Repairs",
   lede: "Phone and tablet repairs at Shop G-88, Hafeez Center, Lahore. Every repair starts with a free check, and when only the glass is cracked, only the glass is replaced.",
@@ -748,6 +745,8 @@ export const repairsPage = {
   allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
   priceTitle: "Price",
   viewDetails: "View details",
+  /** Accessible name of a card's "View details" link: starts with the visible label, ends with the repair, so each is unique. */
+  viewDetailsOf: (title: string) => `View details for ${title}`,
 } as const
 
 export const reviewsPage = {
@@ -780,7 +779,7 @@ export const visitPage = {
   landmarksValue: "Ground floor corridor near the central stairs.", // TODO(adnan): confirm exact walking landmarks and entrance gate
   hoursTitle: "Shop hours",
   mapPrompt: "Tap to load interactive Google Map",
-  mapLoading: "Loading map...",
+  mapLoading: "Loading map…",
   mapAlt: "Rehan Traders storefront at Hafeez Center",
   courierTitle: "Can I send my phone by courier from outside Lahore?",
   courierLede: "Yes. Rehan Traders repairs phones sent by courier from outside Lahore. It takes four steps.",
@@ -846,13 +845,13 @@ export const privacyPage = {
     },
     {
       title: "AI chat data",
-      // TODO(adnan): confirm. The providers' own terms decide whether they keep or train on what they receive.
+      // The providers' own terms decide whether they keep or train on what they receive, so this text promises nothing about that.
       text: "When you use the chat assistant, your message is sent to AI providers (Anthropic through OpenRouter, Google AI Studio and Groq) to write a reply. This site does not store these messages. Do not type your name, number or other private details into them.",
     },
     {
       title: "Data storage and security",
-      // TODO(adnan): confirm who can open the Sheet and the photo folder
-      text: "A booking is saved in the shop's Google Sheet and emailed to the shop, and any photos you attach are saved in the shop's Google Drive. The shop uses them to manage repair job numbers (RT-####).",
+      // Access: Adnan, 31 Oct 2026
+      text: "A booking is saved in the shop's Google Sheet and emailed to the shop, and any photos you attach are saved in the shop's Google Drive. Only Adnan Ali and the shop's technical team can open them. The shop uses them to manage repair job numbers (RT-####).",
     },
     {
       title: "Contact regarding your data",
@@ -898,7 +897,7 @@ export const states = {
     call: "Call 0305 8874839",
   },
   loading: {
-    text: "Loading...",
+    text: "Loading…",
   },
   notFound: {
     title: "Page not found",
@@ -968,6 +967,7 @@ export const chat = {
 /** Labels for UI chrome and screen readers. */
 export const ui = {
   close: "Close",
+  skipToContent: "Skip to content",
   search: "Search",
   noResults: "No results",
   stars: (rating: number) => `${rating} out of 5 stars`,

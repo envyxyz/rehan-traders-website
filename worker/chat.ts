@@ -132,6 +132,7 @@ async function start(p: Provider, messages: ModelMessage[]) {
 export async function chat(request: Request, env: AiEnv): Promise<Response> {
   if (request.method !== "POST") return Response.json({ ok: false, error: "method" }, { status: 405 })
   if (!request.headers.get("content-type")?.startsWith("application/json")) return Response.json({ ok: false, error: "type" }, { status: 415 })
+  if (Number(request.headers.get("content-length")) > 96_000) return Response.json({ ok: false, error: "size" }, { status: 413 })
   const raw = await request.text()
   if (raw.length > 32_000) return Response.json({ ok: false, error: "size" }, { status: 413 })
   let parsed

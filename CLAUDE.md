@@ -51,7 +51,7 @@ pnpm lint         # eslint --max-warnings 0 (includes the no-raw-hex / no-arbitr
 pnpm typecheck    # next typegen && tsc --noEmit (typegen writes the route types such as LayoutProps)
 pnpm palette      # snapshot /dev/kitchen-sink into design/palette.html (needs pnpm dev running)
 pnpm test:e2e     # Playwright (installed Edge) against pnpm preview; booking tests since Phase 5, axe added in Phase 9
-pnpm lhci         # (added in Phase 9) Lighthouse CI against the production build
+pnpm lhci         # Lighthouse CI (mobile, 3 runs a page) against the production build: pnpm build first; it starts wrangler dev on :8787 itself, so stop pnpm preview; CHROME_PATH if Chrome is not found; results in .lighthouseci/
 pnpm preview      # next build, then wrangler dev (http://localhost:8787): the static export plus the Worker, as production runs it
 ```
 Deploys: Cloudflare Workers Builds deploys `main` on push.

@@ -8,7 +8,7 @@ import { Reveal } from "@/components/motion"
 import { footer, nav, services, site, actions, ui } from "@/content"
 
 const groupTitle = "font-display text-title-md text-on-band"
-const linkClass = "inline-flex min-h-11 items-center text-on-band-soft no-underline hover:text-on-band md:min-h-9"
+const linkClass = "inline-flex min-h-11 items-center text-on-band-soft no-underline hover:text-on-band"
 
 function Group({ title, className, children }: { title: string; className?: string; children: React.ReactNode }) {
   return (

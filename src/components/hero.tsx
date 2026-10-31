@@ -1,12 +1,11 @@
-import { Star } from "lucide-react"
-
 import { BookButton } from "@/components/book-button"
 import { Fold3D } from "@/components/fold-3d"
 import { WhatsAppIcon } from "@/components/icon"
 import { OpenStatus } from "@/components/open-status"
+import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { actions, hero, reviews, site, ui } from "@/content"
+import { actions, hero, reviews, site } from "@/content"
 import { heroStagger } from "@/lib/tokens"
 
 // Copy rises in with a stagger; the h1 never animates (it is the LCP element).
@@ -26,11 +25,7 @@ export function Hero() {
           <div className="min-w-0">
             <p {...rise(0)}>
               <span className="flex items-center gap-2 text-caption text-steel">
-                <span className="flex gap-0.5 text-star" role="img" aria-label={ui.stars(reviews.rating)}>
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <Star key={i} aria-hidden className="size-3.25 fill-current" strokeWidth={0} />
-                  ))}
-                </span>
+                <Stars rating={reviews.rating} className="[&_svg]:size-3.25" />
                 <span>
                   <b className="font-display text-body-sm font-bold text-ink">{proof.rating}</b> {proof.rest}
                 </span>

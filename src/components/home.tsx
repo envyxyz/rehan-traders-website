@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight, Star } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { BeforeAfter } from "@/components/before-after"
 import { HoursTable } from "@/components/hours-table"
@@ -12,6 +12,7 @@ import { Reveal } from "@/components/motion"
 import { OpenStatus } from "@/components/open-status"
 import { ReviewCarousel } from "@/components/review-carousel"
 import { ServiceCard } from "@/components/service-card"
+import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
@@ -86,7 +87,7 @@ function Estimate() {
 function BeforeAfterSection() {
   const c = home.beforeAfter
   const frame = "aspect-4/3 w-full"
-  const sizes = "(min-width: 1024px) 640px, 100vw"
+  const sizes = "(min-width: 1024px) 640px, calc(100vw - 2rem)"
   return (
     <Section tone="panel">
       <Container className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
@@ -133,22 +134,12 @@ function Process() {
         </ol>
         {/* The interactive job card and tamper seal */}
         <Reveal className="mt-12 flex justify-center">
-          <div className="relative w-full max-w-2xl rounded-2xl bg-panel p-4 sm:p-8">
+          <div className="relative w-full max-w-2xl rounded-xl bg-panel p-4 sm:p-8">
             <JobCard />
           </div>
         </Reveal>
       </Container>
     </Section>
-  )
-}
-
-function Stars({ rating, className }: { rating: number; className?: string }) {
-  return (
-    <span className={cn("flex gap-0.5 text-star", className)} role="img" aria-label={ui.stars(rating)}>
-      {[0, 1, 2, 3, 4].map((i) => (
-        <Star key={i} aria-hidden className={cn("size-4 fill-current", i >= Math.round(rating) && "opacity-30")} strokeWidth={0} />
-      ))}
-    </span>
   )
 }
 
@@ -187,7 +178,7 @@ function Visit() {
         {/* Tap to load: nothing from google.com/maps until then (PRD §8). */}
         <Reveal className="lg:col-span-6">
           <InteractiveMap>
-            <Img name="storefront" alt={visitPage.mapAlt} sizes="(min-width: 1024px) 560px, 100vw" className="size-full object-cover" />
+            <Img name="storefront" alt={visitPage.mapAlt} sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)" className="size-full object-cover" />
           </InteractiveMap>
         </Reveal>
         <Reveal className="lg:col-span-6 lg:pl-4">

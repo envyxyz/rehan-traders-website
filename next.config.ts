@@ -1,4 +1,5 @@
 import type { NextConfig } from "next"
+import { withCn } from "cn/next"
 
 // Cloudflare free plan: production is a static export (out/), served by the Worker in worker/ (Phases 5 and 6).
 // No ISR, middleware, server actions or dynamic route handlers.
@@ -21,4 +22,6 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default nextConfig
+// Compiles cn's merge tables (src/lib/cn-tables.ts: generated, committed) from the sources and globals.css on every
+// build and dev start, so the browser gets cn's small engine instead of its runtime compiler (src/lib/utils.ts).
+export default withCn(nextConfig, { content: ["src/**/*.{ts,tsx}"], css: "src/app/globals.css", out: "src/lib/cn-tables.ts" })

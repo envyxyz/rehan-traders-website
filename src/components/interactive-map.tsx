@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button"
 import { visit, visitPage } from "@/content"
 import { cn } from "@/lib/utils"
 
+// Stable, so React calls it once when the map mounts, not on every render.
+const focusOnMount = (map: HTMLIFrameElement | null) => map?.focus()
+
 export function InteractiveMap({
   children,
   className,
@@ -20,7 +23,9 @@ export function InteractiveMap({
   if (active) {
     return (
       <div className={cn("overflow-hidden rounded-xl bg-band", className)}>
+        {/* Focus moves into the map that replaced the button, instead of dropping to the page. */}
         <iframe
+          ref={focusOnMount}
           src={visit.mapEmbed}
           title={visit.mapTitle}
           loading="eager"

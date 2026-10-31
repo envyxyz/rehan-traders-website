@@ -1,10 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { ArrowLeft, ArrowRight, Star } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 
 import { Icon } from "@/components/icon"
-import { home, reviews, reviewsPage, ui } from "@/content"
+import { Stars } from "@/components/stars"
+import { Button } from "@/components/ui/button"
+import { home, reviews, reviewsPage } from "@/content"
 import { cn } from "@/lib/utils"
 
 const copy = home.reviews
@@ -105,11 +107,7 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
                   <span className="text-steel">{r.date}</span>
                 </span>
               </span>
-              <span className="mt-1 flex shrink-0 gap-0.5 text-star" role="img" aria-label={ui.stars(r.rating)}>
-                {[0, 1, 2, 3, 4].map((s) => (
-                  <Star key={s} aria-hidden className={cn("size-4 fill-current", s >= r.rating && "opacity-30")} strokeWidth={0} />
-                ))}
-              </span>
+              <Stars rating={r.rating} className="mt-1 shrink-0" />
             </figcaption>
             <blockquote className="text-title-lg font-normal whitespace-pre-line text-ink text-pretty">{r.text}</blockquote>
           </figure>
@@ -117,25 +115,15 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
       </div>
       {all ? (
         <div className="mt-3 flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => step(-1)}
-            aria-label={reviewsPage.prev}
-            className="grid size-11 cursor-pointer place-items-center rounded-pill text-ink hover:bg-concrete"
-          >
+          <Button type="button" variant="icon" onClick={() => step(-1)} aria-label={reviewsPage.prev}>
             <Icon icon={ArrowLeft} />
-          </button>
+          </Button>
           <p aria-live="polite" className="min-w-16 text-center text-body-sm text-steel tabular-nums">
             {reviewsPage.counter(index + 1, items.length)}
           </p>
-          <button
-            type="button"
-            onClick={() => step(1)}
-            aria-label={reviewsPage.next}
-            className="grid size-11 cursor-pointer place-items-center rounded-pill text-ink hover:bg-concrete"
-          >
+          <Button type="button" variant="icon" onClick={() => step(1)} aria-label={reviewsPage.next}>
             <Icon icon={ArrowRight} />
-          </button>
+          </Button>
         </div>
       ) : (
         <div className="mt-3 flex items-center gap-1">
@@ -151,14 +139,9 @@ export function ReviewCarousel({ variant = "home" }: { variant?: "home" | "all" 
               <span className={cn("h-1 rounded-pill", i === index ? "w-6 bg-ink" : "w-2 bg-steel-soft")} />
             </button>
           ))}
-          <button
-            type="button"
-            onClick={() => step(1)}
-            aria-label={copy.next}
-            className="ml-auto grid size-11 cursor-pointer place-items-center rounded-pill text-ink hover:bg-concrete"
-          >
+          <Button type="button" variant="icon" onClick={() => step(1)} aria-label={copy.next} className="ml-auto">
             <Icon icon={ArrowRight} />
-          </button>
+          </Button>
         </div>
       )}
     </div>

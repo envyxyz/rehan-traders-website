@@ -184,7 +184,7 @@ export function ChatPanel() {
           </Button>
         </form>
         {tooLong && (
-          <p id={`${ids}-err`} className="text-body-sm text-error">
+          <p id={`${ids}-err`} role="alert" className="text-body-sm text-error">
             {assistant.tooLong(MAX_INPUT)}
           </p>
         )}

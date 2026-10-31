@@ -101,7 +101,7 @@ function Ring({ progress, label }: { progress: number; label: string }) {
   const length = 2 * Math.PI * r
   return (
     <span role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)} className="absolute inset-0 grid place-items-center">
-      <svg viewBox="0 0 36 36" className="size-9 -rotate-90">
+      <svg aria-hidden viewBox="0 0 36 36" className="size-9 -rotate-90">
         <circle cx="18" cy="18" r={r} fill="none" strokeWidth="3" className="stroke-hairline" />
         <circle
           cx="18"

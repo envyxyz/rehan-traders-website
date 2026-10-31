@@ -27,7 +27,7 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
   const cardRef = React.useRef<HTMLDivElement>(null)
 
   const handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return
+    if (!cardRef.current || matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const rect = cardRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
@@ -61,7 +61,7 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
         ref={cardRef}
         className={cn(
           "relative grid w-full grid-cols-10",
-          "overflow-hidden rounded-xl sm:rounded-2xl",
+          "overflow-hidden rounded-xl",
           "shadow-elevated",
           "border border-hairline",
           "will-change-transform"

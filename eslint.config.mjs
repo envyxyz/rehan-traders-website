@@ -14,10 +14,18 @@ const NO_RAW_COLOUR = [
 
 // An arbitrary value is `utility-[...]` NOT followed by `:` (that would be an arbitrary variant like data-[state=open]:).
 const ARBITRARY = "(?:^|[\\s:!])-?[a-z][a-z0-9-]*-\\[[^\\]\\s]+\\](?!:)"
+// Any string, not only className and cn()/cva() arguments: class strings kept in a const slipped past before.
 const NO_ARBITRARY_VALUE = [
-  [`JSXAttribute[name.name='className'] Literal[value=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
-  [`JSXAttribute[name.name='className'] TemplateElement[value.raw=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
-  [`CallExpression[callee.name=/^(cn|cva)$/] Literal[value=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
+  [`Literal[value=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
+  [`TemplateElement[value.raw=/${ARBITRARY}/]`, "Arbitrary Tailwind value. Add a token to globals.css @theme, then use it."],
+]
+
+// Default Tailwind steps that the @theme reset in globals.css removed: they compile to nothing, so the element silently
+// loses the style (rounded-2xl once left the job card panel square). Our steps: rounded-xs..xl/pill, text-display-*, ...
+const RESET = "(?:^|[\\s:!])-?(?:rounded(?:-[a-z]{1,2})?-[2-4]xl|text-(?:xs|sm|base|lg|[2-9]?xl)|shadow-(?:2xs|xs|sm|md|lg|xl|2xl)|font-(?:mono|serif))(?![\\w-])"
+const NO_RESET_SCALE = [
+  [`Literal[value=/${RESET}/]`, "Tailwind default step that our @theme reset removed: it renders nothing. Use a token from globals.css."],
+  [`TemplateElement[value.raw=/${RESET}/]`, "Tailwind default step that our @theme reset removed: it renders nothing. Use a token from globals.css."],
 ]
 
 const COPY = "Copy belongs in src/content.ts. Import it or take it as a prop."
@@ -38,8 +46,8 @@ export default defineConfig([
   {
     files: ["src/components/**/*.{ts,tsx}", "src/app/**/*.{ts,tsx}"],
     rules: {
-      "no-restricted-syntax": ["error", ...rules(NO_RAW_COLOUR, NO_ARBITRARY_VALUE, NO_LITERAL_COPY)],
+      "no-restricted-syntax": ["error", ...rules(NO_RAW_COLOUR, NO_ARBITRARY_VALUE, NO_RESET_SCALE, NO_LITERAL_COPY)],
     },
   },
-  globalIgnores([".next/**", "out/**", ".wrangler/**", "build/**", "next-env.d.ts", "design/**"]),
+  globalIgnores([".next/**", "out/**", ".wrangler/**", "build/**", "next-env.d.ts", "design/**", "src/lib/cn-tables.ts", ".claude/**"]),
 ])

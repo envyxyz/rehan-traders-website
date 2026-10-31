@@ -1,8 +1,9 @@
 import { expect, test, type Page } from "@playwright/test"
 import sharp from "sharp"
 
-import { actions, booking } from "../../src/content"
+import { actions, booking, site } from "../../src/content"
 import { book, upload } from "../../worker/book"
+import { BOOKING_LIMIT } from "../../src/lib/booking"
 import { pickDevice } from "./helpers"
 
 // The UI tests stub /api/book and /api/upload, so nothing reaches the real Apps Script (no row, no email, no Drive
@@ -135,6 +136,77 @@ test("still confirms with a local reference when the Sheet is down", async ({ pa
   await expect(page.getByText(/^WEB-[0-9A-Z]{6}$/)).toBeVisible()
   const wa = await page.getByRole("link", { name: booking.confirmed.send }).getAttribute("href")
   expect(decodeURIComponent(wa!)).toMatch(/Booking No\. WEB-/)
+})
+
+async function reviewAndSend(page: Page) {
+  await page.goto("/book")
+  await pickDeviceAndFault(page)
+  await next(page)
+  await fillDetails(page)
+  await page.getByRole("button", { name: booking.review.submit }).click()
+}
+
+// The app keeps the customer's booking when the Sheet cannot be reached: the confirmation shows a local WEB- reference and
+// the WhatsApp message carries it, so the shop still gets the visit.
+const sheetDown: [string, (page: Page) => Promise<unknown>][] = [
+  ["a 500 with an HTML body", (page) => page.route("/api/book", (r) => r.fulfill({ status: 500, contentType: "text/html", body: "<h1>oops</h1>" }))],
+  ["a 200 that says ok:false", (page) => stubBook(page, 200, { ok: false, error: "webhook" })],
+  ["a 504", (page) => stubBook(page, 504, { ok: false, error: "timeout" })],
+  ["the network failing", (page) => page.route("/api/book", (r) => r.abort("connectionfailed"))],
+]
+for (const [name, setup] of sheetDown)
+  test(`falls back to the WhatsApp reference on ${name}`, async ({ page }) => {
+    await setup(page)
+    await reviewAndSend(page)
+    await expect(page).toHaveURL("/book/confirmed")
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(booking.confirmed.failedTitle)
+    await expect(page.getByText(/^WEB-[0-9A-Z]{6}$/)).toBeVisible()
+    const wa = new URL((await page.getByRole("link", { name: booking.confirmed.send }).getAttribute("href"))!)
+    expect(wa.origin + wa.pathname).toBe(new URL(site.whatsapp.href).origin + new URL(site.whatsapp.href).pathname)
+    expect(wa.searchParams.get("text")).toMatch(/Booking No\. WEB-/)
+  })
+
+test("a 400 from the Worker keeps the customer on the review step with the error", async ({ page }) => {
+  await stubBook(page, 400, { ok: false, error: "invalid" })
+  await reviewAndSend(page)
+  await expect(page.locator("form").getByRole("alert")).toHaveText(booking.review.error)
+  await expect(page).toHaveURL("/book")
+  await expect(page.getByRole("button", { name: booking.review.submit })).toBeEnabled() // can try again
+})
+
+test("a 429 from the Worker shows the limit message and books nothing", async ({ page }) => {
+  await stubBook(page, 429, { ok: false, error: "limit" })
+  await reviewAndSend(page)
+  await expect(page.locator("form").getByRole("alert")).toHaveText(booking.review.limit)
+  await expect(page).toHaveURL("/book")
+})
+
+test("the hourly limit (5 saved bookings) stops the sixth before any request", async ({ page }) => {
+  let posts = 0
+  await page.route("/api/book", (r) => {
+    posts++
+    return r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, job: "RT-0001" }) })
+  })
+  await page.addInitScript((n) => localStorage.setItem("rt-bookings", JSON.stringify(Array.from({ length: n }, () => Date.now()))), BOOKING_LIMIT)
+  await reviewAndSend(page)
+  await expect(page.locator("form").getByRole("alert")).toHaveText(booking.review.limit)
+  expect(posts).toBe(0)
+})
+
+test("the review step keeps a double click to one request", async ({ page }) => {
+  let posts = 0
+  await page.route("/api/book", async (r) => {
+    posts++
+    await new Promise((res) => setTimeout(res, 300))
+    await r.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, job: "RT-0050" }) })
+  })
+  await page.goto("/book")
+  await pickDeviceAndFault(page)
+  await next(page)
+  await fillDetails(page)
+  await page.getByRole("button", { name: booking.review.submit }).dblclick()
+  await expect(page).toHaveURL("/book/confirmed")
+  expect(posts).toBe(1)
 })
 
 test("a service page takes any typed device name", async ({ page }) => {

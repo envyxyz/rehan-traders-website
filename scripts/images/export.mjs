@@ -6,7 +6,7 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 
-const WIDTHS = [640, 960, 1280, 1920];
+const WIDTHS = [640, 720, 960, 1280, 1920];
 const dir = path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w:)/, '$1'));
 const OUT = path.join(dir, 'out');
 const PUB = path.resolve('public', 'images');

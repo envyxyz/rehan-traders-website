@@ -39,7 +39,7 @@ export default function RepairsIndexPage() {
                     name={s.image}
                     alt={s.alt}
                     priority={i === 0}
-                    sizes="(min-width: 1024px) 340px, (min-width: 768px) 50vw, 100vw"
+                    sizes="(min-width: 1440px) 437px, (min-width: 1024px) calc(33.33vw - 2.67rem), (min-width: 768px) calc(50vw - 2.25rem), calc(100vw - 2rem)"
                     className="w-full aspect-4/3"
                   />
                   <div className="flex flex-1 flex-col p-6">
@@ -50,7 +50,8 @@ export default function RepairsIndexPage() {
                     <div className="mt-auto pt-6 flex flex-wrap items-center justify-between gap-3">
                       <Link
                         href={`/repairs/${s.slug}`}
-                        className="inline-flex items-center gap-1 font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
+                        aria-label={repairsPage.viewDetailsOf(s.title)}
+                        className="inline-flex min-h-11 items-center gap-1 font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
                       >
                         {repairsPage.viewDetails}
                         <Icon icon={ArrowRight} size="sm" />

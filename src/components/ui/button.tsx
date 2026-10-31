@@ -62,7 +62,7 @@ function Button({ className, variant, size, asChild = false, arrow = false, stil
           aria-hidden
           className={cn("grid size-7.5 place-items-center rounded-pill", inverse ? "bg-band text-on-band" : "bg-on-action text-action")}
         >
-          <ArrowUpRight className="size-4" strokeWidth={2} />
+          <ArrowUpRight className="size-4" strokeWidth={1.75} />
         </span>
       )}
       {/* Inverted copy, revealed by the growing circle (globals.css). Its chip blends into the fill. */}
@@ -70,7 +70,7 @@ function Button({ className, variant, size, asChild = false, arrow = false, stil
         <span aria-hidden className={cn("btn-fill", inverse ? "bg-band text-on-band" : "bg-on-action text-action")}>
           {label}
           <span className="grid size-7.5 place-items-center">
-            <ArrowUpRight className="size-4" strokeWidth={2} />
+            <ArrowUpRight className="size-4" strokeWidth={1.75} />
           </span>
         </span>
       )}

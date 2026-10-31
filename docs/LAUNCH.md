@@ -1,34 +1,53 @@
 # Launch checklist (Phase 10)
 
-Items earlier phases left for go-live. Tick them off in Phase 10.
+Tick-box list only. The how-to (clicks, values, success checks) is in `docs/GO-LIVE.md`; the step numbers below point there. SEO audit of the Phase 9 build: `docs/launch/seo-audit.md`. State probed on 31 Oct 2026 is in the table at the top of GO-LIVE.md.
 
-## Booking (from Phase 5)
+## Already true on 31 Oct 2026 (re-check, do not redo)
 
-- [ ] **Rate limit `/api/*`.** One free Cloudflare rate-limiting rule: Cloudflare dashboard > the rehanmobiletraders.com zone > **Security** > **WAF** > **Rate limiting rules** > **Create rule**. Name `api`, match `URI Path starts with /api/`, counting by IP, 10 requests per 10 seconds, action **Block** for 10 seconds. (The free plan allows one rule and a 10-second period; it needs the zone on Cloudflare, so it comes after the nameserver move.) Phase 6's `/api/chat` (and the booking and upload routes) sit under the same rule; `/api/estimate` was removed on 30 Oct 2026.
-- [ ] **Worker secrets.** `BOOKING_WEBHOOK_URL` and `BOOKING_WEBHOOK_SECRET` set in the Worker (`integrations/booking-apps-script/README.md`, step 7).
-- [ ] **Clear the test bookings.** RT-0001 and RT-0002 (29 Oct 2026, "Test booking/quote (Claude)", 0300 0000000) are in the Sheet. Delete both rows, then in the script's Project Settings delete the `LAST_JOB` property so the first customer gets RT-0001 (or set it to match the paper job cards).
+- [x] Nameservers on Cloudflare, DNSSEC on, apex and www answer from the Worker, HTTP to HTTPS 301, HSTS 6 months (GO-LIVE steps 2 to 4).
+- [x] All runtime secrets set in the Worker (GO-LIVE step 1).
+
+## Code and repo
+
+- [ ] `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` pass; `grep -rli "5 minutes" out --include=*.html` prints nothing; Phase 9 committed and merged to `main` (GO-LIVE 0).
+- [ ] Fix the SEO audit items marked "before launch" in `docs/launch/seo-audit.md`.
+- [ ] `grep -n "TODO(adnan" src/content.ts` reviewed: each one confirmed or left neutral (GO-LIVE 0.4).
+- [ ] **Public holidays** in `src/content.ts` confirmed with Adnan, Islamic dates updated once announced, list extended past August 2027.
+- [ ] `NEXT_PUBLIC_SITE_URL` removed from `.env.example` (nothing reads it); decide on `OPENROUTER_API_KEY_FREE` (unused by the code) (GO-LIVE 1).
+
+## Cloudflare and DNS
+
+- [ ] Workers Builds connected to `envyxyz/rehan-traders-website`, production branch `main`, build `pnpm build`, deploy `npx wrangler deploy`; first build from a push is green (GO-LIVE 1).
+- [ ] `AI_FORCE_FAIL` absent from the Worker; `npx wrangler secret list` shows the six used names.
+- [ ] workers.dev route: decide on or off (GO-LIVE 1).
+- [ ] DMARC has `rua` (GO-LIVE 5).
+- [ ] `www` 301s to the apex with the path and query kept (GO-LIVE 6).
+- [ ] SSL Full (strict), Always Use HTTPS, Rocket Loader off, AI Crawl Control as in step 7 (GO-LIVE 7).
+- [ ] **Rate limit `/api/*`**: one rule, URI Path starts with `/api/`, IP, 20 per 10 s, Block 10 s; tested (GO-LIVE 8). Phase 6's chat, the booking and the upload routes all sit under it.
+
+## Booking
+
+- [ ] **Clear the test bookings.** RT-0001 and RT-0002 (29 Oct 2026, "Test booking/quote (Claude)", 0300 0000000) are in the Sheet. Delete both rows, then in the Apps Script Project Settings delete the `LAST_JOB` property so the first customer gets RT-0001 (or set it to match the paper job cards).
 - [ ] **One real booking on the live site:** row in the Sheet, email at rehanmobiletraders@gmail.com, WhatsApp text correct. Then delete the test row and reset `LAST_JOB` again.
-- [ ] **Public holidays** in `src/content.ts` confirmed with Adnan, Islamic dates updated once announced, and the list extended past August 2027.
-- [ ] **Workers Logs** stay on (`observability` in `wrangler.jsonc`): a booking the Apps Script could not take is logged there in full. Say so in `/privacy`.
+- [ ] **Workers Logs** stay on (`observability` in `wrangler.jsonc`): a booking the Apps Script could not take is logged there in full. `/privacy` says so.
 
-## Search and listings (from Phase 8)
+## Search and listings
 
-Do these after the site is live on rehanmobiletraders.com with nameservers on Cloudflare. Menu paths were checked against each tool's docs on 31 Oct 2026; dashboards move, so search the help page if a label differs.
+- [ ] Search Console Domain property verified; `sitemap.xml` submitted (Success); `/`, a repair page, `/visit`, `/book` inspected and indexing requested (GO-LIVE 9).
+- [ ] Rich results test clean on `/`, one repair page and `/faq`. No AggregateRating or Review markup, by rule.
+- [ ] Bing imported from Search Console; sitemap present. Crawler Hints on; Bing IndexNow report checked a week after a deploy (GO-LIVE 9).
+- [ ] GBP website link `https://rehanmobiletraders.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp`, appointment link if offered, Friday prayer break in the hours, listing name decided (GO-LIVE 12).
+- [ ] Facebook page phone and hours fixed, then added to `site.sameAs` (GO-LIVE 12).
 
-- [ ] **Google Search Console, Domain property.** search.google.com/search-console > property selector > **Add property** > **Domain** > `rehanmobiletraders.com`. Copy the `google-site-verification=…` TXT value. Cloudflare > the zone > **DNS** > **Records** > **Add record**: Type `TXT`, Name `@`, Content the value, TTL Auto. Back in Search Console, **Verify**.
-- [ ] **Sitemap.** Search Console > **Indexing** > **Sitemaps** > `sitemap.xml` > **Submit**. Status should read Success. `/book/confirmed` and `/dev/*` are not in it on purpose.
-- [ ] **URL inspection.** Inspect `https://rehanmobiletraders.com/` and `https://rehanmobiletraders.com/repairs/touch-glass-replacement`: **Test live URL**, check "Page can be indexed" and the Google-selected canonical, then **Request indexing**.
-- [ ] **Rich results.** search.google.com/test/rich-results (needs a signed-in Google account) on the home page (LocalBusiness: MobilePhoneStore), one repair page (Service, FAQ, Breadcrumbs) and `/faq`. No errors. There is no AggregateRating or Review markup, by rule. Search Console > **Enhancements** fills in over the following weeks.
-- [ ] **Bing Webmaster Tools.** bing.com/webmasters > sign in > **Import your sites from GSC** > allow > pick the property > **Import**. This brings the sitemap too; confirm it under **Sitemaps**.
-- [ ] **IndexNow.** Cloudflare > the zone > **Caching** > **Configuration** > **Crawler Hints** > On. Free, no key file. It pings Bing and other IndexNow engines when content changes. Not verified: whether it fires for Workers static assets; check Bing's **IndexNow** report a week after a deploy, and only then consider a key file in `public/`.
-- [ ] **Google Business Profile website link.** business.google.com > the listing > **Edit profile** > **Contact** > **Website**: `https://rehanmobiletraders.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp`. The tag lets analytics separate listing visits from search; the canonical tag keeps the clean URL indexed. If the profile offers an **Appointment link**, use `https://rehanmobiletraders.com/book?utm_source=google&utm_medium=organic&utm_campaign=gbp`. While there: add the Friday prayer break (1:00 to 2:00 PM) to the hours, and decide the listing name (open point 2 in the Business Profile).
-- [ ] **GA4 inside the Google Tag Manager container.** The site loads one tag: GTM container `GTM-TBXL7JMX` (root layout, via `@next/third-parties`). Nothing else is needed in code. In tagmanager.google.com > the container:
-  1. **Tags** > **New** > **Google tag**, Tag ID = the GA4 measurement ID (`G-…`, from analytics.google.com > **Admin** > **Data streams** > the web stream), trigger **Initialization - All Pages**.
-  2. **Variables** > **User-defined** > **New** > **Data Layer Variable** for each of `from`, `service`, `step`, `index`, `kind`, `saved`, `action`, `path`, `fault`.
-  3. **Triggers** > **New** > **Custom Event**, event name `book_start|book_step|book_submit|whatsapp_click|call_click|directions_click|chat_open|chat_handoff|estimate_complete|price_view`, tick **Use regex matching**.
-  4. **Tags** > **New** > **Google Analytics: GA4 Event**, measurement ID as above, event name `{{Event}}`, event parameters from the variables in step 2, trigger from step 3.
-  5. **Submit** > **Publish**.
-- [ ] **GA4 property settings.** analytics.google.com > **Admin**: time zone Pakistan, currency PKR; **Data retention** > 14 months; **Data streams** > the stream > **Redact data** > email on.
-- [ ] **DebugView.** Open GTM > **Preview** with the live site (or the Google Analytics Debugger extension), open the live site, then GA4 **Admin** > **DebugView**. Tap a WhatsApp button, the phone number, Directions, start and submit a test booking. Expect `whatsapp_click`, `call_click`, `directions_click` (each with only a `from` slug), `book_start`, `book_step`, `book_submit`. No names, numbers or messages in any parameter.
-- [ ] **Key events.** GA4 **Admin** > **Key events** > **New key event**: `book_submit`, `whatsapp_click`, `call_click`, `directions_click`.
-- [ ] **Lighthouse SEO.** Chrome DevTools > **Lighthouse** > Mobile > SEO on `/`, one repair page and `/visit`. Target 100.
+## Analytics
+
+- [ ] GA4 property (Pakistan, PKR, 14 months, redact email) and web stream; Google tag and event tags published in `GTM-TBXL7JMX` (GO-LIVE 10).
+- [ ] DebugView shows `whatsapp_click`, `call_click`, `directions_click`, `book_start`, `book_step`, `book_submit`, with no personal data in any parameter.
+- [ ] Key events set; Search Console linked to GA4 and its report collection published.
+
+## After launch
+
+- [ ] Uptime monitor on `/` (UptimeRobot Free); decision on `GET /api/health` (GO-LIVE 11).
+- [ ] Calendar events created: weekly site check, monthly review refresh (GO-LIVE 13).
+- [ ] Lighthouse SEO and the other three categories 95+ on `/`, one repair page and `/visit` (PageSpeed Insights, mobile).
+- [ ] Note in `docs/PHASES.md` and one commit.

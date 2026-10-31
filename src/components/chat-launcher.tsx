@@ -25,6 +25,8 @@ export function ChatLauncher() {
         ref={button}
         variant="glass"
         className="max-md:size-12 max-md:px-0"
+        aria-haspopup="dialog"
+        aria-expanded={open}
         onPointerEnter={() => void loadSheet()}
         onFocus={() => void loadSheet()}
         onClick={() => {
