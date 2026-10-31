@@ -65,9 +65,10 @@ export const site = {
     ],
     oneLine: "Monday to Saturday 11:00 AM to 10:00 PM, Sunday closed",
     /** Footer, one phrase per line. */
-    lines: ["Monday to Saturday", "11:00 AM to 10:00 PM", "Sunday closed"],
+    lines: ["Monday to Saturday", "11:00 AM to 10:00 PM", "Friday break 1:00 to 2:00 PM", "Sunday closed"],
     fridayBreak: "Friday prayer break 1:00 to 2:00 PM",
-    holidays: "Closed on Eid and Ashura, when Hafeez Center closes",
+    // Adnan, 31 Oct 2026: the shop opens whenever Hafeez Center does, so it closes only when the building closes.
+    holidays: "Closed only when Hafeez Center closes, such as Eid and Ashura",
   },
   status: {
     openNow: "Open now",
@@ -108,15 +109,15 @@ export const facts = {
 } as const
 
 // Typed in by hand (static site, no Places API). Update rating, count and asOf together.
-// Copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings, 32 with text (the other 18 are
+// Review text copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings then, 49 on 31 Oct, 32 with text (the other 18 are
 // stars only and are left out). Text exactly as written; `date` is Google's relative date as of `asOf`. Ameer's own
 // review is left out: the agency should not review its client. `weight` (3 clear English naming the repair, 2 clear
 // praise, 1 short or vague) makes the clearest ones come up most often in the random 10 shown per visit.
 export const reviews = {
   rating: 4.9,
-  count: 50,
-  asOf: "2026-10-29",
-  asOfLabel: "29 October 2026",
+  count: 49,
+  asOf: "2026-10-31",
+  asOfLabel: "31 October 2026",
   // The listing page shows every review. The write-a-review link (https://g.page/r/CUvWWzrw4sFhEBE/review) is for
   // QR cards and WhatsApp follow-ups, not for "Read reviews".
   url: site.mapsUrl,
@@ -234,6 +235,8 @@ export type Service = {
   lead?: boolean
   howItWorks: { step: string; title: string; text: string }[]
   related: string[]
+  /** Search title and description: the problem, then Hafeez Center and Lahore. */
+  seo: { title: string; description: string }
 }
 
 // Images arrive in Phase 2 (public/images); until then cards show a placeholder surface. Prices stay unset while priceMode is "quote".
@@ -257,8 +260,15 @@ export const services: Service[] = [
       { q: "Will my original display be kept?", a: "Yes. Touch glass replacement keeps the display your phone came with. Only the cracked outer glass is changed." },
       { q: "What if the screen has black spots or colored lines?", a: "Lines or dark patches mean the panel under the glass is damaged, and the phone needs a screen replacement instead. The free check at Rehan Traders tells you which one your phone needs." },
       { q: "Can I watch the glass replacement at the bench?", a: "Yes, on request, when the bench is not busy." },
+      { q: "My phone screen is cracked (mobile ki screen toot gayi). Can only the glass be changed?", a: "Yes, if the display under the cracked glass still works. Rehan Traders, Shop G-88, Hafeez Center, Lahore checks it free of cost, separates the cracked glass under heat and vacuum and laminates new glass on, so your original display stays. If the screen shows lines or dark patches, it needs a screen replacement instead." },
+      { q: "Touch is not working after a fall (touch kaam nahi kar raha). What does my phone need?", a: "The free check at Rehan Traders, Hafeez Center, Lahore tells you whether new touch glass fixes it or whether the screen itself has to be replaced, and what it will cost." },
+      { q: "How much does touch glass replacement cost in Lahore?", a: `It depends on the model, so prices are not published online. Send the model and a photo of the screen on WhatsApp to ${site.phone.display} and Rehan Traders replies with a quote, or bring the phone to Shop G-88, Hafeez Center, where checking is free.` },
     ],
     related: ["screen-replacement", "galaxy-z-fold-flip", "iphone"],
+    seo: {
+      title: "Touch glass replacement, Hafeez Center Lahore",
+      description: `Cracked phone glass? Rehan Traders replaces only the glass and keeps your original display. Shop G-88, Hafeez Center, Lahore. Free checking: ${site.phone.display}.`,
+    },
   },
   {
     slug: "galaxy-z-fold-flip",
@@ -280,8 +290,14 @@ export const services: Service[] = [
       { q: "Can a blank inner screen be saved without full replacement?", a: "It depends on the fault. Rehan Traders checks the phone free of cost and tries to save the inner panel before replacing it. If it cannot be saved, the shop tells you plainly." },
       { q: "Do you repair stiff or stuck hinges?", a: "Yes. Rehan Traders repairs Galaxy Z Fold and Z Flip hinges at the bench." },
       { q: "How long does a Galaxy Z Fold repair take?", a: "A Galaxy Z Fold repair can take up to a day, depending on the repair, parts availability and the model." },
+      { q: "My Galaxy Z Fold inner screen has a line or went black (Fold ki andar wali screen kharab ho gayi). Can it be fixed?", a: "Bring it in for the free check at Rehan Traders, Shop G-88, Hafeez Center, Lahore. The shop tries to save the inner panel before replacing it, and tells you plainly what is wrong, what it will cost and how long it will take." },
+      { q: "My Galaxy Z Flip or Z Fold outer glass is cracked. Do you replace it?", a: "Yes. Rehan Traders replaces the outer glass on every Galaxy Z Fold and Z Flip generation at the bench in Hafeez Center, Lahore." },
     ],
     related: ["touch-glass-replacement", "screen-replacement", "board-repair"],
+    seo: {
+      title: "Galaxy Z Fold and Flip repair, Hafeez Center Lahore",
+      description: "Fold inner screen black or lined, cracked outer glass or a stiff hinge? Every Galaxy Z Fold and Z Flip repaired at Shop G-88, Hafeez Center, Lahore. Free checking.",
+    },
   },
   {
     slug: "iphone",
@@ -302,8 +318,14 @@ export const services: Service[] = [
       { q: "Do you fix Face ID faults?", a: "Yes. Face ID sensors and dot projector faults are diagnosed under the microscope." },
       { q: "Can I get my old parts back?", a: "Yes, on request, provided the part is safe to return. Swollen batteries are disposed of immediately." },
       { q: "Will my iPhone show \"Unknown Part\" after a battery change?", a: facts.battery },
+      { q: "My iPhone screen is broken. Do you repair iPhone screens in Lahore?", a: "Yes. At Shop G-88, Hafeez Center, Lahore, Rehan Traders checks the iPhone free of cost. If only the glass is cracked and the display works, the glass is replaced on its own and the display stays. If the display is damaged, the screen is replaced." },
+      { q: "My iPhone back glass is cracked (back glass toot gaya). Can it be replaced?", a: "Yes. Rehan Traders removes the broken back glass and fits new glass at the bench in Hafeez Center, Lahore." },
     ],
     related: ["touch-glass-replacement", "battery-charging", "board-repair"],
+    seo: {
+      title: "iPhone repair, Hafeez Center Lahore",
+      description: `Broken iPhone screen, cracked back glass, Face ID, battery or charging fault? Repaired at Shop G-88, Hafeez Center, Lahore. Free checking. WhatsApp ${site.phone.display}.`,
+    },
   },
   {
     slug: "screen-replacement",
@@ -324,8 +346,13 @@ export const services: Service[] = [
       { q: "Do you repair both iPhone and Android displays?", a: "Yes. We replace screens on iPhone, Samsung, Google Pixel, OnePlus, and other brands." },
       { q: "How can I get a quote for my screen?", a: `Send your exact model and a photo of the screen on WhatsApp to ${site.phone.display}, and the shop replies with a quote. Checking at the shop is free.` },
       { q: "How long does a screen replacement take?", a: "A normal screen change at Rehan Traders can take as little as 60 minutes, depending on parts and the model." },
+      { q: "My phone screen has lines or went black (screen pe lines aa gayi, screen black ho gayi). What do I need?", a: "Lines, a green or pink tint, flicker or a black screen usually mean the display itself is damaged, and it needs a screen replacement. The free check at Rehan Traders, Shop G-88, Hafeez Center, Lahore confirms whether the fault is in the screen or the motherboard before anything is replaced." },
     ],
     related: ["touch-glass-replacement", "galaxy-z-fold-flip", "water-damage-data-recovery"],
+    seo: {
+      title: "Phone screen replacement, Hafeez Center Lahore",
+      description: "Lines on the screen, a black, green or flickering display? Rehan Traders replaces phone screens at Shop G-88, Hafeez Center, Lahore. Free checking first.",
+    },
   },
   {
     slug: "battery-charging",
@@ -346,8 +373,14 @@ export const services: Service[] = [
       { q: "Can a loose charging port be repaired without replacement?", a: "We clean compacted lint and dust first. If the pins are broken, we replace the port." },
       { q: "Can I take my old battery home?", a: "Yes, on request, as long as the battery is not swollen or leaking." },
       { q: "Will my iPhone show \"Unknown Part\" after a battery change?", a: facts.battery },
+      { q: "My phone is not charging (charging nahi ho rahi). Can you fix it?", a: "Yes. At Rehan Traders, Hafeez Center, Lahore, a charging port packed with lint is cleaned first; if its pins are broken, the port is replaced. If the fault is the battery or the board, the free check tells you." },
+      { q: "My battery drains fast or has swollen (battery jaldi khatam ho jati hai, battery phool gayi). What should I do?", a: "Stop charging a swollen battery and bring the phone to Shop G-88, Hafeez Center, Lahore. Rehan Traders replaces the battery, and a swollen battery is removed and disposed of safely straight away." },
     ],
     related: ["iphone", "board-repair", "ipad-tablet"],
+    seo: {
+      title: "Battery and charging repair, Hafeez Center Lahore",
+      description: `Phone not charging, battery draining fast or swollen? Battery and charging port repair at Shop G-88, Hafeez Center, Lahore. Free checking: ${site.phone.display}.`,
+    },
   },
   {
     slug: "water-damage-data-recovery",
@@ -364,11 +397,15 @@ export const services: Service[] = [
       { step: "04", title: "Board testing", text: "Circuits are checked for short circuits before final assembly." },
     ],
     faq: [
-      { q: "What should I do if my phone dropped in water?", a: "Turn it off straight away and do not connect a charger. Bring it to Shop G-88, Hafeez Center, as soon as you can." },
-      { q: "Can you recover data if the phone does not power on?", a: "It depends on the damage. Rehan Traders checks the board first and tries to get your data back. The free check tells you what can be saved." },
+      { q: "My phone fell in water (phone pani mein gir gaya). What should I do?", a: "Turn it off straight away and do not connect a charger. Bring it to Shop G-88, Hafeez Center, as soon as you can." },
+      { q: "My phone is dead after water damage. Can my photos and data be recovered?", a: "It depends on the damage. Rehan Traders checks the board first and tries to get your data back. The free check tells you what can be saved." },
       { q: "How long does a water damage repair take?", a: "It depends on how severe the damage is: anywhere from 8 hours to several days. Data recovery time also depends on the phone's condition." }, // Adnan, 31 Oct 2026
     ],
     related: ["board-repair", "screen-replacement", "battery-charging"],
+    seo: {
+      title: "Water damaged phone repair, Hafeez Center Lahore",
+      description: "Phone fell in water or will not turn on? Turn it off, do not charge it, and bring it to Shop G-88, Hafeez Center, Lahore for cleaning, repair and data recovery.",
+    },
   },
   {
     slug: "board-repair",
@@ -386,10 +423,16 @@ export const services: Service[] = [
     ],
     faq: [
       { q: "What is board-level repair?", a: "Board-level repair fixes the damaged part on the phone's motherboard, such as one chip, instead of replacing the whole board." },
-      { q: "Can you fix a phone that does not turn on at all?", a: "Rehan Traders checks it free of cost first. A phone that will not turn on often has a short circuit or a failed power chip, which can be found under the microscope and replaced. If it cannot be fixed, the shop tells you plainly." },
+      { q: "My phone is dead and will not turn on (mobile on nahi ho raha). Can you fix it?", a: "Rehan Traders checks it free of cost first. A phone that will not turn on often has a short circuit or a failed power chip, which can be found under the microscope and replaced. If it cannot be fixed, the shop tells you plainly." },
       { q: "Can I watch the board repair under the microscope?", a: "Yes, on request, when the bench is not busy." },
+      { q: "My phone shows no signal or does not detect the SIM (SIM nahi chal rahi). Can it be repaired?", a: "Network and SIM faults are diagnosed at board level under the microscope at Rehan Traders, Shop G-88, Hafeez Center, Lahore. The free check tells you what is wrong, whether it can be fixed and what it will cost." },
+      { q: "My phone camera or Face ID stopped working. Do you repair it?", a: "Yes. Rehan Traders checks camera and Face ID faults free of cost at Hafeez Center, Lahore and repairs them at the bench." },
     ],
     related: ["water-damage-data-recovery", "iphone", "battery-charging"],
+    seo: {
+      title: "Motherboard repair, Hafeez Center Lahore",
+      description: "Phone dead, no network or SIM, Face ID or camera fault? Board-level repair under the microscope at Shop G-88, Hafeez Center, Lahore. Free checking first.",
+    },
   },
   {
     slug: "ipad-tablet",
@@ -409,8 +452,13 @@ export const services: Service[] = [
       { q: "Which tablet brands do you repair?", a: "Rehan Traders mainly repairs Apple iPads. For another tablet, ask on WhatsApp first. Very old, obsolete tablets are not accepted." },
       { q: "Can you fix tablet charging ports?", a: "Yes. We repair loose USB-C and Lightning charging ports on tablets." },
       { q: "Can you replace only the glass on an iPad?", a: "It depends on the model. Rehan Traders checks your iPad free of cost and tells you whether the glass can be replaced on its own." },
+      { q: "My iPad screen is broken (iPad ki screen toot gayi). Do you repair iPads in Lahore?", a: "Yes. Rehan Traders mainly repairs Apple iPads at Shop G-88, Hafeez Center, Lahore: cracked glass, screens, batteries and charging. Checking is free." },
     ],
     related: ["touch-glass-replacement", "screen-replacement", "battery-charging"],
+    seo: {
+      title: "iPad repair, Hafeez Center Lahore",
+      description: `Cracked iPad glass, broken screen, battery or charging fault? Mainly iPad repairs at Shop G-88, Hafeez Center, Lahore. Free checking. WhatsApp ${site.phone.display}.`,
+    },
   },
 ]
 
@@ -640,6 +688,32 @@ export const faq = [
     q: "Where is Rehan Traders and when is it open?",
     a: `Rehan Traders is at ${site.address.lines.join(", ")} ${site.address.postalCode}, Pakistan. It is open ${site.hours.oneLine}. ${site.hours.fridayBreak}. ${site.hours.holidays}.`,
   },
+  {
+    q: "My phone or tablet is broken. Where can I get it repaired in Lahore?",
+    a: `Rehan Traders repairs phones and tablets at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore: cracked glass, broken screens, Galaxy Z Fold and Flip, iPhone, iPad, batteries and charging, water damage and motherboard faults. Checking is free. Call or WhatsApp ${site.phone.display}, or walk in ${site.hours.oneLine}.`,
+  },
+] as const
+
+/**
+ * Broken-phone problems as people type them, in Pakistani English and Roman Urdu (plus Urdu script for llms.txt),
+ * each mapped to the confirmed repair page that fixes it. Used by llms.txt and llms-full.txt. Only confirmed repairs:
+ * speaker, microphone, overheating, buttons and software faults wait for Adnan (docs/launch/search-plan.md).
+ */
+export const problems = [
+  { problem: "Cracked phone glass, display still works", says: ["mobile ki screen toot gayi", "sirf ooper wala glass toota hai", "touch glass change karwana hai"], urdu: "موبائل کی سکرین ٹوٹ گئی", service: "touch-glass-replacement" },
+  { problem: "Touch not working", says: ["touch kaam nahi kar raha"], urdu: "ٹچ کام نہیں کر رہا", service: "touch-glass-replacement" },
+  { problem: "Lines on the screen, black, green, pink or flickering display", says: ["screen pe lines aa gayi", "screen black ho gayi", "panel change karwana hai"], urdu: "سکرین پر لائنیں آ گئیں", service: "screen-replacement" },
+  { problem: "Galaxy Z Fold or Z Flip inner screen, outer glass or hinge", says: ["Fold ki andar wali screen kharab ho gayi", "hinge tight ho gaya"], urdu: "فولڈ کی اندر والی سکرین خراب ہو گئی", service: "galaxy-z-fold-flip" },
+  { problem: "Phone fell in water or got wet", says: ["phone pani mein gir gaya", "mobile geela ho gaya"], urdu: "فون پانی میں گر گیا", service: "water-damage-data-recovery" },
+  { problem: "Photos and data needed from a dead or water-damaged phone", says: ["data wapas chahiye", "photos recover karni hain"], urdu: "ڈیٹا واپس چاہیے", service: "water-damage-data-recovery" },
+  { problem: "Phone not charging or loose charging port", says: ["charging nahi ho rahi", "charger nahi lag raha"], urdu: "چارجنگ نہیں ہو رہی", service: "battery-charging" },
+  { problem: "Battery drains fast or has swollen", says: ["battery jaldi khatam ho jati hai", "battery phool gayi"], urdu: "بیٹری جلدی ختم ہو جاتی ہے", service: "battery-charging" },
+  { problem: "Phone dead, will not turn on", says: ["mobile on nahi ho raha", "set dead ho gaya"], urdu: "موبائل آن نہیں ہو رہا", service: "board-repair" },
+  { problem: "No signal, no network or SIM not detected", says: ["SIM nahi chal rahi", "signal nahi aa rahe"], urdu: "سم نہیں چل رہی", service: "board-repair" },
+  { problem: "Camera not working", says: ["camera kaam nahi kar raha"], urdu: "کیمرہ کام نہیں کر رہا", service: "board-repair" },
+  { problem: "iPhone Face ID not working", says: ["Face ID kaam nahi kar raha"], urdu: "فیس آئی ڈی کام نہیں کر رہی", service: "iphone" },
+  { problem: "iPhone back glass cracked", says: ["back glass toot gaya"], urdu: "بیک گلاس ٹوٹ گیا", service: "iphone" },
+  { problem: "iPad glass or screen broken, iPad battery or charging", says: ["iPad ki screen toot gayi"], urdu: "آئی پیڈ کی سکرین ٹوٹ گئی", service: "ipad-tablet" },
 ] as const
 
 export const visit = {
@@ -673,8 +747,9 @@ export const estimate = {
 export const home = {
   repairs: { title: "What we repair" },
   beforeAfter: {
+    // TODO(adnan): real before-and-after pair from a finished job (PRD §12 q6). Hidden until then; set true with the real images.
+    show: false as boolean,
     title: "Same phone, new glass.",
-    // TODO(adnan): real before-and-after pair from a finished job (PRD §12 q6). Placeholder images until then.
     caption: "Example pair, to be replaced by a real job: cracked front glass, replaced with the display kept.",
     before: { image: "placeholder-before", alt: "Placeholder: phone with shattered front glass before repair", label: "Before" },
     after: { image: "placeholder-after", alt: "Placeholder: the same phone with new front glass after repair", label: "After" },
@@ -774,9 +849,9 @@ export const visitPage = {
   buildingLabel: "Building",
   buildingValue: "Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore",
   entranceLabel: "Entrance",
-  entranceValue: "Enter Hafeez Center from Main Boulevard. Shop G-88 is on the ground floor.", // TODO(adnan): confirm the entrance and walking route
+  entranceValue: "Shop G-88 is on the ground floor of Hafeez Center, Main Boulevard.", // TODO(adnan): confirm the entrance and walking route
   landmarksLabel: "Landmarks",
-  landmarksValue: "Ground floor corridor near the central stairs.", // TODO(adnan): confirm exact walking landmarks and entrance gate
+  landmarksValue: null as string | null, // TODO(adnan): confirm exact walking landmarks and entrance gate. Hidden while null.
   hoursTitle: "Shop hours",
   mapPrompt: "Tap to load interactive Google Map",
   mapLoading: "Loading map…",
@@ -918,42 +993,39 @@ export const seo = {
   /** Alt text for the share image; keep in step with src/app/opengraph-image.alt.txt. */
   shareImageAlt: "Rehan Traders, Mobile & Tab Repair Lab, Shop G-88, Hafeez Center, Lahore",
   book: {
-    title: "Book a visit",
-    description: "Book a repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time.",
+    title: "Book a phone repair visit in Lahore",
+    description: "Book a phone or tablet repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time. No account needed.",
   },
   bookConfirmed: { title: "Booking confirmed", description: "Your Rehan Traders booking." },
   repairs: {
-    title: "Phone and tablet repairs in Lahore",
-    description: "Touch glass replacement, Galaxy Z Fold and Flip, iPhone, screens, batteries, water damage and motherboard repair at Shop G-88, Hafeez Center, Lahore.",
+    title: "Phone and tablet repair, Hafeez Center Lahore",
+    description: "Cracked glass, broken screens, Galaxy Z Fold and Flip, iPhone, iPad, batteries, charging, water damage and motherboard repair at Shop G-88, Hafeez Center, Lahore.",
   },
   reviews: {
-    title: "Customer reviews",
-    description: `Customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore: ${reviews.rating.toFixed(1)} on Google. Reviews copied from Google as written.`,
+    title: "Phone repair reviews, Hafeez Center Lahore",
+    description: `Customer reviews for Rehan Traders, the phone repair shop at G-88, Hafeez Center, Lahore: ${reviews.rating.toFixed(1)} on Google. Reviews copied from Google as written.`,
   },
   visit: {
-    title: "Visit Shop G-88",
-    description: "Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore. Open Monday to Saturday 11:00 AM to 10:00 PM.",
+    title: "Visit Shop G-88, Hafeez Center, Lahore",
+    description: "Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore. Monday to Saturday 11 AM to 10 PM, Friday break 1 to 2 PM.",
   },
   faq: {
-    title: "Frequently asked questions",
-    description: "Free checking, warranty, repair time, quotes and courier repairs at Rehan Traders, Shop G-88, Hafeez Center, Lahore, answered plainly.",
+    title: "Phone repair questions, Hafeez Center Lahore",
+    description: "Phone repair questions answered plainly: free checking, warranty, repair time, quotes and courier repairs at Rehan Traders, Shop G-88, Hafeez Center, Lahore.",
   },
   about: {
     title: "About the shop at Hafeez Center, Lahore",
     description: "Rehan Traders, Shop G-88, Hafeez Center, has repaired phones since 2009. Run by Adnan Ali, the shop tries to save your panel, and your money, first.",
   },
   privacy: {
-    title: "Privacy policy",
-    description: "Privacy policy for Rehan Traders. How booking and chat information is handled in plain English.",
+    title: "Privacy policy for phone repair bookings",
+    description: "Privacy policy for Rehan Traders, Hafeez Center, Lahore. How phone repair booking, estimate and chat information is handled, in plain English.",
   },
   terms: {
-    title: "Terms of service",
-    description: "Terms of service for phone and tablet repair bookings and bench services at Rehan Traders.",
+    title: "Terms of service for phone repairs",
+    description: "Terms of service for phone and tablet repair bookings, estimates, bench services and collection at Rehan Traders, Hafeez Center, Lahore.",
   },
-  service: (title: string, short: string) => ({
-    title: `${title} in Lahore`,
-    description: `${short} Rehan Traders, Shop G-88, Hafeez Center, Lahore. Free checking. WhatsApp ${site.phone.display}.`,
-  }),
+  /** Service pages use each service's own `seo` (problem, Hafeez Center, Lahore). */
   notFound: { title: "Page not found", description: "This page does not exist." },
   kitchenSink: { title: "Kitchen sink" },
 } as const
@@ -1026,9 +1098,9 @@ export type EstimateFault = {
 
 export const estimator = {
   seo: {
-    title: "Repair estimate",
+    title: "Phone repair estimate in Lahore",
     description:
-      "Pick your device and the fault to see the likely repair, or send the problem with photos. Rehan Traders, Hafeez Center, Lahore replies with a quote on WhatsApp.",
+      "Pick your device and the fault to see the likely repair, or send photos. Rehan Traders, Hafeez Center, Lahore replies with a quote on WhatsApp.",
   },
   title: "Repair estimate",
   lede: "Pick a device and fault to see the likely repair, or send the problem with photos and the shop replies with a quote on WhatsApp.",

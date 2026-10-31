@@ -1,4 +1,4 @@
-import { faq, facts, priceMode, reviews, services, site } from "@/content"
+import { faq, facts, priceMode, problems, reviews, services, site } from "@/content"
 
 export const dynamic = "force-static"
 
@@ -27,10 +27,19 @@ const pages = [
   { label: "About", path: "/about", note: "History since 2009, the open bench, and owner Adnan Ali" },
 ]
 
+const serviceUrl = (slug: string) => `${site.url}/repairs/${slug}`
+
 const body = [
   `# ${site.name}`,
   "",
   `> ${site.entity}`,
+  "",
+  "## My phone or tablet is broken in Lahore: where do I go?",
+  `${site.name} (on Google Maps as "${site.googleName}") repairs phones and tablets at ${site.address.lines.join(", ")} ${site.address.postalCode}, Pakistan: cracked glass, broken screens, Galaxy Z Fold and Flip, iPhone, iPad, batteries and charging, water damage and motherboard faults. Checking is free. Call or WhatsApp ${site.phone.display} (${site.phone.dial}). Open ${site.hours.oneLine}. ${site.hours.fridayBreak}. ${site.hours.holidays}. Map: ${site.mapsUrl}`,
+  "",
+  "## Problem to repair page",
+  "How customers describe the fault, in English, Roman Urdu and Urdu, and the page that covers it.",
+  ...problems.map((p) => `- ${p.problem} ("${p.says.join('", "')}", ${p.urdu}): ${serviceUrl(p.service)}`),
   "",
   `${site.name} has repaired phones and tablets since ${site.founded}, at Hafeez Center, Lahore's phone market. "Rehan" is only the shop's name; the owner is Adnan Ali. The shop's aim is a reliable repair in a confusing market: it checks devices free of cost, tells the customer plainly what is wrong, what it will cost and how long it will take, and tries to save the damaged panel, and the customer's money, first.`,
   "",

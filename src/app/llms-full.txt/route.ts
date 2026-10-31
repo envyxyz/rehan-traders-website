@@ -1,4 +1,4 @@
-import { aboutPage, faq, facts, faqPage, priceMode, privacyPage, repairsPage, reviews, reviewsPage, services, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
+import { aboutPage, faq, facts, faqPage, priceMode, privacyPage, problems, repairsPage, reviews, reviewsPage, services, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
 
 export const dynamic = "force-static"
 
@@ -30,6 +30,17 @@ const sections: string[] = [
   `Warranty: ${facts.warranty}`,
   `Repair time: ${facts.turnaround} ${facts.turnaroundFold}`,
   `Checking: ${facts.check}`,
+  `Name on Google Maps: ${site.googleName} (the same shop)`,
+  `Owner: ${aboutPage.adnanTitle}. "Rehan" is only the shop's name.`,
+
+  hr(),
+
+  // ── Problems, as customers describe them ──────────────────────────────
+  `## Problem to repair page`,
+  "",
+  "How customers describe the fault, in English, Roman Urdu and Urdu, and the repair page that covers it.",
+  "",
+  ...problems.map((p) => `- ${p.problem} ("${p.says.join('", "')}", ${p.urdu}): ${site.url}/repairs/${p.service}`),
 
   hr(),
 
@@ -131,7 +142,7 @@ const sections: string[] = [
   `**Shop:** ${visitPage.shopValue}`,
   `**Building:** ${visitPage.buildingValue}`,
   `**Entrance:** ${visitPage.entranceValue}`,
-  `**Landmarks:** ${visitPage.landmarksValue}`,
+  ...(visitPage.landmarksValue ? [`**Landmarks:** ${visitPage.landmarksValue}`] : []),
   "",
   `### Shop hours`,
   ...visit.hours.map((h) => `- ${h.label}: ${h.value}`),

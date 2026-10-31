@@ -25,7 +25,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Foldables: every Galaxy Z Fold and Z Flip generation, Pixel Fold, Surface Duo. Outer glass, inner panel, hinge.
 - Board-level repair at an open bench with a microscope, inside Hafeez Center, Lahore's phone market.
 - Repairing phones since 2009.
-- 4.9 on Google from 47 reviews (23 Oct 2026). Copied from the Google listing into content.ts with its date, refreshed by hand; never rounded up or guessed.
+- 4.9 on Google from 49 reviews (31 Oct 2026). Copied from the Google listing into content.ts with its date, refreshed by hand; never rounded up or guessed.
 
 ## Operating Context
 
@@ -71,7 +71,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 ## Evidence on Hand
 
 - Real photos: `../growth/Photos/Originals/` (12, 20 Oct 2026) and retouched set `../growth/Photos/Edited/`.
-- Google: 4.9 from 47 reviews. Reviews mention a Galaxy S22 Ultra water-damage fix with data recovered and a Galaxy Z Fold4 blank display fix.
+- Google: 4.9 from 49 reviews. Reviews mention a Galaxy S22 Ultra water-damage fix with data recovered and a Galaxy Z Fold4 blank display fix.
 - Service list: `../growth/Documents/Business Profile.html` section 02.
 - Adnan's answers of 28 Oct 2026: `docs/PRD.md` §11.
 - Not confirmed, never invent: prices, warranty length in days or months or its terms, any turnaround beyond the 30 Oct 2026 answer, number of repairs, registered name/NTN, courier packing guidance, general original-parts claims, anything on the risk of touch-glass separation.
