@@ -48,7 +48,7 @@ export const site = {
    * TODO(adnan): confirm. The Facebook page (rehantraders0) joins this list once its phone and hours are fixed
    * (it shows 0305 5875716 and "Always open"); it is left out until then.
    */
-  sameAs: ["https://maps.google.com/?cid=7044160813583291979"],
+  sameAs: ["https://maps.google.com/?cid=7044160813583291979", "https://www.instagram.com/rehantraders.lab/"], // Instagram: as listed on the verified Business Profile
   /** Square brand avatar, public/images/logo.png. */
   logo: "/images/logo.png",
   /** 24h times, Asia/Karachi. 0 = Sunday. */

@@ -21,9 +21,9 @@ Tick-box list only. The how-to (clicks, values, success checks) is in `docs/GO-L
 - [ ] `AI_FORCE_FAIL` absent from the Worker; `npx wrangler secret list` shows the six used names.
 - [ ] workers.dev route: decide on or off (GO-LIVE 1).
 - [ ] DMARC has `rua` (GO-LIVE 5).
-- [ ] `www` 301s to the apex with the path and query kept (GO-LIVE 6).
+- [x] `www` 301s to the apex with the path and query kept (GO-LIVE 6).
 - [ ] SSL Full (strict), Always Use HTTPS, Rocket Loader off, AI Crawl Control as in step 7 (GO-LIVE 7).
-- [ ] **Rate limit `/api/*`**: one rule, URI Path starts with `/api/`, IP, 20 per 10 s, Block 10 s; tested (GO-LIVE 8). Phase 6's chat, the booking and the upload routes all sit under it.
+- [x] **Rate limit `/api/*`**: one rule, URI Path starts with `/api/`, IP, 20 per 10 s, Block 10 s; tested (GO-LIVE 8). Phase 6's chat, the booking and the upload routes all sit under it.
 
 ## Booking
 
@@ -33,7 +33,7 @@ Tick-box list only. The how-to (clicks, values, success checks) is in `docs/GO-L
 
 ## Search and listings
 
-- [ ] Search Console Domain property verified; `sitemap.xml` submitted (Success); `/`, a repair page, `/visit`, `/book` inspected and indexing requested (GO-LIVE 9).
+- [x] Search Console Domain property verified; `sitemap.xml` submitted (Success); `/`, a repair page, `/visit`, `/book` inspected and indexing requested (GO-LIVE 9).
 - [ ] Rich results test clean on `/`, one repair page and `/faq`. No AggregateRating or Review markup, by rule.
 - [ ] Bing imported from Search Console; sitemap present. Crawler Hints on; Bing IndexNow report checked a week after a deploy (GO-LIVE 9).
 - [ ] GBP website link `https://rehanmobiletraders.com/?utm_source=google&utm_medium=organic&utm_campaign=gbp`, appointment link if offered, Friday prayer break in the hours, listing name decided (GO-LIVE 12).
