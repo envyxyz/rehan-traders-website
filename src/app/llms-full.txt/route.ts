@@ -142,7 +142,7 @@ const sections: string[] = [
   `**Shop:** ${visitPage.shopValue}`,
   `**Building:** ${visitPage.buildingValue}`,
   `**Entrance:** ${visitPage.entranceValue}`,
-  `**Landmarks:** ${visitPage.landmarksValue}`,
+  ...(visitPage.landmarksValue ? [`**Landmarks:** ${visitPage.landmarksValue}`] : []),
   "",
   `### Shop hours`,
   ...visit.hours.map((h) => `- ${h.label}: ${h.value}`),

@@ -18,6 +18,13 @@ Ground rules for everything below:
 - The website is live, crawlable, and allows every AI crawler in robots.txt; GPTBot and ClaudeBot user agents get HTTP 200 on `/` and `/llms.txt`.
 - On 19 Oct, Maps searches from Hafeez Center put the shop 8th of 8 for "mobile repair Hafeez Center Lahore" and 5th of 8 for "mobile repairing shop Gulberg Lahore" (`.agency/raw/gmb/search-results.txt`). That is the baseline.
 
+## Baseline: not in Google or Bing yet (checked 31 Oct 2026)
+
+- `site:rehanmobiletraders.com` on Google returned no documents, checked by hand in a browser. Bing's `site:` query returned unrelated pages, none from this site. Nothing else in this plan can rank until action 3 below is done, so do it first.
+- agy ran 8 repair queries through Google Search grounding (a broken phone in Lahore, best shop, Hafeez Center, touch glass, Fold screen, water damage, iPhone in Gulberg, "mobile ki screen toot gayi"). The site and the shop appeared in 0 of 8. A grounded summary is not a real results page, so treat the order of results as a rough guide, and re-check in a normal browser.
+- Domains agy saw most: hafeez-center.com.pk, mobilemarket.pk, citysearch.pk, apexrepairinglab.com, phoneservicecentre.com, gsm.net.pk, dmarket.pk, reddit.com (r/lahore), pakwheels.com forums, carlcare.com. So the portals and citysearch.pk come first when asking to be listed. Check each page before contacting it.
+- llms.txt: no AI provider has confirmed it affects citations (agy's reading of the docs). Keep it, since it costs nothing, and do not count on it. FAQ rich results are no longer shown for local businesses, so the FAQ text helps as page content and not as a rich result.
+
 ## Ranked actions (impact per hour)
 
 | # | Action | Who | Time | Why it moves rankings |

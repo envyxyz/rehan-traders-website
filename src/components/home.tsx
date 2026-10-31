@@ -235,7 +235,7 @@ export function HomeSections() {
   return (
     <>
       <Repairs />
-      <BeforeAfterSection />
+      {home.beforeAfter.show && <BeforeAfterSection />}
       <Process />
       <Visit />
       <Reviews />

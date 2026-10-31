@@ -114,6 +114,7 @@ export default function VisitPage() {
                   </Text>
                 </Card>
 
+                {visitPage.landmarksValue && (
                 <Card className="p-5">
                   <span className="font-display text-caption font-bold text-steel">
                     {visitPage.landmarksLabel}
@@ -122,6 +123,7 @@ export default function VisitPage() {
                     {visitPage.landmarksValue}
                   </Text>
                 </Card>
+                )}
               </div>
             </div>
 

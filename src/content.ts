@@ -109,15 +109,15 @@ export const facts = {
 } as const
 
 // Typed in by hand (static site, no Places API). Update rating, count and asOf together.
-// Copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings, 32 with text (the other 18 are
+// Review text copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings then, 49 on 31 Oct, 32 with text (the other 18 are
 // stars only and are left out). Text exactly as written; `date` is Google's relative date as of `asOf`. Ameer's own
 // review is left out: the agency should not review its client. `weight` (3 clear English naming the repair, 2 clear
 // praise, 1 short or vague) makes the clearest ones come up most often in the random 10 shown per visit.
 export const reviews = {
   rating: 4.9,
-  count: 50,
-  asOf: "2026-10-29",
-  asOfLabel: "29 October 2026",
+  count: 49,
+  asOf: "2026-10-31",
+  asOfLabel: "31 October 2026",
   // The listing page shows every review. The write-a-review link (https://g.page/r/CUvWWzrw4sFhEBE/review) is for
   // QR cards and WhatsApp follow-ups, not for "Read reviews".
   url: site.mapsUrl,
@@ -747,8 +747,9 @@ export const estimate = {
 export const home = {
   repairs: { title: "What we repair" },
   beforeAfter: {
+    // TODO(adnan): real before-and-after pair from a finished job (PRD §12 q6). Hidden until then; set true with the real images.
+    show: false as boolean,
     title: "Same phone, new glass.",
-    // TODO(adnan): real before-and-after pair from a finished job (PRD §12 q6). Placeholder images until then.
     caption: "Example pair, to be replaced by a real job: cracked front glass, replaced with the display kept.",
     before: { image: "placeholder-before", alt: "Placeholder: phone with shattered front glass before repair", label: "Before" },
     after: { image: "placeholder-after", alt: "Placeholder: the same phone with new front glass after repair", label: "After" },
@@ -848,9 +849,9 @@ export const visitPage = {
   buildingLabel: "Building",
   buildingValue: "Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore",
   entranceLabel: "Entrance",
-  entranceValue: "Enter Hafeez Center from Main Boulevard. Shop G-88 is on the ground floor.", // TODO(adnan): confirm the entrance and walking route
+  entranceValue: "Shop G-88 is on the ground floor of Hafeez Center, Main Boulevard.", // TODO(adnan): confirm the entrance and walking route
   landmarksLabel: "Landmarks",
-  landmarksValue: "Ground floor corridor near the central stairs.", // TODO(adnan): confirm exact walking landmarks and entrance gate
+  landmarksValue: null as string | null, // TODO(adnan): confirm exact walking landmarks and entrance gate. Hidden while null.
   hoursTitle: "Shop hours",
   mapPrompt: "Tap to load interactive Google Map",
   mapLoading: "Loading map…",

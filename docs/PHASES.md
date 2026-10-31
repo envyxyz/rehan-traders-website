@@ -224,3 +224,10 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - `docs/LAUNCH.md`: Search Console, Bing, IndexNow (Crawler Hints), Business Profile link with UTM, GTM and GA4 setup, DebugView, key events.
 - Results: lint and typecheck pass; the export builds. Lighthouse mobile on all 18 routes: SEO 100, Accessibility 100, Best Practices 100; Performance 64 to 74 on an uncompressed local server (still the Phase 3 CPU issue, Phase 9). JSON-LD parses everywhere, no AggregateRating. Rich Results test needs a signed-in browser: in `docs/LAUNCH.md`. Screenshots: `design/phase-8/`.
 - Left: GA4 tags inside GTM, Search Console and Bing verification, DebugView check (all Phase 10). Adnan: walking route to G-88, registered name/NTN.
+
+### 2026-10-31 · Phase 10: search work shipped; dashboards still open
+- Shipped: problem-phrased FAQs (English and Roman Urdu), a search title and description per repair, richer JSON-LD (Hafeez Center, area served, service catalog, WebSite node), a problem map in the llms files, footer Friday break, favicon, simpler sitemap. Review count corrected to 49 (Google, 31 Oct).
+- Hidden until Adnan answers: the before/after slider (`home.beforeAfter.show`, placeholder images) and the landmarks line on `/visit`. The entrance line was made neutral.
+- Docs: `docs/launch/nap.md`, `docs/launch/search-plan.md`.
+- Found: Google has no pages of the site indexed. Search Console comes first.
+- Left: everything in `docs/LAUNCH.md` that needs a dashboard sign-in, real booking test, Lighthouse on production, Android check, Adnan's questions (`../growth/Notes/Questions for Adnan.md`).

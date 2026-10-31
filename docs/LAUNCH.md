@@ -9,8 +9,8 @@ Tick-box list only. The how-to (clicks, values, success checks) is in `docs/GO-L
 
 ## Code and repo
 
-- [ ] `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` pass; `grep -rli "5 minutes" out --include=*.html` prints nothing; Phase 9 committed and merged to `main` (GO-LIVE 0).
-- [ ] Fix the SEO audit items marked "before launch" in `docs/launch/seo-audit.md`.
+- [x] `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test:e2e` pass (timeouts and re-runs in `docs/QA.md`); `grep -rli "5 minutes" out --include=*.html` prints nothing; Phase 9 committed and merged to `main` (GO-LIVE 0).
+- [x] `/dev` is out of production. `www` is still open, in the Cloudflare section below. Fix the SEO audit items marked "before launch" in `docs/launch/seo-audit.md`.
 - [ ] `grep -n "TODO(adnan" src/content.ts` reviewed: each one confirmed or left neutral (GO-LIVE 0.4).
 - [ ] **Public holidays** in `src/content.ts` confirmed with Adnan, Islamic dates updated once announced, list extended past August 2027.
 - [ ] `NEXT_PUBLIC_SITE_URL` removed from `.env.example` (nothing reads it); decide on `OPENROUTER_API_KEY_FREE` (unused by the code) (GO-LIVE 1).
@@ -47,7 +47,7 @@ Tick-box list only. The how-to (clicks, values, success checks) is in `docs/GO-L
 
 ## After launch
 
-- [ ] Uptime monitor on `/` (UptimeRobot Free); decision on `GET /api/health` (GO-LIVE 11).
+- [ ] Uptime monitor on `/` (UptimeRobot Free); `GET /api/health` is live (GO-LIVE 11).
 - [ ] Calendar events created: weekly site check, monthly review refresh (GO-LIVE 13).
 - [ ] Lighthouse SEO and the other three categories 95+ on `/`, one repair page and `/visit` (PageSpeed Insights, mobile).
 - [ ] Note in `docs/PHASES.md` and one commit.
