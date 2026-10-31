@@ -992,8 +992,8 @@ export const seo = {
   /** Alt text for the share image; keep in step with src/app/opengraph-image.alt.txt. */
   shareImageAlt: "Rehan Traders, Mobile & Tab Repair Lab, Shop G-88, Hafeez Center, Lahore",
   book: {
-    title: "Book a visit",
-    description: "Book a repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time.",
+    title: "Book a phone repair visit in Lahore",
+    description: "Book a phone or tablet repair visit to Rehan Traders, Shop G-88, Hafeez Center, Lahore. Pick your device, the fault and a time. No account needed.",
   },
   bookConfirmed: { title: "Booking confirmed", description: "Your Rehan Traders booking." },
   repairs: {
@@ -1001,8 +1001,8 @@ export const seo = {
     description: "Cracked glass, broken screens, Galaxy Z Fold and Flip, iPhone, iPad, batteries, charging, water damage and motherboard repair at Shop G-88, Hafeez Center, Lahore.",
   },
   reviews: {
-    title: "Customer reviews",
-    description: `Customer reviews for Rehan Traders, Shop G-88, Hafeez Center, Lahore: ${reviews.rating.toFixed(1)} on Google. Reviews copied from Google as written.`,
+    title: "Phone repair reviews, Hafeez Center Lahore",
+    description: `Customer reviews for Rehan Traders, the phone repair shop at G-88, Hafeez Center, Lahore: ${reviews.rating.toFixed(1)} on Google. Reviews copied from Google as written.`,
   },
   visit: {
     title: "Visit Shop G-88, Hafeez Center, Lahore",
@@ -1010,19 +1010,19 @@ export const seo = {
   },
   faq: {
     title: "Phone repair questions, Hafeez Center Lahore",
-    description: "Free checking, warranty, repair time, quotes and courier repairs at Rehan Traders, Shop G-88, Hafeez Center, Lahore, answered plainly.",
+    description: "Phone repair questions answered plainly: free checking, warranty, repair time, quotes and courier repairs at Rehan Traders, Shop G-88, Hafeez Center, Lahore.",
   },
   about: {
     title: "About the shop at Hafeez Center, Lahore",
     description: "Rehan Traders, Shop G-88, Hafeez Center, has repaired phones since 2009. Run by Adnan Ali, the shop tries to save your panel, and your money, first.",
   },
   privacy: {
-    title: "Privacy policy",
-    description: "Privacy policy for Rehan Traders. How booking and chat information is handled in plain English.",
+    title: "Privacy policy for phone repair bookings",
+    description: "Privacy policy for Rehan Traders, Hafeez Center, Lahore. How phone repair booking, estimate and chat information is handled, in plain English.",
   },
   terms: {
-    title: "Terms of service",
-    description: "Terms of service for phone and tablet repair bookings and bench services at Rehan Traders.",
+    title: "Terms of service for phone repairs",
+    description: "Terms of service for phone and tablet repair bookings, estimates, bench services and collection at Rehan Traders, Hafeez Center, Lahore.",
   },
   /** Service pages use each service's own `seo` (problem, Hafeez Center, Lahore). */
   notFound: { title: "Page not found", description: "This page does not exist." },
@@ -1097,9 +1097,9 @@ export type EstimateFault = {
 
 export const estimator = {
   seo: {
-    title: "Repair estimate",
+    title: "Phone repair estimate in Lahore",
     description:
-      "Pick your device and the fault to see the likely repair, or send the problem with photos. Rehan Traders, Hafeez Center, Lahore replies with a quote on WhatsApp.",
+      "Pick your device and the fault to see the likely repair, or send photos. Rehan Traders, Hafeez Center, Lahore replies with a quote on WhatsApp.",
   },
   title: "Repair estimate",
   lede: "Pick a device and fault to see the likely repair, or send the problem with photos and the shop replies with a quote on WhatsApp.",
