@@ -29,7 +29,7 @@ import {
   type BookingDay,
 } from "@/lib/booking"
 import { track } from "@/lib/track"
-import { cn } from "@/lib/utils"
+import { cn, nextField } from "@/lib/utils"
 
 const STEPS = ["device", "fault", "time", "details", "review"] as const
 type Step = (typeof STEPS)[number]
@@ -222,6 +222,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
   return (
     <form
       noValidate
+      onKeyDown={nextField}
       onSubmit={(e) => {
         e.preventDefault()
         next()
@@ -336,6 +337,8 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
               <Input
                 id={`${ids}-name`}
                 autoComplete="name"
+                autoCapitalize="words"
+                enterKeyHint="next"
                 maxLength={60}
                 value={draft.name}
                 onChange={(e) => set({ name: e.target.value })}
@@ -355,6 +358,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
                 type="tel"
                 inputMode="tel"
                 autoComplete="tel"
+                enterKeyHint="next"
                 maxLength={20}
                 placeholder={booking.details.phonePlaceholder}
                 value={draft.phone}
@@ -403,7 +407,8 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
       {/* Honeypot: off-screen and out of the tab order, so only bots fill it. */}
       <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" aria-label={booking.details.honeypot} />
 
-      <div className="sticky bottom-0 -mx-1 mt-auto flex flex-wrap gap-2.5 bg-card px-1 py-3">
+      {/* Docked in the sheet only: on /book the page's StickyBar owns the bottom of the screen. */}
+      <div className={cn("-mx-1 mt-auto flex flex-wrap gap-2.5 bg-card px-1 py-3", onDone && "sticky bottom-0")}>
         {index > 0 && (
           <Button type="button" variant="line" size="lg" still onClick={back} disabled={sending}>
             {booking.back}

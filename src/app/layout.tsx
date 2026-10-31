@@ -32,6 +32,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   colorScheme: "light dark",
+  // Android shrinks the page for the keyboard; iOS ignores this, and SheetContent follows visualViewport there.
+  interactiveWidget: "resizes-content",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: themeColor.light },
     { media: "(prefers-color-scheme: dark)", color: themeColor.dark },

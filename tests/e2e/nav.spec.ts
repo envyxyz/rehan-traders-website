@@ -41,9 +41,12 @@ test("desktop: a repair in the Repairs menu opens its page, by keyboard", async 
   await trigger.focus()
   await page.keyboard.press("Enter")
   await expect(page.getByRole("menu")).toBeVisible()
+  // Radix moves focus a tick after each key, so a key pressed straight after another acts on the old item: wait for the focus each time.
+  await expect(page.getByRole("menuitem").first()).toBeFocused()
   await page.keyboard.press("ArrowDown")
+  await expect(page.getByRole("menuitem").nth(1)).toBeFocused()
   await page.keyboard.press("Enter")
-  await expect(page).toHaveURL(`/repairs/${services[0].slug}`)
+  await expect(page).toHaveURL(`/repairs/${services[1].slug}`)
 })
 
 test("desktop: scrolling swaps the top bar for the island, and the hidden one leaves the tab order", async ({ page, isMobile }) => {

@@ -23,8 +23,10 @@ export function StickyBar() {
   return (
     <div
       inert={!shown}
+      data-shown={shown || undefined}
       className={cn(
-        "glass fixed inset-x-3 bottom-safe-bottom z-30 flex gap-1.5 rounded-pill p-1.5 transition duration-base ease-drawer md:hidden",
+        // peer: the ChatLauncher, its next sibling, rises above the bar only while the bar is up.
+        "peer glass typing-hidden fixed inset-x-3 bottom-safe-bottom z-30 flex gap-1.5 rounded-pill p-1.5 transition duration-base ease-drawer md:hidden",
         !shown && "translate-y-full opacity-0"
       )}
     >

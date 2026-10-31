@@ -26,7 +26,7 @@ export function ServiceCard({ service, lead }: { service: Service; lead?: boolea
         />
       </Link>
       <div className="flex flex-1 flex-col gap-3 p-6">
-        <Link href={`/repairs/${service.slug}`} className="no-underline">
+        <Link href={`/repairs/${service.slug}`} className="-my-2.25 flex min-h-11 items-center no-underline">
           <CardTitle className={cn(lead && "text-title-lg", "hover:text-ink")}>{service.title}</CardTitle>
         </Link>
         <CardDescription className="mb-1 line-clamp-2">{service.short}</CardDescription>

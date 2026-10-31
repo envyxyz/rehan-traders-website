@@ -78,7 +78,7 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
             </React.Fragment>
           ))}
         </nav>
-        <div className="mt-auto grid gap-2.5 pt-4">
+        <div className="sticky bottom-0 -mx-6 -mb-6 mt-auto grid gap-2.5 bg-card px-6 pt-4 pb-6">
           <Button asChild size="lg" arrow>
             <Link href="/book">{actions.book}</Link>
           </Button>

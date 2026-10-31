@@ -14,6 +14,7 @@ import { spring } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
 const ISLAND_AT = 80 // phones: px of scroll before the bar gathers into the island
+const SCROLL_SLOP = 8 // phones: px of travel before a direction counts, so a thumb's jitter does not flick the nav
 const BAR_FADE = 240 // desktop: px of scroll over which the top bar fades out
 
 const linkClass = "inline-flex h-11 items-center gap-1 rounded-pill px-3.5 font-display text-nav text-ink active:bg-concrete"
@@ -145,7 +146,9 @@ function MobileNav() {
     const onScroll = () => {
       const y = scrollY
       setIsland(y > ISLAND_AT)
-      setHidden(y > last && y > ISLAND_AT)
+      if (y <= ISLAND_AT) setHidden(false)
+      else if (Math.abs(y - last) >= SCROLL_SLOP) setHidden(y > last)
+      else return
       last = y
     }
     onScroll()
@@ -158,7 +161,7 @@ function MobileNav() {
       className={cn(
         "pointer-events-none fixed inset-x-0 top-0 z-40 flex px-5 pt-5 pb-6 transition-transform duration-base ease-drawer sm:px-7 sm:pt-7 lg:hidden",
         island && "pt-3.5 sm:pt-3.5",
-        hidden && "-translate-y-full"
+        hidden && "-translate-y-full focus-within:translate-y-0"
       )}
     >
       <m.div
@@ -171,7 +174,7 @@ function MobileNav() {
         )}
       >
         <m.div layout="position" transition={spring.layout}>
-          <Link href="/" aria-label={nav.home} className="flex items-center gap-2.25 font-display text-title-md font-extrabold tracking-tight text-ink">
+          <Link href="/" aria-label={nav.home} className={cn("flex min-h-11 items-center gap-2.25 font-display text-title-md font-extrabold tracking-tight text-ink", island && "-mx-2.25 min-w-11 justify-center")}>
             <Mark className={island ? "size-6.5" : "size-7.5"} />
             {!island && <span>{site.name}</span>}
           </Link>

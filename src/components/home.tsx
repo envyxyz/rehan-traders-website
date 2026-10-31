@@ -75,7 +75,7 @@ function Estimate() {
         <Label htmlFor="estimate-q" className="sr-only">
           {estimate.label}
         </Label>
-        <Input id="estimate-q" name="q" required minLength={3} maxLength={500} placeholder={estimate.placeholder} autoComplete="off" />
+        <Input id="estimate-q" name="q" required minLength={3} maxLength={500} placeholder={estimate.placeholder} autoComplete="off" enterKeyHint="go" />
         <Button type="submit" size="lg" className="sm:shrink-0">
           {estimate.submit}
         </Button>

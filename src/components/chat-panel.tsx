@@ -30,6 +30,7 @@ export function ChatPanel() {
   const [messages, setMessages] = React.useState<Msg[]>(saved)
   const [draft, setDraft] = React.useState("")
   const [busy, setBusy] = React.useState(false)
+  const [typing, setTyping] = React.useState(false)
   const log = React.useRef<HTMLDivElement>(null)
   const request = React.useRef<AbortController>(null)
   const ids = React.useId()
@@ -144,7 +145,8 @@ export function ChatPanel() {
 
       <div className="flex shrink-0 flex-col gap-3 border-t border-hairline px-6 pt-4">
         {chips.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          // With the keyboard up the conversation gets the room; the chips return when the field lets go.
+          <div className={cn("flex flex-wrap gap-2", typing && "max-md:hidden")}>
             {chips.map((c) => (
               <Button key={c} type="button" variant="line" dir="auto" className="h-auto min-h-11 px-3.5 py-2 text-left text-caption whitespace-normal" onClick={() => void send(c)}>
                 {c}
@@ -175,6 +177,8 @@ export function ChatPanel() {
             placeholder={assistant.placeholder}
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
+            onFocus={() => setTyping(true)}
+            onBlur={() => setTyping(false)}
             disabled={atLimit}
             aria-invalid={tooLong}
             aria-describedby={tooLong ? `${ids}-err` : undefined}
@@ -219,7 +223,7 @@ function Bubble({ role, children, footer }: { role: Msg["role"]; children: React
       dir="auto"
       className={cn(
         // shrink-0: in a scrolling flex column the bubbles must never squash to fit; the log scrolls instead.
-        "max-w-5/6 shrink-0 overflow-hidden rounded-lg text-body-md",
+        "max-w-5/6 shrink-0 overflow-hidden rounded-lg text-body-md wrap-anywhere",
         role === "user" ? "self-end bg-action text-on-action" : "self-start border border-hairline bg-card text-body"
       )}
     >
