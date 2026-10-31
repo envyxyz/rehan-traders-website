@@ -819,6 +819,8 @@ export const repairsPage = {
   allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
   priceTitle: "Price",
   viewDetails: "View details",
+  /** Accessible name of a card's "View details" link: starts with the visible label, ends with the repair, so each is unique. */
+  viewDetailsOf: (title: string) => `View details for ${title}`,
 } as const
 
 export const reviewsPage = {
@@ -851,7 +853,7 @@ export const visitPage = {
   landmarksValue: "Ground floor corridor near the central stairs.", // TODO(adnan): confirm exact walking landmarks and entrance gate
   hoursTitle: "Shop hours",
   mapPrompt: "Tap to load interactive Google Map",
-  mapLoading: "Loading map...",
+  mapLoading: "Loading map…",
   mapAlt: "Rehan Traders storefront at Hafeez Center",
   courierTitle: "Can I send my phone by courier from outside Lahore?",
   courierLede: "Yes. Rehan Traders repairs phones sent by courier from outside Lahore. It takes four steps.",
@@ -969,7 +971,7 @@ export const states = {
     call: "Call 0305 8874839",
   },
   loading: {
-    text: "Loading...",
+    text: "Loading…",
   },
   notFound: {
     title: "Page not found",
@@ -1036,6 +1038,7 @@ export const chat = {
 /** Labels for UI chrome and screen readers. */
 export const ui = {
   close: "Close",
+  skipToContent: "Skip to content",
   search: "Search",
   noResults: "No results",
   stars: (rating: number) => `${rating} out of 5 stars`,

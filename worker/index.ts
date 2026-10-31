@@ -16,6 +16,8 @@ const worker = {
     if (pathname === "/api/book") return secure(await book(request, env))
     if (pathname === "/api/chat") return secure(await chat(request, env))
     if (pathname === "/api/upload") return secure(await upload(request, env))
+    // For the uptime monitor: proves the Worker runs, touches nothing.
+    if (pathname === "/api/health") return secure(Response.json({ ok: true }))
     return secure(Response.json({ ok: false, error: "not_found" }, { status: 404 }))
   },
 }

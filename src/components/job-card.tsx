@@ -61,7 +61,7 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
         ref={cardRef}
         className={cn(
           "relative grid w-full grid-cols-10",
-          "overflow-hidden rounded-xl sm:rounded-2xl",
+          "overflow-hidden rounded-xl",
           "shadow-elevated",
           "border border-hairline",
           "will-change-transform"

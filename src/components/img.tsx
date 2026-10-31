@@ -1,11 +1,13 @@
-import { existsSync } from "node:fs"
+import { existsSync, readFileSync } from "node:fs"
 import path from "node:path"
 
 import { cn } from "@/lib/utils"
 
 // Phase 2 writes public/images/<name>-<width>.avif|webp at these widths (scripts/images/export.mjs).
-const WIDTHS = [640, 960, 1280, 1920]
+const WIDTHS = [640, 720, 960, 1280, 1920]
 const dir = path.join(process.cwd(), "public", "images")
+// Pixel size of each image's largest export (written by export.mjs): width and height attributes, for the aspect ratio before CSS loads.
+const meta: Record<string, { width: number; height: number }> = JSON.parse(readFileSync(path.join(dir, "alt.json"), "utf8"))
 
 const srcSet = (name: string, ext: string, widths: number[]) =>
   widths.map((w) => `/images/${name}-${w}.${ext} ${w}w`).join(", ")
@@ -34,8 +36,11 @@ export function Img({ name, alt, sizes, className, priority }: ImgProps) {
         src={`/images/${name}-${widths[0]}.webp`}
         srcSet={srcSet(name, "webp", widths)}
         sizes={sizes}
+        width={meta[name]?.width}
+        height={meta[name]?.height}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
         decoding="async"
         className={cn("object-cover", className)}
       />

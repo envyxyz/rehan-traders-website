@@ -76,7 +76,7 @@ export default function VisitPage() {
                   name="storefront"
                   alt={visitPage.mapAlt}
                   priority
-                  sizes="(min-width: 1024px) 600px, 100vw"
+                  sizes="(min-width: 1024px) 600px, calc(100vw - 2rem)"
                   className="size-full object-cover"
                 />
               </InteractiveMap>
@@ -130,7 +130,7 @@ export default function VisitPage() {
                 <Img
                   name="storefront"
                   alt={visitPage.mapAlt}
-                  sizes="(min-width: 1024px) 560px, 100vw"
+                  sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
                   className="aspect-4/3 w-full"
                 />
                 <figcaption className="p-4 text-caption text-steel">

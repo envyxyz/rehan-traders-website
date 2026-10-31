@@ -87,7 +87,7 @@ function Estimate() {
 function BeforeAfterSection() {
   const c = home.beforeAfter
   const frame = "aspect-4/3 w-full"
-  const sizes = "(min-width: 1024px) 640px, 100vw"
+  const sizes = "(min-width: 1024px) 640px, calc(100vw - 2rem)"
   return (
     <Section tone="panel">
       <Container className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
@@ -134,7 +134,7 @@ function Process() {
         </ol>
         {/* The interactive job card and tamper seal */}
         <Reveal className="mt-12 flex justify-center">
-          <div className="relative w-full max-w-2xl rounded-2xl bg-panel p-4 sm:p-8">
+          <div className="relative w-full max-w-2xl rounded-xl bg-panel p-4 sm:p-8">
             <JobCard />
           </div>
         </Reveal>
@@ -178,7 +178,7 @@ function Visit() {
         {/* Tap to load: nothing from google.com/maps until then (PRD §8). */}
         <Reveal className="lg:col-span-6">
           <InteractiveMap>
-            <Img name="storefront" alt={visitPage.mapAlt} sizes="(min-width: 1024px) 560px, 100vw" className="size-full object-cover" />
+            <Img name="storefront" alt={visitPage.mapAlt} sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)" className="size-full object-cover" />
           </InteractiveMap>
         </Reveal>
         <Reveal className="lg:col-span-6 lg:pl-4">

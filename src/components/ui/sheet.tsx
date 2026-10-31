@@ -34,7 +34,7 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "fixed z-50 flex flex-col gap-4 overflow-y-auto p-6 text-body shadow-float duration-(--duration-base) ease-drawer outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
+          "fixed z-50 flex flex-col gap-4 overflow-y-auto overscroll-contain p-6 text-body shadow-float duration-(--duration-base) ease-drawer outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
           sides[side],
           glass ? "glass" : "bg-card",
           className
