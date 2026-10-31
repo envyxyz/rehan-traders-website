@@ -43,6 +43,7 @@ export function Reveal({
   return (
     <div
       ref={ref}
+      data-reveal
       className={cn(seen ? "animate-rise" : "opacity-0", "motion-reduce:animate-none motion-reduce:opacity-100", className)}
       style={{ animationDelay: `${delay}s` }}
     >

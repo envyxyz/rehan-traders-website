@@ -578,3 +578,10 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Without JavaScript nothing reveals the Reveal blocks (motion.tsx), so they are shown from the start. */
+@media (scripting: none) {
+  [data-reveal] {
+    opacity: 1;
+  }
+}
