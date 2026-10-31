@@ -113,4 +113,4 @@ The merge of `phase9-audits` into `phase9` built, linted and typechecked. Two re
 
 ## Design and skill audits (round 2)
 
-_To be filled in by the orchestrator: design fixes, skill audits and image performance work from `phase9-round2`, and the re-run of the numbers above on the merged build._
+Merged build (`phase9-round2` included), 31 Oct 2026: build, lint and typecheck pass. Full e2e: 268 tests ran; the only 2 failures were 30-second test timeouts in axe, on a machine with about 1 GB of free memory and stale test servers. Re-run alone at the same 30-second limit, both passed (`axe /repairs` mobile light, `axe booking sheet` desktop dark). That re-run timed out once on `axe booking sheet` mobile dark, which then passed with a 180-second limit. No axe violations in any run. Lighthouse was not re-run on the merged build: the table above is from before `phase9-round2`, and 8 routes in it are unmeasured.

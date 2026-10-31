@@ -224,3 +224,7 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
   - `docs/LAUNCH.md`: Search Console, Bing, IndexNow (Crawler Hints), Business Profile link with UTM, GTM and GA4 setup, DebugView, key events.
 - Results: lint and typecheck pass; the export builds. Lighthouse mobile on all 18 routes: SEO 100, Accessibility 100, Best Practices 100; Performance 64 to 74 on an uncompressed local server (still the Phase 3 CPU issue, Phase 9). JSON-LD parses everywhere, no AggregateRating. Rich Results test needs a signed-in browser: in `docs/LAUNCH.md`. Screenshots: `design/phase-8/`.
 - Left: GA4 tags inside GTM, Search Console and Bing verification, DebugView check (all Phase 10). Adnan: walking route to G-88, registered name/NTN.
+
+### 2026-10-31 · Phase 9: tests and audits
+- Shipped: Playwright e2e and axe on every route (light and dark, desktop and phone), Lighthouse CI config, CSP in `public/_headers`, approved look fixes, audit fixes, 720w images, GTM after load, `src/app/loading.tsx` removed, `/api/health`, kitchen sink out of the production export. Runbook in `docs/GO-LIVE.md`, checklist in `docs/LAUNCH.md`, SEO audit in `docs/launch/seo-audit.md`.
+- Results and gaps: `docs/QA.md`. Lighthouse performance stays under 0.95 and home JS over the 120 KB budget; Ameer chose to document that gap.
