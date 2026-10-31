@@ -151,6 +151,8 @@ const sections: string[] = [
   visitPage.courierLede,
   ...visitPage.courierSteps.map((step, i) => `${i + 1}. ${step.text}`),
   visitPage.courierDelivery,
+  "",
+  `The same steps, with questions and answers, are on ${site.url}/courier`,
 
   hr(),
 

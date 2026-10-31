@@ -234,3 +234,9 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 ### 2026-10-31 · Phase 9: tests and audits
 - Shipped: Playwright e2e and axe on every route (light and dark, desktop and phone), Lighthouse CI config, CSP in `public/_headers`, approved look fixes, audit fixes, 720w images, GTM after load, `src/app/loading.tsx` removed, `/api/health`, kitchen sink out of the production export. Runbook in `docs/GO-LIVE.md`, checklist in `docs/LAUNCH.md`, SEO audit in `docs/launch/seo-audit.md`.
 - Results and gaps: `docs/QA.md`. Lighthouse performance stays under 0.95 and home JS over the 120 KB budget; Ameer chose to document that gap.
+
+### 2026-10-31 · Phase 11: courier page, problem index
+- Shipped: `/courier` ("Send your phone by courier"): the four steps, delivery line and three actions from `/visit#courier` (now one shared `CourierSteps` component), a four-question FAQ from confirmed facts (FAQPage JSON-LD, breadcrumbs), OG and Twitter images. Linked from the footer Shop links, the home "Outside Lahore?" line, a "How courier repairs work" link in `/visit#courier` (which still works), the sitemap, `llms.txt` and `llms-full.txt`; added to `tests/e2e/routes.ts`. No delivery times, prices or insurance named.
+- `/repairs`: "What's wrong with your phone?" list under the cards, driven by `problems` in `content.ts` (English text only), each item linking to its repair page.
+- Checks: typecheck, lint, build pass; pages and no-quote-promise e2e 22 passed; axe `/courier` and `/repairs` 8 passed. Links 44px tall at 390 and 1440, light and dark (only the shared breadcrumb "Home" link is smaller). Screenshots: `design/phase-11/`.
+- Not done: nothing pushed or merged. Repair-page FAQ answers unchanged.

@@ -22,6 +22,7 @@ const pages = [
   { label: "Repair estimate", path: "/estimate", note: "Pick the device and the fault to see the likely repair, or create a quote ticket with the problem and up to 3 photos" },
   { label: "Book a visit", path: "/book", note: "Choose a device, a fault and a visit time; no account needed" },
   { label: "Visit", path: "/visit", note: "Directions, hours, Google Map embed and the four courier steps" },
+  { label: "Send by courier", path: "/courier", note: "Phone repair by courier from outside Lahore: the four steps, who pays for delivery, and questions answered" },
   { label: "Reviews", path: "/reviews", note: "Customer reviews copied directly from Google Business Profile" },
   { label: "FAQ", path: "/faq", note: "Answers to common questions about repairs, pricing and visits" },
   { label: "About", path: "/about", note: "History since 2009, the open bench, and owner Adnan Ali" },

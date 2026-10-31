@@ -7,6 +7,7 @@ export const routes = [
   "/estimate",
   "/book",
   "/visit",
+  "/courier",
   "/reviews",
   "/faq",
   "/about",

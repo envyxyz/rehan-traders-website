@@ -11,7 +11,7 @@ import { Container, Section } from "@/components/layout"
 import { PriceLine } from "@/components/price-line"
 import { Heading, Text } from "@/components/typography"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
-import { actions, breadcrumbs, repairsPage, seo, services } from "@/content"
+import { actions, breadcrumbs, problems, repairsPage, seo, services } from "@/content"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.repairs.title, description: seo.repairs.description, path: "/repairs" })
@@ -62,6 +62,20 @@ export default function RepairsIndexPage() {
                     </div>
                   </div>
                 </Card>
+              </li>
+            ))}
+          </ul>
+
+          <h2 className="mt-16 font-display text-title-md text-ink">{repairsPage.problemsTitle}</h2>
+          <ul className="mt-4 grid gap-x-8 md:grid-cols-2">
+            {problems.map((p) => (
+              <li key={p.problem}>
+                <Link
+                  href={`/repairs/${p.service}`}
+                  className="flex min-h-11 items-center text-body-sm text-ink underline-offset-4 hover:underline"
+                >
+                  {p.problem}
+                </Link>
               </li>
             ))}
           </ul>

@@ -200,7 +200,7 @@ function Visit() {
           </Button>
           <Text size="body-sm" tone="muted" className="mt-5">
             {visit.courier}{" "}
-            <Link href="/visit#courier" className="text-ink underline underline-offset-4">
+            <Link href="/courier" className="text-ink underline underline-offset-4">
               {visit.courierLink}
             </Link>
           </Text>

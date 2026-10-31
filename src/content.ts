@@ -732,7 +732,7 @@ export const visit = {
     { label: "Sunday, Eid and Ashura", value: "Closed", days: [0] },
   ],
   courier: "Outside Lahore? We repair phones sent by courier.",
-  courierLink: "See the four steps",
+  courierLink: "See the four steps", // links to /courier
 } as const
 
 export const estimate = {
@@ -785,6 +785,7 @@ export const footer = {
     { label: "About", href: "/about" },
     { label: "Reviews", href: "/reviews" },
     { label: "FAQ", href: "/faq" },
+    { label: "Send by courier", href: "/courier" },
     // Warranty page publishes only once Adnan confirms terms
   ],
   directions: "Directions on Google Maps",
@@ -802,6 +803,7 @@ export const breadcrumbs = {
   reviews: "Reviews",
   visit: "Visit",
   faq: "Questions",
+  courier: "Courier",
   about: "About",
   privacy: "Privacy",
   terms: "Terms",
@@ -811,6 +813,7 @@ export const breadcrumbs = {
 export const repairsPage = {
   title: "Repairs",
   lede: "Phone and tablet repairs at Shop G-88, Hafeez Center, Lahore. Every repair starts with a free check, and when only the glass is cracked, only the glass is replaced.",
+  problemsTitle: "What's wrong with your phone?",
   whatWeFix: "What we fix",
   howItWorks: "How it works",
   faqTitle: "Questions about this repair",
@@ -866,6 +869,33 @@ export const visitPage = {
   ],
   courierDelivery: delivery,
   courierActions: { ticket: "Create a ticket", whatsapp: "Send photos on WhatsApp", call: `Call ${site.phone.display}` },
+  courierMore: "How courier repairs work",
+} as const
+
+/** The /courier page. Steps, delivery line and actions are the ones /visit#courier shows (Adnan, 30 Oct 2026). */
+export const courierPage = {
+  title: "Send your phone by courier",
+  lede: "Live outside Lahore? Rehan Traders, Shop G-88, Hafeez Center, Lahore repairs phones sent by courier from anywhere in Pakistan. It takes four steps.",
+  stepsTitle: "The four steps",
+  faqTitle: "Courier questions",
+  faq: [
+    {
+      q: "Can I send my phone by courier from outside Lahore?",
+      a: `Yes. Create a ticket on the website or call ${site.phone.display}, then send photos of the phone on WhatsApp. If possible, Rehan Traders quotes over the phone; otherwise you send the phone to Shop G-88, Hafeez Center, Lahore, where it is inspected and quoted, repaired once you agree, and sent back.`,
+    },
+    {
+      q: "How do I send the phone to Rehan Traders?",
+      a: facts.delivery,
+    },
+    {
+      q: "Do I agree to the price before the repair?",
+      a: "Yes. If a quote over the phone is not possible, Rehan Traders inspects the phone, gives you a quote, and repairs it once you agree.",
+    },
+    {
+      q: "How do I start a courier repair?",
+      a: `Create a ticket on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp.`,
+    },
+  ],
 } as const
 
 export const faqPage = {
@@ -1008,6 +1038,10 @@ export const seo = {
   visit: {
     title: "Visit Shop G-88, Hafeez Center, Lahore",
     description: "Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore. Monday to Saturday 11 AM to 10 PM, Friday break 1 to 2 PM.",
+  },
+  courier: {
+    title: "Phone repair by courier, from outside Lahore",
+    description: "Send your phone by courier for repair from anywhere in Pakistan. Rehan Traders, Shop G-88, Hafeez Center, Lahore inspects it, quotes, repairs it once you agree and sends it back.",
   },
   faq: {
     title: "Phone repair questions, Hafeez Center Lahore",

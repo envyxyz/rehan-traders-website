@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
-import { ArrowUpRight, Phone } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { CourierSteps } from "@/components/courier-steps"
 import { CtaBand } from "@/components/cta-band"
 import { HoursTable } from "@/components/hours-table"
 import { Icon, WhatsAppIcon } from "@/components/icon"
@@ -154,43 +155,15 @@ export default function VisitPage() {
             </Text>
           </div>
 
-          <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {visitPage.courierSteps.map((step, i) => (
-              <li key={step.title}>
-                <Card className="h-full p-6">
-                  <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-3 font-display text-title-md text-ink">{step.title}</h3>
-                  <Text tone="body" size="body-sm" className="mt-1.5">
-                    {step.text}
-                  </Text>
-                </Card>
-              </li>
-            ))}
-          </ol>
+          <CourierSteps from="visit" />
 
-          <Text tone="muted" size="body-sm" className="mt-5 max-w-2xl">
-            {visitPage.courierDelivery}
-          </Text>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button asChild size="lg" arrow>
-              <Link href="/estimate?tab=describe">{visitPage.courierActions.ticket}</Link>
-            </Button>
-            <Button asChild size="lg" variant="whatsapp">
-              <a href={site.whatsapp.href} data-track="whatsapp" data-track-from="visit">
-                <WhatsAppIcon />
-                {visitPage.courierActions.whatsapp}
-              </a>
-            </Button>
-            <Button asChild size="lg" variant="line">
-              <a href={site.phone.href} data-track="call" data-track-from="visit">
-                <Icon icon={Phone} />
-                {visitPage.courierActions.call}
-              </a>
-            </Button>
-          </div>
+          <Link
+            href="/courier"
+            className="mt-4 inline-flex min-h-11 items-center gap-1 font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
+          >
+            {visitPage.courierMore}
+            <Icon icon={ArrowRight} size="sm" />
+          </Link>
         </Container>
       </Section>
 

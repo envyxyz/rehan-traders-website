@@ -46,6 +46,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ],
     },
     {
+      url: `${site.url}/courier`,
+      lastModified,
+    },
+    {
       url: `${site.url}/reviews`,
       lastModified,
     },
