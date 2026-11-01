@@ -32,9 +32,9 @@ export default function FaqPage() {
           </div>
 
           <div className="mt-12 max-w-3xl">
-            <Accordion type="single" collapsible className="border-t border-hairline">
+            <Accordion className="border-t border-hairline">
               {faq.map((f) => (
-                <AccordionItem key={f.q} value={f.q}>
+                <AccordionItem key={f.q}>
                   <AccordionTrigger as="h2" className="text-left font-display text-title-md font-bold text-ink">
                     {f.q}
                   </AccordionTrigger>

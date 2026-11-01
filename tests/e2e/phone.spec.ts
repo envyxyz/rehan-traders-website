@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test"
 
-import { actions, assistant, booking, nav, ui } from "../../src/content"
+import { actions, assistant, nav, ui } from "../../src/content"
+import { booking } from "../../src/content-large"
 import { routes } from "./routes"
 
 // Phase 12. Phone only: the widths the shop's customers actually have.
@@ -59,7 +60,7 @@ test.describe("phone", () => {
   })
 
   test("the keyboard's next key moves from name to number", async ({ page }) => {
-    await page.goto("/estimate?tab=describe")
+    await page.goto("/quote?tab=describe")
     const name = page.getByLabel(booking.details.name)
     await name.fill("Ali")
     await name.press("Enter")
@@ -67,7 +68,7 @@ test.describe("phone", () => {
   })
 
   test("floating chrome steps aside while a field has focus", async ({ page }) => {
-    await page.goto("/estimate?tab=describe")
+    await page.goto("/quote?tab=describe")
     await expect(page.getByRole("button", { name: assistant.title })).toBeVisible()
     await page.getByLabel(booking.details.name).focus()
     await expect(page.getByRole("button", { name: assistant.title })).toBeHidden()

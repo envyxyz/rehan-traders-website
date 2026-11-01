@@ -7,7 +7,8 @@ import { ReviewCarousel } from "@/components/review-carousel"
 import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { breadcrumbs, reviews, reviewsPage, seo, ui } from "@/content"
+import { breadcrumbs, reviewsPage, seo, ui } from "@/content"
+import { reviews } from "@/content-large"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.reviews.title, description: seo.reviews.description, path: "/reviews" })
@@ -46,7 +47,7 @@ export default function ReviewsPage() {
             </div>
 
             <div>
-              <ReviewCarousel variant="all" />
+              <ReviewCarousel />
             </div>
           </div>
         </Container>

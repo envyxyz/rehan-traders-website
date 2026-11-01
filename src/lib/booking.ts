@@ -1,4 +1,5 @@
-import type { holidays, site } from "../content"
+import type { site } from "../content"
+import type { holidays } from "../content-large"
 
 // Type-only import, so scripts/check-booking.mjs can run this file under plain Node. Used by the
 // BookingFlow (client) and worker/book.ts (server), so both agree on what a valid slot and number are.
@@ -79,7 +80,7 @@ export function normalizePhone(input: string) {
 /** "+923001234567" → "0300 1234567". */
 export const displayPhone = (e164: string) => `0${e164.slice(3, 6)} ${e164.slice(6)}`
 
-// ─── Browser side: shared by the BookingFlow and the quote ticket form on /estimate ──────────────────────────────
+// ─── Browser side: shared by the BookingFlow and the quote ticket form on /quote ──────────────────────────────
 
 /** sessionStorage key: the confirmation page reads the booking from here, so nothing personal goes in a URL. */
 export const BOOKING_KEY = "rt-booking"

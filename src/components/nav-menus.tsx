@@ -15,7 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { actions, nav, services, site } from "@/content"
+import { actions, nav, site } from "@/content"
+import { services } from "@/content-large"
 import { menuStagger } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 

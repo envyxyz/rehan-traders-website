@@ -5,10 +5,10 @@ import { Estimator, EstimatorFromUrl } from "@/components/estimator"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
-import { estimator } from "@/content"
+import { estimator } from "@/content-large"
 import { pageMeta } from "@/lib/page-meta"
 
-export const metadata: Metadata = pageMeta({ title: estimator.seo.title, description: estimator.seo.description, path: "/estimate" })
+export const metadata: Metadata = pageMeta({ title: estimator.seo.title, description: estimator.seo.description, path: "/quote" })
 
 export default function EstimatePage() {
   return (

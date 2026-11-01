@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from "@playwright/test"
 
-import { actions, jobCardContent, nav, services, site, ui } from "../../src/content"
+import { actions, jobCardContent, nav, site, ui } from "../../src/content"
+import { services } from "../../src/content-large"
 import { routes } from "./routes"
 
 // The nav renders twice (desktop, phone); only the visible one counts per project.
@@ -251,9 +252,10 @@ test("phone: the menu items fade in one after another, and reduced motion drops 
   await opener.click()
   const sheet = page.getByRole("dialog", { name: nav.menu })
   const full = await motion(sheet)
-  expect(full.names).toEqual(nav.links.map(() => "rise"))
+  const rows = nav.links.length + 1 // Home, then the links
+  expect(full.names).toEqual(Array(rows).fill("rise"))
   expect(full.delays).toEqual([...full.delays].sort((a, b) => a - b))
-  expect(new Set(full.delays).size).toBe(nav.links.length)
+  expect(new Set(full.delays).size).toBe(rows)
   expect(full.slide).toBeGreaterThan(0)
 
   await page.keyboard.press("Escape")
@@ -261,7 +263,7 @@ test("phone: the menu items fade in one after another, and reduced motion drops 
   await page.emulateMedia({ reducedMotion: "reduce" })
   await opener.click()
   const calm = await motion(sheet)
-  expect(calm.names).toEqual(nav.links.map(() => "none"))
+  expect(calm.names).toEqual(Array(rows).fill("none"))
   expect(calm.slide).toBeLessThan(0.001) // the global reduced-motion rule sets 0.00001s
 })
 

@@ -52,7 +52,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 ## Capabilities and Constraints
 
 - Booking: device, fault, visit time, name and phone. Saved and emailed to the shop, then WhatsApp opens with a prefilled message.
-- Quote ticket: the Describe tab on /estimate sends name, number, device, message and up to 3 photos through the booking pipeline as a quote request; the shop replies on WhatsApp.
+- Quote ticket: the Describe it tab on /quote sends name, number, device, message and up to 3 photos through the booking pipeline as a quote request; the shop replies on WhatsApp.
 - AI chat assistant: answers from the site's own content only. Primary model Claude Haiku via OpenRouter, fallback Gemini via Google AI Studio, final fallback a fixed reply with WhatsApp and call links. Replies in the language the customer writes in (English, Roman Urdu or Urdu script).
 - Google reviews and rating: 5 real reviews copied into content.ts with an as-of date, linking to the Google listing (no Places API: no billing).
 - Prices: launch in quote mode (Adnan): no price line is shown and quotes are given on WhatsApp. Never promise how fast a quote comes. One switch in content.ts flips to "From Rs X" later; panel prices move fast, so the switch must stay one line.

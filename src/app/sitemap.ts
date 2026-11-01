@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 
-import { services, site } from "@/content"
+import { site } from "@/content"
+import { services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -31,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
     },
     {
-      url: `${site.url}/estimate`,
+      url: `${site.url}/quote`,
       lastModified,
     },
     {

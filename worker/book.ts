@@ -1,6 +1,7 @@
 import { z } from "zod"
 
-import { booking, faults, holidays, services, site } from "../src/content"
+import { site } from "../src/content"
+import { booking, faults, holidays, services } from "../src/content-large"
 import { displayPhone, isBookableSlot, normalizePhone, slotLabel } from "../src/lib/booking"
 
 export type BookEnv = { BOOKING_WEBHOOK_URL?: string; BOOKING_WEBHOOK_SECRET?: string }
@@ -65,7 +66,7 @@ const Booking = z
   })
   .strict()
   .refine((b) => !openFaults.includes(b.fault) || !!b.problem)
-  // A quote has no slot. It names a service, or (the ticket form on /estimate) is an open fault with the customer's words.
+  // A quote has no slot. It names a service, or (the ticket form on /quote) is an open fault with the customer's words.
   .refine((b) =>
     b.kind === "quote" ? b.slot === null && (!!b.service || (openFaults.includes(b.fault) && !!b.problem)) : b.slot !== null && isBookableSlot(b.slot, new Date(), site.hours, holidays)
   )

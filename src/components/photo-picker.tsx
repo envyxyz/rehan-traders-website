@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { Icon } from "@/components/icon"
 import { Plus, X } from "@/components/icons"
-import { booking } from "@/content"
+import { booking } from "@/content-large"
 import { busyStart, busyStop } from "@/lib/busy"
 import { uploadPhoto } from "@/lib/upload"
 

@@ -38,9 +38,9 @@ export default function CourierPage() {
       <Section tone="panel">
         <Container>
           <Heading as="h2">{courierPage.faqTitle}</Heading>
-          <Accordion type="single" collapsible className="mt-8 max-w-3xl border-t border-hairline">
+          <Accordion className="mt-8 max-w-3xl border-t border-hairline">
             {courierPage.faq.map((f) => (
-              <AccordionItem key={f.q} value={f.q}>
+              <AccordionItem key={f.q}>
                 <AccordionTrigger as="h3" className="text-left font-display text-title-md font-bold text-ink">
                   {f.q}
                 </AccordionTrigger>

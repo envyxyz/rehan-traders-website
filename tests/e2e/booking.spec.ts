@@ -1,7 +1,8 @@
 import { expect, test, type Page } from "@playwright/test"
 import sharp from "sharp"
 
-import { actions, booking, site } from "../../src/content"
+import { actions, site } from "../../src/content"
+import { booking } from "../../src/content-large"
 import { book, upload } from "../../worker/book"
 import { BOOKING_LIMIT } from "../../src/lib/booking"
 import { pickDevice } from "./helpers"
@@ -269,7 +270,7 @@ test("the Worker takes ordinary punctuation in the description and refuses contr
     expect(forwarded.problem).toBe(text)
     expect((await send("bad\u0007bell")).status).toBe(400)
 
-    // The quote ticket on /estimate has no service: allowed for an open fault with the customer's words, nothing else.
+    // The quote ticket on /quote has no service: allowed for an open fault with the customer's words, nothing else.
     const ticket = (extra: object) =>
       book(
         new Request("https://x/api/book", {

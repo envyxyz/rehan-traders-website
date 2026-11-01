@@ -1,4 +1,4 @@
-import { estimator } from "@/content"
+import { estimator } from "@/content-large"
 import { createOgImage, ogContentType, ogSize } from "@/lib/page-meta"
 
 export const dynamic = "force-static"

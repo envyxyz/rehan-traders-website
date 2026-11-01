@@ -25,11 +25,11 @@ const DZ = (s: string): Int32Array => {
     }
     return out
 }
-const GROUP_COUNT = 179
+const GROUP_COUNT = 180
 const customValidatorNames: string[] = []
-const edgeStart = PS(U("C20030213000002120004200100003000212002010012002200107201002000000302001060100000220030100520020000030020300120010100"))
-const labelStart = PS(U("1111411151111111911651194411112523415:78323332111172511113526313111111711616347111111911324572113653744322524541117:"))
-const labelText = "abcdeasefghinsetlmoprstunderlinewznimatespectgorightnessrderttom-bltolursor-spantarteividerop-shadowurationcorationlay-yilllexontapr-xyayscaleid-cols-xyeineadingft-clampax-bin-ltxyhw-screenhwpacityrutlinederigin-offsetblrtxyaceholderioghtngtateundedw-start-tchizepace-ytrokealeroll-pyadowrinkextoprackingnsformitionlate-xy-offsetill-change"
+const edgeStart = PS(U("C2003021300000212000420010000300021200201001200220021007201002000000302001060100000220030100520020000030020300120010100"))
+const labelStart = PS(U("1111411151111111911651194411112523415:7832333211117251111152226313111111711616347111111911324572113653744322524541117:"))
+const labelText = "abcdeasefghinsetlmoprstunderlinewznimatespectgorightnessrderttom-bltolursor-spantarteividerop-shadowurationcorationlay-yilllexontapr-xyayscaleid-cols-xyeiadingftnest-clampax-bin-ltxyhw-screenhwpacityrutlinederigin-offsetblrtxyaceholderioghtngtateundedw-start-tchizepace-ytrokealeroll-pyadowrinkextoprackingnsformitionlate-xy-offsetill-change"
 // pre-order tree: targets derived from edge counts via subtree sizes
 const edgeTarget = (() => {
     const N = edgeStart.length - 1
@@ -48,21 +48,21 @@ const edgeTarget = (() => {
     }
     return out
 })()
-const nodeGroup = U("0000000406780000000000000AB00000000000L0000000000000000W0000000000000b000000000000m00pq000000uv000000000~00000000", 1)
+const nodeGroup = U("0000000406780000000000000AB00000000000L000000000000000000X0000000000000c000000000000n00qr000000vw00000000000000000", 1)
 // vlists = op-pattern pool + per-list refs; the engine indexes these directly
 const vlistPat = PS(U("233634333335335125"))
 const vlistOps = U("324230325B:0325B:432553263253:8GA542H<C=132553;843258GAB:032")
-const vlistRef = U("01234445677086249602:;<<<675555<5=<5>?<5><<<<67046<<<2<<<<5360076<@65<2A50005556>07")
-const vlistGroup = DZ("00200200200200200200200200020020020020200200200200200200202002002020020020020020020020002000200020002002000200200200020000020020002000020020020020020020020200200200200200200200200200200200020020020020202002002002020020002002002020020002020202000200020002002000020200")
+const vlistRef = U("01234445677086249602:;<<<675555<5=0<5>?<5><<<<67046<<<2<<<<5360076<@65<2A50005556>07")
+const vlistGroup = DZ("0020020020020020020020020002002002002020020020020020020020200200202002002002002002002000200020002000200200020020200200020000020020002000020020020020020020020200200200200200200200200200200200020020020020202002002002020020002002002020020002020202000200020002002000020200")
 // nodeVlist rebuilt sparse: (anchor deltas, vlist ids)
 const nodeVlist = (() => {
-    const out = new Int32Array(117).fill(-1)
-    const A = DZ("424442222442262222224224424422426242422242222244222222222226242226242222424422424222")
-    const V = DZ("022222222202222222222222222222222222222222222222222222222222222222222222222222222222")
+    const out = new Int32Array(119).fill(-1)
+    const A = DZ("4244422224422622222242244244224262622422242222244222222222226242226242222424422424222")
+    const V = DZ("0222222222022222222222222222222222222222222222222222222222222222222222222222222222222")
     for (let i = 0; i < A.length; i++) out[A[i]!] = V[i]!
     return out
 })()
-const SETS = "container | block contents flow-root hidden inline inline-block inline-flex inline-grid inline-table list-item table table-caption table-cell table-column table-column-group table-footer-group table-header-group table-row table-row-group| not-sr-only sr-only|isolat e ion-auto|object- contain cover fill none scale-down|overflow- auto clip hidden scroll visible|overflow-x- auto clip hidden scroll visible|overflow-y- auto clip hidden scroll visible|overscroll- auto contain none| absolute fixed relative static sticky| collapse invisible visible|justify- around baseline between center center-safe end end-safe evenly normal start stretch|justify-self- auto center center-safe end end-safe start stretch|content- around baseline between center center-safe end end-safe evenly normal start stretch|items- baseline baseline-last center center-safe end end-safe start stretch|self- auto baseline baseline-last center center-safe end end-safe start stretch|place-items- baseline center center-safe end end-safe start stretch| italic not-italic| proportional-nums tabular-nums| no-underline overline|whitespace- break-spaces normal nowrap pre pre-line pre-wrap|break- all keep normal words|wrap- anywhere break-word normal|appearance- auto none|pointer-events- auto none|resize  -none -x -y|snap- align-none center end start|snap- both none x y|touch- auto manipulation none|touch-pan- down up y|select- all auto none text| accordion-down accordion-up bounce caret-blink collapsible-down collapsible-up in none out ping pulse rise spin| auto square video| dashed dotted double hidden none solid| above-bar auto full hero-gap px safe-bottom section sheet|auto |full | alias all-scroll auto cell col-resize context-menu copy crosshair default e-resize ew-resize grab grabbing help move n-resize ne-resize nesw-resize no-drop none not-allowed ns-resize nw-resize nwse-resize pointer progress row-resize s-resize se-resize sw-resize text vertical-text w-resize wait zoom-in zoom-out| auto from-font|none |initial | creep drawer in-out initial linear nav out| col col-reverse row row-reverse| nowrap wrap wrap-reverse| auto initial none| black bold extrabold extralight light medium normal semibold thin| above-bar hero-gap px safe-bottom section sheet| none subgrid| above-bar auto dvh dvw fit full hero-gap lh lvh lvw max min px safe-bottom screen section sheet svh svw| above-bar hero-gap loose none normal px relaxed safe-bottom section sheet snug tight|through | above-bar auto hero-gap px safe-bottom section sheet| above-bar auto dvh dvw fit full hero-gap lh lvh lvw max min none px safe-bottom screen section sheet svh svw| above-bar auto cards content dvh dvw estimate fit full hero-gap lvh lvw max min none panel prose px safe-bottom section sheet svh svw| above-bar auto cards content dvh dvw estimate fit full hero-gap lvh lvw max min none panel px safe-bottom screen section sheet svh svw| first last none| bottom bottom-left bottom-right center left left-bottom left-top right right-bottom right-top top top-left top-right| full lg md none pill sm xl xs| elevated float inner none| above-bar auto dvh dvw fit full hero-gap lvh lvw max min px safe-bottom section sheet svh svw| base body-md body-sm button caption display-hero display-lg display-md display-xl micro nav title-lg title-md| center end justify left right start| balance nowrap pretty wrap| normal tight tighter wide wider widest| cpu gpu none| all colors none opacity shadow transform| above-bar full hero-gap px safe-bottom section sheet| above-bar auto cards content dvh dvw estimate fit full hero-gap lvh lvw max min panel px safe-bottom screen section sheet svh svw| auto contents scroll transform".split('|').map((s) => {
+const SETS = "container | block contents flow-root hidden inline inline-block inline-flex inline-grid inline-table table table-caption table-cell table-column table-column-group table-footer-group table-header-group table-row table-row-group| not-sr-only sr-only|isolat e ion-auto|object- contain cover fill none scale-down|overflow- auto clip hidden scroll visible|overflow-x- auto clip hidden scroll visible|overflow-y- auto clip hidden scroll visible|overscroll- auto contain none| absolute fixed relative static sticky| collapse invisible visible|justify- around baseline between center center-safe end end-safe evenly normal start stretch|justify-self- auto center center-safe end end-safe start stretch|content- around baseline between center center-safe end end-safe evenly normal start stretch|items- baseline baseline-last center center-safe end end-safe start stretch|self- auto baseline baseline-last center center-safe end end-safe start stretch|place-items- baseline center center-safe end end-safe start stretch| italic not-italic| proportional-nums tabular-nums| no-underline overline|whitespace- break-spaces normal nowrap pre pre-line pre-wrap|break- all keep normal words|wrap- anywhere break-word normal|appearance- auto none|pointer-events- auto none|resize  -none -x -y|snap- align-none center end start|snap- both none x y|touch- auto manipulation none|touch-pan- down up y|select- all auto none text| accordion-down accordion-up bounce caret-blink collapsible-down collapsible-up in none out ping pulse rise spin| auto square video| dashed dotted double hidden none solid| above-bar auto full hero-gap px safe-bottom section sheet|auto |full | alias all-scroll auto cell col-resize context-menu copy crosshair default e-resize ew-resize grab grabbing help move n-resize ne-resize nesw-resize no-drop none not-allowed ns-resize nw-resize nwse-resize pointer progress row-resize s-resize se-resize sw-resize text vertical-text w-resize wait zoom-in zoom-out| auto from-font|none |initial | creep drawer in-out initial linear nav out| col col-reverse row row-reverse| nowrap wrap wrap-reverse| auto initial none| black bold extrabold extralight light medium normal semibold thin| above-bar hero-gap px safe-bottom section sheet| none subgrid| above-bar auto dvh dvw fit full hero-gap lh lvh lvw max min px safe-bottom screen section sheet svh svw| above-bar hero-gap loose none normal px relaxed safe-bottom section sheet snug tight|through |item | decimal disc none| above-bar auto hero-gap px safe-bottom section sheet| above-bar auto dvh dvw fit full hero-gap lh lvh lvw max min none px safe-bottom screen section sheet svh svw| above-bar auto cards content dvh dvw estimate fit full hero-gap lvh lvw max min none panel prose px safe-bottom section sheet svh svw| above-bar auto cards content dvh dvw estimate fit full hero-gap lvh lvw max min none panel px safe-bottom screen section sheet svh svw| first last none| bottom bottom-left bottom-right center left left-bottom left-top right right-bottom right-top top top-left top-right| full lg md none pill sm xl xs| elevated float inner none| above-bar auto dvh dvw fit full hero-gap lvh lvw max min px safe-bottom section sheet svh svw| base body-md body-sm button caption display-hero display-lg display-md display-xl micro nav title-lg title-md| center end justify left right start| balance nowrap pretty wrap| normal tight tighter wide wider widest| cpu gpu none| all colors none opacity shadow transform| above-bar full hero-gap px safe-bottom section sheet| above-bar auto cards content dvh dvw estimate fit full hero-gap lvh lvw max min panel px safe-bottom screen section sheet svh svw| auto contents scroll transform".split('|').map((s) => {
     const tails = s.split(' ')
     const prefix = tails.shift()!
     for (let i = 0; i < tails.length; i++) {
@@ -70,14 +70,14 @@ const SETS = "container | block contents flow-root hidden inline inline-block in
     }
     return tails
 })
-const AA = DZ("0000000000000000000000000000000428:6422682242002442822426222242442222282242242226622262442240024422424222")
-const AG = DZ("Ü222222222222222222222222222222ė2Ęĉ402228222ô2ó24224222222¾»222222222242À¹22422226222222422222222222222")
-const AS = DZ("02222222222222222222222222222222222221422223622220022K00NMPEH22324500082]J000000G:T0[8>H2I=Z22gj22200mp2q")
-const litAnchor = new Int32Array(686)
-const litGroup = new Int32Array(686)
-const litPool = new Int32Array(686)
+const AA = DZ("0000000000000000000000000000000428:642268224200244282242624220242442222282242242226622262442240024422424222")
+const AG = DZ("Þ222222222222222222222222222222ę2Ěċ402228222ö2õ24224222222À½222222222242À¹22422226222222422222222222222")
+const AS = DZ("02222222222222222222222222222222222221422223622220022K00NMPEH2222324500082aJ000000G:X0_8>L2M=^22kn22200qt2u")
+const litAnchor = new Int32Array(689)
+const litGroup = new Int32Array(689)
+const litPool = new Int32Array(689)
 let poolText = ''
-const poolOffsets = new Int32Array(624)
+const poolOffsets = new Int32Array(628)
 {
     const tailRef = new Map()
     let nextRef = 0
@@ -100,12 +100,12 @@ const poolOffsets = new Int32Array(624)
     }
 }
 // conflict adjacency (engine builds claim bitmask CSR at init)
-const adjGid = DZ("62R6<2262@2<<2:2666<H6DD2")
+const adjGid = DZ("62R6<2264@2<<2:2666<H6DD2")
 const adjStart = PS(U("::32:442:44:44>2421322131"))
-const adjTgt = DZ("Ť22222şŢť2Ŧ2222222222©2:2ê222Odê2¹aæ2µÎ82ä222íð÷6ê26ñî2í7T2Â222Ë152Ì2É3Ð2Ë7â2ËÎ222222222252Z222ç82äÍ2l2Px©¬­")
-const patGid = U("y")
+const adjTgt = DZ("Ŧ22222šŤŧ2Ũ2222222222©2:2ì222Odì2¹cè2·Ð82ä222íð÷6ê26ñî2í7T2Â222Ë152Ì2É3Ð2Ë7â2ËÎ222222222252Z222ç82äÍ2l2Px©¬­")
+const patGid = U("z")
 const patTgt = U("Q")
-const postfixLookupGroups = U("â")
+const postfixLookupGroups = U("ã")
 const orderSensitiveModifiers = "* ** after backdrop before details-content file first-letter first-line marker placeholder selection"
 export default {
     GROUP_COUNT, customValidatorNames, edgeStart, labelStart, labelText,

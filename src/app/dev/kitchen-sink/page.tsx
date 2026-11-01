@@ -21,7 +21,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Toaster } from "@/components/ui/sonner"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { actions, estimate, faq, faults, hero, nav, seo, services, site, ui } from "@/content"
+import { actions, estimate, faq, hero, nav, seo, site, ui } from "@/content"
+import { faults, services } from "@/content-large"
 import { duration } from "@/lib/tokens"
 import { ToastDemo } from "./toast-demo"
 
@@ -286,9 +287,9 @@ export default function KitchenSink() {
         </Block>
 
         <Block title={L.faq}>
-          <Accordion type="single" collapsible>
+          <Accordion>
             {faq.slice(0, 3).map((f) => (
-              <AccordionItem key={f.q} value={f.q}>
+              <AccordionItem key={f.q}>
                 <AccordionTrigger>{f.q}</AccordionTrigger>
                 <AccordionContent>{f.a}</AccordionContent>
               </AccordionItem>

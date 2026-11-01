@@ -1,4 +1,5 @@
-import { faq, facts, priceMode, problems, reviews, services, site } from "@/content"
+import { faq, facts, priceMode, problems, site } from "@/content"
+import { reviews, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -19,7 +20,7 @@ export const dynamic = "force-static"
 const pages = [
   { label: "Home", path: "/", note: "Landing page: hero, repair list, process, reviews, FAQ, CTA" },
   { label: "Repairs", path: "/repairs", note: "Every repair the shop lists, with links to individual repair pages" },
-  { label: "Repair estimate", path: "/estimate", note: "Pick the device and the fault to see the likely repair, or create a quote ticket with the problem and up to 3 photos" },
+  { label: "Get a Quote", path: "/quote", note: "Find your issue: pick the device and the fault to see the likely repair, or create a quote ticket with the problem and up to 3 photos" },
   { label: "Book a visit", path: "/book", note: "Choose a device, a fault and a visit time; no account needed" },
   { label: "Visit", path: "/visit", note: "Directions, hours, Google Map embed and the four courier steps" },
   { label: "Send by courier", path: "/courier", note: "Phone repair by courier from outside Lahore: the four steps, who pays for delivery, and questions answered" },

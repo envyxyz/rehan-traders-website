@@ -188,7 +188,7 @@
   --container-content: 90rem;  /* 1440px */
   --container-panel: 96rem;    /* hero panel cap, 1536px */
   --container-cards: 66rem;    /* the home repair cards: three to a row, with room at the sides, 1056px */
-  --container-estimate: 34rem; /* the /estimate card: one width for both tabs and the result, 544px */
+  --container-estimate: 34rem; /* the /quote card: one width for both tabs and the result, 544px */
 
   /* Radii: 18px cards, 28px panels, pills for controls. */
   --radius-xs: 0.25rem;
@@ -223,9 +223,6 @@
       transform: translateY(0.5rem);
     }
   }
-
-  --animate-accordion-down: accordion-down var(--duration-fast) var(--ease-out);
-  --animate-accordion-up: accordion-up var(--duration-fast) var(--ease-out);
 }
 
 @theme inline {
@@ -545,6 +542,23 @@ html[data-scrolled]:not([data-nav]) .nav-desktop {
   }
   a {
     text-underline-offset: 0.2em;
+  }
+  /* The native accordion's open and close (components/ui/accordion.tsx). Where unsupported it opens at once. */
+  [data-slot="accordion-item"] {
+    interpolate-size: allow-keywords;
+    &::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition: block-size var(--duration-fast) var(--ease-out), content-visibility var(--duration-fast) allow-discrete;
+    }
+    &[open]::details-content {
+      block-size: auto;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      &::details-content {
+        transition: none;
+      }
+    }
   }
 }
 

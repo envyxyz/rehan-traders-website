@@ -1,4 +1,5 @@
-import { seo, services, site } from "@/content"
+import { seo, site } from "@/content"
+import { services } from "@/content-large"
 import { createOgImage, ogContentType, ogSize } from "@/lib/page-meta"
 
 export const dynamic = "force-static"

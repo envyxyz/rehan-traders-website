@@ -6,7 +6,8 @@ import { CtaBand } from "@/components/cta-band"
 import { Container, Section } from "@/components/layout"
 import { ServiceCard } from "@/components/service-card"
 import { Heading, Text } from "@/components/typography"
-import { breadcrumbs, problems, repairsPage, seo, services } from "@/content"
+import { breadcrumbs, problems, repairsPage, seo } from "@/content"
+import { services } from "@/content-large"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.repairs.title, description: seo.repairs.description, path: "/repairs" })

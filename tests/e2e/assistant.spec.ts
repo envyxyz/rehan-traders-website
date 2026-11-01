@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
 
-import { actions, assistant, booking, estimator } from "../../src/content"
+import { actions, assistant } from "../../src/content"
+import { booking, estimator } from "../../src/content-large"
 import { MAX_INPUT, MAX_TURNS, parseReply, pieces } from "../../src/lib/assistant"
 import { pickDevice } from "./helpers"
 
@@ -106,7 +107,7 @@ test("chat falls back to WhatsApp and call when the Worker fails", async ({ page
 test("estimate: picking device and fault shows the repair in place of the form", async ({ page }) => {
   const errors: string[] = []
   page.on("pageerror", (e) => errors.push(String(e)))
-  await page.goto("/estimate")
+  await page.goto("/quote")
   const form = page.locator("form:visible")
   await form.getByRole("button", { name: estimator.submit }).click()
   await expect(form.getByRole("alert")).toHaveText(estimator.pickError)
@@ -149,7 +150,7 @@ test("estimate: the Describe tab sends a quote ticket and lands on the confirmat
     await route.fulfill({ json: { ok: true, job: "RT-0099" } })
   })
   // The homepage box opens this tab with its message prefilled and sends nothing by itself.
-  await page.goto("/estimate?q=Fold%20inner%20screen%20has%20a%20black%20line")
+  await page.goto("/quote?q=Fold%20inner%20screen%20has%20a%20black%20line")
   const form = page.locator("form:visible")
   await expect(form.getByLabel(estimator.ticket.message)).toHaveValue("Fold inner screen has a black line")
   expect(posts).toBe(0)
@@ -194,7 +195,7 @@ test("estimate: the Describe tab sends a quote ticket and lands on the confirmat
 
 test("estimate: the Describe tab falls back to a WhatsApp reference when the Worker is down", async ({ page }) => {
   await page.route("/api/book", (route) => route.fulfill({ status: 502, json: { ok: false, error: "webhook" } }))
-  await page.goto("/estimate?tab=describe")
+  await page.goto("/quote?tab=describe")
   const form = page.locator("form:visible")
   await pickDevice(page, "Samsung Galaxy Z Fold5", form)
   await form.getByLabel(estimator.ticket.message).fill("Dead after a drop")
@@ -209,7 +210,7 @@ test("estimate: the Describe tab falls back to a WhatsApp reference when the Wor
 
 test("estimate: switching tabs does not move the card (from lg up)", async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 0) < 1024, "below lg each panel has its own height")
-  await page.goto("/estimate")
+  await page.goto("/quote")
   const card = page.locator("[data-slot=card]").first()
   const pick = (await card.boundingBox())!
   await page.getByRole("radio", { name: estimator.mode.describe }).click()

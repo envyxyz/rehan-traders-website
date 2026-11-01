@@ -25,7 +25,7 @@ Check current docs with context7 before using any library API. Do not add a depe
 
 ## Hard rules
 
-1. **Copy lives only in `src/content.ts`.** Components receive text via props or import it from there. No string literals for user-facing text in components (aria-labels included). Unconfirmed facts are marked `// TODO(adnan): confirm` and must be resolved before launch.
+1. **Copy lives only in `src/content.ts` and `src/content-large.ts`.** The large file holds the big blocks (repair pages, reviews, booking, quote) so they stay out of every page's first load; `content.ts` never imports it. Components receive text via props or import it from there. No string literals for user-facing text in components (aria-labels included). Unconfirmed facts are marked `// TODO(adnan): confirm` and must be resolved before launch.
 2. **Tokens only.** Colours, type, spacing, radii, shadows, durations and easings come from the tokens in `src/app/globals.css` (`@theme`). No raw hex, no arbitrary Tailwind values (`text-[17px]`, `bg-[#...]`) in components. New value needed? Add a token, then use it.
 3. **Reuse before you build.** Check `src/components/ui` (shadcn primitives) and `src/components` before writing a new component. One Button, one Card, one Sheet, one Section, one Container.
 4. **Theme follows the device.** `prefers-color-scheme` only, no toggle. Every component is checked in light and dark. Background is static.

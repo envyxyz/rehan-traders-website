@@ -6,7 +6,8 @@ import { OpenStatus } from "@/components/open-status"
 import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
-import { actions, hero, reviews, site } from "@/content"
+import { actions, hero, site } from "@/content"
+import { reviews } from "@/content-large"
 import { heroStagger } from "@/lib/tokens"
 
 // Copy rises in with a stagger; the h1 never animates (it is the LCP element).

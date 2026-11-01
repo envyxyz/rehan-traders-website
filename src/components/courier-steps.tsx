@@ -40,7 +40,7 @@ export function CourierSteps({ from }: { from: string }) {
 
       <div className="mt-6 flex flex-wrap gap-3">
         <Button asChild size="lg" arrow>
-          <Link href="/estimate?tab=describe">{visitPage.courierActions.ticket}</Link>
+          <Link href="/quote?tab=describe">{visitPage.courierActions.ticket}</Link>
         </Button>
         <Button asChild size="lg" variant="whatsapp">
           <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" data-track="whatsapp" data-track-from={from}>

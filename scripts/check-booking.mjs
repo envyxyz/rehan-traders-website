@@ -1,7 +1,8 @@
 // Self-check for src/lib/booking.ts. Run: node scripts/check-booking.mjs (Node 23.6+ strips the TS types).
 import assert from "node:assert/strict"
 
-import { holidays, site } from "../src/content.ts"
+import { site } from "../src/content.ts"
+import { holidays } from "../src/content-large.ts"
 import { bookingDays, displayPhone, isBookableSlot, normalizePhone, slotLabel } from "../src/lib/booking.ts"
 
 const tz = site.hours.timezone

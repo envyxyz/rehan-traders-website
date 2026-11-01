@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test"
 
-import { reviews, reviewsPage } from "../../src/content"
+import { reviewsPage } from "../../src/content"
+import { reviews } from "../../src/content-large"
 
 test("reviews: every review is in the page, one is shown, arrow keys step and the others are inert", async ({ page }) => {
   await page.goto("/reviews")

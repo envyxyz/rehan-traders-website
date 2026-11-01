@@ -9,7 +9,8 @@ import { OpenStatus } from "@/components/open-status"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { actions, booking, seo, site } from "@/content"
+import { actions, seo, site } from "@/content"
+import { booking } from "@/content-large"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.book.title, description: seo.book.description, path: "/book" })

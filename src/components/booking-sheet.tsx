@@ -2,7 +2,7 @@
 
 import { BookingFlow } from "@/components/booking-flow"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
-import { booking, services } from "@/content"
+import { booking, services } from "@/content-large"
 
 /** The booking flow in a side sheet. Loaded by BookButton on the first hover, focus or tap, never in the page's first load. */
 export function BookingSheet({

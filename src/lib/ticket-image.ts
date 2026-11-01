@@ -1,4 +1,5 @@
-import { booking, showsFault, site, type BookingSummary } from "../content"
+import { site } from "../content"
+import { booking, showsFault, type BookingSummary } from "../content-large"
 import { ticketColors as C } from "./tokens"
 
 const SIZE = 1080

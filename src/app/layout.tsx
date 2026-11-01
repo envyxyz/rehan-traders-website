@@ -13,9 +13,8 @@ const gtmId = "GTM-TBXL7JMX"
 // until nav.tsx paints the island. This marks <html> while scrolled, and globals.css keeps the header out of sight until then.
 const scrolledFlag = `(()=>{const d=document.documentElement,f=()=>d.dataset.nav?removeEventListener("scroll",f):d.toggleAttribute("data-scrolled",scrollY>80);addEventListener("scroll",f,{passive:true});f()})()`
 
-// One variable family for headlines and body (weights 400–800). The opsz axis tightens
-// large headlines and opens small text automatically (font-optical-sizing: auto).
-const googleSans = Google_Sans_Flex({ subsets: ["latin"], display: "swap", axes: ["opsz"], variable: "--font-google-sans" })
+// One variable family for headlines and body (weights 400–800). No opsz axis: it nearly doubled the file on slow data.
+const googleSans = Google_Sans_Flex({ subsets: ["latin"], display: "swap", variable: "--font-google-sans" })
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Input, Textarea } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { actions, booking, estimator, priceMode, site, type BookingSummary } from "@/content"
+import { actions, priceMode, site } from "@/content"
+import { booking, estimator, type BookingSummary } from "@/content-large"
 import { MAX_INPUT, repairFor } from "@/lib/assistant"
 import { BOOKING_KEY, BOOKING_LIMIT, localRef, normalizePhone, now, recentBookings, rememberBooking } from "@/lib/booking"
 import { busyStart, busyStop } from "@/lib/busy"
@@ -22,7 +23,7 @@ import { cn, nextField } from "@/lib/utils"
 type Mode = "pick" | "describe"
 type Result = { device: string; faultSlug: string }
 
-/** /estimate?q=… (the homepage box) or ?tab=describe (the courier steps): opens the Describe tab, with the message prefilled. */
+/** /quote?q=… (the homepage box) or ?tab=describe (the courier steps): opens the Describe tab, with the message prefilled. */
 export function EstimatorFromUrl() {
   const params = useSearchParams()
   const q = params.get("q")?.slice(0, MAX_INPUT) ?? ""

@@ -1,6 +1,6 @@
+import dynamic from "next/dynamic"
 import Link from "next/link"
 
-import { BeforeAfter } from "@/components/before-after"
 import { StepCard } from "@/components/courier-steps"
 import { HoursTable } from "@/components/hours-table"
 import { Icon } from "@/components/icon"
@@ -11,7 +11,7 @@ import { JobCard } from "@/components/job-card"
 import { Container, Section } from "@/components/layout"
 import { Reveal } from "@/components/motion"
 import { OpenStatus } from "@/components/open-status"
-import { ReviewCarousel } from "@/components/review-carousel"
+import { ReviewCard } from "@/components/review-card"
 import { ServiceCard } from "@/components/service-card"
 import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"
@@ -19,9 +19,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { actions, estimate, faq, home, process, reviews, services, site, ui, visit, visitPage } from "@/content"
+import { aboutPage, actions, estimate, faq, home, process, site, ui, visit, visitPage } from "@/content"
+import { reviews, services } from "@/content-large"
 import { reveal } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
+
+// Hidden until a real pair exists (home.beforeAfter.show), so its code stays out of the first load until then.
+const BeforeAfter = dynamic(() => import("@/components/before-after").then((m) => m.BeforeAfter))
 
 const textLink = "inline-flex min-h-11 items-center gap-1.5 font-display text-button text-ink underline-offset-4 hover:underline"
 
@@ -57,14 +61,14 @@ function Repairs() {
             </li>
           ))}
         </ul>
-        <Estimate />
+        <FindYourIssue />
       </Container>
     </Section>
   )
 }
 
-/** Under the repairs: a fault not in the list goes to /estimate, which opens the Describe tab with it prefilled and sends nothing (PRD §5.6). */
-function Estimate() {
+/** Under the repairs: a fault not in the list goes to /quote, which opens the Describe tab with it prefilled and sends nothing (PRD §5.6). */
+function FindYourIssue() {
   return (
     <Reveal className="mt-4 grid gap-5 rounded-xl border border-hairline bg-card p-6 sm:p-8 lg:grid-cols-12 lg:items-center lg:gap-10">
       <div className="lg:col-span-5">
@@ -73,7 +77,7 @@ function Estimate() {
           {estimate.lede}
         </Text>
       </div>
-      <form action="/estimate" method="get" className="flex flex-col gap-2.5 sm:flex-row lg:col-span-7">
+      <form action="/quote" method="get" className="flex flex-col gap-2.5 sm:flex-row lg:col-span-7">
         <Label htmlFor="estimate-q" className="sr-only">
           {estimate.label}
         </Label>
@@ -142,25 +146,99 @@ function Process() {
 function Reviews() {
   const c = home.reviews
   return (
-    <Section>
-      <Container className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
-        <Reveal className="lg:col-span-5">
-          <Heading>{c.title}</Heading>
-          <p className="mt-6 flex items-center gap-3">
-            <b className="font-display text-display-lg text-ink tabular-nums">{reviews.rating.toFixed(1)}</b>
+    <Section tone="panel">
+      <Container>
+        <SectionHead title={c.title} link={{ href: "/reviews", label: actions.moreReviews }} />
+        <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-1">
+          <p className="flex items-center gap-3">
+            <b className="font-display text-display-md text-ink tabular-nums">{reviews.rating.toFixed(1)}</b>
             <span>
               <Stars rating={reviews.rating} />
               <span className="mt-1 block text-body-sm text-body">{c.summary}</span>
             </span>
           </p>
-          <a href={reviews.url} target="_blank" rel="noopener noreferrer" className={cn(textLink, "mt-4")}>
+          <a href={reviews.url} target="_blank" rel="noopener noreferrer" className={textLink}>
             {actions.readReviews}
             <span className="sr-only">, {ui.externalLink}</span>
             <Icon icon={ArrowUpRight} size="sm" />
           </a>
+        </div>
+        <ul className="mt-8 grid gap-4 lg:grid-cols-3">
+          {reviews.items.slice(0, reviews.featured).map((r, i) => (
+            <li key={r.author}>
+              <Reveal delay={i * reveal.stagger} className="h-full">
+                <ReviewCard review={r} />
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </Section>
+  )
+}
+
+/** A short list of plain answers, shared by How pricing works and The open bench. */
+function Points({ items }: { items: readonly { title: string; text: string }[] }) {
+  return (
+    <dl className="border-t border-hairline">
+      {items.map((p) => (
+        <div key={p.title} className="border-b border-hairline py-4">
+          <dt className="font-display text-title-md text-ink">{p.title}</dt>
+          <dd className="mt-1 text-body-md text-body">{p.text}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+function Pricing() {
+  const c = home.pricing
+  return (
+    <Section id="pricing">
+      <Container className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+        <Reveal className="lg:col-span-5">
+          <Heading>{c.title}</Heading>
         </Reveal>
         <Reveal className="lg:col-span-7">
-          <ReviewCarousel />
+          <Points items={c.points} />
+          <Button asChild size="lg" arrow wide className="mt-7">
+            <Link href="/quote">{actions.getQuote}</Link>
+          </Button>
+        </Reveal>
+      </Container>
+    </Section>
+  )
+}
+
+function Bench() {
+  const c = home.bench
+  const sizes = "(min-width: 1024px) 300px, calc(50vw - 1.5rem)"
+  return (
+    <Section tone="panel" id="bench">
+      <Container className="grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-12">
+        <Reveal className="order-2 grid grid-cols-2 gap-3 lg:order-1 lg:col-span-6">
+          <Img name={aboutPage.images.team} alt={aboutPage.images.teamAlt} sizes={sizes} className="aspect-square w-full rounded-lg" />
+          <Img name={aboutPage.images.bench} alt={aboutPage.images.benchAlt} sizes={sizes} className="aspect-square w-full rounded-lg" />
+        </Reveal>
+        <Reveal className="order-1 lg:order-2 lg:col-span-6">
+          <Heading>{c.title}</Heading>
+          <Text className="mt-4">{c.lede}</Text>
+          <div className="mt-6">
+            <Points items={c.points} />
+          </div>
+          <div className="mt-6 flex items-center gap-4">
+            {/* eslint-disable-next-line @next/next/no-img-element -- a static export has no image optimizer */}
+            <img src="/images/adnan-ali-192.webp" width={64} height={64} alt={c.owner.alt} loading="lazy" decoding="async" className="size-16 shrink-0 rounded-full object-cover" />
+            <p className="min-w-0 text-body-sm text-body">
+              <b className="block font-display text-body-md text-ink">
+                {c.owner.name}, {c.owner.role}
+              </b>
+              {c.owner.text}{" "}
+              <Link href="/about" className="text-ink underline underline-offset-4">
+                {c.owner.more}
+              </Link>
+            </p>
+          </div>
         </Reveal>
       </Container>
     </Section>
@@ -208,13 +286,13 @@ function Visit() {
 
 function Faq() {
   return (
-    <Section tone="panel">
+    <Section>
       <Container className="grid gap-8 lg:grid-cols-12">
         <SectionHead title={home.faq.title} link={{ href: "/faq", label: actions.allQuestions }} className="lg:col-span-4 lg:flex-col lg:items-start lg:justify-start" />
         <Reveal className="lg:col-span-8">
-          <Accordion type="single" collapsible className="border-t border-hairline">
+          <Accordion className="border-t border-hairline">
             {faq.slice(0, 5).map((f) => (
-              <AccordionItem key={f.q} value={f.q}>
+              <AccordionItem key={f.q}>
                 <AccordionTrigger>{f.q}</AccordionTrigger>
                 <AccordionContent>{f.a}</AccordionContent>
               </AccordionItem>
@@ -226,15 +304,20 @@ function Faq() {
   )
 }
 
-/** PRD §5 sections 2 to 8, between the hero and the CTA band. */
+/**
+ * Between the hero and the CTA band. The order answers the customer's fears in turn: can you fix it, do others trust you,
+ * what will it cost, can I see the work, what happens, where are you (docs/LOOP-9.md has the test behind it).
+ */
 export function HomeSections() {
   return (
     <>
       <Repairs />
+      <Reviews />
+      <Pricing />
+      <Bench />
       {home.beforeAfter.show && <BeforeAfterSection />}
       <Process />
       <Visit />
-      <Reviews />
       <Faq />
     </>
   )

@@ -1,6 +1,7 @@
 import { expect, test, type Locator } from "@playwright/test"
 
-import { actions, estimator, priceMode, services, states } from "../../src/content"
+import { actions, priceMode, states } from "../../src/content"
+import { estimator, services } from "../../src/content-large"
 import { pickDevice } from "./helpers"
 
 // Launch runs in quote mode: no price, no turnaround time, anywhere in a result.
@@ -12,7 +13,7 @@ test("launch is in quote mode", () => {
 })
 
 test("estimate: every fault ends in a result with a WhatsApp quote link and no price or turnaround", async ({ page }) => {
-  await page.goto("/estimate")
+  await page.goto("/quote")
   const form = page.locator("form:visible")
   await pickDevice(page, "Samsung Galaxy S23", form) // Start again keeps the device
   for (const f of estimator.faults) {
@@ -51,9 +52,9 @@ test("home repairs: eight icon cards, three to a row, the last two centred, the 
     await expect(cell.locator("[data-slot=card] > [aria-hidden] svg"), "one icon in the band").toHaveCount(1)
     await expect(cell.locator("img")).toHaveCount(0)
   }
-  // Keyboard and reading order inside a card: the title link (which covers the card), then Book.
+  // One action per card: the title link, which covers the card.
   const links = await cells.first().locator("a").evaluateAll((els) => els.map((el) => el.getAttribute("href")))
-  expect(links).toEqual([`/repairs/${services[0].slug}`, `/book?service=${services[0].slug}`])
+  expect(links).toEqual([`/repairs/${services[0].slug}`])
 
   const box = async (l: Locator) => (await l.boundingBox())!
   const g = await box(grid)

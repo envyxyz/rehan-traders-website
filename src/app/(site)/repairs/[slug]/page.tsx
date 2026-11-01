@@ -14,7 +14,8 @@ import { ServiceCard } from "@/components/service-card"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { actions, breadcrumbs, repairsPage, services, site } from "@/content"
+import { actions, breadcrumbs, repairsPage, site } from "@/content"
+import { services } from "@/content-large"
 import { faqSchema, serviceSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
@@ -148,9 +149,9 @@ export default async function ServicePage({ params }: PageProps) {
               </Text>
             </div>
             <div className="lg:col-span-7">
-              <Accordion type="single" collapsible className="border-t border-hairline">
+              <Accordion className="border-t border-hairline">
                 {service.faq.map((f) => (
-                  <AccordionItem key={f.q} value={f.q}>
+                  <AccordionItem key={f.q}>
                     <AccordionTrigger>{f.q}</AccordionTrigger>
                     <AccordionContent>{f.a}</AccordionContent>
                   </AccordionItem>

@@ -1,4 +1,5 @@
-import { aboutPage, services, site, type Service } from "../content"
+import { aboutPage, site } from "../content"
+import { services, type Service } from "../content-large"
 
 // Structured data per PRD §8. No AggregateRating: stars come from the Google Business Profile, not this site.
 // No priceRange, warranty or turnaround: none is confirmed for publishing.

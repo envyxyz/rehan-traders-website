@@ -6,7 +6,7 @@ Approved by Ameer, 28 Oct 2026, after three hero rounds. Visual reference: `desi
 
 **THESIS.** The site is the shop's job card, not a repair-template landing page. It refuses the category default of a dark hero with a stock cracked phone and a wall of equal icon cards.
 
-**OWN-WORLD.** Paper canvas, ink type and ink pill buttons, one Signal Red line or number per view. Concrete inset panels with 28px corners. Liquid glass only on floating chrome. Archivo 800 headlines, Inter body. AI-cleaned real photos of the G-88 bench. The red job number and the tamper seal are the brand's marks of care.
+**OWN-WORLD.** Paper canvas, ink type and ink pill buttons, one Signal Red line or number per view. Concrete inset panels with 28px corners. Liquid glass only on floating chrome. Archivo 800 headlines, Inter body. Real photos of the G-88 bench. The red job number and the tamper seal are the brand's marks of care.
 
 **STORY.** The visitor sees a fold phone open on a booked job card, reads "Cracked glass? Fixed at G-88.", finds the rating, phone and open status without scrolling, and books or WhatsApps. Lower down: cards prove what is fixed, the before/after proves the result, four steps show the job card process, live Google reviews close the doubt.
 
@@ -57,12 +57,12 @@ Look: shot on iPhone 15 Pro main camera, natural Smart HDR, slight grain, true c
 | Parts drawers, tidy | `..._07_parts-drawers.jpg` | About |
 | Machine corner (laminator) | `..._08_machine-corner.jpg` | Touch glass |
 | Storefront, touch-ups only | `..._01_storefront.jpg` | Visit |
-| Close-ups (new): glass separation, Fold inner panel, iPhone back glass, battery swap, charging port, wet board cleaning, tablet screen | generated to match the bench | Service cards and pages |
+| Close-ups: glass separation, Fold inner panel, iPhone back glass, battery swap, charging port, wet board cleaning, tablet screen | real desk images (confirmed by Ameer, 1 Nov 2026) | Service cards and pages |
 | Before/after pair | placeholder generated; replace with a real job before launch | Homepage slider |
 
 Pipeline: `scripts/images.mjs` sends source + prompt to an OpenRouter image model, writes `public/images/<name>-<width>.avif|webp` at fixed widths and a `<name>.json` sidecar with the exact prompt and source (provenance). Pages use those files with `srcset` (static export, no image optimizer).
 
-New photos: Ameer shoots them from the shot list (plan PDF, AI examples in `design/shot-examples/`). Real shots replace generated close-ups wherever they exist; the before/after pair must be real.
+New photos: Ameer shoots them from the shot list (plan PDF, AI examples in `design/shot-examples/`). The before/after pair must be real.
 
 ## Later options
 

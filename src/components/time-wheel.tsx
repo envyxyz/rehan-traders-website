@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { booking } from "@/content"
+import { booking } from "@/content-large"
 import { cn } from "@/lib/utils"
 
 const VISIBLE = 3 // rows on show; the middle one is the pick. Three keep the whole visit step on one screen.

@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test"
 
-import { services } from "../../src/content"
+import { services } from "../../src/content-large"
 import { chatSystem } from "../../src/lib/assistant"
 
 // The shop does not promise a quote time ("5 minutes"). This keeps the line from coming back.
 const promise = /\b(5|five)\s+minutes?\b/i
-const paths = ["/", "/repairs", `/repairs/${services[0].slug}`, "/estimate", "/book"]
+const paths = ["/", "/repairs", `/repairs/${services[0].slug}`, "/quote", "/book"]
 
 for (const path of paths) {
   test(`${path} makes no "5 minutes" quote promise`, async ({ page }) => {

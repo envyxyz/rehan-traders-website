@@ -1,4 +1,5 @@
-import { aboutPage, faq, facts, faqPage, priceMode, privacyPage, problems, repairsPage, reviews, reviewsPage, services, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
+import { aboutPage, faq, facts, faqPage, priceMode, privacyPage, problems, repairsPage, reviewsPage, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
+import { reviews, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -118,7 +119,7 @@ const sections: string[] = [
   hr(),
 
   `## How to Get a Quote`,
-  `URL: ${site.url}/estimate`,
+  `URL: ${site.url}/quote`,
   "",
   facts.quote,
 
@@ -166,7 +167,7 @@ const sections: string[] = [
   "",
   ...reviews.items
     .filter((r) => r.weight >= 2)
-    .map((r) => `> "${r.text}" — ${r.author}, ${r.rating}★, ${r.date}`),
+    .map((r) => `> "${r.text}" — ${r.author}, ${r.rating}★, ${r.when}`),
 
   hr(),
 

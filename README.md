@@ -63,7 +63,7 @@ The site is a Cloudflare Worker with static assets: the export in `out/` is serv
 
 - **Warranty**: Not always given. Discussed at the counter; it varies with the model, the repair and the parts chosen.
 - **Turnaround**: Standard screen / panel replacement in as little as 60 minutes; complex foldable devices (Galaxy Z Fold/Flip) up to one day depending on parts availability.
-- **Courier**: Nationwide courier repairs accepted. Customers submit a quote ticket on `/estimate` or contact via WhatsApp/phone before dispatch.
+- **Courier**: Nationwide courier repairs accepted. Customers submit a quote ticket on `/quote` or contact via WhatsApp/phone before dispatch.
 - **Open Bench**: All diagnostics and micro-soldering repairs take place at an open bench in Shop G-88, Hafeez Center.
 
 ## Docs

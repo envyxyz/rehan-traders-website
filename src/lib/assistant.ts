@@ -1,4 +1,5 @@
-import { estimator, facts, faq, price, priceMode, process, reviews, services, site, type EstimateFault, type Service } from "../content"
+import { facts, faq, price, priceMode, process, site } from "../content"
+import { estimator, reviews, services, type EstimateFault, type Service } from "../content-large"
 
 // Shared by the Worker (worker/chat.ts) and the client (ChatPanel, Estimator), so both agree on
 // the limits, the reply format and how a fault maps to a repair. Relative imports: the Worker bundles this file.
@@ -26,7 +27,7 @@ export const knowledge = [
   `Water-resistance seal: ${facts.seal} Never say the phone is water resistant afterwards.`,
   `Warranty: ${facts.warranty} Never state a number of days or months.`,
   `Repair time: ${facts.turnaround} ${facts.turnaroundFold} Say "as little as" and "up to", never "guaranteed", and give the 60 minutes only for a normal panel (screen) change.`,
-  `Quotes: ${facts.quote} The ticket form is the Describe it tab on the Repair estimate page (/estimate): name, mobile number, device, message and up to 3 photos.`,
+  `Quotes: ${facts.quote} The ticket form is the Describe it tab on the Get a Quote page (/quote): name, mobile number, device, message and up to 3 photos.`,
   `Booking: on this website (Book a visit): pick the device, the fault and a visit time, then a name and mobile number. No account, no payment.`,
   priceMode === "quote"
     ? `Prices: the shop does not publish prices, because part prices change daily. For any repair, tell the customer to message the shop on WhatsApp with the exact model and the shop will send a quote. Never say how quickly the quote or the repair will come.`

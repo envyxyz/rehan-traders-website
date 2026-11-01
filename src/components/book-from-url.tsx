@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation"
 
 import { BookingFlow } from "@/components/booking-flow"
 import { Text } from "@/components/typography"
-import { services } from "@/content"
+import { services } from "@/content-large"
 
 /** /book?service=SLUG: the only booking data that ever appears in a URL. Unknown slugs are ignored. */
 export function BookFromUrl() {

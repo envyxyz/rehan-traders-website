@@ -13,7 +13,8 @@ import { PhotoPicker, type Photo } from "@/components/photo-picker"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem, TogglePill } from "@/components/ui/radio-group"
 import { TimeWheel } from "@/components/time-wheel"
-import { actions, booking, faults, holidays, priceMode, services, site, type BookingSummary } from "@/content"
+import { actions, priceMode, site } from "@/content"
+import { booking, faults, holidays, services, type BookingSummary } from "@/content-large"
 import {
   BOOKING_KEY,
   BOOKING_LIMIT,
