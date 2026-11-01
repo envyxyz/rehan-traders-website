@@ -239,6 +239,7 @@ test("the home hero has its own chat button; the corner one comes in on scroll",
   await page.locator("#top").getByRole("button", { name: actions.askAi }).click()
   await expect(page.getByRole("dialog", { name: assistant.title })).toBeVisible()
   await page.keyboard.press("Escape")
+  await expect(page.getByRole("dialog", { name: assistant.title })).toBeHidden() // the open sheet locks scrolling
   await page.locator("#repairs").scrollIntoViewIfNeeded()
   await expect(corner).toBeVisible()
 })
@@ -326,3 +327,21 @@ test.describe("POST /api/book", () => {
     expect((await page.request.get("/api/book")).status()).toBe(405)
   })
 })
+
+for (const path of ["/book", "/quote"]) {
+  test(`${path}: what is typed before the page is live survives it going live`, async ({ page }) => {
+    await page.route("**/_next/static/chunks/**", async (route) => {
+      await new Promise((r) => setTimeout(r, 1500))
+      await route.continue()
+    })
+    await page.goto(path, { waitUntil: "domcontentloaded" })
+    const field = page.getByLabel(booking.device.label).locator("visible=true").first()
+    await field.fill("iPhone 13")
+    await page.waitForFunction(() => {
+      const el = document.querySelector("main input")
+      return !!el && Object.keys(el).some((k) => k.startsWith("__reactProps"))
+    })
+    await page.waitForTimeout(500)
+    await expect(field).toHaveValue("iPhone 13")
+  })
+}

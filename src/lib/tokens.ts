@@ -1,8 +1,6 @@
 // JS mirrors of tokens in globals.css, for places that cannot read CSS vars (scripts, metadata).
 export const duration = { press: 0.1, fast: 0.2, base: 0.35, reveal: 0.7 } as const
 
-/** Scroll reveal: 8px rise, once, when 15% visible. */
-export const reveal = { rise: 8, amount: 0.15, stagger: 0.06 } as const
 
 /** Hero copy entrance stagger, seconds (CSS animate-rise). */
 export const heroStagger = 0.08

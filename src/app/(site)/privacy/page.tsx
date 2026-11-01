@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import { CtaBand } from "@/components/cta-band"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { breadcrumbs, privacyPage, seo } from "@/content"
@@ -39,9 +38,6 @@ export default function PrivacyPage() {
             ))}
           </div>
         </Container>
-      </Section>
-
-      <CtaBand />
-    </>
+      </Section>    </>
   )
 }

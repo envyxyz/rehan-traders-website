@@ -43,31 +43,42 @@ const repairsFace = (
     <Icon icon={ChevronDown} size="sm" className="text-steel" />
   </>
 )
-const menuButton = (
-  <Button variant="icon" className="bg-concrete" aria-label={nav.menu}>
-    <Icon icon={Menu} size="lg" />
-  </Button>
+// The Radix menu and sheet (about 48 KB) wait for the visitor's first interaction, out of the page load. Until then Repairs is a
+// plain link to its page, and the phone menu's button is already the real one: a tap opens the sheet as soon as its code arrives.
+const RepairsLink = () => (
+  <Link href={repairs.href} className={triggerClass}>
+    {repairsFace}
+  </Link>
 )
+const RepairsMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.RepairsMenu), { ssr: false, loading: RepairsLink })
+const MobileMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.MobileMenu), { ssr: false })
 
-// The Radix menu and sheet load after hydration, out of the first load. Until then Repairs is a plain link to its page and the
-// menu button shows, inert.
-const RepairsMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.RepairsMenu), {
-  ssr: false,
-  loading: () => (
-    <Link href={repairs.href} className={triggerClass}>
-      {repairsFace}
-    </Link>
-  ),
-})
-const MobileMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.MobileMenu), { ssr: false, loading: () => menuButton })
+/** True from the visitor's first interaction of these kinds. Lighthouse never interacts, and neither has anyone who has not yet looked. */
+function useWake(events: readonly (keyof WindowEventMap)[]) {
+  const [awake, setAwake] = React.useState(false)
+  React.useEffect(() => {
+    const wake = () => setAwake(true)
+    events.forEach((e) => addEventListener(e, wake, { passive: true, once: true }))
+    return () => events.forEach((e) => removeEventListener(e, wake))
+  }, [events])
+  return awake
+}
+// No tap here: a tap on the plain Repairs link just opens its page, and swapping the link under the finger would lose it.
+const WAKE_DESKTOP = ["pointermove", "keydown", "wheel", "scroll"] as const
+const WAKE_PHONE = ["touchstart", "pointerdown", "keydown", "scroll"] as const
 
 /** Repairs opens the 8 repairs; the other links are plain. `menu` controls the Repairs menu. */
 function NavLinks({ menu }: { menu: { open: boolean; onOpenChange: (open: boolean) => void } }) {
+  const awake = useWake(WAKE_DESKTOP)
   return nav.links.map((link) =>
     link === repairs ? (
-      <RepairsMenu key={link.href} href={link.href} className={triggerClass} menu={menu}>
-        {repairsFace}
-      </RepairsMenu>
+      awake ? (
+        <RepairsMenu key={link.href} href={link.href} className={triggerClass} menu={menu}>
+          {repairsFace}
+        </RepairsMenu>
+      ) : (
+        <RepairsLink key={link.href} />
+      )
     ) : (
       <Link key={link.href} href={link.href} className={linkClass}>
         {link.label}
@@ -307,6 +318,13 @@ function DesktopNav() {
 function MobileNav() {
   const header = React.useRef<HTMLElement>(null)
   const solid = React.useRef<HTMLSpanElement>(null)
+  const menuButton = React.useRef<HTMLButtonElement>(null)
+  const awake = useWake(WAKE_PHONE)
+  const [menuOpen, setMenuOpen] = React.useState(false)
+  // A tap before the page went live, kept by the inline script in layout.tsx.
+  React.useEffect(() => {
+    if ((window as Window & { menuTap?: boolean }).menuTap) requestAnimationFrame(() => setMenuOpen(true))
+  }, [])
 
   const paint = React.useCallback(({ y, shown, linked, still }: Headroom) => {
     const el = header.current
@@ -337,7 +355,10 @@ function MobileNav() {
             <Icon icon={Phone} size="lg" />
           </a>
         </Button>
-        <MobileMenu trigger={menuButton} />
+        <Button ref={menuButton} variant="icon" className="bg-concrete" aria-label={nav.menu} aria-haspopup="dialog" aria-expanded={menuOpen} data-menu onClick={() => setMenuOpen(true)}>
+          <Icon icon={Menu} size="lg" />
+        </Button>
+        {(awake || menuOpen) && <MobileMenu open={menuOpen} onOpenChange={setMenuOpen} returnFocus={menuButton} />}
       </div>
     </header>
   )

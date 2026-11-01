@@ -12,8 +12,16 @@ const repairs = nav.links.find((l) => l.href === "/repairs")!
 
 // The Radix menu and the phone sheet are next/dynamic chunks that load after hydration. Until then the same-looking buttons
 // are inert placeholders, and a click or Enter on one is lost. The loaded triggers carry aria-haspopup; wait for it.
-const repairsLoaded = (trigger: Locator) => expect(trigger).toHaveAttribute("aria-haspopup", "menu")
-const sheetLoaded = (opener: Locator) => expect(opener).toHaveAttribute("aria-haspopup", "dialog")
+const repairsLoaded = async (trigger: Locator) => {
+  // The menus load on the first interaction, and one before hydration goes unheard, so keep moving until it is.
+  let x = 5
+  await expect(async () => {
+    await trigger.page().mouse.move(x++, 5)
+    await expect(trigger).toHaveAttribute("aria-haspopup", "menu", { timeout: 500 })
+  }).toPass()
+}
+// Hydrated: the scroll listeners are on. The sheet's code follows the first tap, and the tap waits for it.
+const sheetLoaded = (opener: Locator) => expect.poll(() => opener.evaluate((el) => Object.keys(el).some((k) => k.startsWith("__reactProps")))).toBe(true)
 
 test("desktop: the top bar links go to their pages, and Repairs opens the eight repairs", async ({ page, isMobile }) => {
   test.skip(isMobile, "phones use the menu sheet")
@@ -252,7 +260,7 @@ test("phone: the menu items fade in one after another, and reduced motion drops 
   await opener.click()
   const sheet = page.getByRole("dialog", { name: nav.menu })
   const full = await motion(sheet)
-  const rows = nav.links.length + 1 // Home, then the links
+  const rows = nav.links.length + 2 // Home, the links, Courier
   expect(full.names).toEqual(Array(rows).fill("rise"))
   expect(full.delays).toEqual([...full.delays].sort((a, b) => a - b))
   expect(new Set(full.delays).size).toBe(rows)
@@ -302,4 +310,24 @@ test("the logo link goes home from any page", async ({ page, isMobile }) => {
   await page.goto("/faq")
   await (isMobile ? phone(page) : desktop(page)).getByRole("link", { name: nav.home }).first().click()
   await expect(page).toHaveURL("/")
+})
+
+test("phone: a menu tap before the page is live still opens the menu", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "desktop uses the top bar")
+  await page.route("**/_next/static/chunks/**", async (route) => {
+    await new Promise((r) => setTimeout(r, 1500))
+    await route.continue()
+  })
+  await page.goto("/", { waitUntil: "domcontentloaded" })
+  await page.getByRole("button", { name: nav.menu }).click()
+  await expect(page.getByRole("dialog", { name: nav.menu })).toBeVisible()
+})
+
+test("the menu code is not part of the page load: it waits for the first interaction", async ({ page }) => {
+  const files: string[] = []
+  page.on("response", (r) => r.url().includes("/_next/static/chunks/") && files.push(r.url()))
+  await page.goto("/", { waitUntil: "networkidle" })
+  const before = files.length
+  await page.mouse.move(40, 40)
+  await expect.poll(() => files.length).toBeGreaterThan(before)
 })

@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
-import { Suspense } from "react"
 
 import { BookFromUrl } from "@/components/book-from-url"
-import { BookingFlow } from "@/components/booking-flow"
 import { WhatsAppIcon } from "@/components/icon"
 import { Container, Section } from "@/components/layout"
 import { OpenStatus } from "@/components/open-status"
@@ -42,9 +40,7 @@ export default function BookPage() {
         </div>
         <Card className="min-w-0 p-5 max-md:flex-1 sm:p-7">
           {/* The static HTML has the plain flow; the client reads ?service= and narrows it. */}
-          <Suspense fallback={<BookingFlow />}>
-            <BookFromUrl />
-          </Suspense>
+          <BookFromUrl />
         </Card>
       </Container>
     </Section>

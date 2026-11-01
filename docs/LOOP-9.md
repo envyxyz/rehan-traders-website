@@ -6,6 +6,31 @@ Branch `loop/trust-conversion`, one commit per round, never pushed, never merged
 
 Screenshots: `../.agency/build/website-shots/loop-9/` in the client folder (outside this repo).
 
+## How a round runs (the brief, for any session picking this up)
+
+One full round each time, one commit per round. Read this file first.
+
+1. **Measure:** build, lint, typecheck, Playwright e2e and axe; Lighthouse mobile median of 3 on `/`, `/repairs/galaxy-z-fold-flip`, `/book`, `/quote` against the preview; home first-load JS; home on slow 4G with 4x CPU.
+2. **Find** issues with evidence, ranked by effect on trust and conversion.
+3. **Choose 3 to 5** changes. Trace everything each one touches.
+4. **Verify:** real screenshots at 390 and 1440, light and dark; real flows with mocked APIs; keyboard and reduced motion. Revert what makes numbers or pages worse. A claim needs output or a screenshot.
+5. **Independent score:** a fresh subagent with no change log, only a frozen copy's URL and the rubric below. Harsh, measured on finding flaws, evidence for every score.
+6. **Log** scores, gates, changes and next targets here. Commit locally.
+
+**Rubric:** use the site as (1) a Lahore customer with a cracked Fold on a mid-range phone, (2) a sceptic burned before by Hafeez Center shops, (3) a customer outside Lahore deciding whether to courier a phone. Score 0 to 10: Trust, Conversion, Clarity of copy, Visual polish, Speed feel, Mobile experience, Overall. Tell the reviewer these are deliberate and not to be scored down: no prices, no warranty length, no review count, no sticky bottom bar. Give it no source code; it must not send a real form or message (mock `/api/**`).
+
+**Gates, all needed for a 9:** build, lint, typecheck, e2e and axe pass. Lighthouse mobile accessibility, best practices and SEO 95+, performance 90+ (95 target); if the fold or framework blocks it, show the measured breakdown instead of weakening the gate. Home first-load JS 120 KB gzip or less, or a breakdown showing it is the smallest achievable with the fold. No horizontal overflow from 320 to 1920, targets at least 44px, no truncated key words, skeletons match what they replace.
+
+**Stop when:** (A) all gates pass and Trust, Conversion and Overall are 9+ from the reviewer two rounds in a row; or (B) 8 rounds are done; or (C) two rounds in a row raise no score, or all that remains needs Adnan or real customer data. Never lower a gate or inflate a score. On B or C, say plainly it did not reach 9 and what blocks it.
+
+**Hard rules:** CLAUDE.md applies. Keep the visual identity and the hero's layout, 3D fold and headline; hero copy ideas are logged only. No dark patterns, invented claims or testimonials; review text stays as written. No prices anywhere. No new paid service, no new dependency unless needed. No sticky bottom bar. Never send a real booking, upload or chat: this worktree has no `.env.local` on purpose; form tests use the route mocks. **Never push or merge to main without Ameer asking for that push** (one checkpoint approved so far, deployed as `612bc21`). Pushing main deploys production. `origin/main` can move: fetch first, merge, never force.
+
+**Final report when the loop stops:** leave the site running and give the link; before and after scorecard; the changes that mattered most; before and after screenshots at 390 and 1440; gates with real numbers; what was tried and rejected; questions for Adnan by value; what was not verified. State that conversion scores are expert judgement until real traffic confirms them.
+
+**Tools** (outside the repo, in `../.agency/build/website-shots/loop-9/tools/`, run from this worktree's root): `js-size.mjs <page.html>`; `shots.mjs <base> <outDir> [paths]`; `slice.mjs <img> <prefix> <height> <cols>`; `slow4g.mjs <base>`; `lh.cjs` with `pnpm exec lhci collect --config=<path>` and env `LH_BASE`, `CHROME_PATH` (Edge at `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`); `lh-report.mjs`; `lh-home.mjs`. Frozen reviewer copy: copy `out/` beside a `{ "name", "compatibility_date", "assets": { "directory", "not_found_handling": "404-page" } }` config and serve it with wrangler on its own port.
+
+**Traps:** restart `wrangler dev` after every rebuild: it keeps a stale asset list, and prefetch files then 404 on every page (it failed 43 tests and cost best practices 4 points). The machine has 4 CPUs and other sessions also run tests, so timeouts under load need a solo re-run before they count, and Lighthouse performance swings by about 10 points between runs. Run e2e with `E2E_PORT=8801` and `--workers=3`. A new phase of `.reveal` means axe runs under reduced motion.
+
 ## Standing instructions from Ameer
 
 - **No review count anywhere new.** It goes out of date fast (1 Nov 2026). Item 4's "show the 49 count" is cancelled. The existing count in `llms.txt`, `llms-full.txt` and the chat knowledge is left as it was; each states its as-of date.
@@ -35,6 +60,50 @@ Snapshotted as commit `2fa759c` from the uncommitted work on main, without touch
 | Round | Trust | Conversion | Clarity | Polish | Speed feel | Mobile | Overall |
 |---|---|---|---|---|---|---|---|
 | Baseline, commit `2fa759c` | 6.0 | 6.2 | 6.0 | 7.2 | 6.5 | 7.0 | 6.3 |
+| Round 1, commit `6bf4adc` | 6.0 | 6.5 | 6.5 | 7.0 | 8.5 | 7.5 | 6.6 |
+
+The round 1 reviewer's worst findings: courier risk questions unanswered (mostly needs Adnan); the second home review says the shop sent a Samsung elsewhere and names "Mr Rehan"; no proof on the Fold page; OPPO sign and thin directions on /visit; "ask to watch when not busy" and no rule for a second fault read as escape hatches (needs Adnan); warranty step read as coming after the work; "Certified" unexplained (needs Adnan); no reply expectation; courier ticket is the walk-in form; finder returns nonsense for iPhone + Hinge.
+
+## Round 2 (1 Nov 2026)
+
+Ameer answered the blocking questions: second fault, what "certified" means, courier return and transit risk, packing, remote payment (PRD §11). Walking route still to come.
+
+Changes:
+
+1. **Home order B**, from the order test: repairs, pricing, reviews, process, bench, visit, FAQ, with bands re-alternated.
+2. **Speed.** `Reveal` is CSS on a scroll timeline, not an observer and a state change per block. The Radix menus (about 48 KB) load on first interaction. Poster has `fetchPriority="high"` and no `decoding="async"`. Home on the wire: JS 219 to 172 KB.
+3. **Repair pages** answer the six questions in order, then the action. Fold, iPhone and touch glass pages show matching reviews. Repair-specific WhatsApp text prompts for the model. The final call to action names the free check.
+4. **Bugs.** Text typed on /book and /quote before the page is live survives (two causes: a Suspense boundary replacing the form, and a re-render resetting the field). A phone menu tap before the page or its code is ready opens the menu (the button is one stable element; an inline script keeps a pre-hydration tap).
+5. **Reviews and warranty.** Home opens with Arsim, Adnan F. and Rao; Haadi's review, which says the shop sent a Samsung elsewhere, moved down and off the water page. Warranty is step 2, "discussed up front", in the order it happens.
+6. **Answers applied.** "If another fault appears" in How pricing works, the FAQ and the chat. "What does a certified repair mean?" in the FAQ and About. /courier gets Before you send it: packing, address with postcode, transit risk, declined quote, payment. Courier ticket and WhatsApp links prefill "Courier repair" with the city. Courier in the phone menu. No walk-in call to action on /courier, /privacy or /terms.
+7. **Fold sound.** Volume up about 11 dB (the clips peak near -14 dBFS, too quiet on a phone speaker). A click no longer queues while audio is off. Any tap or key unlocks audio, and audio unlocked on another page of the site carries over. Checked on an emulated phone by counting real starts: tap the fold, 1 start, running; tap the page then scroll, 1 start, running; scroll only, 0.
+
+8. **Service renamed** by Ameer to "Folding Phones (Duo, Pixel, Z Series)".
+
+**Known limit, not a bug:** browsers allow sound only after a tap or key. A scroll does not count, so a first auto-open with no tap before it is silent. Real phone speakers not tested.
+
+### Gates after round 2
+
+| Check | Result |
+|---|---|
+| Build, lint, typecheck | Pass |
+| E2e and axe | Last full run: 241 passed, 38 skipped, 43 failed. 41 were the stale preview (404s) and passed after a restart: security spec 58 of 58. 2 were a closed browser under load. The final build differs only by the service name; a focused re-run is below |
+| Lighthouse, same build, restarted preview, machine shared | `/` 73, a11y 100, bp 100, seo 100, LCP 3117, TBT 905. `/repairs/galaxy-z-fold-flip` 81, LCP 3136, TBT 492. `/book` 93, LCP 3064, TBT 133. `/quote` 93, LCP 3088, TBT 128. Earlier runs of nearly the same build: `/` 80 and 82, Fold page 82 and 86 |
+| Slow 4G, 4x CPU, home at 390 | h1 and links in the DOM 989 ms, FCP and LCP 1112 ms, hydrated 2040 ms. JS on the wire 172 KB (was 219) |
+| Home first-load JS | 172.2 KB gz. Framework about 133 KB |
+
+**Gate not met:** performance 90+ on `/` and repair pages. Home's LCP is the fold poster, with over 2 s of render delay behind main-thread work (Style and Layout about 1 s). Next: reduce that work.
+
+**Not verified:** independent score of round 2 (first job of round 3); keyboard pass across new sections; 320 to 1920 overflow sweep; live analytics events (item 10).
+
+### Next targets, round 3
+
+1. Independent score of this build, logged as round 2.
+2. Home performance gate: main-thread work before the poster paints, phone page length (home about 10,000 px; How it works and FAQ repeat on repair pages).
+3. Add a fold sound test to `fold.spec.ts` (count `AudioBufferSourceNode.start` with context state: tap, tap then scroll, scroll only).
+4. Quote finder nonsense: iPhone + Hinge returns the folding phones repair.
+5. Analytics coverage from every placement (item 10), booking and quote flow steps (item 8), /reviews one card at a time, /visit storefront showing an OPPO sign.
+6. Walking route to G-88 when Ameer sends it.
 
 ## Baseline reviewer's findings still to answer
 

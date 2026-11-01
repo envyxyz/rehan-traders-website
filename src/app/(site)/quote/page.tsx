@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
-import { Suspense } from "react"
 
-import { Estimator, EstimatorFromUrl } from "@/components/estimator"
+import { EstimatorFromUrl } from "@/components/estimator"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
@@ -24,9 +23,7 @@ export default function EstimatePage() {
         </div>
         <Card className="w-full max-w-estimate min-w-0 p-5 sm:p-7 lg:justify-self-end">
           {/* The static HTML has the picker; the client reads ?q= from the homepage box and opens the Describe tab with it. */}
-          <Suspense fallback={<Estimator />}>
-            <EstimatorFromUrl />
-          </Suspense>
+          <EstimatorFromUrl />
         </Card>
       </Container>
     </Section>

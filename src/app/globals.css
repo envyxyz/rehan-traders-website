@@ -498,6 +498,17 @@ html[data-scrolled]:not([data-nav]) .nav-desktop {
   }
 }
 
+/* Reveal (components/reveal.tsx): the rise keyframes on the scroll timeline. No JavaScript, nothing to hydrate. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 25%;
+    }
+  }
+}
+
 /* ---------- Base and browser surfaces ---------- */
 @layer base {
   * {

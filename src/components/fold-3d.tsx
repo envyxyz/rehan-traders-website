@@ -56,14 +56,21 @@ export function Fold3D() {
     let seen: IntersectionObserver | undefined
     let opener: IntersectionObserver | undefined
     const shut = matchMedia(PHONE).matches
-    // Any touch makes the audio playable, so the opening in view can snap. Kept until the browser lets it run.
+    // Any tap makes the audio playable, so the opening in view can snap. A scroll does not count: browsers allow sound only after
+    // a tap or a key, so a first opening with no tap before it is silent. Kept until the browser lets it run.
+    const UNLOCK = ["touchend", "pointerup", "click", "keydown"] as const
+    const stopUnlock = () => UNLOCK.forEach((e) => removeEventListener(e, unlock, true))
     const unlock = () => {
       try {
         audio.current ??= new AudioContext()
-        void audio.current.resume().then(() => audio.current?.state === "running" && removeEventListener("touchend", unlock, true))
+        void audio.current.resume().then(() => audio.current?.state === "running" && stopUnlock())
       } catch {}
     }
-    if (shut) addEventListener("touchend", unlock, { capture: true, passive: true })
+    if (shut) {
+      UNLOCK.forEach((e) => addEventListener(e, unlock, { capture: true, passive: true }))
+      // Tapped on another page of the site already: this page may play straight away.
+      if ((navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation?.hasBeenActive) unlock()
+    }
     let pause: ReturnType<typeof setTimeout>
     // Building the scene blocks the page, so it waits for the first pause: a first scroll keeps its smooth nav and frames.
     const wake = () => {
@@ -118,7 +125,7 @@ export function Fold3D() {
       if (pending.current && !fold.current) busyStop()
       clearTimeout(pause)
       WAKE.forEach((e) => removeEventListener(e, wake))
-      removeEventListener("touchend", unlock, true)
+      stopUnlock()
       seen?.disconnect()
       opener?.disconnect()
       off()
@@ -172,7 +179,7 @@ export function Fold3D() {
           height={1152}
           // eslint-disable-next-line no-restricted-syntax -- decorative: the button carries the label
           alt=""
-          decoding="async"
+          fetchPriority="high"
           className={cn("absolute inset-0 size-full", ready && "opacity-0 transition-opacity delay-(--duration-base)")}
         />
       </picture>

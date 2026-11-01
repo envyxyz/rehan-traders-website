@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CourierSteps } from "@/components/courier-steps"
-import { CtaBand } from "@/components/cta-band"
 import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
+import { Points } from "@/components/points"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { breadcrumbs, courierPage, seo } from "@/content"
@@ -36,6 +36,17 @@ export default function CourierPage() {
       </Section>
 
       <Section tone="panel">
+        <Container className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+          <Heading as="h2" className="lg:col-span-5">
+            {courierPage.beforeTitle}
+          </Heading>
+          <div className="lg:col-span-7">
+            <Points items={courierPage.before} />
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
         <Container>
           <Heading as="h2">{courierPage.faqTitle}</Heading>
           <Accordion className="mt-8 max-w-3xl border-t border-hairline">
@@ -49,9 +60,6 @@ export default function CourierPage() {
             ))}
           </Accordion>
         </Container>
-      </Section>
-
-      <CtaBand />
-    </>
+      </Section>    </>
   )
 }

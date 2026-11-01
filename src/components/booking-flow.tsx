@@ -100,10 +100,13 @@ export function BookingFlow({ service, device, onDone, onBack }: { service?: str
   const firstRender = React.useRef(true)
   const ids = React.useId()
 
+  // Once per flow. On /book?service=… the slug reaches this component just after mount, so the URL names the repair here.
+  const initial = React.useRef(service)
   React.useEffect(() => {
     started.current = now()
-    track("book_start", { service })
-  }, [service])
+    const fromUrl = new URLSearchParams(location.search).get("service")
+    track("book_start", { service: initial.current ?? services.find((s) => s.slug === fromUrl)?.slug })
+  }, [])
 
   // Each new step: tell analytics, and move focus to its question so keyboard and screen reader users follow.
   React.useEffect(() => {

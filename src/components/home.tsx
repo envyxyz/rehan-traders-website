@@ -9,7 +9,8 @@ import { Img } from "@/components/img"
 import { InteractiveMap } from "@/components/interactive-map"
 import { JobCard } from "@/components/job-card"
 import { Container, Section } from "@/components/layout"
-import { Reveal } from "@/components/motion"
+import { Points } from "@/components/points"
+import { Reveal } from "@/components/reveal"
 import { OpenStatus } from "@/components/open-status"
 import { ReviewCard } from "@/components/review-card"
 import { ServiceCard } from "@/components/service-card"
@@ -21,7 +22,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { aboutPage, actions, estimate, faq, home, process, site, ui, visit, visitPage } from "@/content"
 import { reviews, services } from "@/content-large"
-import { reveal } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
 // Hidden until a real pair exists (home.beforeAfter.show), so its code stays out of the first load until then.
@@ -55,7 +55,7 @@ function Repairs() {
         <ul className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           {services.map((s, i) => (
             <li key={s.slug} className={cn("lg:col-span-2", i === services.length - 2 && "lg:col-start-2")}>
-              <Reveal delay={(i % 3) * reveal.stagger} className="h-full">
+              <Reveal className="h-full">
                 <ServiceCard service={s} />
               </Reveal>
             </li>
@@ -118,7 +118,7 @@ function BeforeAfterSection() {
 function Process() {
   const c = home.process
   return (
-    <Section>
+    <Section tone="panel">
       <Container>
         <div className="max-w-2xl">
           <Heading>{c.title}</Heading>
@@ -126,7 +126,7 @@ function Process() {
         <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {process.map((step, i) => (
             <li key={step.title}>
-              <Reveal delay={i * reveal.stagger} className="h-full">
+              <Reveal className="h-full">
                 <StepCard n={i + 1} title={step.title} text={step.text} />
               </Reveal>
             </li>
@@ -134,7 +134,7 @@ function Process() {
         </ol>
         {/* The interactive job card; the tamper seal stays on /about */}
         <Reveal className="mt-12 flex justify-center">
-          <div className="relative w-full max-w-2xl rounded-xl bg-panel p-4 sm:p-8">
+          <div className="relative w-full max-w-2xl rounded-xl bg-paper p-4 sm:p-8">
             <JobCard withSeal={false} />
           </div>
         </Reveal>
@@ -146,7 +146,7 @@ function Process() {
 function Reviews() {
   const c = home.reviews
   return (
-    <Section tone="panel">
+    <Section>
       <Container>
         <SectionHead title={c.title} link={{ href: "/reviews", label: actions.moreReviews }} />
         <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-1">
@@ -164,9 +164,9 @@ function Reviews() {
           </a>
         </div>
         <ul className="mt-8 grid gap-4 lg:grid-cols-3">
-          {reviews.items.slice(0, reviews.featured).map((r, i) => (
+          {reviews.items.slice(0, reviews.featured).map((r) => (
             <li key={r.author}>
-              <Reveal delay={i * reveal.stagger} className="h-full">
+              <Reveal className="h-full">
                 <ReviewCard review={r} />
               </Reveal>
             </li>
@@ -177,24 +177,10 @@ function Reviews() {
   )
 }
 
-/** A short list of plain answers, shared by How pricing works and The open bench. */
-function Points({ items }: { items: readonly { title: string; text: string }[] }) {
-  return (
-    <dl className="border-t border-hairline">
-      {items.map((p) => (
-        <div key={p.title} className="border-b border-hairline py-4">
-          <dt className="font-display text-title-md text-ink">{p.title}</dt>
-          <dd className="mt-1 text-body-md text-body">{p.text}</dd>
-        </div>
-      ))}
-    </dl>
-  )
-}
-
 function Pricing() {
   const c = home.pricing
   return (
-    <Section id="pricing">
+    <Section tone="panel" id="pricing">
       <Container className="grid gap-8 lg:grid-cols-12 lg:gap-12">
         <Reveal className="lg:col-span-5">
           <Heading>{c.title}</Heading>
@@ -214,7 +200,7 @@ function Bench() {
   const c = home.bench
   const sizes = "(min-width: 1024px) 300px, calc(50vw - 1.5rem)"
   return (
-    <Section tone="panel" id="bench">
+    <Section id="bench">
       <Container className="grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-12">
         <Reveal className="order-2 grid grid-cols-2 gap-3 lg:order-1 lg:col-span-6">
           <Img name={aboutPage.images.team} alt={aboutPage.images.teamAlt} sizes={sizes} className="aspect-square w-full rounded-lg" />
@@ -305,18 +291,18 @@ function Faq() {
 }
 
 /**
- * Between the hero and the CTA band. The order answers the customer's fears in turn: can you fix it, do others trust you,
- * what will it cost, can I see the work, what happens, where are you (docs/LOOP-9.md has the test behind it).
+ * Between the hero and the CTA band. The order answers the customer's fears in turn: can you fix it, what will it cost, do others trust you,
+ * what happens, can I see the work, where are you (docs/LOOP-9.md has the test behind it).
  */
 export function HomeSections() {
   return (
     <>
       <Repairs />
-      <Reviews />
       <Pricing />
-      <Bench />
+      <Reviews />
       {home.beforeAfter.show && <BeforeAfterSection />}
       <Process />
+      <Bench />
       <Visit />
       <Faq />
     </>

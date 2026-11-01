@@ -269,7 +269,7 @@ function coverScreen(k: Ink) {
   return c
 }
 
-const CLICK_VOLUME = 1 // the files are already quiet (peak about -14 dBFS); tune here
+const CLICK_VOLUME = 3.5 // the files peak about -14 dBFS, too quiet for a phone speaker; this lifts them to about -3. Tune here
 
 /** `closed`: start shut, with the cover lit, as if it had just been folded. */
 export async function createFold(canvas: HTMLCanvasElement, { closed: startClosed = false } = {}) {
@@ -373,7 +373,11 @@ export async function createFold(canvas: HTMLCanvasElement, { closed: startClose
   }
   const play = (ctx: AudioContext, name: string) =>
     load(name)
-      .then((buffer) => {
+      .then(async (buffer) => {
+        // Browsers keep audio off until the visitor has tapped. Starting it while it is off would only queue the click for a later,
+        // wrong moment, so a fold that moves with no tap behind it stays silent.
+        if (ctx.state !== "running") await Promise.race([ctx.resume(), new Promise((r) => setTimeout(r, 100))])
+        if (ctx.state !== "running") return
         const src = ctx.createBufferSource()
         const gain = ctx.createGain()
         gain.gain.value = CLICK_VOLUME

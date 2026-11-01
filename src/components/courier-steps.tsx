@@ -40,10 +40,10 @@ export function CourierSteps({ from }: { from: string }) {
 
       <div className="mt-6 flex flex-wrap gap-3">
         <Button asChild size="lg" arrow>
-          <Link href="/quote?tab=describe">{visitPage.courierActions.ticket}</Link>
+          <Link href={`/quote?q=${encodeURIComponent(visitPage.courierActions.ticketText)}`}>{visitPage.courierActions.ticket}</Link>
         </Button>
         <Button asChild size="lg" variant="whatsapp">
-          <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" data-track="whatsapp" data-track-from={from}>
+          <a href={site.whatsapp.withText(visitPage.courierActions.whatsappText)} target="_blank" rel="noopener noreferrer" data-track="whatsapp" data-track-from={from}>
             <WhatsAppIcon />
             {visitPage.courierActions.whatsapp}
           </a>

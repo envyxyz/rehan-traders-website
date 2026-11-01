@@ -13,6 +13,7 @@ test("launch is in quote mode", () => {
 })
 
 test("estimate: every fault ends in a result with a WhatsApp quote link and no price or turnaround", async ({ page }) => {
+  test.slow() // fifteen faults, each with a full result
   await page.goto("/quote")
   const form = page.locator("form:visible")
   await pickDevice(page, "Samsung Galaxy S23", form) // Start again keeps the device

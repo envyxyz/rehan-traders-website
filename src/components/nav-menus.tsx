@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { actions, nav, site } from "@/content"
 import { services } from "@/content-large"
 import { menuStagger } from "@/lib/tokens"
@@ -62,12 +62,15 @@ const rise = "animate-rise motion-reduce:animate-none"
 const delay = (i: number) => ({ animationDelay: `${menuStagger.start + i * menuStagger.step}s` })
 
 /**
- * Phones: the menu sheet. `trigger` is Nav's menu button. The items fade in after the sheet slides in. Repairs slides a
+ * Phones: the menu sheet, opened by Nav's menu button (`open`). The items fade in after the sheet slides in. Repairs slides a
  * second panel over the first (Back, All repairs, the eight repairs); whichever panel is hidden is inert.
  */
-export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
-  const [open, setOpen] = React.useState(false)
+export function MobileMenu({ open, onOpenChange, returnFocus }: { open: boolean; onOpenChange: (open: boolean) => void; returnFocus: React.RefObject<HTMLElement | null> }) {
   const [sub, setSub] = React.useState(false)
+  const close = () => {
+    onOpenChange(false)
+    setSub(false)
+  }
   const repairsButton = React.useRef<HTMLButtonElement>(null)
   const backButton = React.useRef<HTMLButtonElement>(null)
   // Focus follows the panel: flushSync lifts `inert` before focusing, and preventScroll keeps the clipped sheet from jumping.
@@ -78,14 +81,10 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
   return (
     <Sheet
       open={open}
-      onOpenChange={(next) => {
-        setOpen(next)
-        if (next) setSub(false)
-      }}
+      onOpenChange={(next) => (next ? onOpenChange(true) : close())}
     >
-      <SheetTrigger asChild>{trigger}</SheetTrigger>
       {/* The nav lives in the layout, so a link inside the sheet would leave it open on the next page. */}
-      <SheetContent side="right" aria-describedby={undefined} className="gap-0 bg-sheet-body p-0" onClick={(e) => (e.target as HTMLElement).closest("a") && setOpen(false)}>
+      <SheetContent side="right" aria-describedby={undefined} className="gap-0 bg-sheet-body p-0" onClick={(e) => (e.target as HTMLElement).closest("a") && close()} onCloseAutoFocus={(e) => { e.preventDefault(); returnFocus.current?.focus() }}>
         <div className={bar}>
           <SheetTitle>{nav.menu}</SheetTitle>
         </div>
@@ -105,6 +104,9 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
               </Link>
             )
           )}
+          <Link href="/courier" className={cn(row, rise)} style={delay(nav.links.length + 1)}>
+            {nav.courier}
+          </Link>
         </nav>
         <div inert={sub} className="sticky bottom-0 mt-auto grid gap-2.5 bg-sheet-body px-6 pt-4 pb-6">
           <p className="flex flex-col text-caption text-steel">

@@ -101,6 +101,13 @@ export const facts = {
   delivery,
   battery:
     "On an iPhone, if you choose an original battery, the \"Unknown Part\" message can be removed and battery health is shown. If you choose a cheaper copy battery, the IC from your old original battery can be moved to the new one. In some very rare cases this is not possible, and the shop tells you after checking the phone.",
+  // Ameer, 1 Nov 2026.
+  secondFault: "If a fault appears because of a mistake on the shop's side, the shop takes responsibility and fixes it at no extra cost. If it was already there and was not found earlier, the shop tells you.",
+  certified: "A repair counts as certified when the phone works well and the customer has no issues with it.",
+  courierReturn: "Checking is free. If you decline the quote, the shop pays to send the phone back.",
+  courierRisk: "Choose a reliable courier. The shop does not take responsibility for theft or damage in transit, so pack it well.",
+  packing: "Wrap the phone in bubble wrap, put it in a cardboard box, then in a shopping bag with foam or other padding around it.",
+  remotePayment: "From outside Lahore you can pay by Raast ID, bank transfer, JazzCash or EasyPaisa.",
   seal: "Rehan Traders re-applies the water-resistance seal after a repair on request.",
   quote: `Send photos of the phone and its model on WhatsApp to ${site.phone.display}, or create a ticket with photos on the Get a Quote page of this website. You can also visit Rehan Traders at Shop G-88, Ground Floor, Hafeez Center, Lahore. The shop replies with a quote; prices are not published online.`,
 } as const
@@ -116,6 +123,7 @@ export const nav = {
   ],
   call: `Call ${site.phone.display}`,
   menu: "Menu",
+  courier: "Send by courier",
   /** Phones: back from the Repairs list to the menu. */
   back: "Back",
   home: `${site.name} home`,
@@ -174,10 +182,10 @@ export const jobCardContent = {
 
 export const process = [
   { title: "Free check at the counter", text: "The shop tells you what is wrong, what it will cost and how long it will take. If you go ahead, your device goes on a numbered job card." },
+  // PRD §11 and Adnan, 31 Oct 2026: not every repair carries one. Never a length.
+  { title: "Warranty, discussed up front", text: "Once the fault is diagnosed or the job is confirmed, the shop tells you plainly whether the repair carries a warranty and on what terms. It depends on the repair, the model and the quality of parts you choose." },
   { title: "Repaired at the open bench", text: "The work happens at the bench in the shop. Ask to watch when it is not busy." },
   { title: "Tested and sealed", text: "Every repair is tested, then sealed in a pouch until you collect it." },
-  // PRD §11 and Adnan, 31 Oct 2026: not every repair carries one. Never a length.
-  { title: "Warranty, explained before you collect", text: "Once the fault is diagnosed or the job is confirmed, the shop tells you plainly whether the repair carries a warranty and on what terms. It depends on the repair, the model and the quality of parts you choose." },
 ] as const
 
 export const faq = [
@@ -192,6 +200,14 @@ export const faq = [
   {
     q: "Do you give a warranty on repairs?",
     a: `It depends on the repair. ${facts.warranty}`,
+  },
+  {
+    q: "What if another fault appears after the repair?",
+    a: facts.secondFault,
+  },
+  {
+    q: "What does a certified repair mean?",
+    a: facts.certified,
   },
   {
     q: "How long does a phone repair take at Rehan Traders?",
@@ -313,6 +329,7 @@ export const home = {
       { title: "The check is free", text: "The shop tells you what is wrong, whether it can be repaired, what it will cost and how long it will take." },
       { title: "You hear the price first", text: "No work starts until you know the cost." },
       { title: "You decide", text: "Go ahead, or take your phone back. The check costs nothing either way." },
+      { title: "If another fault appears", text: facts.secondFault },
     ],
   },
   bench: {
@@ -382,6 +399,23 @@ export const repairsPage = {
   howItWorks: "How it works",
   faqTitle: "Questions about this repair",
   relatedTitle: "Related repairs",
+  answersTitle: "What you need to know",
+  answers: {
+    model: "Can you fix my model?",
+    what: "What will you do?",
+    time: "How long will it take?",
+    price: "How is the price decided?",
+    priceText: "Parts prices change daily, so prices are not listed here. The check is free, you hear the price before work starts, and you decide.",
+    warranty: "What about warranty?",
+    warrantyText: facts.warranty,
+    next: "What happens next?",
+    nextText: "Book a free check or send your model on WhatsApp. If you go ahead, your device goes on a numbered job card, and the finished repair is tested and sealed in a pouch.",
+    courier: "Outside Lahore? Send it by courier.",
+  },
+  proofTitle: "From customers",
+  /** Prefilled on each repair page, so the shop knows the repair and the customer is prompted for the model. */
+  whatsapp: (repair: string) => `Assalam o alaikum. I need a quote for: ${repair}.\nMy phone model: `,
+  ctaTitle: "Book the free check at G‑88.",
   bookHeading: "Need this repair?",
   bookLede: "Book a visit to Shop G-88 or ask for a quote on WhatsApp.",
   allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
@@ -425,11 +459,18 @@ export const visitPage = {
   courierSteps: [
     { title: "Create a ticket", text: `Create a ticket on this website, or call ${site.phone.display}.` },
     { title: "Send photos", text: "Send photos of the phone on WhatsApp." },
-    { title: "Quote by phone", text: "If possible, we give you a quote over the phone." },
-    { title: "Inspect, repair, return", text: "Otherwise you send the phone, we inspect it and quote, repair it once you agree, and send it back." },
+    { title: "Get a quote", text: "If possible, we give you a quote over the phone, before you send anything." },
+    { title: "Send it if needed", text: "If it needs a look first, you send the phone. We inspect it, quote, repair it once you agree, and send it back." },
   ],
   courierDelivery: delivery,
-  courierActions: { ticket: "Create a ticket", whatsapp: "Send photos on WhatsApp", call: `Call ${site.phone.display}` },
+  courierActions: {
+    ticket: "Start a courier repair",
+    /** Prefilled, so the shop sees it is a courier job. */
+    ticketText: "Courier repair. My city: ",
+    whatsapp: "Send photos on WhatsApp",
+    whatsappText: "Assalam o alaikum. Courier repair from outside Lahore.\nMy city: \nMy phone model: ",
+    call: `Call ${site.phone.display}`,
+  },
   courierMore: "How courier repairs work",
 } as const
 
@@ -438,6 +479,14 @@ export const courierPage = {
   title: "Send your phone by courier",
   lede: "Live outside Lahore? Rehan Traders, Shop G-88, Hafeez Center, Lahore repairs phones sent by courier from anywhere in Pakistan. It takes four steps.",
   stepsTitle: "The four steps",
+  beforeTitle: "Before you send it",
+  before: [
+    { title: "Pack it like this", text: facts.packing },
+    { title: "Send it to", text: `${site.name}, ${site.address.lines.join(", ")} ${site.address.postalCode}. Phone ${site.phone.display}.` },
+    { title: "If it is lost or damaged on the way", text: facts.courierRisk },
+    { title: "If you decline the quote", text: facts.courierReturn },
+    { title: "How to pay", text: facts.remotePayment },
+  ],
   faqTitle: "Courier questions",
   faq: [
     {
@@ -472,7 +521,7 @@ export const aboutPage = {
   title: "About Rehan Traders",
   lede: `${site.entity} Hafeez Center is Lahore's phone market, and getting a reliable repair there can be confusing. The shop's aim is to make repairing easy.`,
   sinceTitle: "Since 2009",
-  sinceText: "Rehan Traders has repaired phones since 2009. Every job starts with a free check: the shop tells you plainly what is wrong, whether it can be fixed, what it will cost and how long it will take. Then you decide.",
+  sinceText: "Rehan Traders has repaired phones since 2009. A repair counts as certified when the phone works well and the customer has no issues with it. Every job starts with a free check: the shop tells you plainly what is wrong, whether it can be fixed, what it will cost and how long it will take. Then you decide.",
   benchTitle: "The open repair bench",
   benchText: "Repairs happen at the open bench in Shop G-88, which has a microscope for board work. Ask to watch when the bench is not busy, and ask for your old parts back if you want them. Swollen batteries are the exception: the shop disposes of them straight away.",
   adnanTitle: "Adnan Ali",
@@ -549,7 +598,7 @@ export const termsPage = {
     },
     {
       title: "Device collection with job card",
-      text: "Repaired devices are returned upon presentation of the numbered job card issued at intake. Customers should collect completed devices promptly upon notification.",
+      text: "Repaired devices are returned upon presentation of the numbered job card issued at intake, or sent back by courier for courier repairs. Customers should collect completed devices promptly upon notification.",
     },
   ],
 } as const

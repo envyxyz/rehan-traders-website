@@ -24,7 +24,8 @@ async function scan(page: Page) {
 
 for (const scheme of ["light", "dark"] as const) {
   test.describe(scheme, () => {
-    test.use({ colorScheme: scheme })
+    // Reduced motion: `.reveal` holds blocks below the fold at opacity 0 on a scroll timeline, and axe skips what it cannot see.
+    test.use({ colorScheme: scheme, contextOptions: { reducedMotion: "reduce" } })
 
     for (const path of routes) {
       test(`axe ${path}`, async ({ page }) => {
@@ -62,8 +63,7 @@ for (const scheme of ["light", "dark"] as const) {
     test("axe phone menu sheet", async ({ page, isMobile }) => {
       test.skip(!isMobile, "the menu sheet is the phone nav")
       await page.goto("/")
-      // The sheet is a next/dynamic chunk; until it loads the button is an inert placeholder and a click is lost.
-      await expect(page.getByRole("button", { name: nav.menu })).toHaveAttribute("aria-haspopup", "dialog")
+      // A tap before the sheet's chunk has arrived opens it once it does.
       await page.getByRole("button", { name: nav.menu }).click()
       await expect(page.getByRole("dialog", { name: nav.menu })).toBeVisible()
       await scan(page)

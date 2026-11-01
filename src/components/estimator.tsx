@@ -25,10 +25,25 @@ type Result = { device: string; faultSlug: string }
 
 /** /quote?q=… (the homepage box) or ?tab=describe (the courier steps): opens the Describe tab, with the message prefilled. */
 export function EstimatorFromUrl() {
+  const [from, setFrom] = React.useState({ q: "", describe: false })
+  return (
+    <>
+      <React.Suspense>
+        {/* Same values, same object: a re-render here would reset a field before React restores what was typed during load. */}
+        <ReadParams onRead={React.useCallback((next: { q: string; describe: boolean }) => setFrom((was) => (was.q === next.q && was.describe === next.describe ? was : next)), [])} />
+      </React.Suspense>
+      <Estimator q={from.q} describe={from.describe} />
+    </>
+  )
+}
+
+/** Only this reads the URL: a Suspense boundary around the form itself would replace it on load and wipe what was typed. */
+function ReadParams({ onRead }: { onRead: (from: { q: string; describe: boolean }) => void }) {
   const params = useSearchParams()
   const q = params.get("q")?.slice(0, MAX_INPUT) ?? ""
   const describe = !!q || params.get("tab") === "describe"
-  return <Estimator key={`${describe}|${q}`} q={q} describe={describe} />
+  React.useEffect(() => onRead({ q, describe }), [q, describe, onRead])
+  return null
 }
 
 /**
@@ -41,6 +56,12 @@ const tab = "justify-center whitespace-nowrap max-sm:flex-1 max-sm:px-3"
 
 export function Estimator({ q = "", describe = false }: { q?: string; describe?: boolean }) {
   const [mode, setMode] = React.useState<Mode>(describe ? "describe" : "pick")
+  // The URL arrives just after the first render: switch the tab in place, so nothing typed or focused is lost.
+  const [seenDescribe, setSeenDescribe] = React.useState(describe)
+  if (seenDescribe !== describe) {
+    setSeenDescribe(describe)
+    if (describe) setMode("describe")
+  }
   const [result, setResult] = React.useState<Result | null>(null)
   const tabs = React.useRef<HTMLDivElement>(null)
 
@@ -178,6 +199,11 @@ function TicketForm({ q }: { q: string }) {
   const [name, setName] = React.useState("")
   const [phone, setPhone] = React.useState("")
   const [message, setMessage] = React.useState(q)
+  const [seenQ, setSeenQ] = React.useState(q)
+  if (seenQ !== q) {
+    setSeenQ(q)
+    setMessage(q)
+  }
   const [photos, setPhotos] = React.useState<Photo[]>([])
   const [error, setError] = React.useState<{ field: "device" | "name" | "phone" | "message" | "form"; text: string } | null>(null)
   const [sending, setSending] = React.useState(false)

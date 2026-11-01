@@ -27,6 +27,8 @@ export const knowledge = [
   `Water-resistance seal: ${facts.seal} Never say the phone is water resistant afterwards.`,
   `Warranty: ${facts.warranty} Never state a number of days or months.`,
   `Repair time: ${facts.turnaround} ${facts.turnaroundFold} Say "as little as" and "up to", never "guaranteed", and give the 60 minutes only for a normal panel (screen) change.`,
+  `If another fault appears: ${facts.secondFault} Certified repair: ${facts.certified}`,
+  `Courier: ${facts.courierReturn} ${facts.courierRisk} Packing: ${facts.packing} ${facts.remotePayment}`,
   `Quotes: ${facts.quote} The ticket form is the Describe it tab on the Get a Quote page (/quote): name, mobile number, device, message and up to 3 photos.`,
   `Booking: on this website (Book a visit): pick the device, the fault and a visit time, then a name and mobile number. No account, no payment.`,
   priceMode === "quote"

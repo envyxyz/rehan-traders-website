@@ -160,7 +160,15 @@ Answered 30 Oct 2026 (former §12 q1, q2 and q4):
 - **Water-resistance seal:** re-applied after a repair on request. No claim that the phone is water resistant afterwards.
 - **Risk during touch-glass separation:** not published, by choice (Ameer, 30 Oct 2026).
 
+Answered by Ameer, 1 Nov 2026:
+- **A fault appearing after a repair:** if it is the shop's mistake, the shop takes responsibility and fixes it at no extra cost. If it was already there and not found before, the shop tells the customer.
+- **"Certified":** a repair counts as certified when the device works well and the customer has no issues. There is no outside certifier.
+- **Courier:** the customer picks a reliable courier. If the quote is declined the shop pays return delivery; checking is free. The shop takes no responsibility for theft or damage in transit. Packing: bubble wrap, cardboard box, then a shopping bag with foam or other padding around it.
+- **Paying from outside Lahore:** Raast ID, bank transfer, JazzCash, EasyPaisa.
+
 ## 12. Still open
+
+0. Walking route and landmarks to G-88: Ameer will send them.
 
 Nothing below goes on the site until answered.
 1. ~~Warranty~~ Answered 30 Oct 2026 (section 11): depends on the repair, the model and the quality of parts the customer chooses. No number of days is given.

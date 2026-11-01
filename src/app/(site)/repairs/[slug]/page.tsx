@@ -9,13 +9,15 @@ import { Icon, WhatsAppIcon } from "@/components/icon"
 import { ArrowRight, repairIcons } from "@/components/icons"
 import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
+import { Points } from "@/components/points"
 import { PriceLine } from "@/components/price-line"
+import { ReviewCard } from "@/components/review-card"
 import { ServiceCard } from "@/components/service-card"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, repairsPage, site } from "@/content"
-import { services } from "@/content-large"
+import { reviews, services } from "@/content-large"
 import { faqSchema, serviceSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
@@ -41,6 +43,21 @@ export default async function ServicePage({ params }: PageProps) {
   if (!service) notFound()
 
   const relatedServices = services.filter((s) => service.related.includes(s.slug))
+  const proof = reviews.items.filter((r) => service.proof?.includes(r.author))
+  const a = repairsPage.answers
+  const actionsRow = (from: string) => (
+    <div className="flex flex-wrap items-center gap-3">
+      <BookButton service={service.slug} size="lg" arrow>
+        {actions.bookRepair}
+      </BookButton>
+      <Button asChild size="lg" variant="whatsapp">
+        <a href={site.whatsapp.withText(repairsPage.whatsapp(service.title))} target="_blank" rel="noopener noreferrer" data-track="whatsapp" data-track-from={from} aria-label={actions.whatsappLabel}>
+          <WhatsAppIcon />
+          {actions.whatsapp}
+        </a>
+      </Button>
+    </div>
+  )
 
   return (
     <>
@@ -65,25 +82,7 @@ export default async function ServicePage({ params }: PageProps) {
                 {service.short}
               </Text>
               <PriceLine priceFrom={service.priceFrom} className="mt-6" />
-
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <BookButton service={service.slug} size="lg" arrow>
-                  {actions.bookRepair}
-                </BookButton>
-                <Button asChild size="lg" variant="whatsapp">
-                  <a
-                    href={site.whatsapp.withText(service.title)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-track="whatsapp"
-                    data-track-from="repair"
-                    aria-label={actions.whatsappLabel}
-                  >
-                    <WhatsAppIcon />
-                    {actions.whatsapp}
-                  </a>
-                </Button>
-              </div>
+              <div className="mt-8">{actionsRow("repair")}</div>
             </div>
 
             <div className="lg:col-span-5">
@@ -95,31 +94,71 @@ export default async function ServicePage({ params }: PageProps) {
         </Container>
       </Section>
 
-      {/* What we fix */}
+      {/* The six questions, in the order a customer asks them, then the action. */}
       <Section tone="panel">
-        <Container>
-          <div className="max-w-2xl">
-            <Heading as="h2">{repairsPage.whatWeFix}</Heading>
-            <Text tone="muted" className="mt-3">
-              {service.long}
-            </Text>
+        <Container className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-5">
+            <Heading as="h2">{repairsPage.answersTitle}</Heading>
           </div>
-
-          <div className="mt-8 flex flex-wrap gap-2.5">
-            {service.faults.map((fault) => (
-              <span
-                key={fault}
-                className="inline-flex items-center rounded-pill border border-hairline bg-card px-4 py-2 font-display text-body-sm font-semibold text-ink"
-              >
-                {fault}
-              </span>
-            ))}
+          <div className="lg:col-span-7">
+            <Points
+              items={[
+                { title: a.model, text: service.answers.model },
+                {
+                  title: a.what,
+                  text: (
+                    <>
+                      {service.long}
+                      <span className="mt-3 flex flex-wrap gap-2">
+                        {service.faults.map((fault) => (
+                          <span key={fault} className="inline-flex items-center rounded-pill border border-hairline bg-card px-3.5 py-1.5 font-display text-body-sm font-semibold text-ink">
+                            {fault}
+                          </span>
+                        ))}
+                      </span>
+                    </>
+                  ),
+                },
+                { title: a.time, text: service.answers.time },
+                { title: a.price, text: a.priceText },
+                { title: a.warranty, text: a.warrantyText },
+                {
+                  title: a.next,
+                  text: (
+                    <>
+                      {a.nextText}{" "}
+                      <Link href="/courier" className="text-ink underline underline-offset-4">
+                        {a.courier}
+                      </Link>
+                    </>
+                  ),
+                },
+              ]}
+            />
+            <div className="mt-7">{actionsRow("repair-answers")}</div>
           </div>
         </Container>
       </Section>
 
+      {proof.length > 0 && (
+        <Section>
+          <Container>
+            <Heading as="h2" size="display-md" className="sm:text-display-lg">
+              {repairsPage.proofTitle}
+            </Heading>
+            <ul className="mt-8 grid gap-4 lg:grid-cols-3">
+              {proof.map((r) => (
+                <li key={r.author}>
+                  <ReviewCard review={r} />
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      )}
+
       {/* How it works */}
-      <Section>
+      <Section tone={proof.length > 0 ? "panel" : "paper"}>
         <Container>
           <Heading as="h2">{repairsPage.howItWorks}</Heading>
           <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -190,7 +229,7 @@ export default async function ServicePage({ params }: PageProps) {
         </Section>
       )}
 
-      <CtaBand />
+      <CtaBand title={repairsPage.ctaTitle} />
     </>
   )
 }
