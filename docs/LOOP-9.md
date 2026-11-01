@@ -90,7 +90,17 @@ Home first-load JS after: 176.1 KB gz. Framework alone is about 133 KB (react-do
 
 ### Home order test
 
-Shipped: repairs, reviews, pricing, bench, process, visit, FAQ. Alternative: repairs, pricing, reviews, process, bench, visit, FAQ (price first, because cost is the customer's first fear). Result is recorded under round 2.
+Shipped in round 1: repairs, reviews, pricing, bench, process, visit, FAQ. Alternative: repairs, pricing, reviews, process, bench, visit, FAQ. A fresh reviewer, shown both as phone captures, picked the alternative: the sceptic reads "You hear the price first" before the reviews, promise first and proof second. The courier customer is served slightly better by the shipped order, and by neither well. To apply and verify in round 2.
+
+### Deployed checkpoint (Ameer asked for it, 1 Nov 2026)
+
+Ameer asked to push live up to a checkpoint and continue, which overrides the brief's "never push" for this checkpoint. `origin/main` had moved to `0104126` (another session: repair picker before booking, Start my repair and Ask AI in the hero, cards without Book, the 2-star review removed as Ameer's call, Fold card renamed), so it was merged, never forced.
+
+- Kept from that session: all of the above. Repair cards keep the round 1 version: the whole card is one link, without its extra View details link to the same page.
+- Tests on the merged build: lint, typecheck and build pass. 166 functional passed, 25 skipped, 3 failed at 3 workers; the 3 (2 tests) passed alone with a 90 s limit. Axe on `/`, `/quote`, `/book` and the Fold page: 16 passed. The full axe sweep was not run on the merge.
+- Also live with it: the owner's uncommitted batch as of the snapshot (`2fa759c`), which round 1 is built on.
+- Not live: edits in the main checkout made after the snapshot, 17 files differing from it at 15:59 (some of them are `0104126` itself).
+- Question for Adnan: the Fold card now reads "iPhone Duo, Pixel Fold, Z Fold and Z Flip", but PRD §12 q5 says there is no iPhone Duo and assumes Surface Duo.
 
 ### Not verified in round 1
 

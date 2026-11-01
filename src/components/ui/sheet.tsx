@@ -19,6 +19,9 @@ const sides = {
   right:
     "sheet-fit inset-x-2 sm:left-auto sm:w-md rounded-xl data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right",
   left: "sheet-fit inset-x-2 sm:right-auto sm:w-md rounded-xl data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left",
+  /** Centred: inset edges with auto margins, so a max width or height (from `frame`) centres it with no transform. */
+  center:
+    "sheet-fit inset-x-2 m-auto rounded-xl data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
   bottom:
     "inset-x-0 bottom-0 max-h-sheet rounded-t-xl data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
 } as const
@@ -59,8 +62,14 @@ function SheetContent({
   children,
   side = "right",
   glass = false,
+  frame,
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Content> & { side?: keyof typeof sides; glass?: boolean }) {
+}: React.ComponentProps<typeof SheetPrimitive.Content> & {
+  side?: keyof typeof sides
+  glass?: boolean
+  /** Classes for the sheet's outer box; `className` styles the scroller inside it. */
+  frame?: string
+}) {
   const fit = useKeyboardFit()
   const mounted = React.useCallback(
     (el: HTMLElement | null) => {
@@ -81,6 +90,7 @@ function SheetContent({
         className={cn(
           "fixed z-50 flex flex-col overflow-hidden text-body shadow-float transition-none duration-(--duration-base) ease-drawer outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
           sides[side],
+          frame,
           glass ? "glass" : "bg-card"
         )}
         {...props}

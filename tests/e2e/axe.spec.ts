@@ -54,7 +54,7 @@ for (const scheme of ["light", "dark"] as const) {
 
     test("axe chat sheet", async ({ page }) => {
       await page.goto("/")
-      await page.getByRole("button", { name: assistant.title }).click()
+      await page.locator("#top").getByRole("button", { name: actions.askAi }).click()
       await expect(page.getByRole("dialog", { name: assistant.title })).toBeVisible()
       await scan(page)
     })
@@ -71,9 +71,12 @@ for (const scheme of ["light", "dark"] as const) {
 
     test("axe booking sheet", async ({ page }) => {
       await page.goto("/")
-      await page.locator("#top").getByRole("link", { name: actions.book }).first().click()
+      await page.locator("#top").getByRole("link", { name: actions.start }).first().click()
       await expect(page.getByRole("dialog")).toBeVisible()
-      await scan(page)
+      await scan(page) // the repair picker
+      await page.getByRole("dialog").getByRole("button").first().click()
+      await expect(page.getByRole("dialog").locator("form")).toBeVisible()
+      await scan(page) // the booking
     })
   })
 }

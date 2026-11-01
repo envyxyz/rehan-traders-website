@@ -127,6 +127,9 @@ export const nav = {
 
 export const actions = {
   book: "Book a visit",
+  /** The main call to action: opens the repair picker, then the booking. */
+  start: "Start my repair",
+  askAi: "Ask AI",
   /** On repair cards, repair pages and the estimate result: names the free check at the counter, the first step of every repair. */
   bookRepair: "Book a free check",
   whatsapp: "WhatsApp",

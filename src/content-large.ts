@@ -8,7 +8,7 @@ import { actions, estimate, facts, googleRating, site } from "./content"
 
 // Typed in by hand (static site, no Places API). Update rating and asOf together.
 // Review text copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings then, 49 on 31 Oct, 32 with text (the other 18 are
-// stars only and are left out). Text exactly as written; Ameer's own review is left out: the agency should not review its
+// stars only and are left out; so is the one below 4 stars, 1 Nov 2026, Ameer's call). Text exactly as written; Ameer's own review is left out: the agency should not review its
 // client. `when` is fixed, so it never goes stale: Google's relative date counted back from 29 Oct 2026 to its month, and
 // "a year ago" or older as "Over a year ago" and so on, which stays true. The count is not shown on the site: it dates fast.
 // Order is deliberate: the first ones answer the fears of unnecessary work, of being overcharged and of a shop nobody can
@@ -55,7 +55,6 @@ export const reviews = {
     { author: "Husnain J.", rating: 5, when: "Over 3 years ago", weight: 1, text: "Very good" },
     { author: "NAQi Z.", rating: 5, when: "Sep 2026", weight: 1, text: "Grateful" },
     { author: "Danish K.", rating: 5, when: "Over 2 years ago", weight: 1, text: "Rauf Good" },
-    { author: "Muhammad U.", rating: 2, when: "Apr 2026", weight: 1, text: "Average" },
   ],
 } as const
 
@@ -107,7 +106,7 @@ export const services: Service[] = [
   },
   {
     slug: "galaxy-z-fold-flip",
-    title: "Galaxy Z Fold and Flip",
+    title: "iPhone Duo, Pixel Fold, Z Fold and Z Flip",
     short: "Outer glass, inner screen and hinge for every Galaxy Z Fold and Z Flip.",
     long: "Outer glass, inner screen and hinge repairs for every Galaxy Z Fold and Z Flip, plus Pixel Fold and Surface Duo. The shop tries to save the damaged panel first and replaces it only when it cannot be saved.",
     faults: ["Outer glass", "Inner screen", "Hinge", "Blank display", "Lines on screen"],
@@ -350,6 +349,11 @@ export const showsFault = (b: Pick<BookingSummary, "fault" | "problem">) => !(b.
 
 export const booking = {
   title: "Book a visit",
+  /** The first step behind "Start my repair". `unsure` books without a repair picked. */
+  picker: {
+    title: "What needs fixing?",
+    unsure: { title: "Not sure what's wrong", short: "Tell us what it's doing and the free check finds the fault." },
+  },
   lede: "Four quick questions. No account, no payment.",
   progress: (step: number, total: number, name: string) => `Step ${step} of ${total}: ${name}`,
   next: "Next",

@@ -13,6 +13,7 @@ export {
   ChevronLeft,
   ChevronRight,
   ChevronsLeftRight,
+  CircleHelp,
   Clock,
   Cpu,
   Download,

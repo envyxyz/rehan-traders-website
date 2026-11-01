@@ -1,4 +1,5 @@
 import { BookButton } from "@/components/book-button"
+import { AskAiButton } from "@/components/chat-launcher"
 import { Fold3D } from "@/components/fold-3d"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { MapPin } from "@/components/icons"
@@ -45,16 +46,18 @@ export function Hero() {
               </p>
               <Stars rating={reviews.rating} small />
             </div>
-            <div className={`mt-hero-gap grid gap-3 sm:flex sm:flex-wrap ${rise(2).className}`} style={rise(2).style}>
-              <BookButton size="lg" arrow wide>
-                {actions.book}
+            <div className={`mt-hero-gap grid gap-3 sm:max-w-md ${rise(2).className}`} style={rise(2).style}>
+              <BookButton size="lg" arrow wide className="btn-wide-full sm:w-full sm:justify-between sm:pl-2">
+                {actions.start}
               </BookButton>
-              <Button asChild size="lg" variant="whatsapp">
-                <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="hero">
-                  <WhatsAppIcon />
-                  {actions.whatsapp}
-                </a>
-              </Button>
+              <div className="flex gap-3">
+                <AskAiButton className="flex-1" />
+                <Button asChild size="lg" variant="whatsapp" className="size-13 px-0">
+                  <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="hero">
+                    <WhatsAppIcon />
+                  </a>
+                </Button>
+              </div>
             </div>
             <div className={`mt-hero-gap grid gap-2 text-caption text-steel sm:flex sm:flex-wrap sm:gap-x-5 ${rise(3).className}`} style={rise(3).style}>
               <span className="inline-flex items-center gap-1.5">

@@ -67,7 +67,7 @@ const dayParts = (date: string) => {
  * BookingSheet behind every Book button. `service` (a slug) narrows the fault chips and, while prices are
  * in quote mode, offers "Get a quote" instead of a visit time.
  */
-export function BookingFlow({ service, device, onDone }: { service?: string; device?: string; onDone?: () => void }) {
+export function BookingFlow({ service, device, onDone, onBack }: { service?: string; device?: string; onDone?: () => void; /** Back from the first step (the repair picker). */ onBack?: () => void }) {
   const router = useRouter()
   const svc = services.find((s) => s.slug === service)
   const faultChoices: readonly string[] = [...(svc?.faults ?? faults), ...booking.fault.open]
@@ -158,6 +158,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
   }
 
   function back() {
+    if (step === STEPS[0]) return onBack?.()
     if (step === "details" && draft.kind === "quote") return go("time")
     go(STEPS[Math.max(0, STEPS.indexOf(step) - 1)])
   }
@@ -413,7 +414,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
 
       {/* Docked at the foot of the sheet only; on /book the buttons follow the form. */}
       <div className={cn("-mx-1 mt-auto flex flex-wrap gap-2.5 bg-card px-1 py-3", onDone && "sticky bottom-0")}>
-        {index > 0 && (
+        {(index > 0 || onBack) && (
           <Button type="button" variant="line" size="lg" still onClick={back} disabled={sending}>
             {booking.back}
           </Button>

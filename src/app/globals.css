@@ -184,6 +184,7 @@
   --spacing-sheet: 92svh;      /* bottom sheet max height */
   --spacing-hero-gap: clamp(1.5rem, 3.5svh, 2.25rem); /* between hero copy groups: taller screens breathe more */
   --spacing-safe-bottom: max(0.75rem, env(safe-area-inset-bottom)); /* floating bars clear the home indicator */
+  --spacing-dialog: 44rem; /* the booking dialog's height from sm */
   --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button */
   --container-content: 90rem;  /* 1440px */
   --container-panel: 96rem;    /* hero panel cap, 1536px */
@@ -307,6 +308,11 @@
   top: calc(0.5rem + var(--vv-top, 0px));
   bottom: calc(0.5rem + var(--vv-bottom, 0px));
 }
+/* A centred dialog as tall as its content, never past sheet-fit's edges. */
+@utility fit-height {
+  height: fit-content;
+  max-height: calc(100svh - 1rem - var(--vv-top, 0px) - var(--vv-bottom, 0px));
+}
 
 /* Floating phone chrome steps aside while a field has focus: it would ride over the field or under the keyboard. */
 /* Scrolls, without a visible bar (the chat log). */
@@ -376,6 +382,13 @@
     .btn-fill {
       transition-duration: var(--duration-fast);
     }
+  }
+  /* The same balance at every width, for a wide button that stays full width past phones (the hero). */
+  .btn-wide-full::before,
+  .btn-wide-full > .btn-fill::before {
+    content: "";
+    flex-shrink: 0;
+    width: 1.875rem;
   }
   /* Full-width on a phone (the `wide` prop): a spacer the chip's size balances the chip, so the label is truly centred and the chip keeps the right edge. */
   @media (width < 40rem) {
