@@ -1,12 +1,11 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 
-import { BookButton } from "@/components/book-button"
 import { Icon } from "@/components/icon"
 import { Img } from "@/components/img"
 import { PriceLine } from "@/components/price-line"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
-import { actions, repairsPage, type Service } from "@/content"
+import { repairsPage, type Service } from "@/content"
 import { cn } from "@/lib/utils"
 
 // Rendered widths in the home grid (Container gutters 16/24/40px, 16px gaps): leads take half a row from lg, the rest a third.
@@ -33,10 +32,7 @@ export function ServiceCard({ service, lead, priority, as }: { service: Service;
         </Link>
         <CardDescription className="mb-1 line-clamp-2">{service.short}</CardDescription>
         <PriceLine priceFrom={service.priceFrom} className="text-body-sm font-semibold" />
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-3">
-          <BookButton service={service.slug} variant="line" className="relative z-10">
-            {actions.bookRepair}
-          </BookButton>
+        <div className="mt-auto flex justify-end pt-3 max-md:hidden">
           <Link
             href={`/repairs/${service.slug}`}
             aria-label={repairsPage.viewDetailsOf(service.title)}

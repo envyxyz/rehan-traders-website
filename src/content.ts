@@ -103,7 +103,7 @@ export const facts = {
 
 // Typed in by hand (static site, no Places API). Update rating, count and asOf together.
 // Review text copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings then, 49 on 31 Oct, 32 with text (the other 18 are
-// stars only and are left out). Text exactly as written; `date` is Google's relative date as of `asOf`. Ameer's own
+// stars only and are left out; so is the one below 4 stars, 1 Nov 2026, Ameer's call). Text exactly as written; `date` is Google's relative date as of `asOf`. Ameer's own
 // review is left out: the agency should not review its client. `weight` (3 clear English naming the repair, 2 clear
 // praise, 1 short or vague) makes the clearest ones come up most often in the random 10 shown per visit.
 export const reviews = {
@@ -147,7 +147,6 @@ export const reviews = {
     { author: "Husnain J.", rating: 5, date: "3 years ago", weight: 1, text: "Very good" },
     { author: "NAQi Z.", rating: 5, date: "a month ago", weight: 1, text: "Grateful" },
     { author: "Danish K.", rating: 5, date: "2 years ago", weight: 1, text: "Rauf Good" },
-    { author: "Muhammad U.", rating: 2, date: "6 months ago", weight: 1, text: "Average" },
   ],
 } as const
 
@@ -171,6 +170,9 @@ export const nav = {
 
 export const actions = {
   book: "Book a visit",
+  /** The main call to action: opens the repair picker, then the booking. */
+  start: "Start my repair",
+  askAi: "Ask AI",
   bookRepair: "Book this repair",
   whatsapp: "WhatsApp",
   // Starts with the visible "WhatsApp" (WCAG 2.5.3 label in name).
@@ -263,7 +265,7 @@ export const services: Service[] = [
   },
   {
     slug: "galaxy-z-fold-flip",
-    title: "Galaxy Z Fold and Flip",
+    title: "iPhone Duo, Pixel Fold, Z Fold and Z Flip",
     short: "Outer glass, inner screen and hinge for every Galaxy Z Fold and Z Flip.",
     long: "Outer glass, inner screen and hinge repairs for every Galaxy Z Fold and Z Flip, plus Pixel Fold and Surface Duo. The shop tries to save the damaged panel first and replaces it only when it cannot be saved.",
     faults: ["Outer glass", "Inner screen", "Hinge", "Blank display", "Lines on screen"],
@@ -514,6 +516,11 @@ export const showsFault = (b: Pick<BookingSummary, "fault" | "problem">) => !(b.
 
 export const booking = {
   title: "Book a visit",
+  /** The first step behind "Start my repair". `unsure` books without a repair picked. */
+  picker: {
+    title: "What needs fixing?",
+    unsure: { title: "Not sure what's wrong", short: "Tell us what it's doing and the free check finds the fault." },
+  },
   lede: "Four quick questions. No account, no payment.",
   progress: (step: number, total: number, name: string) => `Step ${step} of ${total}: ${name}`,
   next: "Next",

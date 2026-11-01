@@ -15,7 +15,7 @@ export function CtaBand() {
           <Heading className="text-on-band">{cta.title}</Heading>
           <div className="grid gap-3 sm:flex sm:flex-wrap lg:shrink-0">
             <BookButton size="lg" variant="inverse" arrow wide>
-              {actions.book}
+              {actions.start}
             </BookButton>
             <Button asChild size="lg" variant="whatsapp">
               <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="cta">

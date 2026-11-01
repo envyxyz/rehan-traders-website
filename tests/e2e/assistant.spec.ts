@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test"
 
-import { actions, assistant, booking, estimator } from "../../src/content"
+import { actions, assistant, booking, estimator, services } from "../../src/content"
 import { MAX_INPUT, MAX_TURNS, parseReply, pieces } from "../../src/lib/assistant"
 import { pickDevice } from "./helpers"
 
@@ -11,8 +11,8 @@ const stubChat = (page: Page, status: number, body: string) =>
   page.route("/api/chat", (route) => route.fulfill({ status, contentType: "text/plain; charset=utf-8", body }))
 
 async function openChat(page: Page, load = true) {
-  if (load) await page.goto("/")
-  // The launcher is there from page load: a round icon on phones, "Ask a question" on desktop.
+  if (load) await page.goto("/faq")
+  // The launcher is there from page load, except in the home hero: a round icon on phones, "Ask a question" on desktop.
   await page.getByRole("button", { name: assistant.title }).click()
   await expect(page.getByRole("dialog", { name: assistant.title })).toBeVisible()
   return page.getByRole("dialog", { name: assistant.title })
@@ -117,7 +117,7 @@ test("estimate: picking device and fault shows the repair in place of the form",
   const fixed = (page.viewportSize()?.width ?? 0) >= 1024 // from lg the card keeps one height; below it, each panel has its own
   await form.getByRole("button", { name: estimator.submit }).dblclick() // a double click must not crash the page
 
-  await expect(page.getByRole("main").getByText("Galaxy Z Fold and Flip", { exact: true })).toBeVisible()
+  await expect(page.getByRole("main").getByText(services[1].title, { exact: true })).toBeVisible()
   await expect(page.getByText(estimator.result.panel.maybe)).toBeVisible()
   const after = (await card.boundingBox())!
   if (fixed) expect(after.height).toBe(before.height) // the card keeps its size
@@ -136,7 +136,7 @@ test("estimate: picking device and fault shows the repair in place of the form",
 
   // Book this repair opens the booking with the device already picked.
   await page.getByRole("link", { name: actions.bookRepair }).click()
-  await expect(page.getByRole("dialog").getByText("Galaxy Z Fold and Flip")).toBeVisible()
+  await expect(page.getByRole("dialog").getByText(services[1].title)).toBeVisible()
 })
 
 test("estimate: the Describe tab sends a quote ticket and lands on the confirmation", async ({ page }) => {

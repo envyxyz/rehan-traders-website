@@ -10,7 +10,7 @@ const loadSheet = () => import("@/components/booking-sheet").then((m) => m.Booki
 const BookingSheet = dynamic(loadSheet, { ssr: false })
 
 type BookButtonProps = Omit<React.ComponentProps<typeof Button>, "asChild" | "onClick"> & {
-  /** Service slug: narrows the faults and offers "Get a quote". The only thing that may go in the URL. */
+  /** Service slug: narrows the faults and offers "Get a quote". The only thing that may go in the URL. Without one the sheet asks first. */
   service?: string
   device?: string
 }
@@ -21,8 +21,8 @@ type BookButtonProps = Omit<React.ComponentProps<typeof Button>, "asChild" | "on
  */
 export function BookButton({ service, device, children, ...props }: BookButtonProps) {
   const [open, setOpen] = React.useState(false)
-  // Mounted on the first click and kept, so the sheet can play its closing animation.
-  const [asked, setAsked] = React.useState(false)
+  // Mounted on the first click and kept, so the sheet can play its closing animation. Each opening is a fresh sheet, back at the picker.
+  const [opens, setOpens] = React.useState(0)
   const link = React.useRef<HTMLAnchorElement>(null)
   return (
     <>
@@ -35,14 +35,14 @@ export function BookButton({ service, device, children, ...props }: BookButtonPr
           onClick={(e) => {
             if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
             e.preventDefault()
-            setAsked(true)
+            setOpens((n) => n + 1)
             setOpen(true)
           }}
         >
           {children}
         </a>
       </Button>
-      {asked && <BookingSheet open={open} onOpenChange={setOpen} service={service} device={device} returnFocus={link} />}
+      {opens > 0 && <BookingSheet key={opens} open={open} onOpenChange={setOpen} service={service} device={device} returnFocus={link} />}
     </>
   )
 }

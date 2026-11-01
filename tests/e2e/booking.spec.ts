@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test"
 import sharp from "sharp"
 
-import { actions, booking, site } from "../../src/content"
+import { actions, assistant, booking, services, site } from "../../src/content"
 import { book, upload } from "../../worker/book"
 import { BOOKING_LIMIT } from "../../src/lib/booking"
 import { pickDevice } from "./helpers"
@@ -216,13 +216,30 @@ test("a service page takes any typed device name", async ({ page }) => {
   await expect(page.getByRole("heading", { name: booking.steps.fault.title })).toBeVisible()
 })
 
-test("a Book button opens the booking sheet", async ({ page, isMobile }) => {
+test("the main button asks which repair, then opens the booking for it", async ({ page, isMobile }) => {
   test.skip(isMobile, "the hero button is the same component on phones")
   await page.goto("/")
-  await page.locator("#top").getByRole("link", { name: actions.book }).click()
-  await expect(page.getByRole("dialog")).toBeVisible()
-  await expect(page.getByRole("dialog").getByLabel(booking.device.label)).toBeVisible()
+  await page.locator("#top").getByRole("link", { name: actions.start }).click()
+  const dialog = page.getByRole("dialog", { name: booking.picker.title })
+  await expect(dialog.getByRole("button")).toHaveCount(services.length + 2) // the repairs, not sure, close
+  await dialog.getByRole("button", { name: services[0].title }).click()
+  await expect(page.getByRole("dialog", { name: services[0].title }).getByLabel(booking.device.label)).toBeVisible()
+  await page.getByRole("button", { name: booking.back }).click()
+  await expect(page.getByRole("dialog", { name: booking.picker.title })).toBeVisible()
+  await page.getByRole("button", { name: booking.picker.unsure.title }).click()
+  await expect(page.getByRole("dialog", { name: booking.title }).getByLabel(booking.device.label)).toBeVisible()
   await expect(page).toHaveURL("/")
+})
+
+test("the home hero has its own chat button; the corner one comes in on scroll", async ({ page }) => {
+  await page.goto("/")
+  const corner = page.getByRole("button", { name: assistant.title })
+  await expect(corner).toBeHidden()
+  await page.locator("#top").getByRole("button", { name: actions.askAi }).click()
+  await expect(page.getByRole("dialog", { name: assistant.title })).toBeVisible()
+  await page.keyboard.press("Escape")
+  await page.locator("#repairs").scrollIntoViewIfNeeded()
+  await expect(corner).toBeVisible()
 })
 
 test("an upload cannot become a booking: the Worker's action and secret come last", async () => {
