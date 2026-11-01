@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { ArrowLeft, ArrowRight } from "lucide-react"
 
 import { Icon } from "@/components/icon"
+import { ArrowLeft, ArrowRight } from "@/components/icons"
 import { Stars } from "@/components/stars"
 import { Button } from "@/components/ui/button"
 import { home, reviews, reviewsPage } from "@/content"

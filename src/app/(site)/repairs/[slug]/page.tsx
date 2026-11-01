@@ -1,14 +1,13 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowRight } from "lucide-react"
 
 import { BookButton } from "@/components/book-button"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { ArrowRight, repairIcons } from "@/components/icons"
 import { JsonLd } from "@/components/json-ld"
-import { Img } from "@/components/img"
 import { Container, Section } from "@/components/layout"
 import { PriceLine } from "@/components/price-line"
 import { ServiceCard } from "@/components/service-card"
@@ -87,13 +86,9 @@ export default async function ServicePage({ params }: PageProps) {
             </div>
 
             <div className="lg:col-span-5">
-              <Img
-                name={service.image}
-                alt={service.alt}
-                sizes="(min-width: 1024px) 480px, calc(100vw - 2rem)"
-                className="aspect-4/3 w-full rounded-xl border border-hairline"
-                priority
-              />
+              <div aria-hidden className="grid aspect-4/3 w-full place-items-center rounded-xl border border-hairline bg-panel">
+                <Icon icon={repairIcons[service.slug]} size="repair-lg" className="text-signal" />
+              </div>
             </div>
           </div>
         </Container>

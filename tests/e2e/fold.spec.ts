@@ -2,7 +2,21 @@ import { expect, test } from "@playwright/test"
 
 import { hero } from "../../src/content"
 
-test("hero fold: three.js waits for an interaction, then the fold closes and opens by keyboard", async ({ page }) => {
+test("phone: the fold starts shut and opens by itself once it is scrolled into view", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "desktop starts open")
+  await page.goto("/")
+  await page.waitForLoadState("networkidle")
+  const fold = page.locator("button.fold-stage")
+  await expect(fold).toHaveAttribute("aria-label", hero.fold.open)
+  expect(await fold.locator("img").evaluate((img: HTMLImageElement) => img.currentSrc)).toContain("fold-poster-closed")
+  await page.evaluate(() => scrollBy(0, 10)) // any interaction loads the scene
+  await expect(page.locator("canvas[data-ready]")).toBeAttached({ timeout: 30_000 })
+  await fold.scrollIntoViewIfNeeded()
+  await expect(fold).toHaveAttribute("aria-label", hero.fold.close, { timeout: 10_000 })
+})
+
+test("hero fold: three.js waits for an interaction, then the fold closes and opens by keyboard", async ({ page, isMobile }) => {
+  test.skip(isMobile, "phones start shut (the test above)")
   await page.goto("/")
   await page.waitForLoadState("networkidle")
   // A page load alone (what Lighthouse sees) shows the poster and never loads the scene.

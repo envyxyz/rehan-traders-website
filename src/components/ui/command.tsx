@@ -2,8 +2,7 @@
 
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
-import { Search } from "lucide-react"
-
+import { Search } from "@/components/icons"
 import { cn } from "@/lib/utils"
 
 /** Device search (booking). cmdk handles filtering and keyboard; the list sits inline or in a Popover. */

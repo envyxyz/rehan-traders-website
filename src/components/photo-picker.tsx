@@ -1,10 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { Plus, X } from "lucide-react"
 
 import { Icon } from "@/components/icon"
+import { Plus, X } from "@/components/icons"
 import { booking } from "@/content"
+import { busyStart, busyStop } from "@/lib/busy"
 import { uploadPhoto } from "@/lib/upload"
 
 export const MAX_PHOTOS = 3
@@ -46,12 +47,14 @@ export function PhotoPicker({
       const key = crypto.randomUUID()
       taken.current++
       onChange((all) => [...all, { key, preview: URL.createObjectURL(file), progress: 0 }])
+      busyStart()
       uploadPhoto(file, (progress) => patch(key, { progress }))
         .then((id) => patch(key, { id, progress: 1 }))
         .catch(() => {
           drop(key)
           onError(c.uploadError)
         })
+        .finally(busyStop)
     }
     if (input.current) input.current.value = ""
   }

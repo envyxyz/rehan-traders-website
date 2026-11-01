@@ -134,7 +134,7 @@ test("estimate: picking device and fault shows the repair in place of the form",
   await expect(page.getByRole("heading", { name: estimator.result.title })).toBeVisible()
   expect(errors).toEqual([])
 
-  // Book this repair opens the booking with the device already picked.
+  // Book a free check opens the booking with the device already picked.
   await page.getByRole("link", { name: actions.bookRepair }).click()
   await expect(page.getByRole("dialog").getByText("Galaxy Z Fold and Flip")).toBeVisible()
 })

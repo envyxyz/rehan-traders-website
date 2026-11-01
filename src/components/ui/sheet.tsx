@@ -2,8 +2,10 @@
 
 import * as React from "react"
 import { Dialog as SheetPrimitive } from "radix-ui"
-import { X } from "lucide-react"
 
+import { Icon } from "@/components/icon"
+import { X } from "@/components/icons"
+import { isCovering } from "@/components/loading"
 import { Button } from "@/components/ui/button"
 import { ui } from "@/content"
 import { cn } from "@/lib/utils"
@@ -44,6 +46,14 @@ function useKeyboardFit() {
   return setSheet
 }
 
+/**
+ * A skeleton stood in for this sheet while its chunk downloaded (loading.tsx): the sheet appears in its place, so its
+ * opening animation is skipped (`[data-instant]`, globals.css). Runs as the element mounts, once per opening.
+ */
+const instantIfCovered = (el: HTMLElement | null) => {
+  if (el && isCovering()) el.dataset.instant = ""
+}
+
 function SheetContent({
   className,
   children,
@@ -52,11 +62,21 @@ function SheetContent({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & { side?: keyof typeof sides; glass?: boolean }) {
   const fit = useKeyboardFit()
+  const mounted = React.useCallback(
+    (el: HTMLElement | null) => {
+      fit(el)
+      instantIfCovered(el)
+    },
+    [fit]
+  )
   return (
     <SheetPrimitive.Portal>
-      <SheetPrimitive.Overlay className="fixed inset-0 z-50 bg-scrim data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
+      <SheetPrimitive.Overlay
+        ref={instantIfCovered}
+        className="fixed inset-0 z-50 bg-scrim data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0"
+      />
       <SheetPrimitive.Content
-        ref={fit}
+        ref={mounted}
         data-slot="sheet-content"
         className={cn(
           "fixed z-50 flex flex-col overflow-hidden text-body shadow-float transition-none duration-(--duration-base) ease-drawer outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
@@ -69,7 +89,7 @@ function SheetContent({
         <div className={cn("flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain p-6", className)}>{children}</div>
         <SheetPrimitive.Close asChild>
           <Button variant="icon" className="absolute top-3 right-3 bg-concrete" aria-label={ui.close}>
-            <X aria-hidden className="size-5" strokeWidth={1.75} />
+            <Icon icon={X} size="lg" />
           </Button>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>

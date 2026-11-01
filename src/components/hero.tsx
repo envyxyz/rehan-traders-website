@@ -1,8 +1,7 @@
-import { MapPin } from "lucide-react"
-
 import { BookButton } from "@/components/book-button"
 import { Fold3D } from "@/components/fold-3d"
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { MapPin } from "@/components/icons"
 import { OpenStatus } from "@/components/open-status"
 import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"

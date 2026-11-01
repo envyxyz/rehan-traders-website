@@ -187,6 +187,7 @@
   --spacing-above-bar: calc(var(--spacing-safe-bottom) + 4.5rem); /* the phone chat button */
   --container-content: 90rem;  /* 1440px */
   --container-panel: 96rem;    /* hero panel cap, 1536px */
+  --container-cards: 66rem;    /* the home repair cards: three to a row, with room at the sides, 1056px */
   --container-estimate: 34rem; /* the /estimate card: one width for both tabs and the result, 544px */
 
   /* Radii: 18px cards, 28px panels, pills for controls. */
@@ -205,10 +206,12 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* the arrow button fill */
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);   /* sheets */
   --ease-nav: cubic-bezier(0.4, 0, 0.2, 1);        /* nav hide/show: an even glide, no snap at the start */
+  --ease-creep: cubic-bezier(0.05, 0.6, 0.25, 0.97); /* the red top line: off at once, slows, never stops dead */
   --duration-press: 100ms;
   --duration-fast: 200ms;
   --duration-base: 350ms;
-  --duration-nav: 450ms;   /* nav hide/show */
+  --duration-nav: 450ms;   /* phone nav hide/show */
+  --duration-creep: 10s;   /* the red top line's walk to 90% */
   --duration-fill: 700ms;  /* arrow button: chip colour filling the button, and its lift */
   --duration-reveal: 700ms;
 
@@ -413,6 +416,76 @@
     background: radial-gradient(closest-side, var(--floor), transparent);
     filter: blur(0.4rem);
   }
+  /* The open phone's outline in the poster (x 17-83%, y 14-88% of the square), a hair inside it so the poster covers
+     every edge once it has loaded. Stands in for the poster until then. Phones show the shut poster (x 33-65%, y 13-88%). */
+  .fold-skeleton {
+    position: absolute;
+    inset: 14.8% 17.3% 12.4% 17.3%;
+    border-radius: 2% / 1.8%;
+    @media (width < 48rem) {
+      inset: 14% 35.5% 13% 34%;
+      border-radius: 4% / 1.8%;
+    }
+  }
+}
+
+/* ---------- Loading: skeletons and the red line at the top (loading.tsx) ---------- */
+/* A skeleton is always the shape of what it stands for. It pulses between two quiet greys: no sweep, no gradient. */
+@keyframes skeleton-pulse {
+  50% {
+    background-color: var(--hairline);
+  }
+}
+/* A sheet's skeleton shows 120ms after it mounts, so a chunk that arrives at once flashes nothing. */
+@keyframes skeleton-after {
+  from {
+    visibility: hidden;
+  }
+}
+/* From 0 to 90% of the screen, then it waits for the end. */
+@keyframes top-line-creep {
+  to {
+    transform: scaleX(0.9);
+  }
+}
+@layer components {
+  .skeleton {
+    background-color: var(--concrete);
+    animation: skeleton-pulse 1.4s ease-in-out infinite;
+  }
+  /* A photo that has loaded (loading.tsx) stops pulsing: a running background under it would repaint every frame. */
+  img[data-loaded] {
+    animation: none;
+    background: none;
+  }
+  .sheet-skeleton {
+    animation: skeleton-after 1ms step-end 120ms both;
+  }
+  .top-line {
+    z-index: 60; /* over the sheets' scrim (z-50) */
+    transform: scaleX(0);
+    animation: top-line-creep var(--duration-creep) var(--ease-creep) forwards;
+  }
+  /* Done: loading.tsx starts the transition from where the creep got to, to full width. */
+  .top-line[data-done] {
+    animation: none;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+}
+/* A sheet that takes the place of its skeleton does not slide in again (SheetContent). Out of every layer, so it beats the
+   animate-in utilities; it ends when the sheet starts to close, so the exit still plays. */
+[data-instant][data-state="open"] {
+  animation: none;
+}
+/* A page opened part way down: the desktop header waits, unseen, for nav.tsx to paint it as the island (layout.tsx). */
+html[data-scrolled]:not([data-nav]) .nav-desktop {
+  visibility: hidden;
+}
+/* No JavaScript, so nothing marks a photo as loaded: no pulse. */
+@media (scripting: none) {
+  .skeleton {
+    animation: none;
+  }
 }
 
 /* ---------- Base and browser surfaces ---------- */
@@ -481,12 +554,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-}
-
-/* Without JavaScript nothing reveals the Reveal blocks (motion.tsx), so they are shown from the start. */
-@media (scripting: none) {
-  [data-reveal] {
-    opacity: 1;
   }
 }

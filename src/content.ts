@@ -165,13 +165,16 @@ export const nav = {
   /** Phones: back from the Repairs list to the menu. */
   back: "Back",
   home: `${site.name} home`,
+  /** Phones: the menu's first row. */
+  homeLink: "Home",
   label: "Main",
 
 } as const
 
 export const actions = {
   book: "Book a visit",
-  bookRepair: "Book this repair",
+  /** On repair cards, repair pages and the estimate result: names the free check at the counter, the first step of every repair. */
+  bookRepair: "Book a free check",
   whatsapp: "WhatsApp",
   // Starts with the visible "WhatsApp" (WCAG 2.5.3 label in name).
   whatsappLabel: `WhatsApp, chat on ${site.phone.display}`,
@@ -180,7 +183,7 @@ export const actions = {
   allRepairs: "All repairs",
   readReviews: "Read all reviews on Google",
   allQuestions: "All questions",
-  /** Phase 5: the button on the booking form / page opened by "Book this repair", and its success message. */
+  /** Phase 5: the button on the booking form / page opened by "Book a free check", and its success message. */
   getQuote: "Get a quote",
   quoteSent: "Ticket created. We'll send your quote on WhatsApp.",
 } as const
@@ -221,9 +224,7 @@ export type Service = {
   priceFrom?: number
   /** Phase 2 image name: public/images/<image>-<width>.avif|webp */
   image: string
-  alt: string
   faq: { q: string; a: string }[]
-  lead?: boolean
   howItWorks: { step: string; title: string; text: string }[]
   related: string[]
   /** Search title and description: the problem, then Hafeez Center and Lahore. */
@@ -239,8 +240,6 @@ export const services: Service[] = [
     long: "Rehan Traders first checks that the display under the cracked glass still works. If it does, the glass is separated from the display under heat and vacuum and new glass is laminated on. You keep the display your phone came with and pay for new glass, not a whole new screen.",
     faults: ["Cracked glass", "Scratched glass", "Touch not working"],
     image: "glass-separation",
-    alt: "Technician separating cracked glass from a phone display at the bench",
-    lead: true,
     howItWorks: [
       { step: "01", title: "Free check", text: "We check the display under the glass for black spots or colored lines." },
       { step: "02", title: "Glass separation", text: "Under heat and vacuum, the cracked outer glass is separated from the display." },
@@ -268,8 +267,6 @@ export const services: Service[] = [
     long: "Outer glass, inner screen and hinge repairs for every Galaxy Z Fold and Z Flip, plus Pixel Fold and Surface Duo. The shop tries to save the damaged panel first and replaces it only when it cannot be saved.",
     faults: ["Outer glass", "Inner screen", "Hinge", "Blank display", "Lines on screen"],
     image: "fold-inner-panel",
-    alt: "Galaxy Z Fold opened on the bench with its inner panel exposed",
-    lead: true,
     howItWorks: [
       { step: "01", title: "Hinge and display inspection", text: "We inspect hinge tension, frame alignment, and inner flexible panel condition." },
       { step: "02", title: "Panel recovery priority", text: "We try to save the original inner screen before replacing it." },
@@ -297,7 +294,6 @@ export const services: Service[] = [
     long: "iPhone screens, back glass, Face ID, batteries, cameras and charging faults, fixed at the open bench.",
     faults: ["Screen", "Back glass", "Face ID", "Battery", "Charging", "Camera"],
     image: "iphone-back-glass",
-    alt: "iPhone with its back glass being replaced",
     howItWorks: [
       { step: "01", title: "Diagnostic check", text: "We test Face ID, display, battery health, and cameras on the job card." },
       { step: "02", title: "Bench repair", text: "Screens, back glass, battery swaps, or board faults are worked on at the bench." },
@@ -325,7 +321,6 @@ export const services: Service[] = [
     long: "When the display itself is damaged, with lines, a pink or green screen, a black or blank display or flicker, the screen is replaced. If only the glass is cracked, touch glass replacement keeps your original display instead.",
     faults: ["Lines on screen", "Black or blank display", "Green or white screen", "Flickering"],
     image: "screen-replacement", // no Phase 2 job yet: shows the placeholder,
-    alt: "Phone with its display panel removed on the bench",
     howItWorks: [
       { step: "01", title: "Panel assessment", text: "We confirm whether the fault is in the display panel or motherboard output." },
       { step: "02", title: "Screen removal", text: "The damaged screen is taken off at the bench." },
@@ -352,7 +347,6 @@ export const services: Service[] = [
     long: "Battery replacement and charging port repair. Swollen batteries are removed and disposed of safely.",
     faults: ["Battery drains fast", "Swollen battery", "Not charging", "Loose charging port"],
     image: "battery-swap",
-    alt: "Phone battery being replaced at the bench",
     howItWorks: [
       { step: "01", title: "Power testing", text: "We measure current draw, charging rate, and battery degradation at the bench." },
       { step: "02", title: "Component repair", text: "Degraded batteries or damaged charging flex boards are replaced." },
@@ -380,7 +374,6 @@ export const services: Service[] = [
     long: "Liquid-damaged and dead phones are opened, cleaned and repaired at board level, with your data recovered first where possible.",
     faults: ["Water damage", "Phone will not turn on", "Data recovery"],
     image: "wet-board-cleaning",
-    alt: "Phone board being cleaned after water damage",
     howItWorks: [
       { step: "01", title: "Immediate intake", text: "The phone is opened immediately and the battery disconnected to halt short circuits." },
       { step: "02", title: "Corrosion cleaning", text: "Mineral deposits and liquid corrosion are cleaned from the board." },
@@ -405,7 +398,6 @@ export const services: Service[] = [
     long: "Motherboard faults, network and SIM faults, Face ID and no-power faults diagnosed and repaired under the microscope.",
     faults: ["No power", "No network or SIM", "Face ID", "Camera", "Vibration"],
     image: "board-microscope",
-    alt: "Microscope over a phone board at the repair bench",
     howItWorks: [
       { step: "01", title: "Microscope inspection", text: "The logic board is examined under the microscope for burnt chips and damaged lines." },
       { step: "02", title: "Circuit diagnostics", text: "Power lines and short circuits are traced with digital multimeters and schematics." },
@@ -432,7 +424,6 @@ export const services: Service[] = [
     long: "Mainly iPad repairs: glass, screens, batteries and charging. Very old, obsolete tablets are not taken in.",
     faults: ["Cracked glass", "Screen", "Battery", "Charging"],
     image: "ipad-screen",
-    alt: "Tablet screen being repaired at the bench",
     howItWorks: [
       { step: "01", title: "Tablet inspection", text: "We check whether only the glass is cracked or the display under it is damaged too." },
       { step: "02", title: "Bench repair", text: "Glass separation, display replacement, or battery service is performed at the bench." },
@@ -813,9 +804,6 @@ export const repairsPage = {
   bookLede: "Book a visit to Shop G-88 or ask for a quote on WhatsApp.",
   allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
   priceTitle: "Price",
-  viewDetails: "View details",
-  /** Accessible name of a card's "View details" link: starts with the visible label, ends with the repair, so each is unique. */
-  viewDetailsOf: (title: string) => `View details for ${title}`,
 } as const
 
 export const reviewsPage = {
@@ -1129,7 +1117,7 @@ export const estimator = {
   },
   title: "Repair estimate",
   lede: "Pick a device and fault to see the likely repair, or send the problem with photos and the shop replies with a quote on WhatsApp.",
-  mode: { label: "How do you want to tell us?", pick: "Pick device and fault", describe: "Describe it" },
+  mode: { label: "How do you want to tell us?", pick: "Pick the fault", describe: "Describe it" },
   device: "Device",
   fault: "Fault",
   submit: "See the likely repair",
@@ -1157,7 +1145,7 @@ export const estimator = {
   faults: [
     { slug: "cracked-glass", label: "Cracked glass, screen still works", service: "touch-glass-replacement", panel: "kept" },
     { slug: "touch-not-working", label: "Touch not working", service: "touch-glass-replacement", panel: "kept" },
-    { slug: "screen-damaged", label: "Lines, black, green or flickering screen", service: "screen-replacement", panel: "maybe" },
+    { slug: "screen-damaged", label: "Lines, black or green screen", service: "screen-replacement", panel: "maybe" },
     { slug: "fold-inner-screen", label: "Fold or Flip inner screen", service: "galaxy-z-fold-flip", panel: "maybe" },
     { slug: "hinge", label: "Hinge", service: "galaxy-z-fold-flip", panel: null },
     { slug: "back-glass", label: "Back glass", service: "iphone", panel: null },

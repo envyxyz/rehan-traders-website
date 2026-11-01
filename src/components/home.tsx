@@ -1,9 +1,10 @@
 import Link from "next/link"
-import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { BeforeAfter } from "@/components/before-after"
+import { StepCard } from "@/components/courier-steps"
 import { HoursTable } from "@/components/hours-table"
 import { Icon } from "@/components/icon"
+import { ArrowRight, ArrowUpRight } from "@/components/icons"
 import { Img } from "@/components/img"
 import { InteractiveMap } from "@/components/interactive-map"
 import { JobCard } from "@/components/job-card"
@@ -24,10 +25,10 @@ import { cn } from "@/lib/utils"
 
 const textLink = "inline-flex min-h-11 items-center gap-1.5 font-display text-button text-ink underline-offset-4 hover:underline"
 
-/** Heading with an optional text link on the right, on one row at any width. */
+/** Heading with an optional text link on the right, on one row at any width, the two on one baseline. */
 function SectionHead({ title, link, className }: { title: string; link?: { href: string; label: string }; className?: string }) {
   return (
-    <div className={cn("flex items-end justify-between gap-x-4 gap-y-2 sm:gap-x-8", className)}>
+    <div className={cn("flex items-baseline justify-between gap-x-4 gap-y-2 sm:gap-x-8", className)}>
       <Heading size="display-md" className="min-w-0 sm:text-display-lg">
         {title}
       </Heading>
@@ -41,18 +42,17 @@ function SectionHead({ title, link, className }: { title: string; link?: { href:
   )
 }
 
+/** Eight cards at 1152px, not the page width, so they keep room at the sides. From lg the last two sit centred under the six above. */
 function Repairs() {
-  const leads = services.filter((s) => s.lead)
-  const rest = services.filter((s) => !s.lead)
   return (
     <Section id="repairs">
-      <Container>
+      <Container className="max-w-cards">
         <SectionHead title={home.repairs.title} link={{ href: "/repairs", label: actions.allRepairs }} />
         <ul className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
-          {[...leads, ...rest].map((s, i) => (
-            <li key={s.slug} className={s.lead ? "lg:col-span-3" : "lg:col-span-2"}>
+          {services.map((s, i) => (
+            <li key={s.slug} className={cn("lg:col-span-2", i === services.length - 2 && "lg:col-start-2")}>
               <Reveal delay={(i % 3) * reveal.stagger} className="h-full">
-                <ServiceCard service={s} lead={s.lead} />
+                <ServiceCard service={s} />
               </Reveal>
             </li>
           ))}
@@ -119,17 +119,11 @@ function Process() {
         <div className="max-w-2xl">
           <Heading>{c.title}</Heading>
         </div>
-        <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {process.map((step, i) => (
             <li key={step.title}>
-              <Reveal delay={i * reveal.stagger}>
-                <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="mt-3 font-display text-title-md text-ink">{step.title}</h3>
-                <Text tone="muted" className="mt-1.5">
-                  {step.text}
-                </Text>
+              <Reveal delay={i * reveal.stagger} className="h-full">
+                <StepCard n={i + 1} title={step.title} text={step.text} />
               </Reveal>
             </li>
           ))}
@@ -188,7 +182,7 @@ function Visit() {
           <address className="mt-5 not-italic text-body-md text-body">
             {site.address.lines.map((l) => (
               <span key={l} className="block">
-                {l}
+                {l}{" "}
               </span>
             ))}
           </address>

@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { actions, booking, estimator, priceMode, site, type BookingSummary } from "@/content"
 import { MAX_INPUT, repairFor } from "@/lib/assistant"
 import { BOOKING_KEY, BOOKING_LIMIT, localRef, normalizePhone, now, recentBookings, rememberBooking } from "@/lib/booking"
+import { busyStart, busyStop } from "@/lib/busy"
 import { track } from "@/lib/track"
 import { cn, nextField } from "@/lib/utils"
 
@@ -34,6 +35,9 @@ export function EstimatorFromUrl() {
  * that goes through the booking pipeline. Every panel sits in the same grid cell, so the card is as tall as the
  * tallest one and switching tabs or showing a result never moves the page.
  */
+// The two ways in share one line on phones, each half of it.
+const tab = "justify-center whitespace-nowrap max-sm:flex-1 max-sm:px-3"
+
 export function Estimator({ q = "", describe = false }: { q?: string; describe?: boolean }) {
   const [mode, setMode] = React.useState<Mode>(describe ? "describe" : "pick")
   const [result, setResult] = React.useState<Result | null>(null)
@@ -50,14 +54,19 @@ export function Estimator({ q = "", describe = false }: { q?: string; describe?:
       <div ref={tabs}>
         <RadioGroup
           aria-label={estimator.mode.label}
+          className="flex-nowrap"
           value={mode}
           onValueChange={(m) => {
             setMode(m as Mode)
             setResult(null)
           }}
         >
-          <RadioGroupItem value="pick">{estimator.mode.pick}</RadioGroupItem>
-          <RadioGroupItem value="describe">{estimator.mode.describe}</RadioGroupItem>
+          <RadioGroupItem value="pick" className={tab}>
+            {estimator.mode.pick}
+          </RadioGroupItem>
+          <RadioGroupItem value="describe" className={tab}>
+            {estimator.mode.describe}
+          </RadioGroupItem>
         </RadioGroup>
       </div>
 
@@ -206,6 +215,7 @@ function TicketForm({ q }: { q: string }) {
     setError(null)
     const photoIds = photos.flatMap((p) => (p.id ? [p.id] : []))
     let job: string | null = null
+    busyStart() // the red line runs until the confirmation page replaces this one
     try {
       const res = await fetch("/api/book", {
         method: "POST",
@@ -224,6 +234,7 @@ function TicketForm({ q }: { q: string }) {
         }),
       })
       if (res.status === 400 || res.status === 429) {
+        busyStop()
         busy.current = false
         setSending(false)
         return fail("form", res.status === 429 ? booking.review.limit : booking.review.error)

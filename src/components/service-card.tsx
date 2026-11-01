@@ -1,50 +1,36 @@
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 
 import { BookButton } from "@/components/book-button"
 import { Icon } from "@/components/icon"
-import { Img } from "@/components/img"
+import { ArrowRight, repairIcons } from "@/components/icons"
 import { PriceLine } from "@/components/price-line"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
-import { actions, repairsPage, type Service } from "@/content"
-import { cn } from "@/lib/utils"
+import { actions, type Service } from "@/content"
 
-// Rendered widths in the home grid (Container gutters 16/24/40px, 16px gaps): leads take half a row from lg, the rest a third.
-const sizesLead = "(min-width: 1440px) 672px, (min-width: 1024px) calc(50vw - 3rem), (min-width: 768px) calc(50vw - 2rem), calc(100vw - 2rem)"
-const sizesRest = "(min-width: 1440px) 443px, (min-width: 1024px) calc(33.33vw - 2.33rem), (min-width: 768px) calc(50vw - 2rem), calc(100vw - 2rem)"
-
-export function ServiceCard({ service, lead, priority, as }: { service: Service; lead?: boolean; priority?: boolean; as?: "h2" | "h3" }) {
+/**
+ * One card everywhere: the repair's icon on a panel, then the name, one line of what it covers, and Book. The whole card
+ * opens the repair. Phones put the panel at the side, so a card is a short row; from sm it sits on top.
+ */
+export function ServiceCard({ service, as }: { service: Service; as?: "h2" | "h3" }) {
   return (
-    <Card className="relative flex h-full flex-col gap-0 overflow-hidden p-0">
-      {/* The title links the same page; this one is for the eye and the thumb, so it stays out of the tab order and the accessibility tree. */}
-      <Link href={`/repairs/${service.slug}`} aria-hidden tabIndex={-1} className="block overflow-hidden">
-        <Img
-          name={service.image}
-          alt={service.alt}
-          priority={priority}
-          sizes={lead ? sizesLead : sizesRest}
-          className={cn("aspect-video w-full transition-transform duration-(--duration-base) ease-out hover:scale-102", lead ? "md:aspect-16/10" : "md:aspect-4/3")}
-        />
-      </Link>
-      <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">
-        {/* On phones this link's ::after stretches over the whole card, so any tap on it opens the repair. */}
-        <Link href={`/repairs/${service.slug}`} className="-my-2.25 flex min-h-11 items-center no-underline after:absolute after:inset-0 md:after:hidden">
-          <CardTitle as={as} className={cn(lead && "text-title-lg", "hover:text-ink")}>{service.title}</CardTitle>
+    <Card className="relative flex h-full flex-row gap-0 overflow-hidden p-0 transition-colors hover:border-ink sm:flex-col">
+      <div aria-hidden className="grid w-24 shrink-0 place-items-center bg-panel sm:w-auto sm:py-9">
+        <Icon icon={repairIcons[service.slug]} size="repair" className="text-signal" />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-1.5 p-4 sm:p-5">
+        {/* This link's ::after stretches over the whole card; Book sits above it. */}
+        <Link href={`/repairs/${service.slug}`} className="-my-3 flex min-h-11 items-center no-underline after:absolute after:inset-0">
+          <CardTitle as={as} className="text-body-md font-bold hover:text-ink">
+            {service.title}
+          </CardTitle>
         </Link>
-        <CardDescription className="mb-1 line-clamp-2">{service.short}</CardDescription>
+        <CardDescription className="line-clamp-2 text-body-sm">{service.short}</CardDescription>
         <PriceLine priceFrom={service.priceFrom} className="text-body-sm font-semibold" />
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-3">
-          <BookButton service={service.slug} variant="line" className="relative z-10">
+        <div className="mt-auto flex justify-end pt-1">
+          <BookButton service={service.slug} variant="text" className="relative z-10 text-body-sm font-bold">
             {actions.bookRepair}
-          </BookButton>
-          <Link
-            href={`/repairs/${service.slug}`}
-            aria-label={repairsPage.viewDetailsOf(service.title)}
-            className="hidden min-h-11 items-center gap-1 font-display text-caption font-bold text-steel hover:text-ink md:inline-flex"
-          >
-            <span>{repairsPage.viewDetails}</span>
             <Icon icon={ArrowRight} size="sm" />
-          </Link>
+          </BookButton>
         </div>
       </div>
     </Card>

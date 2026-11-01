@@ -3,9 +3,9 @@
 import * as React from "react"
 import Link from "next/link"
 import { flushSync } from "react-dom"
-import { ChevronLeft, ChevronRight, Phone } from "lucide-react"
 
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { ChevronLeft, ChevronRight, Phone } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -22,25 +22,22 @@ import { cn } from "@/lib/utils"
 // The nav's Radix menus. Nav loads this module with next/dynamic after hydration, so the menu and dialog code is not
 // in the first load; until it arrives Nav shows the same trigger without behaviour. The triggers' faces come from Nav.
 
-/** Repairs opens the 8 repairs. `menu` controls it; `fades` is the top bar's, which fades with the bar. */
+/** Repairs opens the 8 repairs. `menu` controls it. */
 export function RepairsMenu({
   href,
   className,
   menu,
-  fades,
   children,
 }: {
   href: string
   className: string
   menu?: { open: boolean; onOpenChange: (open: boolean) => void }
-  fades?: boolean
   children: React.ReactNode
 }) {
   return (
     <DropdownMenu modal={false} {...menu}>
       <DropdownMenuTrigger className={className}>{children}</DropdownMenuTrigger>
-      {/* The top bar's menu fades with the bar (--nav-fade, set on scroll), so it never floats on after the bar. */}
-      <DropdownMenuContent align="start" sideOffset={12} style={fades ? { opacity: "var(--nav-fade, 1)", transition: "opacity var(--duration-reveal) var(--ease-out)" } : undefined}>
+      <DropdownMenuContent align="start" sideOffset={12}>
         {services.map((s) => (
           <DropdownMenuItem key={s.slug} asChild>
             <Link href={`/repairs/${s.slug}`}>{s.title}</Link>
@@ -92,14 +89,17 @@ export function MobileMenu({ trigger }: { trigger: React.ReactElement }) {
           <SheetTitle>{nav.menu}</SheetTitle>
         </div>
         <nav aria-label={nav.label} inert={sub} className="flex flex-col px-6 pt-2">
+          <Link href="/" className={cn(row, rise)} style={delay(0)}>
+            {nav.homeLink}
+          </Link>
           {nav.links.map((link, i) =>
             link === repairs ? (
-              <button key={link.href} ref={repairsButton} type="button" className={cn(row, "cursor-pointer justify-between", rise)} style={delay(i)} onClick={() => show(true)}>
+              <button key={link.href} ref={repairsButton} type="button" className={cn(row, "cursor-pointer justify-between", rise)} style={delay(i + 1)} onClick={() => show(true)}>
                 {link.label}
                 <Icon icon={ChevronRight} size="xl" className="text-steel" />
               </button>
             ) : (
-              <Link key={link.href} href={link.href} className={cn(row, rise)} style={delay(i)}>
+              <Link key={link.href} href={link.href} className={cn(row, rise)} style={delay(i + 1)}>
                 {link.label}
               </Link>
             )

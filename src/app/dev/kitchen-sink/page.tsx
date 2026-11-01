@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
-import { ArrowRight, Clock, MapPin, Phone, ShieldCheck, Smartphone, Star, Wrench } from "lucide-react"
 
 import { Chip } from "@/components/chip"
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { ArrowRight, Clock, MapPin, Phone, repairIcons, ShieldCheck, Smartphone, Star, Wrench } from "@/components/icons"
 import { Container, Section } from "@/components/layout"
 import { Reveal } from "@/components/motion"
 import { PriceLine } from "@/components/price-line"
@@ -301,6 +301,9 @@ export default function KitchenSink() {
             {[Phone, MapPin, Clock, Wrench, ShieldCheck, Smartphone].map((I, i) => <Icon key={i} icon={I} size="lg" />)}
             <span className="text-star"><Icon icon={Star} size="lg" /></span>
             <WhatsAppIcon size="lg" />
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-6 text-signal">
+            {Object.entries(repairIcons).map(([slug, I]) => <Icon key={slug} icon={I} size="repair" />)}
           </div>
         </Block>
       </Container>

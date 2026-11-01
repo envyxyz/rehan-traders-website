@@ -1,6 +1,7 @@
 import { ChatLauncher } from "@/components/chat-launcher"
 import { Footer } from "@/components/footer"
 import { LinkTracker } from "@/components/link-tracker"
+import { ImgLoaded, TopLine } from "@/components/loading"
 import { Nav } from "@/components/nav"
 import { ui } from "@/content"
 
@@ -25,6 +26,8 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <Footer />
       <ChatLauncher />
       <LinkTracker />
+      <TopLine />
+      <ImgLoaded />
     </div>
   )
 }

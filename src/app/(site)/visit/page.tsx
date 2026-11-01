@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { ArrowRight, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
@@ -7,6 +6,7 @@ import { CourierSteps } from "@/components/courier-steps"
 import { CtaBand } from "@/components/cta-band"
 import { HoursTable } from "@/components/hours-table"
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { ArrowRight } from "@/components/icons"
 import { Img } from "@/components/img"
 import { JsonLd } from "@/components/json-ld"
 import { InteractiveMap } from "@/components/interactive-map"
@@ -53,7 +53,6 @@ export default function VisitPage() {
                   <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" data-track="directions" data-track-from="visit">
                     {actions.directions}
                     <span className="sr-only">, {ui.externalLink}</span>
-                    <Icon icon={ArrowUpRight} size="sm" />
                   </a>
                 </Button>
                 <Button asChild size="lg" variant="whatsapp">

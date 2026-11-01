@@ -3,11 +3,12 @@
 import * as React from "react"
 import dynamic from "next/dynamic"
 
+import { SheetSkeleton } from "@/components/loading"
 import { Button } from "@/components/ui/button"
 
 const loadSheet = () => import("@/components/booking-sheet").then((m) => m.BookingSheet)
-// Not in the first page load: the sheet and flow download on hover, focus or the first tap.
-const BookingSheet = dynamic(loadSheet, { ssr: false })
+// Not in the first page load: the sheet and flow download on hover, focus or the first tap. If the tap comes first, a skeleton of the sheet shows.
+const BookingSheet = dynamic(loadSheet, { ssr: false, loading: () => <SheetSkeleton kind="booking" /> })
 
 type BookButtonProps = Omit<React.ComponentProps<typeof Button>, "asChild" | "onClick"> & {
   /** Service slug: narrows the faults and offers "Get a quote". The only thing that may go in the URL. */
@@ -30,6 +31,7 @@ export function BookButton({ service, device, children, ...props }: BookButtonPr
         <a
           ref={link}
           href={service ? `/book?service=${service}` : "/book"}
+          data-sheet
           onPointerEnter={() => void loadSheet()}
           onFocus={() => void loadSheet()}
           onClick={(e) => {

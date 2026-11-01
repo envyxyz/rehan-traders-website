@@ -1,14 +1,16 @@
 "use client"
 
 import * as React from "react"
-import { ArrowUp, Phone } from "lucide-react"
 
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { ArrowUp, Phone } from "@/components/icons"
+import { SkeletonLine } from "@/components/loading"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { assistant, site } from "@/content"
 import { MAX_INPUT, MAX_TURNS, parseReply, pieces } from "@/lib/assistant"
+import { busyStart, busyStop } from "@/lib/busy"
 import { track } from "@/lib/track"
 import { cn } from "@/lib/utils"
 
@@ -67,6 +69,10 @@ export function ChatPanel() {
     const show = (content: string) => setMessages([...history, { role: "assistant", content }])
     let content = ""
     const ctrl = (request.current = new AbortController())
+    let waiting = true
+    const arrived = () => waiting && ((waiting = false), busyStop())
+    busyStart()
+    ctrl.signal.addEventListener("abort", arrived) // closing the sheet mid-wait
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -80,6 +86,7 @@ export function ChatPanel() {
       for (;;) {
         const { value, done } = await reader.read()
         if (done) break
+        arrived()
         content += value
         show(content)
       }
@@ -87,6 +94,8 @@ export function ChatPanel() {
     } catch {
       if (ctrl.signal.aborted) return
       show(fixed(assistant.fallback))
+    } finally {
+      arrived()
     }
     if (history.filter((m) => m.role === "user").length >= MAX_TURNS) setMessages((m) => [...m, { role: "assistant", content: fixed(assistant.limit) }])
     setBusy(false)
@@ -138,7 +147,14 @@ export function ChatPanel() {
                         <React.Fragment key={j}>{buttons.length ? p.text : withPhoneLink(p.text)}</React.Fragment>
                       )
                     )
-                  : streaming && <span className="animate-pulse text-steel">{assistant.typing}</span>}
+                  : streaming && (
+                      // Waiting for the first words: the reply's first two lines, as a skeleton. Screen readers hear "typing".
+                      <>
+                        <span className="sr-only">{assistant.typing}</span>
+                        <SkeletonLine className="w-48 max-w-full text-body-md" />
+                        <SkeletonLine className="w-32 text-body-md" />
+                      </>
+                    )}
             </Bubble>
           )
         })}

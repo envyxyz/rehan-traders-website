@@ -1,8 +1,7 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
-import { ArrowUpRight } from "lucide-react"
-
+import { ArrowUpRight } from "@/components/icons"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -19,6 +18,8 @@ const buttonVariants = cva(
         whatsapp: "bg-whatsapp text-on-whatsapp hover:brightness-105 active:brightness-95",
         glass: "glass active:brightness-95",
         icon: "text-ink hover:translate-y-0 hover:bg-concrete active:bg-concrete",
+        /** No box: an underlined label (and an icon after it), for a quiet action inside a card. */
+        text: "text-ink underline decoration-1 underline-offset-4 hover:translate-y-0 hover:decoration-2",
         /** Ink outline that fills on hover, label and arrow taking the sheet's colour (booking flow). */
         outline: "border border-ink text-ink hover:bg-ink hover:text-card active:bg-ink active:text-card",
       },
@@ -30,6 +31,7 @@ const buttonVariants = cva(
     compoundVariants: [
       { variant: "icon", size: "md", className: "size-11 px-0" },
       { variant: "icon", size: "lg", className: "size-13 px-0" },
+      { variant: "text", className: "px-0" },
     ],
     defaultVariants: { variant: "ink", size: "md" },
   }

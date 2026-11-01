@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { ChevronRight } from "lucide-react"
 
 import { Icon } from "@/components/icon"
+import { ChevronRight } from "@/components/icons"
 import { JsonLd } from "@/components/json-ld"
 import { breadcrumbs, site } from "@/content"
 import { cn } from "@/lib/utils"

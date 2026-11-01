@@ -1,6 +1,5 @@
-import { Clock } from "lucide-react"
-
 import { Icon } from "@/components/icon"
+import { Clock } from "@/components/icons"
 import { site } from "@/content"
 import { cn } from "@/lib/utils"
 

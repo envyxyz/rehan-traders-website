@@ -42,7 +42,7 @@ export function Img({ name, alt, sizes, className, priority }: ImgProps) {
         loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : undefined}
         decoding="async"
-        className={cn("object-cover", className)}
+        className={cn("skeleton object-cover", className)}
       />
     </picture>
   )

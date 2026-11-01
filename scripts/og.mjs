@@ -1,6 +1,6 @@
 // Renders the link-preview images with the installed Edge (same approach as scripts/palette.mjs):
 //   src/app/opengraph-image.png  1200x630  (also copied to twitter-image.png)
-//   src/app/apple-icon.png       180x180
+//   public/apple-icon.png        180x180
 // Needs network once, for the Google Sans Flex latin subset (inlined so the render is self-contained).
 // Run:  node scripts/og.mjs     Text mirrors site.name, the brand descriptor and site.address.short in src/content.ts.
 import { copyFile, readFile, stat, writeFile } from "node:fs/promises"
@@ -60,7 +60,7 @@ const shot = async (html, w, h, file) => {
   await p.close()
 }
 await shot(og, 1200, 630, "opengraph-image.png")
-await shot(apple, 180, 180, "apple-icon.png")
+await shot(apple, 180, 180, "../../public/apple-icon.png")
 await browser.close()
 await copyFile(new URL("opengraph-image.png", root), new URL("twitter-image.png", root))
 const kb = (await stat(new URL("opengraph-image.png", root))).size / 1024

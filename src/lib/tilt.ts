@@ -8,10 +8,22 @@ const RECENTER = 0.02 // the resting angle drifts towards how the phone is held 
 
 const clamp = (v: number) => Math.max(-1, Math.min(1, v / RANGE))
 
-/** iOS sends orientation only after asking, and only from a tap: call this in the tap handler. Elsewhere it does nothing. */
+const ASKED = "rt-tilt-asked"
+
+/**
+ * iOS sends orientation only after asking, and only from a tap: call this in the tap handler. It asks once per device,
+ * ever (remembered in localStorage), whatever the answer was; elsewhere it does nothing.
+ */
 export function askTilt() {
   const ask = (globalThis.DeviceOrientationEvent as unknown as { requestPermission?: () => Promise<string> })?.requestPermission
-  if (typeof ask === "function") void ask().catch(() => {})
+  if (typeof ask !== "function") return
+  try {
+    if (localStorage.getItem(ASKED)) return
+    localStorage.setItem(ASKED, "1")
+  } catch {
+    // Storage refused (private mode): asking every visit is better than never.
+  }
+  void ask().catch(() => {})
 }
 
 /** Calls `cb` on every orientation event, on touch screens without reduced motion. Returns the unsubscribe. */

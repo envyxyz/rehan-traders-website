@@ -27,9 +27,9 @@ export default function RepairsIndexPage() {
           </div>
 
           <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((s, i) => (
+            {services.map((s) => (
               <li key={s.slug}>
-                <ServiceCard service={s} priority={i === 0} as="h2" />
+                <ServiceCard service={s} as="h2" />
               </li>
             ))}
           </ul>

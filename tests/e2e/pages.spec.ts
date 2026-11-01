@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test, type Locator } from "@playwright/test"
 
 import { actions, estimator, priceMode, services, states } from "../../src/content"
 import { pickDevice } from "./helpers"
@@ -38,6 +38,44 @@ test("repair pages show no price in quote mode", async ({ page }) => {
     await page.goto(`/repairs/${s.slug}`)
     expect(await page.getByRole("main").innerText(), s.slug).not.toMatch(money)
   }
+})
+
+test("home repairs: eight icon cards, three to a row, the last two centred, the estimate band under them", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the grid layout is checked at desktop width")
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/")
+  const grid = page.locator("#repairs ul")
+  const cells = grid.locator(":scope > li")
+  await expect(cells).toHaveCount(services.length)
+  for (const cell of await cells.all()) {
+    await expect(cell.locator("[data-slot=card] > [aria-hidden] svg"), "one icon in the band").toHaveCount(1)
+    await expect(cell.locator("img")).toHaveCount(0)
+  }
+  // Keyboard and reading order inside a card: the title link (which covers the card), then Book.
+  const links = await cells.first().locator("a").evaluateAll((els) => els.map((el) => el.getAttribute("href")))
+  expect(links).toEqual([`/repairs/${services[0].slug}`, `/book?service=${services[0].slug}`])
+
+  const box = async (l: Locator) => (await l.boundingBox())!
+  const g = await box(grid)
+  expect((await box(page.locator("#repairs > div"))).width).toBe(1056) // max-w-cards, not the page width
+  const rows = new Map<number, { x: number; width: number }[]>()
+  for (const cell of await cells.all()) {
+    const b = await box(cell)
+    const top = Math.round(b.y)
+    rows.set(top, [...(rows.get(top) ?? []), { x: b.x, width: b.width }])
+  }
+  const perRow = [...rows.values()]
+  expect(perRow.map((r) => r.length)).toEqual([3, 3, 2])
+  const last = perRow[2]
+  const span = { left: Math.min(...last.map((c) => c.x)), right: Math.max(...last.map((c) => c.x + c.width)) }
+  expect((span.left + span.right) / 2, "last row centred").toBeCloseTo(g.x + g.width / 2, 0)
+
+  // The estimate form is a band under the grid as wide as it, not one of its cells.
+  await expect(grid.locator("form")).toHaveCount(0)
+  const band = await box(page.locator("#repairs form").locator("xpath=.."))
+  expect(band.y).toBeGreaterThan(g.y + g.height)
+  expect(band.x).toBeCloseTo(g.x, 0)
+  expect(band.width).toBeCloseTo(g.width, 0)
 })
 
 test("an unknown URL returns the 404 page with a way home", async ({ page }) => {

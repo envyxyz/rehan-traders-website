@@ -1,9 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { ChevronsLeftRight } from "lucide-react"
 
 import { Icon } from "@/components/icon"
+import { ChevronsLeftRight } from "@/components/icons"
 import { home } from "@/content"
 
 const copy = home.beforeAfter

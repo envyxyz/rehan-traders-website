@@ -2,9 +2,10 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { CalendarPlus, Download } from "lucide-react"
 
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { CalendarPlus, Download } from "@/components/icons"
+import { SkeletonLine } from "@/components/loading"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 import { actions, booking, showsFault, site, type BookingSummary } from "@/content"
@@ -75,7 +76,7 @@ function saveTicket(b: BookingSummary, file: File | null) {
   download(file)
 }
 
-/** /book/confirmed. The booking comes from sessionStorage (never the URL), so the static HTML renders nothing. */
+/** /book/confirmed. The booking comes from sessionStorage (never the URL), so the static HTML is the ticket's skeleton. */
 export function Confirmation() {
   const raw = React.useSyncExternalStore(noSubscribe, readBooking, () => undefined)
   const b = React.useMemo(() => (raw ? (JSON.parse(raw) as BookingSummary) : null), [raw])
@@ -105,7 +106,35 @@ export function Confirmation() {
     if (matchMedia("(pointer: fine)").matches) download(file)
   }, [file, b])
 
-  if (raw === undefined) return null
+  if (raw === undefined)
+    return (
+      <div aria-hidden className="flex flex-col gap-6 lg:gap-8">
+        <div>
+          <SkeletonLine className="w-3/4 text-display-lg" />
+          <SkeletonLine className="mt-3 w-1/2 text-body-md" />
+        </div>
+        <div className="flex flex-col rounded-xl bg-panel sm:min-h-96 sm:flex-row">
+          <div className="flex items-center justify-between gap-6 p-6 sm:w-64 sm:shrink-0 sm:flex-col sm:items-start sm:p-8 lg:w-80">
+            <div className="w-40">
+              <SkeletonLine className="w-1/2 text-body-sm" />
+              <SkeletonLine className="mt-1 w-full text-display-lg" />
+            </div>
+            <span className="skeleton size-16 shrink-0 rounded-pill sm:size-20" />
+          </div>
+          <div className="flex flex-1 flex-col gap-6 p-6 pt-4 sm:p-8">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-5 lg:grid-cols-4">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i}>
+                  <SkeletonLine className="w-1/2 text-body-sm" />
+                  <SkeletonLine className="mt-0.5 w-3/4 text-body-md" />
+                </div>
+              ))}
+            </div>
+            <span className="skeleton mt-auto h-13 w-56 self-end rounded-pill" />
+          </div>
+        </div>
+      </div>
+    )
 
   if (!b)
     return (

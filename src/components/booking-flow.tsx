@@ -2,10 +2,10 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { ArrowRight } from "lucide-react"
 
 import { DeviceField } from "@/components/device-field"
 import { Icon } from "@/components/icon"
+import { ArrowRight } from "@/components/icons"
 import { Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 import { Input, Textarea } from "@/components/ui/input"
@@ -28,6 +28,7 @@ import {
   slotLabel,
   type BookingDay,
 } from "@/lib/booking"
+import { busyStart, busyStop } from "@/lib/busy"
 import { track } from "@/lib/track"
 import { cn, nextField } from "@/lib/utils"
 
@@ -177,6 +178,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
       elapsed: now() - started.current,
     }
     let job: string | null = null
+    busyStart() // the red line runs until the confirmation page replaces this one
     try {
       const res = await fetch("/api/book", {
         method: "POST",
@@ -184,6 +186,7 @@ export function BookingFlow({ service, device, onDone }: { service?: string; dev
         body: JSON.stringify(body),
       })
       if (res.status === 400 || res.status === 429) {
+        busyStop()
         setSending(false)
         return setError(res.status === 429 ? booking.review.limit : booking.review.error)
       }

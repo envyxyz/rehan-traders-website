@@ -4,6 +4,7 @@ import * as React from "react"
 
 import type { Fold } from "@/components/fold-scene"
 import { hero } from "@/content"
+import { busyStart, busyStop } from "@/lib/busy"
 import { askTilt, onTilt } from "@/lib/tilt"
 import { cn } from "@/lib/utils"
 
@@ -12,28 +13,57 @@ const WAKE = ["pointermove", "pointerdown", "touchstart", "keydown", "wheel", "s
 const WAKE_PAUSE = 200 // ms with no interaction before the scene builds
 // The poster is the scene's first frame (scripts/fold-poster.mjs), so the canvas fades in over it without a jump.
 const POSTER = [480, 800, 1152]
-const srcSet = (ext: string) => POSTER.map((w) => `/art/fold-poster-${w}.${ext} ${w}w`).join(", ")
+const srcSet = (ext: string, state: "" | "closed" = "") => POSTER.map((w) => `/art/fold-poster${state && `-${state}`}-${w}.${ext} ${w}w`).join(", ")
 const SIZES = "(min-width: 64rem) min(36rem, 70svh), (min-width: 30rem) 22rem, 18.5rem"
+// Phones: the fold starts shut (its own poster), and opens with its snap the first time most of it is on screen.
+const PHONE = "(width < 48rem)"
+const OPEN_IN_VIEW = 0.6
+const noSubscribe = () => () => {}
 
-/** The hero's Galaxy Z Fold in 3D. Tap or click folds it shut (with a snap) and opens it again. */
+/**
+ * The hero's Galaxy Z Fold in 3D. Tap or click folds it shut (with a snap) and opens it again. On phones it starts shut
+ * and opens itself once scrolled into view. Browsers allow sound only after a tap, so the phone's touch unlocks the audio
+ * early; if the visitor has not touched yet, that first opening is silent.
+ */
 export function Fold3D() {
   const canvas = React.useRef<HTMLCanvasElement>(null)
   const fold = React.useRef<Fold | null>(null)
   const audio = React.useRef<AudioContext | null>(null)
   const pending = React.useRef(false)
+  const noScene = React.useRef(false)
   const load = React.useRef(() => {})
+  const poster = React.useRef<HTMLImageElement>(null)
   const [ready, setReady] = React.useState(false)
-  const [closed, setClosed] = React.useState(false)
+  const [posterIn, setPosterIn] = React.useState(false)
+  // Shut until toggled: on phones it starts that way.
+  const phone = React.useSyncExternalStore(noSubscribe, () => matchMedia(PHONE).matches, () => false)
+  const [toggled, setClosed] = React.useState<boolean | null>(null)
+  const closed = toggled ?? phone
 
   const toggle = React.useCallback(() => {
     const next = fold.current?.toggle(audio.current)
     if (next != null) setClosed(next)
   }, [])
 
+  // The poster may have loaded before this ran.
+  React.useEffect(() => {
+    if (poster.current?.complete) setPosterIn(true)
+  }, [])
+
   React.useEffect(() => {
     let alive = true
     let off = () => {}
     let seen: IntersectionObserver | undefined
+    let opener: IntersectionObserver | undefined
+    const shut = matchMedia(PHONE).matches
+    // Any touch makes the audio playable, so the opening in view can snap. Kept until the browser lets it run.
+    const unlock = () => {
+      try {
+        audio.current ??= new AudioContext()
+        void audio.current.resume().then(() => audio.current?.state === "running" && removeEventListener("touchend", unlock, true))
+      } catch {}
+    }
+    if (shut) addEventListener("touchend", unlock, { capture: true, passive: true })
     let pause: ReturnType<typeof setTimeout>
     // Building the scene blocks the page, so it waits for the first pause: a first scroll keeps its smooth nav and frames.
     const wake = () => {
@@ -45,9 +75,9 @@ export function Fold3D() {
       clearTimeout(pause)
       WAKE.forEach((e) => removeEventListener(e, wake))
       // No WebGL: the poster stays and three.js never loads (its renderer logs an error before it throws).
-      if (!document.createElement("canvas").getContext("webgl2")) return
+      if (!document.createElement("canvas").getContext("webgl2")) return void (noScene.current = true)
       import("@/components/fold-scene")
-        .then(({ createFold }) => createFold(canvas.current!))
+        .then(({ createFold }) => createFold(canvas.current!, { closed: shut }))
         .then((f) => {
           if (!alive) return f.dispose()
           fold.current = f
@@ -57,10 +87,26 @@ export function Fold3D() {
             off = entries.at(-1)!.isIntersecting ? onTilt((t) => f.tilt(t.x, t.y)) : () => {}
           })
           seen.observe(canvas.current!)
+          if (shut)
+            opener = new IntersectionObserver(
+              ([entry]) => {
+                if (!entry.isIntersecting) return
+                opener!.disconnect()
+                if (f.isClosed()) toggle()
+              },
+              { threshold: OPEN_IN_VIEW }
+            )
           setReady(true)
-          if (pending.current) toggle()
+          if (pending.current) {
+            busyStop()
+            toggle()
+          }
+          opener?.observe(canvas.current!) // after a waiting tap, which may have opened it already
         })
-        .catch(() => {}) // no WebGL: the poster stays
+        .catch(() => {
+          noScene.current = true // no WebGL: the poster stays
+          if (pending.current) busyStop()
+        })
     }
     load.current = start
     // Weak or data-saving phones keep the poster (the same picture); three.js loads there only if the fold is tapped.
@@ -69,9 +115,12 @@ export function Fold3D() {
     if (!weak) WAKE.forEach((e) => addEventListener(e, wake, { passive: true }))
     return () => {
       alive = false
+      if (pending.current && !fold.current) busyStop()
       clearTimeout(pause)
       WAKE.forEach((e) => removeEventListener(e, wake))
+      removeEventListener("touchend", unlock, true)
       seen?.disconnect()
+      opener?.disconnect()
       off()
       fold.current?.dispose()
       fold.current = null
@@ -93,8 +142,10 @@ export function Fold3D() {
           void audio.current.resume()
         } catch {}
         if (fold.current) toggle()
-        else {
+        else if (!pending.current && !noScene.current) {
+          // The tap waits for three.js: the red line shows it is coming.
           pending.current = true
+          busyStart()
           load.current() // a click that came with no pointer or key event first (assistive tech, scripts)
         }
       }}
@@ -105,9 +156,15 @@ export function Fold3D() {
       }}
       onPointerLeave={() => fold.current?.tilt(0, 0)}
     >
+      {/* The phone's shape pulses until the poster has loaded over it; gone for good once it has. */}
+      {!posterIn && !ready && <span aria-hidden className="skeleton fold-skeleton" />}
       <picture>
+        <source media={PHONE} type="image/avif" srcSet={srcSet("avif", "closed")} sizes={SIZES} />
+        <source media={PHONE} type="image/webp" srcSet={srcSet("webp", "closed")} sizes={SIZES} />
         <source type="image/avif" srcSet={srcSet("avif")} sizes={SIZES} />
         <img
+          ref={poster}
+          onLoad={() => setPosterIn(true)}
           src="/art/fold-poster-800.webp"
           srcSet={srcSet("webp")}
           sizes={SIZES}

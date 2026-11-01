@@ -3,8 +3,8 @@ import { expect, test, type Locator, type Page } from "@playwright/test"
 import { actions, jobCardContent, nav, services, site, ui } from "../../src/content"
 import { routes } from "./routes"
 
-// The nav renders twice (desktop bar and island, phone header); only the visible one counts per project.
-const desktop = (page: Page) => page.locator("header").first() // the desktop bar and island; the phone header is the second
+// The nav renders twice (desktop, phone); only the visible one counts per project.
+const desktop = (page: Page) => page.locator("header").first() // the desktop bar that morphs into the island; the phone header is the second
 const phone = (page: Page) => page.locator("header").nth(1)
 const links = nav.links.filter((l) => l.href !== "/repairs")
 const repairs = nav.links.find((l) => l.href === "/repairs")!
@@ -17,7 +17,7 @@ const sheetLoaded = (opener: Locator) => expect(opener).toHaveAttribute("aria-ha
 test("desktop: the top bar links go to their pages, and Repairs opens the eight repairs", async ({ page, isMobile }) => {
   test.skip(isMobile, "phones use the menu sheet")
   await page.goto("/")
-  const bar = desktop(page).locator(":scope > div nav")
+  const bar = desktop(page).locator("nav")
   await expect(bar.getByRole("link", { name: nav.call })).toHaveAttribute("href", site.phone.href)
   await repairsLoaded(bar.getByRole("button", { name: "Repairs" }))
   await bar.getByRole("button", { name: "Repairs" }).click()
@@ -37,7 +37,7 @@ test("desktop: the top bar links go to their pages, and Repairs opens the eight 
 test("desktop: a repair in the Repairs menu opens its page, by keyboard", async ({ page, isMobile }) => {
   test.skip(isMobile, "phones use the menu sheet")
   await page.goto("/")
-  const trigger = desktop(page).locator(":scope > div nav").getByRole("button", { name: "Repairs" })
+  const trigger = desktop(page).locator("nav").getByRole("button", { name: "Repairs" })
   await repairsLoaded(trigger)
   await trigger.focus()
   await page.keyboard.press("Enter")
@@ -50,34 +50,66 @@ test("desktop: a repair in the Repairs menu opens its page, by keyboard", async 
   await expect(page).toHaveURL(`/repairs/${services[1].slug}`)
 })
 
-test("desktop: scrolling swaps the top bar for the island, and the hidden one leaves the tab order", async ({ page, isMobile }) => {
+test("desktop: scrolled, the bar becomes the centred island and stays on screen; at the top it is the bar again", async ({ page, isMobile }) => {
   test.skip(isMobile, "the island is the desktop pattern")
   await page.goto("/")
-  const [bar, island] = [desktop(page).locator(":scope > div"), desktop(page).locator(":scope > nav")]
-  await expect(island).toHaveAttribute("inert", "")
-  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight / 2))
-  await expect(bar).toHaveAttribute("inert", "")
-  await expect(island).not.toHaveAttribute("inert", "")
-  await page.evaluate(() => scrollBy({ top: -200, behavior: "instant" })) // down hides the island, up brings it back
-  await island.getByRole("link", { name: "Reviews", exact: true }).click()
+  const bar = desktop(page).locator("nav")
+  const box = () => desktop(page).locator(".glass").evaluate((el) => el.getBoundingClientRect().toJSON() as DOMRect)
+  await repairsLoaded(bar.getByRole("button", { name: "Repairs" })) // hydrated: the scroll listener is on
+  const width = await page.evaluate(() => document.documentElement.clientWidth) // the nav spans the page, not the scrollbar
+  expect((await box()).right).toBeGreaterThan(width - 80)
+
+  await page.evaluate(() => scrollTo({ top: 1500, behavior: "instant" }))
+  await expect.poll(async () => Math.abs((await box()).left + (await box()).width / 2 - width / 2)).toBeLessThan(2) // settled, centred
+  const island = await box()
+  expect(island.width).toBeLessThan(700)
+  expect(island.top).toBeGreaterThanOrEqual(0)
+  // The mark sits inside the island, drawn over its glass.
+  const mark = await desktop(page).getByRole("link", { name: nav.home }).locator("svg").evaluate((el) => el.getBoundingClientRect().toJSON() as DOMRect)
+  expect(mark.left).toBeGreaterThan(island.left)
+  const onTop = await page.evaluate(([x, y]) => !!document.elementFromPoint(x, y)?.closest("svg"), [mark.left + mark.width / 2, mark.top + mark.height / 2])
+  expect(onTop).toBe(true)
+  await bar.getByRole("link", { name: "Reviews", exact: true }).click()
   await expect(page).toHaveURL("/reviews")
+
+  await page.goto("/")
+  await repairsLoaded(bar.getByRole("button", { name: "Repairs" }))
+  await page.evaluate(() => scrollTo({ top: 1500, behavior: "instant" }))
+  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }))
+  await expect.poll(async () => (await box()).right).toBeGreaterThan(width - 80)
 })
 
-test("desktop: the island slides out on scroll down and back on scroll up; reduced motion keeps it still", async ({ page, isMobile }) => {
+test("desktop: spam scrolling leaves one nav that settles; reduced motion swaps with no in-between", async ({ page, isMobile }) => {
   test.skip(isMobile, "the island is the desktop pattern")
   await page.goto("/")
-  const island = desktop(page).locator(":scope > nav")
-  const bottom = () => island.evaluate((el) => el.getBoundingClientRect().bottom)
-  await repairsLoaded(island.getByRole("button", { name: "Repairs" })) // hydrated: the scroll listener is on
-  await page.evaluate(() => scrollTo({ top: 1500, behavior: "instant" }))
-  await expect.poll(bottom).toBeLessThanOrEqual(0)
-  await page.evaluate(() => scrollTo({ top: 1200, behavior: "instant" }))
-  await expect.poll(bottom).toBeGreaterThan(0)
+  const header = desktop(page)
+  await repairsLoaded(header.getByRole("button", { name: "Repairs" }))
+  const width = () => header.locator(".glass").evaluate((el) => Math.round(el.getBoundingClientRect().width))
+  for (let i = 0; i < 6; i++) {
+    await page.mouse.wheel(0, 300)
+    await page.waitForTimeout(60)
+    await page.mouse.wheel(0, -300)
+    await page.waitForTimeout(60)
+  }
+  await expect(header.locator("nav")).toHaveCount(1)
+  // Settled: two reads a moment apart agree.
+  await expect
+    .poll(async () => {
+      const before = await width()
+      await page.waitForTimeout(100)
+      return (await width()) - before
+    })
+    .toBe(0)
 
   await page.emulateMedia({ reducedMotion: "reduce" })
-  await page.evaluate(() => scrollTo({ top: 1800, behavior: "instant" }))
-  await expect.poll(bottom).toBeGreaterThan(0)
-  expect(await island.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThan(0.001)
+  await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }))
+  await page.waitForTimeout(100)
+  const bar = await width()
+  await page.evaluate(() => scrollTo({ top: 1500, behavior: "instant" }))
+  await expect.poll(width).toBeLessThan(bar)
+  const island = await width() // the first width seen after the swap is already the last
+  await page.waitForTimeout(300)
+  expect(await width()).toBe(island)
 })
 
 test("phone: the header is the lockup, a call button and a menu button, with no island", async ({ page, isMobile }) => {

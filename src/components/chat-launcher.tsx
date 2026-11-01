@@ -2,16 +2,17 @@
 
 import * as React from "react"
 import dynamic from "next/dynamic"
-import { MessageCircle } from "lucide-react"
 
 import { Icon } from "@/components/icon"
+import { MessageCircle } from "@/components/icons"
+import { SheetSkeleton } from "@/components/loading"
 import { Button } from "@/components/ui/button"
 import { assistant } from "@/content"
 import { track } from "@/lib/track"
 
 const loadSheet = () => import("@/components/chat-sheet").then((m) => m.ChatSheet)
-// Not in the first page load: the assistant downloads on hover, focus or the first tap.
-const ChatSheet = dynamic(loadSheet, { ssr: false })
+// Not in the first page load: the assistant downloads on hover, focus or the first tap. If the tap comes first, a skeleton of the sheet shows.
+const ChatSheet = dynamic(loadSheet, { ssr: false, loading: () => <SheetSkeleton kind="chat" /> })
 
 /** Glass chat button on every screen from page load: "Ask a question" on desktop, a round icon on phones. */
 export function ChatLauncher() {

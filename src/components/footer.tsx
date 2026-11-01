@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
 
 import { Icon } from "@/components/icon"
+import { ArrowUpRight } from "@/components/icons"
 import { Container } from "@/components/layout"
 import { Mark } from "@/components/logo"
 import { Reveal } from "@/components/motion"
@@ -59,9 +59,10 @@ export function Footer() {
             <address className="mt-3 space-y-3 not-italic">
               {[site.address.lines, site.hours.lines].map((lines) => (
                 <p key={lines[0]}>
+                  {/* The space keeps the lines apart as text: Google's snippet read "Saturday11:00 AM" without it. */}
                   {lines.map((line) => (
                     <span key={line} className="block">
-                      {line}
+                      {line}{" "}
                     </span>
                   ))}
                 </p>

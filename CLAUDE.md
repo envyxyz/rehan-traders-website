@@ -29,9 +29,9 @@ Check current docs with context7 before using any library API. Do not add a depe
 2. **Tokens only.** Colours, type, spacing, radii, shadows, durations and easings come from the tokens in `src/app/globals.css` (`@theme`). No raw hex, no arbitrary Tailwind values (`text-[17px]`, `bg-[#...]`) in components. New value needed? Add a token, then use it.
 3. **Reuse before you build.** Check `src/components/ui` (shadcn primitives) and `src/components` before writing a new component. One Button, one Card, one Sheet, one Section, one Container.
 4. **Theme follows the device.** `prefers-color-scheme` only, no toggle. Every component is checked in light and dark. Background is static.
-5. **One Signal Red element per view.** Red is a line or a number (rule, job number, step numbers), never a fill larger than a pill.
+5. **One Signal Red element per view.** Red is a line or a number (rule, job number, step numbers), never a fill larger than a pill. Exception (owner, 1 Nov 2026): the repair icons on repair cards and repair pages are red, one per card. The red loading line at the top of the screen (`TopLine`) shows only while something loads.
 6. **No kickers.** No uppercase eyebrow labels above headings. No gradient text. No glass on body content or glass on glass.
-7. **Icons:** lucide-react, stroke 1.75, one size scale. WhatsApp uses its official glyph. No emoji as icons.
+7. **Icons:** lucide-react, stroke 1.75, one size scale, always imported from `src/components/icons.tsx` (which also holds the four repair icons drawn in Lucide's grid and stroke) and drawn through `Icon` in `icon.tsx`. WhatsApp uses its official glyph. No emoji as icons.
 8. **Motion:** transform and opacity (plus blur on glass). One authored moment per page. Reveals once, 8px rise. The h1 never animates in. Respect `prefers-reduced-motion` and `prefers-reduced-transparency`. Lenis off on touch.
 9. **Phone number** is written `0305 8874839` and dialled `tel:+923058874839`. WhatsApp: `https://wa.me/923058874839`. Take both from `content.ts`.
 10. **Never invent claims:** prices, warranty, turnaround, years, counts, "original parts", "100%". Prices show through `priceMode` (`'from'` → "From Rs X", `'quote'` → no price line, quotes are given on WhatsApp; never promise how fast); launch is `'quote'`. Confirmed facts and Adnan's answers: `PRODUCT.md` and `docs/PRD.md` §11.

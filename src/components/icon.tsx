@@ -1,18 +1,17 @@
-import type { LucideIcon } from "lucide-react"
-
+import type { IconGlyph } from "@/components/icons"
 import { cn } from "@/lib/utils"
 
-const sizes = { sm: "size-4", md: "size-4.5", lg: "size-5", xl: "size-6" } as const
+const sizes = { sm: "size-4", md: "size-4.5", lg: "size-5", xl: "size-6", repair: "size-10 sm:size-16", "repair-lg": "size-24" } as const
 
 type IconProps = {
-  icon: LucideIcon
+  icon: IconGlyph
   size?: keyof typeof sizes
   className?: string
   /** Give a name only when the icon stands alone; otherwise it is decorative. */
   label?: string
 }
 
-/** Lucide at one stroke (1.75) and one size scale. */
+/** Lucide (icons.tsx) at one stroke (1.75) and one size scale. */
 export function Icon({ icon: Glyph, size = "md", className, label }: IconProps) {
   return (
     <Glyph
@@ -25,7 +24,7 @@ export function Icon({ icon: Glyph, size = "md", className, label }: IconProps) 
   )
 }
 
-/** WhatsApp's official glyph (Simple Icons, CC0). Lucide has no brand marks. */
+/** WhatsApp's official glyph (Simple Icons, CC0). */
 export function WhatsAppIcon({ size = "md", className }: Pick<IconProps, "size" | "className">) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden className={cn(sizes[size], "shrink-0", className)}>

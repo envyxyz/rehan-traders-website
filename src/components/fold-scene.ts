@@ -271,7 +271,8 @@ function coverScreen(k: Ink) {
 
 const CLICK_VOLUME = 1 // the files are already quiet (peak about -14 dBFS); tune here
 
-export async function createFold(canvas: HTMLCanvasElement) {
+/** `closed`: start shut, with the cover lit, as if it had just been folded. */
+export async function createFold(canvas: HTMLCanvasElement, { closed: startClosed = false } = {}) {
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }) // throws without WebGL: the poster stays
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
@@ -358,7 +359,7 @@ export async function createFold(canvas: HTMLCanvasElement) {
   const SNAP_AT = FADE * 0.8 + FOLD
   const CLOSE_END = SNAP_AT + 120 + 700
   const OPEN_END = 150 + FOLD * 0.9 + 450
-  let closed = false
+  let closed = startClosed
   let since = -Infinity
   let click: "open" | "close" | null = null // the sound still to play
   let audio: AudioContext | null = null
@@ -396,7 +397,7 @@ export async function createFold(canvas: HTMLCanvasElement) {
       fold = easeIn(clamp01((e - FADE * 0.8) / FOLD))
       cover = clamp01((e - SNAP_AT - 120) / 700)
       // A small settle after the snap.
-      if (!reduced && e > SNAP_AT) kick = Math.sin((e - SNAP_AT) / 30) * Math.exp(-(e - SNAP_AT) / 90) * 0.012
+      if (!reduced && e > SNAP_AT && e < CLOSE_END) kick = Math.sin((e - SNAP_AT) / 30) * Math.exp(-(e - SNAP_AT) / 90) * 0.012
     } else {
       cover = 1 - clamp01(e / 250)
       fold = 1 - easeInOut(clamp01((e - 150) / (FOLD * 0.9)))
@@ -473,6 +474,7 @@ export async function createFold(canvas: HTMLCanvasElement) {
       wake()
       return closed
     },
+    isClosed: () => closed,
     /** -1..1 each way; 0, 0 is at rest. Ignored with reduced motion. */
     tilt(x: number, y: number) {
       if (reduced) return
