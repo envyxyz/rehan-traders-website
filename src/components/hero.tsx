@@ -23,7 +23,7 @@ export function Hero() {
     <section id="top" className="flex min-h-svh p-2 sm:p-3">
       {/* The panel always fills the window (the fixed nav sits inside it at any width); only the content is capped. */}
       <div className="flex flex-1 overflow-hidden rounded-xl bg-panel">
-        <div className="mx-auto grid w-full max-w-panel content-start gap-8 px-5 pt-20 pb-6 sm:px-6 sm:pt-28 sm:pb-8 lg:grid-cols-2 lg:content-center lg:items-center lg:px-12 lg:pb-12 xl:px-20">
+        <div className="mx-auto grid w-full max-w-panel grid-cols-1 content-start gap-8 px-5 pt-20 pb-6 sm:px-6 sm:pt-28 sm:pb-8 lg:grid-cols-2 lg:content-center lg:items-center lg:px-12 lg:pb-12 xl:px-20">
           <div className="min-w-0">
             <span aria-hidden className="mb-4 block h-1 w-11 bg-signal" />
             <p className={`font-display text-body-sm font-bold whitespace-nowrap text-ink ${rise(0).className}`} style={rise(0).style}>
@@ -39,7 +39,7 @@ export function Hero() {
             <div className={`mt-hero-gap grid justify-start gap-1.5 text-caption ${rise(1).className}`} style={rise(1).style}>
               <p className="text-ink">
                 {proof.before}{" "}
-                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className="text-ink/80 transition-colors duration-fast hover:text-ink" data-track="directions" data-track-from="hero">
+                <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-ink/80 transition-colors duration-fast hover:text-ink" data-track="directions" data-track-from="hero">
                   {proof.link}
                 </a>
               </p>

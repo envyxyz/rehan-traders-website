@@ -394,7 +394,7 @@
     display: block;
     isolation: isolate; /* the floor shadow sits under the canvas, not under the hero panel */
     aspect-ratio: 1;
-    height: 18.5rem;
+    height: min(18.5rem, 100vw - 3.5rem); /* never wider than the panel's content on the narrowest phones */
     margin-inline: auto;
     @media (width >= 30rem) { height: 22rem; }
     @media (width >= 64rem) { height: min(36rem, 70svh); }
