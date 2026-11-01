@@ -133,7 +133,7 @@ export default async function ServicePage({ params }: PageProps) {
                   {st.step}
                 </span>
                 <h3 className="mt-3 font-display text-title-md text-ink">{st.title}</h3>
-                <Text tone="muted" size="body-sm" className="mt-2">
+                <Text tone="muted" className="mt-2">
                   {st.text}
                 </Text>
               </li>
@@ -148,7 +148,7 @@ export default async function ServicePage({ params }: PageProps) {
           <Container className="grid gap-8 lg:grid-cols-12">
             <div className="lg:col-span-5">
               <Heading as="h2">{repairsPage.faqTitle}</Heading>
-              <Text tone="muted" size="body-sm" className="mt-3">
+              <Text tone="muted" className="mt-3">
                 {repairsPage.bookLede}
               </Text>
             </div>

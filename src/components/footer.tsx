@@ -88,7 +88,7 @@ export function Footer() {
             ))}
           </Group>
         </Reveal>
-        <div className="mt-14 flex flex-wrap justify-between gap-2 border-t border-band-elevated pt-6 text-caption">
+        <div className="mt-14 flex flex-wrap justify-between gap-2 pt-6 text-caption">
           <span>{footer.copyright(new Date().getFullYear())}</span>
           {footer.registered && <span>{footer.registered}</span>}
         </div>

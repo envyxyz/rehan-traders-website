@@ -10,14 +10,14 @@ The master record is `../growth/Documents/Business Profile.html`, section 00. Th
 
 ```
 Rehan Traders
-Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54000, Pakistan
+Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54660, Pakistan
 0305 8874839   (international +92 305 8874839, WhatsApp https://wa.me/923058874839)
 https://rehanmobiletraders.com
 Monday to Saturday 11:00 AM to 10:00 PM. Friday prayer break 1:00 to 2:00 PM. Sunday closed.
 Closed only when Hafeez Center closes, such as Eid and Ashura.
 ```
 
-For address forms: line 1 `Shop G-88, Ground Floor, Hafeez Center`, line 2 `Main Boulevard, Block E1, Gulberg III`, city `Lahore`, province `Punjab`, postal code `54000` (see fix 2), plus code `G88V+C9 Lahore`, coordinates `31.5161006, 74.3433894`.
+For address forms: line 1 `Shop G-88, Ground Floor, Hafeez Center`, line 2 `Main Boulevard, Block E1, Gulberg III`, city `Lahore`, province `Punjab`, postal code `54660`, plus code `G88V+C9 Lahore`, coordinates `31.5161006, 74.3433894`.
 
 Name rules:
 - "Rehan Traders" everywhere we control. The Google listing keeps "Rehan Traders & Mobile Repairing Shop" until the new sign is up (`../growth/Notes/Brand Name and Signs.md`); the site's JSON-LD carries it as `alternateName`, so the two are tied together. Do not add more keywords to any listing name.

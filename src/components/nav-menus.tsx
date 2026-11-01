@@ -22,23 +22,25 @@ import { cn } from "@/lib/utils"
 // The nav's Radix menus. Nav loads this module with next/dynamic after hydration, so the menu and dialog code is not
 // in the first load; until it arrives Nav shows the same trigger without behaviour. The triggers' faces come from Nav.
 
-/** Repairs opens the 8 repairs. `menu` controls it (the top bar's, which fades with the bar). */
+/** Repairs opens the 8 repairs. `menu` controls it; `fades` is the top bar's, which fades with the bar. */
 export function RepairsMenu({
   href,
   className,
   menu,
+  fades,
   children,
 }: {
   href: string
   className: string
   menu?: { open: boolean; onOpenChange: (open: boolean) => void }
+  fades?: boolean
   children: React.ReactNode
 }) {
   return (
     <DropdownMenu modal={false} {...menu}>
       <DropdownMenuTrigger className={className}>{children}</DropdownMenuTrigger>
       {/* The top bar's menu fades with the bar (--nav-fade, set on scroll), so it never floats on after the bar. */}
-      <DropdownMenuContent align="start" sideOffset={12} style={menu && { opacity: "var(--nav-fade, 1)", transition: "opacity var(--duration-reveal) var(--ease-out)" }}>
+      <DropdownMenuContent align="start" sideOffset={12} style={fades ? { opacity: "var(--nav-fade, 1)", transition: "opacity var(--duration-reveal) var(--ease-out)" } : undefined}>
         {services.map((s) => (
           <DropdownMenuItem key={s.slug} asChild>
             <Link href={`/repairs/${s.slug}`}>{s.title}</Link>

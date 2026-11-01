@@ -79,7 +79,6 @@ export function JobCard({ className, withSeal = true }: JobCardProps) {
           "relative grid w-full grid-cols-10",
           "overflow-hidden rounded-xl",
           "shadow-elevated",
-          "border border-hairline",
           "will-change-transform"
         )}
         style={{ transformStyle: "preserve-3d" }}

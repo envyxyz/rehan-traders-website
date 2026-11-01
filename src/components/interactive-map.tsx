@@ -37,7 +37,7 @@ export function InteractiveMap({
   }
 
   return (
-    <div className={cn("relative aspect-4/3 w-full overflow-hidden rounded-xl border border-hairline bg-concrete", className)}>
+    <div className={cn("relative aspect-4/3 w-full overflow-hidden rounded-xl bg-concrete", className)}>
       {children}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-scrim p-6 text-center">
         <Button
@@ -45,7 +45,7 @@ export function InteractiveMap({
           size="lg"
           variant="glass"
           onClick={() => setActive(true)}
-          className="h-auto min-h-13 max-w-full cursor-pointer gap-2 py-3 whitespace-normal shadow-float"
+          className="h-auto min-h-13 max-w-full cursor-pointer gap-2 py-3 whitespace-normal"
         >
           <Icon icon={MapPin} />
           <span>{visitPage.mapPrompt}</span>

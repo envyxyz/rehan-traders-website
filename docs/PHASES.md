@@ -262,3 +262,7 @@ Each phase appends a dated entry below: what shipped, what is left, decisions ma
 ## Owner fixes, 31 Oct 2026
 
 Hero proof and hours line, nav with About, FAQ and Contact, phone lockup and menu, repair cards, one-screen page openings, real fold sounds (`public/sounds`), external links in new tabs. "10,000+ Certified Repairs" confirmed by Ameer on 1 Nov 2026; "since 2009" left out of the hero.
+
+## Owner fixes, 1 Nov 2026
+
+Phone hero rework (claim above the h1, stacked buttons, first lede sentence hidden on phones), `wide` Button for full-width arrow buttons, no WebGL means three.js never loads and the scene waits for a pause in scrolling. Nav: leaves with the page from the top, then glides out on scroll down and in on scroll up (`--ease-nav`, `--duration-nav`); reduced motion keeps it still. Running text 16px, purely decorative lines and outlines removed; FAQ separators stay. QA and phase screenshots referenced above (`design/phase-*`, `docs/screens/`) moved to `../.agency/build/website-shots/`. After a `@theme` edit, delete `.next` before trusting a dev or local build: both can keep a stale theme.

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 
 // three.js loads on the first interaction of any kind, never with the page (Lighthouse never interacts).
 const WAKE = ["pointermove", "pointerdown", "touchstart", "keydown", "wheel", "scroll"] as const
+const WAKE_PAUSE = 200 // ms with no interaction before the scene builds
 // The poster is the scene's first frame (scripts/fold-poster.mjs), so the canvas fades in over it without a jump.
 const POSTER = [480, 800, 1152]
 const srcSet = (ext: string) => POSTER.map((w) => `/art/fold-poster-${w}.${ext} ${w}w`).join(", ")
@@ -33,9 +34,16 @@ export function Fold3D() {
     let alive = true
     let off = () => {}
     let seen: IntersectionObserver | undefined
+    let pause: ReturnType<typeof setTimeout>
+    // Building the scene blocks the page, so it waits for the first pause: a first scroll keeps its smooth nav and frames.
+    const wake = () => {
+      clearTimeout(pause)
+      pause = setTimeout(start, WAKE_PAUSE)
+    }
     const start = () => {
       load.current = () => {} // once
-      WAKE.forEach((e) => removeEventListener(e, start))
+      clearTimeout(pause)
+      WAKE.forEach((e) => removeEventListener(e, wake))
       // No WebGL: the poster stays and three.js never loads (its renderer logs an error before it throws).
       if (!document.createElement("canvas").getContext("webgl2")) return
       import("@/components/fold-scene")
@@ -58,10 +66,11 @@ export function Fold3D() {
     // Weak or data-saving phones keep the poster (the same picture); three.js loads there only if the fold is tapped.
     const nav = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } }
     const weak = nav.connection?.saveData || (nav.deviceMemory ?? 8) < 4 || navigator.hardwareConcurrency < 4
-    if (!weak) WAKE.forEach((e) => addEventListener(e, start, { passive: true }))
+    if (!weak) WAKE.forEach((e) => addEventListener(e, wake, { passive: true }))
     return () => {
       alive = false
-      WAKE.forEach((e) => removeEventListener(e, start))
+      clearTimeout(pause)
+      WAKE.forEach((e) => removeEventListener(e, wake))
       seen?.disconnect()
       off()
       fold.current?.dispose()

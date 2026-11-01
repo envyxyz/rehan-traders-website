@@ -19,7 +19,7 @@ function CardTitle({ className, as: Tag = "h3", ...props }: React.ComponentProps
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<"p">) {
-  return <p data-slot="card-description" className={cn("text-body-sm text-steel", className)} {...props} />
+  return <p data-slot="card-description" className={cn("text-body-md text-steel", className)} {...props} />
 }
 
 function CardFooter({ className, ...props }: React.ComponentProps<"div">) {

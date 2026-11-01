@@ -69,7 +69,7 @@ function Estimate() {
     <Reveal className="mt-4 grid gap-5 rounded-xl border border-hairline bg-card p-6 sm:p-8 lg:grid-cols-12 lg:items-center lg:gap-10">
       <div className="lg:col-span-5">
         <h3 className="font-display text-title-lg text-ink">{estimate.title}</h3>
-        <Text tone="muted" size="body-sm" className="mt-1.5">
+        <Text tone="muted" className="mt-1.5">
           {estimate.lede}
         </Text>
       </div>
@@ -127,7 +127,7 @@ function Process() {
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-3 font-display text-title-md text-ink">{step.title}</h3>
-                <Text tone="muted" size="body-sm" className="mt-1.5">
+                <Text tone="muted" className="mt-1.5">
                   {step.text}
                 </Text>
               </Reveal>

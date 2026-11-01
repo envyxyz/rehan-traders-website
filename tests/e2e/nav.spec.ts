@@ -58,8 +58,26 @@ test("desktop: scrolling swaps the top bar for the island, and the hidden one le
   await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight / 2))
   await expect(bar).toHaveAttribute("inert", "")
   await expect(island).not.toHaveAttribute("inert", "")
+  await page.evaluate(() => scrollBy({ top: -200, behavior: "instant" })) // down hides the island, up brings it back
   await island.getByRole("link", { name: "Reviews", exact: true }).click()
   await expect(page).toHaveURL("/reviews")
+})
+
+test("desktop: the island slides out on scroll down and back on scroll up; reduced motion keeps it still", async ({ page, isMobile }) => {
+  test.skip(isMobile, "the island is the desktop pattern")
+  await page.goto("/")
+  const island = desktop(page).locator(":scope > nav")
+  const bottom = () => island.evaluate((el) => el.getBoundingClientRect().bottom)
+  await repairsLoaded(island.getByRole("button", { name: "Repairs" })) // hydrated: the scroll listener is on
+  await page.evaluate(() => scrollTo({ top: 1500, behavior: "instant" }))
+  await expect.poll(bottom).toBeLessThanOrEqual(0)
+  await page.evaluate(() => scrollTo({ top: 1200, behavior: "instant" }))
+  await expect.poll(bottom).toBeGreaterThan(0)
+
+  await page.emulateMedia({ reducedMotion: "reduce" })
+  await page.evaluate(() => scrollTo({ top: 1800, behavior: "instant" }))
+  await expect.poll(bottom).toBeGreaterThan(0)
+  expect(await island.evaluate((el) => parseFloat(getComputedStyle(el).transitionDuration))).toBeLessThan(0.001)
 })
 
 test("phone: the header is the lockup, a call button and a menu button, with no island", async ({ page, isMobile }) => {
@@ -73,11 +91,14 @@ test("phone: the header is the lockup, a call button and a menu button, with no 
   await expect(header.getByRole("link", { name: nav.home })).toContainText(`${jobCardContent.brandFirst}${jobCardContent.brandSecond}`)
   await expect(header.locator(".glass")).toHaveCount(0)
   // Transparent at the top of the page, solid paper with a hairline once scrolled.
-  const background = () => header.evaluate((el) => getComputedStyle(el).backgroundColor)
-  expect(await background()).toBe("rgba(0, 0, 0, 0)")
+  await sheetLoaded(header.getByRole("button", { name: nav.menu })) // hydrated: the scroll listener is on
+  const solid = header.locator(":scope > span")
+  const opacity = () => solid.evaluate((el) => getComputedStyle(el).opacity)
+  expect(await opacity()).toBe("0")
   await page.evaluate(() => scrollTo({ top: 300, behavior: "instant" }))
-  await expect.poll(background).not.toBe("rgba(0, 0, 0, 0)")
-  expect(await header.evaluate((el) => getComputedStyle(el).borderBottomColor)).not.toBe("rgba(0, 0, 0, 0)")
+  await expect.poll(opacity).toBe("1")
+  expect(await solid.evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe("rgba(0, 0, 0, 0)")
+  expect(await solid.evaluate((el) => getComputedStyle(el).borderBottomColor)).not.toBe("rgba(0, 0, 0, 0)")
 })
 
 test("phone: the header slides away on scroll down, returns on scroll up, and shows while it holds focus", async ({ page, isMobile }) => {
@@ -95,6 +116,11 @@ test("phone: the header slides away on scroll down, returns on scroll up, and sh
   await expect.poll(bottom).toBeLessThanOrEqual(0)
   await header.getByRole("button", { name: nav.menu }).focus()
   await expect.poll(bottom).toBeGreaterThan(0)
+  await page.evaluate(() => (document.activeElement as HTMLElement).blur())
+
+  await page.emulateMedia({ reducedMotion: "reduce" })
+  await page.evaluate(() => scrollTo({ top: 1800, behavior: "instant" }))
+  await expect.poll(bottom).toBeGreaterThan(0) // reduced motion: it stays put
 })
 
 test("phone: the menu sheet opens, lists every page, closes on Escape and gives focus back", async ({ page, isMobile }) => {

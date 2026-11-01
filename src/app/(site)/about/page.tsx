@@ -109,7 +109,7 @@ export default function AboutPage() {
                   {st.step}
                 </span>
                 <h3 className="mt-3 font-display text-title-md text-ink">{st.title}</h3>
-                <Text tone="muted" size="body-sm" className="mt-2">
+                <Text tone="muted" className="mt-2">
                   {st.text}
                 </Text>
               </Card>

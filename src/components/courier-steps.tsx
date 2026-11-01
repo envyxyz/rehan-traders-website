@@ -19,7 +19,7 @@ export function CourierSteps({ from }: { from: string }) {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <h3 className="mt-3 font-display text-title-md text-ink">{step.title}</h3>
-              <Text tone="body" size="body-sm" className="mt-1.5">
+              <Text tone="body" className="mt-1.5">
                 {step.text}
               </Text>
             </Card>
