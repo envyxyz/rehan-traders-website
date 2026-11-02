@@ -46,7 +46,8 @@ export function ChatLauncher() {
   const [asked, setAsked] = React.useState(false)
   const button = React.useRef<HTMLButtonElement>(null)
   const opener = React.useRef<HTMLElement>(null)
-  const home = usePathname() === "/"
+  const path = usePathname()
+  const home = path === "/"
   const [pastHero, setPastHero] = React.useState(false)
 
   React.useEffect(() => {
@@ -69,6 +70,9 @@ export function ChatLauncher() {
     addEventListener(OPEN_CHAT, onOpen)
     return () => removeEventListener(OPEN_CHAT, onOpen)
   }, [start])
+
+  // The booking page is one task, and on phones the button sat on its last step's WhatsApp link.
+  if (path === "/book") return null
 
   return (
     <div

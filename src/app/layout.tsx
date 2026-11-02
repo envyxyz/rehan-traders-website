@@ -14,6 +14,8 @@ const gtmId = "GTM-TBXL7JMX"
 const scrolledFlag = `(()=>{const d=document.documentElement,f=()=>d.dataset.nav?removeEventListener("scroll",f):d.toggleAttribute("data-scrolled",scrollY>80);addEventListener("scroll",f,{passive:true});f()})()`
 // A tap on the phone menu's button before the page is live would be lost, so a line of script keeps it for nav.tsx.
 const menuTap = `addEventListener("click",e=>{e.target.closest&&e.target.closest("[data-menu]")&&(window.menuTap=1)})`
+// See "Everything below the first screen" in globals.css: a page that may open part way down lays out in full.
+const wholePage = `(()=>{const w=()=>document.documentElement.toggleAttribute("data-whole",true);(location.hash||performance.getEntriesByType("navigation")[0]?.type!=="navigate")&&w();addEventListener("click",e=>{e.target.closest&&e.target.closest("a")&&w()},true)})()`
 
 // One variable family for headlines and body (weights 400–800). No opsz axis: it nearly doubled the file on slow data.
 const googleSans = Google_Sans_Flex({ subsets: ["latin"], display: "swap", variable: "--font-google-sans" })
@@ -59,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={googleSans.variable} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: scrolledFlag + ";" + menuTap }} />
+        <script dangerouslySetInnerHTML={{ __html: scrolledFlag + ";" + menuTap + ";" + wholePage }} />
       </head>
       <body>
         {children}

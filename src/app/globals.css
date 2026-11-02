@@ -215,6 +215,7 @@
   --duration-creep: 10s;   /* the red top line's walk to 90% */
   --duration-fill: 700ms;  /* arrow button: chip colour filling the button, and its lift */
   --duration-reveal: 700ms;
+  --duration-dots: 1200ms; /* one bounce of the chat's typing dots */
 
   /* Hero copy: 8px rise and fade. Callers stagger with animation-delay. */
   --animate-rise: rise var(--duration-reveal) var(--ease-out) both;
@@ -222,6 +223,21 @@
     from {
       opacity: 0;
       transform: translateY(0.5rem);
+    }
+  }
+
+  /* Chat: a bubble or chip rises in, a reply's words fade in over where the dots were. */
+  --animate-bubble: bubble var(--duration-base) var(--ease-out) both;
+  @keyframes bubble {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.97);
+    }
+  }
+  --animate-reply: reply var(--duration-fast) var(--ease-out) both;
+  @keyframes reply {
+    from {
+      opacity: 0;
     }
   }
 }
@@ -452,6 +468,24 @@
     visibility: hidden;
   }
 }
+@keyframes dot-bounce {
+  0%, 60%, 100% {
+    transform: none;
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(-0.3125rem);
+    opacity: 1;
+  }
+}
+@keyframes dot-fade {
+  50% {
+    opacity: 1;
+  }
+  0%, 100% {
+    opacity: 0.45;
+  }
+}
 /* From 0 to 90% of the screen, then it waits for the end. */
 @keyframes top-line-creep {
   to {
@@ -467,6 +501,27 @@
   img[data-loaded] {
     animation: none;
     background: none;
+  }
+  /* The chat is writing: three dots, one line tall so a one-line reply takes their place without a jump. */
+  .typing-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 1lh;
+    vertical-align: top;
+  }
+  .typing-dots i {
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 50%;
+    background-color: var(--steel);
+    animation: dot-bounce var(--duration-dots) ease-in-out infinite;
+  }
+  .typing-dots i:nth-child(2) {
+    animation-delay: calc(var(--duration-dots) * 0.12);
+  }
+  .typing-dots i:nth-child(3) {
+    animation-delay: calc(var(--duration-dots) * 0.24);
   }
   .sheet-skeleton {
     animation: skeleton-after 1ms step-end 120ms both;
@@ -536,12 +591,16 @@ html[data-scrolled]:not([data-nav]) .nav-desktop {
     touch-action: manipulation;
   }
   /* Everything below the first screen skips style, layout and paint until it nears the viewport, so the first
-     layout is the hero's alone. "auto" keeps the size once seen. Not on phones: sections there run far taller than the
-     placeholder, and Back then restored the scroll position thousands of pixels off. */
-  @media (width >= 48rem) {
-    main > section:not(:first-child) {
-      content-visibility: auto;
-      contain-intrinsic-size: auto 40rem;
+     layout is the hero's alone. "auto" keeps the size once seen. Phone sections run far taller than the placeholder, so a
+     page opened part way down (Back, a reload, a #link) would land thousands of pixels off: wholePage in layout.tsx marks
+     those, and any tap on a link, and they lay out in full. */
+  main > section:not(:first-child) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 40rem;
+    @media (width < 48rem) {
+      html[data-whole] & {
+        content-visibility: visible;
+      }
     }
   }
   ::selection {
@@ -592,5 +651,9 @@ html[data-scrolled]:not([data-nav]) .nav-desktop {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Without motion the dots still show the chat is busy: they fade, they do not bounce. */
+  .typing-dots i {
+    animation: dot-fade var(--duration-dots) ease-in-out infinite !important;
   }
 }

@@ -7,14 +7,15 @@ import { cn } from "@/lib/utils"
 const WIDTHS = [640, 720, 960, 1280, 1920]
 const dir = path.join(process.cwd(), "public", "images")
 // Pixel size of each image's largest export (written by export.mjs): width and height attributes, for the aspect ratio before CSS loads.
-const meta: Record<string, { width: number; height: number }> = JSON.parse(readFileSync(path.join(dir, "alt.json"), "utf8"))
+const meta: Record<string, { width: number; height: number; alt: string }> = JSON.parse(readFileSync(path.join(dir, "alt.json"), "utf8"))
 
 const srcSet = (name: string, ext: string, widths: number[]) =>
   widths.map((w) => `/images/${name}-${w}.${ext} ${w}w`).join(", ")
 
 type ImgProps = {
   name: string
-  alt: string
+  /** Defaults to the image's alt text in alt.json. */
+  alt?: string
   /** The `sizes` attribute: how wide the image renders at each breakpoint. */
   sizes: string
   /** Sizing and aspect classes for the frame, e.g. "aspect-4/3 rounded-lg". */
@@ -38,7 +39,7 @@ export function Img({ name, alt, sizes, className, priority }: ImgProps) {
         sizes={sizes}
         width={meta[name]?.width}
         height={meta[name]?.height}
-        alt={alt}
+        alt={alt ?? meta[name]?.alt ?? ""}
         loading={priority ? "eager" : "lazy"}
         fetchPriority={priority ? "high" : undefined}
         decoding="async"

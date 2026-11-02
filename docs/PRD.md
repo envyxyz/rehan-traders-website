@@ -148,7 +148,7 @@ These are confirmed and can go on the site:
 - **Hours:** Mon to Sat 11 AM to 10 PM, Friday prayer break 1 to 2 PM, closed Sundays and public holidays.
 - **Booking email:** rehanmobiletraders@gmail.com.
 - **Photos:** team faces allowed, names not needed. Owner is Adnan (his photo: the old profile picture in `../growth/Brand/`).
-- **Coverage:** every Galaxy Z Fold and Z Flip generation, Pixel Fold, Surface Duo; iPhones (panels, back glass); water damage; tablets except very old, obsolete models. The shop tries to save the damaged panel first.
+- **Coverage:** all foldables, not only Galaxy Z Fold and Z Flip (Ameer, 1 Nov 2026; earlier wording: every Z Fold and Z Flip generation, Pixel Fold, Surface Duo). Copy names Duo, Galaxy Z Series and Pixel Fold only; iPhones (panels, back glass); water damage; tablets except very old, obsolete models. The shop tries to save the damaged panel first.
 - **Founded:** 2009.
 
 Answered 30 Oct 2026 (former §12 q1, q2 and q4):

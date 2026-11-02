@@ -5,6 +5,9 @@ export const duration = { press: 0.1, fast: 0.2, base: 0.35, reveal: 0.7 } as co
 /** Hero copy entrance stagger, seconds (CSS animate-rise). */
 export const heroStagger = 0.08
 
+/** Chat chips rising in (CSS animate-bubble), seconds apart. */
+export const chipStagger = 0.06
+
 /** Phone menu: items fade in (CSS animate-rise) from `start` seconds, once the sheet or the Repairs list has slid in, `step` apart. */
 export const menuStagger = { start: 0.25, step: 0.05 } as const
 

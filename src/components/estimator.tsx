@@ -413,7 +413,7 @@ function Outcome({ result, onAgain }: { result: Result; onAgain: () => void }) {
               </div>
             ))}
           </dl>
-          {fault.panel && <Text>{estimator.result.panel[fault.panel]}</Text>}
+          <Text>{fault.panel ? estimator.result.panel[fault.panel] : service.short}</Text>
           {price && <p className="font-display text-title-md tabular-nums text-ink">{price}</p>}
         </>
       ) : (

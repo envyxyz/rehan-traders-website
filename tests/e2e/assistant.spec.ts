@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test"
 
 import { actions, assistant } from "../../src/content"
 import { booking, estimator, services } from "../../src/content-large"
-import { MAX_INPUT, MAX_TURNS, parseReply, pieces } from "../../src/lib/assistant"
+import { knowledge, MAX_INPUT, MAX_TURNS, parseReply, pieces, repairFor } from "../../src/lib/assistant"
 import { pickDevice } from "./helpers"
 
 // UI tests stub /api/chat and /api/book, so they cost nothing and do not depend on a model.
@@ -72,6 +72,29 @@ test("chat streams a reply with chips and inline links, never buttons", async ({
   expect(sent!.messages[1].content).not.toContain(">>")
 })
 
+test("while a reply is written the chat shows bouncing dots, not the red line at the top", async ({ page }) => {
+  await page.route("/api/chat", async (route) => {
+    await new Promise((r) => setTimeout(r, 1500))
+    await route.fulfill({ status: 200, contentType: "text/plain", body: reply }).catch(() => {})
+  })
+  const sheet = await openChat(page)
+  await sheet.getByRole("button", { name: assistant.chips[0] }).click()
+  await expect(sheet.locator(".typing-dots i")).toHaveCount(3)
+  await expect(sheet.getByText(assistant.typing)).toBeAttached()
+  await expect(page.locator(".top-line")).toBeHidden()
+  await expect(sheet.getByText("Yes, we repair Galaxy Z Fold inner screens.")).toBeVisible()
+  await expect(sheet.locator(".typing-dots")).toHaveCount(0)
+})
+
+test("the assistant knows the shop repairs all foldables, and the finder follows", () => {
+  expect(knowledge).toContain("all foldables")
+  for (const device of ["Galaxy Z Flip6", "Galaxy Fold", "Pixel Fold", "Surface Duo", "Motorola Razr 50"]) {
+    expect(repairFor("hinge", device).service?.slug, device).toBe("galaxy-z-fold-flip")
+  }
+  expect(repairFor("hinge", "iPhone 15").service).toBeNull()
+  expect(repairFor("fold-inner-screen", "Galaxy S24").service).toBeNull()
+})
+
 test("closing the sheet mid-reply does not break the next message", async ({ page }) => {
   await page.route("/api/chat", async (route) => {
     await new Promise((r) => setTimeout(r, 1500)) // still "typing" when the sheet closes
@@ -112,7 +135,7 @@ test("estimate: picking device and fault shows the repair in place of the form",
   await form.getByRole("button", { name: estimator.submit }).click()
   await expect(form.getByRole("alert")).toHaveText(estimator.pickError)
   await pickDevice(page, "Samsung Galaxy Z Fold5", form)
-  await page.getByRole("radio", { name: "Fold or Flip inner screen" }).click()
+  await page.getByRole("radio", { name: "Foldable inner screen" }).click()
   const card = page.locator("[data-slot=card]").first()
   const before = (await card.boundingBox())!
   const fixed = (page.viewportSize()?.width ?? 0) >= 1024 // from lg the card keeps one height; below it, each panel has its own
@@ -124,7 +147,7 @@ test("estimate: picking device and fault shows the repair in place of the form",
   if (fixed) expect(after.height).toBe(before.height) // the card keeps its size
   else expect(after.height).toBeLessThan(before.height) // no empty space under a short result
   const wa = new URL((await page.getByRole("link", { name: estimator.result.quote }).getAttribute("href"))!)
-  expect(wa.searchParams.get("text")).toBe(estimator.whatsapp("Samsung Galaxy Z Fold5", "Fold or Flip inner screen"))
+  expect(wa.searchParams.get("text")).toBe(estimator.whatsapp("Samsung Galaxy Z Fold5", "Foldable inner screen"))
   await expect(page.getByRole("link", { name: actions.bookRepair })).toHaveAttribute("href", "/book?service=galaxy-z-fold-flip")
 
   // Start again brings the form back, and a second result works too.

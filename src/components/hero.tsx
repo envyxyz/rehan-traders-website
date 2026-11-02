@@ -51,12 +51,13 @@ export function Hero() {
                 {actions.start}
               </BookButton>
               <div className="flex gap-3">
-                <AskAiButton className="flex-1" />
-                <Button asChild size="lg" variant="whatsapp" className="size-13 px-0">
+                <Button asChild size="lg" variant="whatsapp" className="flex-1">
                   <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="hero">
                     <WhatsAppIcon />
+                    {actions.whatsapp}
                   </a>
                 </Button>
+                <AskAiButton className="flex-1" />
               </div>
             </div>
             <div className={`mt-hero-gap grid gap-2 text-caption text-steel sm:flex sm:flex-wrap sm:gap-x-5 ${rise(3).className}`} style={rise(3).style}>

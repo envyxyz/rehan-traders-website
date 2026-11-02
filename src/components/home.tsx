@@ -20,7 +20,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { aboutPage, actions, estimate, faq, home, process, site, ui, visit, visitPage } from "@/content"
+import { aboutPage, actions, estimate, faq, home, jobCardContent, process, site, ui, visit, visitPage } from "@/content"
 import { reviews, services } from "@/content-large"
 import { cn } from "@/lib/utils"
 
@@ -136,6 +136,9 @@ function Process() {
         <Reveal className="mt-12 flex justify-center">
           <div className="relative w-full max-w-2xl rounded-xl bg-paper p-4 sm:p-8">
             <JobCard withSeal={false} />
+            <Text size="body-sm" tone="muted" className="mt-3 text-center">
+              {jobCardContent.sampleNote}
+            </Text>
           </div>
         </Reveal>
       </Container>

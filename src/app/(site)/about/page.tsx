@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
 import { Heading, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
-import { aboutPage, breadcrumbs, seo } from "@/content"
+import { aboutPage, breadcrumbs, jobCardContent, seo } from "@/content"
 import { storeSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
@@ -119,6 +119,9 @@ export default function AboutPage() {
           <div className="mt-12 flex justify-center">
             <div className="relative w-full max-w-2xl rounded-xl bg-panel p-4 sm:p-8">
               <JobCard />
+              <Text size="body-sm" tone="muted" className="mt-3 text-center">
+                {jobCardContent.sampleNote}
+              </Text>
             </div>
           </div>
         </Container>

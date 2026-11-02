@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import { CourierSteps } from "@/components/courier-steps"
 import { CtaBand } from "@/components/cta-band"
 import { HoursTable } from "@/components/hours-table"
 import { Icon, WhatsAppIcon } from "@/components/icon"
@@ -88,79 +87,31 @@ export default function VisitPage() {
       {/* How to find G-88 in Hafeez Center */}
       <Section tone="panel">
         <Container>
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-6">
-              <Heading as="h2">{visitPage.directionsTitle}</Heading>
-              <Text tone="muted" className="mt-3">
-                {visit.directions}
-              </Text>
+          <Heading as="h2">{visitPage.directionsTitle}</Heading>
+          <Text tone="muted" className="mt-3">
+            {visit.directions}
+          </Text>
 
-              <div className="mt-8 space-y-4">
-                <Card className="p-5">
-                  <span className="font-display text-caption font-bold text-steel">
-                    {visitPage.entranceLabel}
-                  </span>
-                  <Text tone="body" size="body-sm" className="mt-1">
-                    {visitPage.entranceValue}
-                  </Text>
-                </Card>
-
-                <Card className="p-5">
-                  <span className="font-display text-caption font-bold text-steel">
-                    {visitPage.floorLabel}
-                  </span>
-                  <Text tone="body" size="body-sm" className="mt-1">
-                    {visitPage.floorValue}
-                  </Text>
-                </Card>
-
-                {visitPage.landmarksValue && (
-                <Card className="p-5">
-                  <span className="font-display text-caption font-bold text-steel">
-                    {visitPage.landmarksLabel}
-                  </span>
-                  <Text tone="body" size="body-sm" className="mt-1">
-                    {visitPage.landmarksValue}
-                  </Text>
-                </Card>
-                )}
-              </div>
-            </div>
-
-            <div className="lg:col-span-6">
-              <figure className="overflow-hidden rounded-xl border border-hairline bg-card">
-                <Img
-                  name="storefront"
-                  alt={visitPage.mapAlt}
-                  sizes="(min-width: 1024px) 560px, calc(100vw - 2rem)"
-                  className="aspect-4/3 w-full"
-                />
-                <figcaption className="p-4 text-caption text-steel">
-                  {visitPage.mapAlt}
-                </figcaption>
-              </figure>
-            </div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {[
+              [visitPage.signLabel, visitPage.signValue],
+              [visitPage.floorLabel, visitPage.floorValue],
+              ...(visitPage.landmarksValue ? [[visitPage.landmarksLabel, visitPage.landmarksValue]] : []),
+            ].map(([label, value]) => (
+              <Card key={label} className="p-5">
+                <span className="font-display text-caption font-bold text-steel">{label}</span>
+                <Text tone="body" size="body-sm" className="mt-1">
+                  {value}
+                </Text>
+              </Card>
+            ))}
           </div>
-        </Container>
-      </Section>
-
-      {/* Courier repairs: four numbered steps, then the three ways to start. */}
-      <Section id="courier">
-        <Container>
-          <div className="max-w-2xl">
-            <Heading as="h2">{visitPage.courierTitle}</Heading>
-            <Text tone="muted" className="mt-3">
-              {visitPage.courierLede}
-            </Text>
-          </div>
-
-          <CourierSteps from="visit" />
 
           <Link
             href="/courier"
-            className="mt-4 inline-flex min-h-11 items-center gap-1 font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
+            className="mt-6 inline-flex min-h-11 items-center gap-1 font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline"
           >
-            {visitPage.courierMore}
+            {visitPage.courierLink}
             <Icon icon={ArrowRight} size="sm" />
           </Link>
         </Container>

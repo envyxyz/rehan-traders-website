@@ -61,10 +61,44 @@ Snapshotted as commit `2fa759c` from the uncommitted work on main, without touch
 |---|---|---|---|---|---|---|---|
 | Baseline, commit `2fa759c` | 6.0 | 6.2 | 6.0 | 7.2 | 6.5 | 7.0 | 6.3 |
 | Round 1, commit `6bf4adc` | 6.0 | 6.5 | 6.5 | 7.0 | 8.5 | 7.5 | 6.6 |
+| Round 2, commit `1972000` | 6.7 | 6.8 | 6.3 | 7.1 | 8.1 | 7.3 | 6.8 |
+
+The round 2 reviewer's worst findings: "10,000+ Certified Repairs" reads as a self-made badge once the FAQ explains it; the Fold page has an icon in an empty box and no Fold photo; the quote finder accepts nonsense (iPhone + Fold inner screen, Nokia + Face ID); courier lacks turnaround and payment order (needs Adnan); the OPPO sign and thin "how to find" on /visit; Ask AI labelled above an unlabelled WhatsApp icon; /reviews one card per tap; payment and holiday wording conflict across pages; stiff third-person copy; repetition on phones; the chat button over content; the sample job card looks like a stale real record.
 
 The round 1 reviewer's worst findings: courier risk questions unanswered (mostly needs Adnan); the second home review says the shop sent a Samsung elsewhere and names "Mr Rehan"; no proof on the Fold page; OPPO sign and thin directions on /visit; "ask to watch when not busy" and no rule for a second fault read as escape hatches (needs Adnan); warranty step read as coming after the work; "Certified" unexplained (needs Adnan); no reply expectation; courier ticket is the walk-in form; finder returns nonsense for iPhone + Hinge.
 
+## Round 3 (1 to 2 Nov 2026)
+
+Started with Ameer's two requests, then the round 2 reviewer's findings a web change can fix.
+
+1. **Foldables** (Ameer): service title "Foldables (Duo, Z Series, Pixel)", slug unchanged. Copy, FAQs, SEO, hero lede, problems, the finder label ("Foldable inner screen"), llms.txt and the chat knowledge say all foldables, naming only Duo, Galaxy Z Series and Pixel Fold. `facts.foldables` tells the assistant to say yes for any foldable. The finder knows foldables without "fold" or "flip" in the name (Razr, Magic V, Find N, OnePlus Open, Mate X).
+2. **Chat** (Ameer): three bouncing dots in a bubble while a reply is written, not the red top line (the line stays for pages, chunks, submits and uploads). Bubbles and chips rise in, the words fade in where the dots were, one-line replies keep the same height, streaming follows at once instead of restarting a smooth scroll per chunk, and the chips arriving scroll the reply clear. On phones the sheet rises from the bottom corner with a fade. Reduced motion: no movement, the dots fade.
+3. **Adnan's photo** (Ameer): background removed locally with rembg (`u2net_human_seg`, alpha matting) from the 192 px crop of `growth/Brand/Archive/v0 - Old shop artwork/old-profile-badge_v1.png`, then the badge's yellow ring and a grey bottle beside the neck masked out by hand. Face untouched. Checked at 64 px on paper, panel and dark.
+4. **Finder:** iPhone + Hinge or Fold inner screen, and Face ID on a non-Apple phone, now say it does not match a listed repair. A result with no panel line shows the repair's one-line summary.
+5. **Proof and paths:** each repair page's hero shows its real desk photo (the Fold page: the Fold open under the microscope), with the red repair icon on it. /reviews lists all 30 reviews at once, no carousel (component deleted). /visit loses the second storefront photo and the courier block (a link instead) and gains "The sign": the big sign says OPPO, look for G-88 and Tab House & Rehan Traders Lab. Hero: WhatsApp is a labelled button beside Ask AI. Chat chip "Touch glass price?" is now "Is checking free?". No chat button on /book. "Create ticket" is "Send to the shop" and "Fill in the form". Payment lists agree (Raast added to the FAQ and Terms); holidays read "Also closed when Hafeez Center closes". The sample job card says it is a sample.
+6. **Phone performance:** below-the-fold sections skip layout on phones too. A page that may open part way down (Back, reload, a #link) or any tap on a link lays out in full first, so scroll restoration stays exact. Home Lighthouse on the same machine: 73 to 84, TBT 905 to 427 ms. Tried and rejected: `<Suspense>` around each home section to slice hydration. In this static export it outlines every section into hidden HTML that only a script reveals, so no-JavaScript visitors and crawlers would see nothing.
+
+**Held back, not live:** the business card on the fold's screen with a QR to the Google profile (Ameer). The scene code is done (29 x 29 QR, level L, `site.mapsUrl`, 8 canvas px a module), committed on this branch after the deployed commit and not pushed, but the posters could not be regenerated or the QR decoded from real screenshots: the machine had 0.2 to 0.4 GB free and the preview stopped answering. Shipping the scene without matching posters would flash the old job card under the new one.
+
+### Gates after round 3 (machine at 0.2 to 0.6 GB free)
+
+| Check | Result |
+|---|---|
+| Build, lint, typecheck | Pass |
+| E2e, focused (assistant, booking, faq, fold incl. the new sound tests, nav, pages, phone, reviews), 2 workers | 116 passed, 27 skipped, 1 failed under load; that one passed alone (26.8 s) |
+| Axe, light and dark, both projects: `/`, `/about`, `/quote`, `/reviews`, `/visit`, Fold and iPhone pages, chat sheet | 32 of 32 |
+| Lighthouse `/`, median of 3, same build before the late copy changes | perf 84 (was 73), a11y, bp, seo 100, LCP 3048 (simulated; observed paint 430 to 530 ms), TBT 427 |
+| Screenshots, 390 and 1440, light and dark | `website-shots/loop-9/round-3/` |
+
+Not run: the full e2e and axe sweep, Lighthouse on the final build and on repair pages (the new hero photo may move their LCP), the 320 to 1920 overflow sweep, the independent score of round 3.
+
+**Not edited:** CLAUDE.md rule 5 (a relayed request); its wording, red line "only while something loads", still holds.
+
+**Favicon in Google:** the site meets Google's favicon rules (192 px PNG and SVG linked from the home page, `favicon.ico` with 48 px, crawlable). Google's favicon service returns 404 for the domain, so Google has not stored it yet. Fix: Search Console, URL inspection of the home page, Request indexing; it updates on Google's schedule.
+
 ## Round 2 (1 Nov 2026)
+
+**Deployed:** Ameer asked, and the round 1 and 2 session pushed `1972000` to main (verified live).
 
 Ameer answered the blocking questions: second fault, what "certified" means, courier return and transit risk, packing, remote payment (PRD §11). Walking route still to come.
 

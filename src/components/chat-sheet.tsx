@@ -20,7 +20,8 @@ export function ChatSheet({
       <SheetContent
         side="right"
         glass
-        className="gap-3 pb-6"
+        // Phones: rises from the thumb's corner with a fade, not across the whole width. Desktop keeps the slide from the right.
+        className="gap-3 pb-6 data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 max-sm:data-[state=closed]:slide-out-to-right-0 max-sm:data-[state=closed]:slide-out-to-bottom-8 max-sm:data-[state=open]:slide-in-from-right-0 max-sm:data-[state=open]:slide-in-from-bottom-8"
         onCloseAutoFocus={(e) => {
           e.preventDefault()
           returnFocus.current?.focus()

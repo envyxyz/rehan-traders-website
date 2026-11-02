@@ -24,6 +24,7 @@ export const knowledge = [
   `Outside Lahore: ${facts.courier}`,
   `Checking: ${facts.check}`,
   `iPhone batteries: ${facts.battery} This is only about batteries and what the customer chooses: never say the shop's parts are original.`,
+  `Foldables: ${facts.foldables} If a customer names any foldable, say yes, the shop repairs it.`,
   `Water-resistance seal: ${facts.seal} Never say the phone is water resistant afterwards.`,
   `Warranty: ${facts.warranty} Never state a number of days or months.`,
   `Repair time: ${facts.turnaround} ${facts.turnaroundFold} Say "as little as" and "up to", never "guaranteed", and give the 60 minutes only for a normal panel (screen) change.`,
@@ -107,7 +108,8 @@ export function pieces(body: string, streaming = false): Piece[] {
   return out
 }
 
-const foldable = /\bz\s?(fold|flip)|\b(fold|flip)\s?\d|pixel.*fold|surface duo/i
+// Any foldable: the shop repairs them all (Ameer, 1 Nov 2026). Names without "fold" or "flip" in them are listed.
+const foldable = /\b(z\s?)?(fold|flip)|\bduo\b|\brazr\b|\bmagic\s?v|\bfind\s?n\d|\boneplus\s?open\b|\bmate\s?xt?\b/i
 const tablet = /ipad|galaxy tab|\btab\b|tablet|matepad|\bpad\b/i
 const apple = /iphone|apple/i
 
@@ -122,9 +124,11 @@ export function repairFor(faultSlug: string, device: string | null) {
   if (foldable.test(d) && ["cracked-glass", "touch-not-working", "screen-damaged", "hinge"].includes(fault.slug)) slug = "galaxy-z-fold-flip"
   else if (tablet.test(d) && ["cracked-glass", "touch-not-working", "screen-damaged", "battery", "charging"].includes(fault.slug)) slug = "ipad-tablet"
   else if (apple.test(d) && ["screen-damaged", "battery", "charging", "camera", "face-id"].includes(fault.slug)) slug = "iphone"
-  // Back glass and Face ID are listed for iPhones only (Face ID also as board repair).
+  // Back glass and Face ID are listed for iPhones only.
   if (fault.slug === "back-glass" && d && !apple.test(d)) slug = ""
-  if (fault.slug === "face-id" && d && !apple.test(d)) slug = "board-repair"
+  if (fault.slug === "face-id" && d && !apple.test(d)) slug = ""
+  // A hinge or an inner screen only exists on a folding phone: iPhone + Hinge is not the Fold repair.
+  if (["hinge", "fold-inner-screen"].includes(fault.slug) && d && !foldable.test(d)) slug = ""
   const service = services.find((s) => s.slug === slug) ?? null
   return { fault, service, price: service ? priceLine(service) : null }
 }

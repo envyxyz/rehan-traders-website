@@ -6,6 +6,7 @@ import { BookButton } from "@/components/book-button"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
 import { Icon, WhatsAppIcon } from "@/components/icon"
+import { Img } from "@/components/img"
 import { ArrowRight, repairIcons } from "@/components/icons"
 import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
@@ -86,8 +87,12 @@ export default async function ServicePage({ params }: PageProps) {
             </div>
 
             <div className="lg:col-span-5">
-              <div aria-hidden className="grid aspect-4/3 w-full place-items-center rounded-xl border border-hairline bg-panel">
-                <Icon icon={repairIcons[service.slug]} size="repair-lg" className="text-signal" />
+              {/* A real photo from the desk, with the repair's icon on it. */}
+              <div className="relative">
+                <Img name={service.image} priority sizes="(min-width: 1024px) 480px, calc(100vw - 2rem)" className="aspect-4/3 w-full rounded-xl" />
+                <span aria-hidden className="absolute top-3 left-3 grid size-12 place-items-center rounded-lg bg-card">
+                  <Icon icon={repairIcons[service.slug]} size="xl" className="text-signal" />
+                </span>
               </div>
             </div>
           </div>

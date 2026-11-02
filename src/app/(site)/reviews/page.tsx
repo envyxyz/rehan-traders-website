@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
 import { Container, Section } from "@/components/layout"
-import { ReviewCarousel } from "@/components/review-carousel"
+import { ReviewCard } from "@/components/review-card"
 import { Stars } from "@/components/stars"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
@@ -16,40 +16,41 @@ export const metadata: Metadata = pageMeta({ title: seo.reviews.title, descripti
 export default function ReviewsPage() {
   return (
     <>
-      <Section first className="flex flex-col justify-center pb-12 lg:pb-16">
+      <Section first>
         <Container>
           <Breadcrumbs items={[{ label: breadcrumbs.reviews }]} className="mb-3" />
 
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <Heading as="h1" size="display-xl" rule>
-                {reviewsPage.title}
-              </Heading>
-              <Text tone="muted" size="body-md" className="mt-4 max-w-xl">
-                {reviewsPage.lede}
-              </Text>
+          <Heading as="h1" size="display-xl" rule>
+            {reviewsPage.title}
+          </Heading>
+          <Text tone="muted" size="body-md" className="mt-4 max-w-xl">
+            {reviewsPage.lede}
+          </Text>
 
-              <p className="mt-8 flex items-center gap-3">
-                <b className="font-display text-display-lg text-ink tabular-nums">{reviews.rating.toFixed(1)}</b>
-                <span>
-                  <Stars rating={reviews.rating} />
-                  <span className="mt-1 block font-display text-body-md font-bold text-ink">
-                    {reviewsPage.starSummary(reviews.rating)}
-                  </span>
-                </span>
-              </p>
-              <Button asChild size="lg" arrow className="mt-8">
-                <a href={reviews.url} target="_blank" rel="noopener noreferrer">
-                  {reviewsPage.readAllOnGoogle}
-                  <span className="sr-only">, {ui.externalLink}</span>
-                </a>
-              </Button>
-            </div>
+          <p className="mt-8 flex items-center gap-3">
+            <b className="font-display text-display-lg text-ink tabular-nums">{reviews.rating.toFixed(1)}</b>
+            <span>
+              <Stars rating={reviews.rating} />
+              <span className="mt-1 block font-display text-body-md font-bold text-ink">
+                {reviewsPage.starSummary(reviews.rating)}
+              </span>
+            </span>
+          </p>
+          <Button asChild size="lg" arrow className="mt-8">
+            <a href={reviews.url} target="_blank" rel="noopener noreferrer">
+              {reviewsPage.readAllOnGoogle}
+              <span className="sr-only">, {ui.externalLink}</span>
+            </a>
+          </Button>
 
-            <div>
-              <ReviewCarousel />
-            </div>
-          </div>
+          {/* All of them at once, no script: a sceptic reads on, or stops, at their own pace. */}
+          <ul className="mt-12 columns-1 gap-4 md:columns-2 xl:columns-3">
+            {reviews.items.map((r) => (
+              <li key={r.author} className="mb-4 break-inside-avoid">
+                <ReviewCard review={r} />
+              </li>
+            ))}
+          </ul>
         </Container>
       </Section>
 

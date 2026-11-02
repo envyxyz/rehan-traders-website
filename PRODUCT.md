@@ -22,7 +22,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 
 - Touch glass replacement that keeps the original display (the shop's own title: "Touch Glass Specialist").
 - Saves the damaged panel first where it can (Adnan: "our main priority").
-- Foldables: every Galaxy Z Fold and Z Flip generation, Pixel Fold, Surface Duo. Outer glass, inner panel, hinge.
+- Foldables: all of them, not only Galaxy Z Fold and Z Flip (Ameer, 1 Nov 2026). Name Duo, Galaxy Z Series and Pixel Fold; list no other brands. Outer glass, inner panel, hinge.
 - Board-level repair at an open bench with a microscope, inside Hafeez Center, Lahore's phone market.
 - Repairing phones since 2009.
 - 10,000+ certified repairs (confirmed by Ameer, 1 Nov 2026).
@@ -40,7 +40,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Risk during touch-glass separation: not published, by choice (Ameer, 30 Oct 2026). No page, FAQ, chat answer or llms file answers it.
 - Turnaround: depends on the type of repair, parts availability, and how rare and complex the model is. A normal panel (screen) change can take as little as 60 minutes; complex devices such as Galaxy Z Folds can take up to a day. Say "as little as" and "up to"; the 60 minutes belongs to a normal panel change only (Adnan, 30 Oct 2026).
 - Water damage: anywhere from 8 hours to several days, depending on how severe it is. Data recovery time depends on the situation (Adnan, 31 Oct 2026).
-- Hinges: the shop repairs Galaxy Z Fold and Z Flip hinges (Adnan, 31 Oct 2026).
+- Hinges: the shop repairs foldable hinges (Adnan, 31 Oct 2026, for Galaxy Z Fold and Z Flip; all foldables per Ameer, 1 Nov 2026).
 - Tablets: mainly iPads (Adnan, 31 Oct 2026).
 - Address: Shop G-88 line confirmed by Adnan, 31 Oct 2026. The Google listing is named "Rehan Traders & Mobile Repairing Shop"; the website and brand use "Rehan Traders" (schema alternateName carries the listing name).
 - Payment: all methods (cash, card, JazzCash, EasyPaisa, bank transfer).

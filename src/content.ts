@@ -73,7 +73,7 @@ export const site = {
     lines: ["Monday to Saturday", "11:00 AM to 10:00 PM", "Friday break 1:00 to 2:00 PM", "Sunday closed"],
     fridayBreak: "Friday prayer break 1:00 to 2:00 PM",
     // Adnan, 31 Oct 2026: the shop opens whenever Hafeez Center does, so it closes only when the building closes.
-    holidays: "Closed only when Hafeez Center closes, such as Eid and Ashura",
+    holidays: "Also closed when Hafeez Center closes, such as Eid and Ashura",
   },
   payments: "All payment methods accepted", // Adnan, PRD §11 q4
   courier: true, // Adnan, PRD §11 q6: courier and out-of-city repairs
@@ -93,9 +93,10 @@ export const facts = {
     "Rehan Traders discusses warranty once the fault is diagnosed or the job is confirmed. Whether a repair carries one, and its terms, depend on the repair, the model and the quality of parts you choose.",
   turnaround:
     "Repair time at Rehan Traders, Hafeez Center, Lahore depends on the type of repair, parts availability, and how rare and complex the model is. A normal screen (panel) change can take as little as 60 minutes.",
+  foldables: "Rehan Traders repairs all foldables, not only Galaxy Z Fold and Z Flip: Duo, every Galaxy Z Series generation, Pixel Fold and any other foldable.",
   turnaroundFold:
-    "Complex devices such as Galaxy Z Folds can take up to a day.",
-  courier: `Rehan Traders repairs phones sent by courier from outside Lahore. Create a ticket on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp. If possible the shop quotes over the phone. Otherwise you send the phone, the shop inspects it and quotes, repairs it once you agree, and sends it back. ${delivery}`,
+    "Complex devices such as foldables can take up to a day.",
+  courier: `Rehan Traders repairs phones sent by courier from outside Lahore. Fill in the form on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp. If possible the shop quotes over the phone. Otherwise you send the phone, the shop inspects it and quotes, repairs it once you agree, and sends it back. ${delivery}`,
   check:
     "Rehan Traders checks your device free of cost at Shop G-88, Hafeez Center, Lahore. The shop tells you what the issue is, whether it can be repaired, what it will cost and how long it will take.",
   delivery,
@@ -158,7 +159,7 @@ export const hero = {
   title: "Cracked glass? Fixed at G‑88.", // ‑ is a non-breaking hyphen: "G-88" never splits
   /** Tablet and up only: a phone starts the lede at "Rehan Traders checks". */
   ledeLead: "A reliable repair in a confusing market. ",
-  lede: "Rehan Traders checks your phone free of cost and tries to save your panel, and your money, first. Touch glass, Galaxy Z Fold and Flip, iPhone and board repairs in Hafeez Center, Lahore.",
+  lede: "Rehan Traders checks your phone free of cost and tries to save your panel, and your money, first. Touch glass, foldables, iPhone and board repairs in Hafeez Center, Lahore.",
   // Confirmed by Ameer, 1 Nov 2026.
   track: "10,000+ Certified Repairs",
   proof: (rating: number) => ({ before: `Rated ${rating.toFixed(1)} on`, link: "Google Maps" }),
@@ -178,6 +179,7 @@ export const jobCardContent = {
     warranty: { label: "Warranty to", aria: "Warranty to", initial: "As agreed" },
   },
   sealAlt: "Rehan Traders tamper seal",
+  sampleNote: "A sample card. Your job gets its own number and details.",
 } as const
 
 export const process = [
@@ -214,8 +216,8 @@ export const faq = [
     a: `${facts.turnaround} ${facts.turnaroundFold}`,
   },
   {
-    q: "How long does a Galaxy Z Fold repair take?",
-    a: "A Galaxy Z Fold repair at Rehan Traders, Hafeez Center, Lahore can take up to a day, depending on parts availability and how complex the model is.",
+    q: "How long does a foldable repair take?",
+    a: "A foldable repair at Rehan Traders, Hafeez Center, Lahore can take up to a day, depending on parts availability and how complex the model is.",
   },
   {
     q: "How do I get a price for my repair?",
@@ -223,7 +225,7 @@ export const faq = [
   },
   {
     q: "Can I send my phone by courier from outside Lahore?",
-    a: `Yes. Create a ticket on the website or call ${site.phone.display}, then send photos of the phone on WhatsApp. If possible, Rehan Traders quotes over the phone; otherwise you send the phone to Shop G-88, Hafeez Center, Lahore, where it is inspected and quoted, repaired once you agree, and sent back. ${facts.delivery}`,
+    a: `Yes. Fill in the form on the website or call ${site.phone.display}, then send photos of the phone on WhatsApp. If possible, Rehan Traders quotes over the phone; otherwise you send the phone to Shop G-88, Hafeez Center, Lahore, where it is inspected and quoted, repaired once you agree, and sent back. ${facts.delivery}`,
   },
   {
     q: "Will my iPhone show \"Unknown Part\" after a battery change?",
@@ -239,7 +241,7 @@ export const faq = [
   },
   {
     q: "How can I pay?",
-    a: "Rehan Traders accepts all payment methods: cash, card, JazzCash, EasyPaisa and bank transfer.",
+    a: "Rehan Traders accepts all payment methods: cash, card, JazzCash, EasyPaisa, bank transfer and Raast.",
   },
   {
     q: "Where is Rehan Traders and when is it open?",
@@ -247,7 +249,7 @@ export const faq = [
   },
   {
     q: "My phone or tablet is broken. Where can I get it repaired in Lahore?",
-    a: `Rehan Traders repairs phones and tablets at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore: cracked glass, broken screens, Galaxy Z Fold and Flip, iPhone, iPad, batteries and charging, water damage and motherboard faults. Checking is free. Call or WhatsApp ${site.phone.display}, or walk in ${site.hours.oneLine}.`,
+    a: `Rehan Traders repairs phones and tablets at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore: cracked glass, broken screens, foldables, iPhone, iPad, batteries and charging, water damage and motherboard faults. Checking is free. Call or WhatsApp ${site.phone.display}, or walk in ${site.hours.oneLine}.`,
   },
 ] as const
 
@@ -260,7 +262,7 @@ export const problems = [
   { problem: "Cracked phone glass, display still works", says: ["mobile ki screen toot gayi", "sirf ooper wala glass toota hai", "touch glass change karwana hai"], urdu: "موبائل کی سکرین ٹوٹ گئی", service: "touch-glass-replacement" },
   { problem: "Touch not working", says: ["touch kaam nahi kar raha"], urdu: "ٹچ کام نہیں کر رہا", service: "touch-glass-replacement" },
   { problem: "Lines on the screen, black, green, pink or flickering display", says: ["screen pe lines aa gayi", "screen black ho gayi", "panel change karwana hai"], urdu: "سکرین پر لائنیں آ گئیں", service: "screen-replacement" },
-  { problem: "Galaxy Z Fold or Z Flip inner screen, outer glass or hinge", says: ["Fold ki andar wali screen kharab ho gayi", "hinge tight ho gaya"], urdu: "فولڈ کی اندر والی سکرین خراب ہو گئی", service: "galaxy-z-fold-flip" },
+  { problem: "Foldable inner screen, outer glass or hinge: Duo, Galaxy Z Series, Pixel Fold", says: ["Fold ki andar wali screen kharab ho gayi", "hinge tight ho gaya"], urdu: "فولڈ کی اندر والی سکرین خراب ہو گئی", service: "galaxy-z-fold-flip" },
   { problem: "Phone fell in water or got wet", says: ["phone pani mein gir gaya", "mobile geela ho gaya"], urdu: "فون پانی میں گر گیا", service: "water-damage-data-recovery" },
   { problem: "Photos and data needed from a dead or water-damaged phone", says: ["data wapas chahiye", "photos recover karni hain"], urdu: "ڈیٹا واپس چاہیے", service: "water-damage-data-recovery" },
   { problem: "Phone not charging or loose charging port", says: ["charging nahi ho rahi", "charger nahi lag raha"], urdu: "چارجنگ نہیں ہو رہی", service: "battery-charging" },
@@ -317,6 +319,7 @@ export const home = {
     title: "How a repair works",
     jobCardAlt: "The Rehan Traders repair job card, with fields for the customer, device and fault",
     sealAlt: "Rehan Traders tamper seal",
+  sampleNote: "A sample card. Your job gets its own number and details.",
   },
   reviews: {
     title: "What customers say",
@@ -428,11 +431,6 @@ export const reviewsPage = {
   viewOnGoogle: "View on Google Maps",
   readAllOnGoogle: "Read reviews on Google Maps",
   googleReview: "Google review",
-  carouselLabel: "Customer reviews, use the left and right arrow keys to move between them",
-  carouselRole: "carousel",
-  prev: "Previous review",
-  next: "Next review",
-  counter: (n: number, total: number) => `${n} of ${total}`,
   starSummary: (rating: number) => `${rating.toFixed(1)} out of 5 stars on Google`,
 } as const
 
@@ -454,10 +452,13 @@ export const visitPage = {
   mapPrompt: "Tap to load interactive Google Map",
   mapLoading: "Loading map…",
   mapAlt: "Rehan Traders storefront at Hafeez Center",
+  signLabel: "The sign",
+  signValue: "The big sign says OPPO. Look for G-88 at its left edge and Tab House & Rehan Traders Lab along the bottom.",
+  courierLink: "Outside Lahore? You can send your phone by courier.",
   courierTitle: "Can I send my phone by courier from outside Lahore?",
   courierLede: "Yes. Rehan Traders repairs phones sent by courier from outside Lahore. It takes four steps.",
   courierSteps: [
-    { title: "Create a ticket", text: `Create a ticket on this website, or call ${site.phone.display}.` },
+    { title: "Fill in the form", text: `Fill in the form on this website, or call ${site.phone.display}.` },
     { title: "Send photos", text: "Send photos of the phone on WhatsApp." },
     { title: "Get a quote", text: "If possible, we give you a quote over the phone, before you send anything." },
     { title: "Send it if needed", text: "If it needs a look first, you send the phone. We inspect it, quote, repair it once you agree, and send it back." },
@@ -471,7 +472,6 @@ export const visitPage = {
     whatsappText: "Assalam o alaikum. Courier repair from outside Lahore.\nMy city: \nMy phone model: ",
     call: `Call ${site.phone.display}`,
   },
-  courierMore: "How courier repairs work",
 } as const
 
 /** The /courier page. Steps, delivery line and actions are the ones /visit#courier shows (Adnan, 30 Oct 2026). */
@@ -491,7 +491,7 @@ export const courierPage = {
   faq: [
     {
       q: "Can I send my phone by courier from outside Lahore?",
-      a: `Yes. Create a ticket on the website or call ${site.phone.display}, then send photos of the phone on WhatsApp. If possible, Rehan Traders quotes over the phone; otherwise you send the phone to Shop G-88, Hafeez Center, Lahore, where it is inspected and quoted, repaired once you agree, and sent back.`,
+      a: `Yes. Fill in the form on the website or call ${site.phone.display}, then send photos of the phone on WhatsApp. If possible, Rehan Traders quotes over the phone; otherwise you send the phone to Shop G-88, Hafeez Center, Lahore, where it is inspected and quoted, repaired once you agree, and sent back.`,
     },
     {
       q: "How do I send the phone to Rehan Traders?",
@@ -503,7 +503,7 @@ export const courierPage = {
     },
     {
       q: "How do I start a courier repair?",
-      a: `Create a ticket on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp.`,
+      a: `Fill in the form on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp.`,
     },
   ],
 } as const
@@ -594,7 +594,7 @@ export const termsPage = {
     },
     {
       title: "Accepted payment methods",
-      text: "Payment is due upon completion of the repair. We accept cash, direct bank transfer, debit and credit cards, JazzCash, and EasyPaisa.",
+      text: "Payment is due upon completion of the repair. We accept cash, direct bank transfer, debit and credit cards, JazzCash, EasyPaisa and Raast.",
     },
     {
       title: "Device collection with job card",
@@ -627,7 +627,7 @@ export const seo = {
   home: {
     title: "Rehan Traders · Mobile repair at Hafeez Center, Lahore",
     description:
-      "Phone and tablet repair at Shop G-88, Hafeez Center, Lahore. Free checking, touch glass replacement with your display kept, Galaxy Z Fold and Flip, iPhone.",
+      "Phone and tablet repair at Shop G-88, Hafeez Center, Lahore. Free checking, touch glass replacement with your display kept, foldables, iPhone.",
   },
   titleTemplate: "%s · Rehan Traders",
   /** Alt text for the share image; keep in step with src/app/opengraph-image.alt.txt. */
@@ -639,7 +639,7 @@ export const seo = {
   bookConfirmed: { title: "Booking confirmed", description: "Your Rehan Traders booking." },
   repairs: {
     title: "Phone and tablet repair, Hafeez Center Lahore",
-    description: "Cracked glass, broken screens, Galaxy Z Fold and Flip, iPhone, iPad, batteries, charging, water damage and motherboard repair at Shop G-88, Hafeez Center, Lahore.",
+    description: "Cracked glass, broken screens, foldables, iPhone, iPad, batteries, charging, water damage and motherboard repair at Shop G-88, Hafeez Center, Lahore.",
   },
   reviews: {
     title: "Phone repair reviews, Hafeez Center Lahore",
@@ -724,7 +724,7 @@ export const assistant = {
   you: "You",
   shop: site.name,
   /** First quick replies, before the model suggests its own. */
-  chips: ["Fold inner screen?", "Touch glass price?", "Opening hours?", "Where is G-88?"],
+  chips: ["Fold inner screen?", "Is checking free?", "Opening hours?", "Where is G-88?"],
   actions: { book: actions.book, whatsapp: actions.whatsapp, call: actions.call },
   whatsappText: "Assalam o alaikum. I have a question about a repair.",
   /** The "custom form" link inside a reply: the Describe it tab (name, number, device, message, photos). */

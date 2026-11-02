@@ -4,13 +4,12 @@ import * as React from "react"
 
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { ArrowUp, Phone } from "@/components/icons"
-import { SkeletonLine } from "@/components/loading"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { assistant, site } from "@/content"
 import { MAX_INPUT, MAX_TURNS, parseReply, pieces } from "@/lib/assistant"
-import { busyStart, busyStop } from "@/lib/busy"
+import { chipStagger } from "@/lib/tokens"
 import { track } from "@/lib/track"
 import { cn } from "@/lib/utils"
 
@@ -35,6 +34,9 @@ export function ChatPanel() {
   const [typing, setTyping] = React.useState(false)
   const log = React.useRef<HTMLDivElement>(null)
   const request = React.useRef<AbortController>(null)
+  const count = React.useRef(messages.length)
+  // Reopening the sheet shows the chat as it was; only what is new rises in.
+  const [restored] = React.useState(messages.length)
   const ids = React.useId()
 
   // Closing the sheet mid-reply stops the stream and drops the empty placeholder it was filling.
@@ -46,11 +48,14 @@ export function ChatPanel() {
     []
   )
 
+  // Glides for a new bubble and for the chips arriving; follows streaming text at once, or each chunk restarts the glide and it judders.
   React.useEffect(() => {
     saved = messages
-    const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches
+    const added = messages.length !== count.current
+    count.current = messages.length
+    const smooth = (added || !busy) && !matchMedia("(prefers-reduced-motion: reduce)").matches
     log.current?.scrollTo({ top: log.current.scrollHeight, behavior: smooth ? "smooth" : "auto" })
-  }, [messages])
+  }, [messages, busy])
 
   const turns = messages.filter((m) => m.role === "user").length
   const atLimit = turns >= MAX_TURNS
@@ -69,10 +74,6 @@ export function ChatPanel() {
     const show = (content: string) => setMessages([...history, { role: "assistant", content }])
     let content = ""
     const ctrl = (request.current = new AbortController())
-    let waiting = true
-    const arrived = () => waiting && ((waiting = false), busyStop())
-    busyStart()
-    ctrl.signal.addEventListener("abort", arrived) // closing the sheet mid-wait
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -86,7 +87,6 @@ export function ChatPanel() {
       for (;;) {
         const { value, done } = await reader.read()
         if (done) break
-        arrived()
         content += value
         show(content)
       }
@@ -94,8 +94,6 @@ export function ChatPanel() {
     } catch {
       if (ctrl.signal.aborted) return
       show(fixed(assistant.fallback))
-    } finally {
-      arrived()
     }
     if (history.filter((m) => m.role === "user").length >= MAX_TURNS) setMessages((m) => [...m, { role: "assistant", content: fixed(assistant.limit) }])
     setBusy(false)
@@ -104,14 +102,18 @@ export function ChatPanel() {
   return (
     <div className="-mx-6 flex min-h-0 flex-1 flex-col border-t border-hairline">
       <div ref={log} role="log" aria-busy={busy} className="no-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-6 py-4">
-        <Bubble role="assistant">{assistant.greeting}</Bubble>
+        <Bubble role="assistant" enter={restored === 0}>
+          {assistant.greeting}
+        </Bubble>
         {messages.map((m, i) => {
           const { body, buttons } = m.role === "assistant" ? parseReply(m.content) : { body: m.content, buttons: [] as ("whatsapp" | "call")[] }
           const streaming = busy && i === messages.length - 1
+          const enter = i >= restored
           return (
             <Bubble
               key={i}
               role={m.role}
+              enter={enter}
               footer={
                 !streaming && buttons.length > 0 ? (
                   <>
@@ -134,25 +136,33 @@ export function ChatPanel() {
               {m.role === "user"
                 ? body
                 : body
-                  ? pieces(body, streaming).map((p, j) =>
-                      p.type === "send" ? (
-                        <button key={j} type="button" className={inline} disabled={busy || atLimit} onClick={() => void send(p.text)}>
-                          {p.text}
-                        </button>
-                      ) : p.type === "form" ? (
-                        <a key={j} href={assistant.formHref} className={inline} onClick={() => track("chat_handoff", { action: "form" })}>
-                          {p.text}
-                        </a>
-                      ) : (
-                        <React.Fragment key={j}>{buttons.length ? p.text : withPhoneLink(p.text)}</React.Fragment>
-                      )
+                  ? (
+                      // The dots give way to the words with a fade: same height for a one-line reply, so the bubble keeps its place.
+                      <span className={cn(enter && "animate-reply")}>
+                        {pieces(body, streaming).map((p, j) =>
+                          p.type === "send" ? (
+                            <button key={j} type="button" className={inline} disabled={busy || atLimit} onClick={() => void send(p.text)}>
+                              {p.text}
+                            </button>
+                          ) : p.type === "form" ? (
+                            <a key={j} href={assistant.formHref} className={inline} onClick={() => track("chat_handoff", { action: "form" })}>
+                              {p.text}
+                            </a>
+                          ) : (
+                            <React.Fragment key={j}>{buttons.length ? p.text : withPhoneLink(p.text)}</React.Fragment>
+                          )
+                        )}
+                      </span>
                     )
                   : streaming && (
-                      // Waiting for the first words: the reply's first two lines, as a skeleton. Screen readers hear "typing".
+                      // Waiting for the first words: three bouncing dots. Screen readers hear "typing".
                       <>
                         <span className="sr-only">{assistant.typing}</span>
-                        <SkeletonLine className="w-48 max-w-full text-body-md" />
-                        <SkeletonLine className="w-32 text-body-md" />
+                        <span aria-hidden className="typing-dots">
+                          <i />
+                          <i />
+                          <i />
+                        </span>
                       </>
                     )}
             </Bubble>
@@ -164,8 +174,8 @@ export function ChatPanel() {
         {chips.length > 0 && (
           // With the keyboard up the conversation gets the room; the chips return when the field lets go.
           <div className={cn("flex flex-wrap gap-2", typing && "max-md:hidden")}>
-            {chips.map((c) => (
-              <Button key={c} type="button" variant="line" dir="auto" className="h-auto min-h-11 px-3.5 py-2 text-left text-caption whitespace-normal" onClick={() => void send(c)}>
+            {chips.map((c, i) => (
+              <Button key={c} type="button" variant="line" dir="auto" className="h-auto min-h-11 animate-bubble px-3.5 py-2 text-left text-caption whitespace-normal" style={{ animationDelay: `${i * chipStagger}s` }} onClick={() => void send(c)}>
                 {c}
               </Button>
             ))}
@@ -234,14 +244,15 @@ function withPhoneLink(text: string) {
   )
 }
 
-function Bubble({ role, children, footer }: { role: Msg["role"]; children: React.ReactNode; footer?: React.ReactNode }) {
+function Bubble({ role, children, footer, enter }: { role: Msg["role"]; children: React.ReactNode; footer?: React.ReactNode; enter?: boolean }) {
   return (
     <div
       dir="auto"
       className={cn(
         // shrink-0: in a scrolling flex column the bubbles must never squash to fit; the log scrolls instead.
         "max-w-5/6 shrink-0 overflow-hidden rounded-lg text-body-md wrap-anywhere",
-        role === "user" ? "self-end bg-action text-on-action" : "self-start border border-hairline bg-card text-body"
+        role === "user" ? "origin-bottom-right self-end bg-action text-on-action" : "origin-bottom-left self-start border border-hairline bg-card text-body",
+        enter && "animate-bubble"
       )}
     >
       <div className="px-4 py-3 whitespace-pre-line">{children}</div>
