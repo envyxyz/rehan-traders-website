@@ -164,7 +164,14 @@ export const hero = {
   track: "10,000+ Certified Repairs",
   proof: (rating: number) => ({ before: `Rated ${rating.toFixed(1)} on`, link: "Google Maps" }),
   /** The 3D fold: status bar on its screen, and the label of the button that folds and opens it. */
-  fold: { time: "11:00", network: "5G", close: "Fold the phone", open: "Open the phone" },
+  fold: {
+    time: "11:00",
+    network: "5G",
+    close: "Fold the phone",
+    open: "Open the phone",
+    /** The business card on its screen (growth/Brand/Print/Business Card - Front.png). */
+    card: { brandFirst: "Rehan", brandSecond: "Traders", name: "Adnan Ali", address: "Shop G-88, Hafeez Center, Lahore", descriptor: "Mobile & Tab Repair Lab", hours: "Mon to Sat · 11 AM to 10 PM" },
+  },
 } as const
 
 export const jobCardContent = {

@@ -6,9 +6,8 @@
 import * as THREE from "three"
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js"
 
-import { QR_PATH } from "@/components/job-card"
 import { MARK } from "@/components/logo"
-import { hero, jobCardContent } from "@/content"
+import { hero, site } from "@/content"
 
 // Galaxy Z Fold6: open 132.6 x 153.5 x 5.6 mm, closed 68.1 x 153.5 x 12.1 mm.
 const W = 66.3 // one half
@@ -94,7 +93,12 @@ function texture(c: HTMLCanvasElement) {
   return t
 }
 
-type Ink = { paper: string; ink: string; steel: string; rule: string; red: string; display: string; type: string }
+// The card's QR, opening the shop's Google Business Profile (site.mapsUrl). 29 x 29 modules, level L. Change the URL and this must be regenerated.
+const QR_SIZE = 29
+const QR_PATH =
+  "M0,0h7v1h-7zM10,0h1v1h-1zM12,0h3v1h-3zM17,0h4v1h-4zM22,0h7v1h-7zM0,1h1v1h-1zM6,1h1v1h-1zM8,1h1v1h-1zM10,1h1v1h-1zM15,1h1v1h-1zM20,1h1v1h-1zM22,1h1v1h-1zM28,1h1v1h-1zM0,2h1v1h-1zM2,2h3v1h-3zM6,2h1v1h-1zM12,2h1v1h-1zM15,2h1v1h-1zM19,2h2v1h-2zM22,2h1v1h-1zM24,2h3v1h-3zM28,2h1v1h-1zM0,3h1v1h-1zM2,3h3v1h-3zM6,3h1v1h-1zM8,3h3v1h-3zM12,3h2v1h-2zM15,3h5v1h-5zM22,3h1v1h-1zM24,3h3v1h-3zM28,3h1v1h-1zM0,4h1v1h-1zM2,4h3v1h-3zM6,4h1v1h-1zM9,4h1v1h-1zM14,4h1v1h-1zM17,4h4v1h-4zM22,4h1v1h-1zM24,4h3v1h-3zM28,4h1v1h-1zM0,5h1v1h-1zM6,5h1v1h-1zM8,5h2v1h-2zM11,5h2v1h-2zM15,5h1v1h-1zM17,5h1v1h-1zM20,5h1v1h-1zM22,5h1v1h-1zM28,5h1v1h-1zM0,6h7v1h-7zM8,6h1v1h-1zM10,6h1v1h-1zM12,6h1v1h-1zM14,6h1v1h-1zM16,6h1v1h-1zM18,6h1v1h-1zM20,6h1v1h-1zM22,6h7v1h-7zM9,7h3v1h-3zM14,7h1v1h-1zM16,7h1v1h-1zM19,7h1v1h-1zM0,8h5v1h-5zM6,8h4v1h-4zM11,8h3v1h-3zM15,8h4v1h-4zM21,8h1v1h-1zM23,8h1v1h-1zM25,8h1v1h-1zM27,8h1v1h-1zM0,9h4v1h-4zM7,9h1v1h-1zM10,9h1v1h-1zM12,9h1v1h-1zM14,9h1v1h-1zM17,9h1v1h-1zM19,9h4v1h-4zM24,9h1v1h-1zM28,9h1v1h-1zM1,10h1v1h-1zM5,10h4v1h-4zM10,10h1v1h-1zM13,10h1v1h-1zM15,10h3v1h-3zM22,10h2v1h-2zM4,11h2v1h-2zM7,11h1v1h-1zM12,11h1v1h-1zM14,11h2v1h-2zM19,11h4v1h-4zM24,11h2v1h-2zM27,11h1v1h-1zM0,12h3v1h-3zM4,12h3v1h-3zM9,12h3v1h-3zM13,12h1v1h-1zM15,12h3v1h-3zM19,12h1v1h-1zM23,12h1v1h-1zM25,12h2v1h-2zM0,13h1v1h-1zM2,13h3v1h-3zM7,13h2v1h-2zM11,13h2v1h-2zM14,13h1v1h-1zM18,13h2v1h-2zM21,13h4v1h-4zM28,13h1v1h-1zM0,14h1v1h-1zM2,14h2v1h-2zM5,14h4v1h-4zM14,14h2v1h-2zM17,14h2v1h-2zM20,14h1v1h-1zM24,14h3v1h-3zM1,15h2v1h-2zM4,15h2v1h-2zM8,15h2v1h-2zM11,15h1v1h-1zM14,15h3v1h-3zM20,15h1v1h-1zM22,15h1v1h-1zM24,15h1v1h-1zM27,15h1v1h-1zM1,16h2v1h-2zM6,16h1v1h-1zM9,16h1v1h-1zM13,16h1v1h-1zM15,16h3v1h-3zM23,16h1v1h-1zM25,16h2v1h-2zM0,17h1v1h-1zM5,17h1v1h-1zM7,17h8v1h-8zM17,17h8v1h-8zM26,17h1v1h-1zM28,17h1v1h-1zM0,18h1v1h-1zM4,18h1v1h-1zM6,18h2v1h-2zM9,18h1v1h-1zM15,18h1v1h-1zM18,18h1v1h-1zM22,18h3v1h-3zM26,18h1v1h-1zM0,19h1v1h-1zM2,19h3v1h-3zM7,19h4v1h-4zM12,19h1v1h-1zM15,19h2v1h-2zM20,19h1v1h-1zM22,19h1v1h-1zM24,19h1v1h-1zM27,19h1v1h-1zM0,20h1v1h-1zM2,20h3v1h-3zM6,20h1v1h-1zM9,20h3v1h-3zM13,20h1v1h-1zM15,20h3v1h-3zM19,20h6v1h-6zM26,20h3v1h-3zM8,21h1v1h-1zM10,21h3v1h-3zM14,21h1v1h-1zM18,21h1v1h-1zM20,21h1v1h-1zM24,21h5v1h-5zM0,22h7v1h-7zM8,22h1v1h-1zM10,22h1v1h-1zM13,22h1v1h-1zM15,22h1v1h-1zM19,22h2v1h-2zM22,22h1v1h-1zM24,22h3v1h-3zM0,23h1v1h-1zM6,23h1v1h-1zM10,23h1v1h-1zM12,23h1v1h-1zM14,23h2v1h-2zM18,23h3v1h-3zM24,23h1v1h-1zM27,23h1v1h-1zM0,24h1v1h-1zM2,24h3v1h-3zM6,24h1v1h-1zM8,24h2v1h-2zM13,24h1v1h-1zM15,24h4v1h-4zM20,24h5v1h-5zM26,24h2v1h-2zM0,25h1v1h-1zM2,25h3v1h-3zM6,25h1v1h-1zM8,25h5v1h-5zM14,25h1v1h-1zM17,25h1v1h-1zM19,25h2v1h-2zM25,25h2v1h-2zM28,25h1v1h-1zM0,26h1v1h-1zM2,26h3v1h-3zM6,26h1v1h-1zM8,26h1v1h-1zM10,26h1v1h-1zM13,26h1v1h-1zM15,26h2v1h-2zM19,26h1v1h-1zM21,26h7v1h-7zM0,27h1v1h-1zM6,27h1v1h-1zM8,27h1v1h-1zM10,27h1v1h-1zM12,27h1v1h-1zM16,27h1v1h-1zM20,27h1v1h-1zM22,27h4v1h-4zM27,27h1v1h-1zM0,28h7v1h-7zM8,28h1v1h-1zM10,28h2v1h-2zM13,28h1v1h-1zM15,28h5v1h-5zM22,28h2v1h-2zM26,28h1v1h-1z"
+
+type Ink = { paper: string; ink: string; steel: string; red: string; display: string }
 
 function tokens(): Ink {
   const root = getComputedStyle(document.documentElement)
@@ -103,10 +107,8 @@ function tokens(): Ink {
     paper: v("--device-paper", "white"),
     ink: v("--device-ink", "black"),
     steel: v("--device-steel", "gray"),
-    rule: v("--device-rule", "silver"),
     red: v("--device-red", "red"),
     display: v("--font-display", "sans-serif"),
-    type: v("--font-typewriter", "monospace"),
   }
 }
 
@@ -130,7 +132,7 @@ function mark(x: CanvasRenderingContext2D, cx: number, cy: number, size: number,
   x.restore()
 }
 
-/** The open inner screen: wallpaper, status bar and the Rehan Traders job card (the JobCard layout), across both halves. */
+/** The open inner screen: wallpaper, status bar and the Rehan Traders business card, across both halves. */
 function innerScreen(k: Ink) {
   const cw = 1024
   const ch = Math.round((cw * SH) / (2 * (SW + G)))
@@ -174,63 +176,47 @@ function innerScreen(k: Ink) {
   x.fill()
   x.globalAlpha = 1
 
-  // The job card.
+  // The business card (growth/Brand/Print/Business Card - Front.png, 1005 x 651), with its QR larger so a camera can read it off a screen.
   const pad = 52
   const w = cw - 2 * pad
-  const h = Math.round(w * 0.62)
+  const u = w / 1005
+  const h = Math.round(651 * u)
   const top = Math.round((ch - h) / 2 + 20)
-  const col = w * 0.3
+  const left = pad + 72 * u
+  const right = pad + w - 72 * u
+  const text = (t: string, tx: number, ty: number, font: string, fill = k.ink) => {
+    const [weight, size] = font.split(" ")
+    x.font = `${weight} ${Number(size) * u}px ${k.display}`
+    x.fillStyle = fill
+    x.fillText(t, tx, top + ty * u)
+  }
   x.save()
   x.beginPath()
   x.roundRect(pad, top, w, h, 30)
   x.clip()
-  x.fillStyle = k.ink
-  x.fillRect(pad, top, col, h)
   x.fillStyle = k.paper
-  x.fillRect(pad + col, top, w - col, h)
-  mark(x, pad + col / 2, top + h / 2, col * 0.66, k.paper, k.red)
-
-  const left = pad + col + 44
-  const right = pad + w - 44
-  const inner = right - left
-  const y0 = top + 44
-  mark(x, left + 28, y0 + 28, 56, k.ink, k.red)
-  x.fillStyle = k.ink
-  x.textBaseline = "top"
-  x.font = `800 28px ${k.display}`
-  x.fillText(jobCardContent.brandFirst, left + 70, y0 + 2)
-  x.fillText(jobCardContent.brandSecond, left + 70, y0 + 30)
-  const qr = 108
+  x.fillRect(pad, top, w, h)
+  x.textBaseline = "alphabetic"
+  mark(x, left + 58 * u, top + 124 * u, 124 * u, k.ink, k.red)
+  text(hero.fold.card.brandFirst, left + 134 * u, 120, "800 50")
+  text(hero.fold.card.brandSecond, left + 134 * u, 170, "800 50")
+  // Whole canvas pixels per module, so the code stays sharp. The paper around it is the quiet zone.
+  const qrModule = 8
   x.save()
-  x.translate(right - qr, y0)
-  x.scale(qr / 25, qr / 25)
+  x.translate(right - QR_SIZE * qrModule, top + 60 * u)
+  x.scale(qrModule, qrModule)
+  x.fillStyle = k.ink
   x.fill(new Path2D(QR_PATH))
   x.restore()
-
-  const rowH = 80
-  const fieldsTop = top + h - 40 - 2 * rowH
-  let size = 76
-  x.font = `700 ${size}px ${k.display}`
-  size = Math.floor(size * Math.min(1, inner / x.measureText(jobCardContent.phone).width))
-  x.font = `700 ${size}px ${k.display}`
-  x.textBaseline = "middle"
-  x.fillText(jobCardContent.phone, left - 2, (y0 + qr + fieldsTop) / 2)
-
-  const gap = 40
-  const fw = (inner - gap) / 2
-  x.textBaseline = "top"
-  Object.values(jobCardContent.fields).forEach((f, i) => {
-    const fx = left + (i % 2) * (fw + gap)
-    const fy = fieldsTop + Math.floor(i / 2) * rowH
-    x.fillStyle = k.steel
-    x.font = `500 20px ${k.display}`
-    x.fillText(f.label, fx, fy)
-    x.fillStyle = k.ink
-    x.font = `700 24px ${k.type}`
-    x.fillText(f.initial, fx, fy + 28, fw)
-    x.fillStyle = k.rule
-    x.fillRect(fx, fy + 62, fw, 2)
-  })
+  x.fillStyle = k.red
+  x.fillRect(left, top + 396 * u, 94 * u, 3 * u)
+  text(hero.fold.card.name, left, 456, "700 36")
+  text(site.phone.display, left, 530, "700 62")
+  text(hero.fold.card.address, left, 578, "400 27", k.steel)
+  x.textAlign = "right"
+  text(hero.fold.card.descriptor, right, 531, "500 25")
+  text(hero.fold.card.hours, right, 571, "500 25")
+  x.textAlign = "left"
   x.restore()
 
   // The crease: a soft shade and a faint sheen down the middle, a few pixels wide, not a line.
@@ -295,7 +281,7 @@ export async function createFold(canvas: HTMLCanvasElement, { closed: startClose
   const frame = new THREE.MeshPhysicalMaterial({ color: 0x5a6074, metalness: 0.85, roughness: 0.42, side: THREE.DoubleSide })
   const glass = new THREE.MeshPhysicalMaterial({ color: 0x050608, roughness: 0.1, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 0.45 })
   // Screens: black glass that reflects the room, lit from inside through the emissive map. Not tone mapped, so the
-  // job card shows its real paper and ink.
+  // business card shows its real paper and ink.
   const screen = (map: THREE.Texture) =>
     new THREE.MeshPhysicalMaterial({ color: 0x000000, roughness: 0.05, envMapIntensity: 0.6, emissive: 0xffffff, emissiveMap: map, toneMapped: false, side: THREE.DoubleSide })
   const innerMat = screen(innerTex)

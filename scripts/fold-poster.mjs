@@ -1,5 +1,5 @@
 // The hero fold's poster: the 3D scene's first frame, shown until three.js loads (src/components/fold-3d.tsx).
-// Run with the dev server up (`pnpm dev`), from the website root, after any change to the scene or the job card:
+// Run with the dev server up (`pnpm dev`), from the website root, after any change to the scene or the business card:
 //   node scripts/fold-poster.mjs
 // Writes public/art/fold-poster-<w>.avif|webp (open) and fold-poster-closed-<w> (shut, the phones' poster). The widths match
 // POSTER in fold-3d.tsx; 1152 is the 576px stage at 2x.

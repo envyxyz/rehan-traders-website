@@ -70,7 +70,7 @@ Later (phase 11): device pages (`/repairs/galaxy-z-fold/fold5`), cost guides, ma
 
 ## 5. Homepage, top to bottom
 
-1. **Hero (100svh, inset panel).** Google proof row, red rule, h1 "Cracked glass? Fixed at G-88.", one-line lede, **Book a visit** (primary) + **WhatsApp**, then phone, address and live open status. Right: CSS 3D Galaxy Z Fold, closed on load, opens into a V with a job card (No. RT-0427) on its inner screen.
+1. **Hero (100svh, inset panel).** Google proof row, red rule, h1 "Cracked glass? Fixed at G-88.", one-line lede, **Book a visit** (primary) + **WhatsApp**, then phone, address and live open status. Right: CSS 3D Galaxy Z Fold, closed on load, opens into a V with the business card and a QR to the Google profile on its inner screen.
 2. **Repairs.** Cards with image, title, two-line description, price line ("From Rs X" in `from` mode; no price line at launch, quotes on WhatsApp) and a **Book this repair** button. Lead with touch glass and Fold/Flip (larger cards), then iPhone, screen, battery/charging, water/data, board, tablets. "All repairs" link.
 3. **Before and after.** Drag slider: the same phone cracked and fixed, caption naming device and fault.
 4. **How a repair works.** Four steps that mirror the shop's real kit: 1 job card at the counter, 2 repaired at the open bench, 3 tested and sealed in the pouch, 4 warranty card. Step numbers in Signal Red.

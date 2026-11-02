@@ -78,7 +78,15 @@ Started with Ameer's two requests, then the round 2 reviewer's findings a web ch
 5. **Proof and paths:** each repair page's hero shows its real desk photo (the Fold page: the Fold open under the microscope), with the red repair icon on it. /reviews lists all 30 reviews at once, no carousel (component deleted). /visit loses the second storefront photo and the courier block (a link instead) and gains "The sign": the big sign says OPPO, look for G-88 and Tab House & Rehan Traders Lab. Hero: WhatsApp is a labelled button beside Ask AI. Chat chip "Touch glass price?" is now "Is checking free?". No chat button on /book. "Create ticket" is "Send to the shop" and "Fill in the form". Payment lists agree (Raast added to the FAQ and Terms); holidays read "Also closed when Hafeez Center closes". The sample job card says it is a sample.
 6. **Phone performance:** below-the-fold sections skip layout on phones too. A page that may open part way down (Back, reload, a #link) or any tap on a link lays out in full first, so scroll restoration stays exact. Home Lighthouse on the same machine: 73 to 84, TBT 905 to 427 ms. Tried and rejected: `<Suspense>` around each home section to slice hydration. In this static export it outlines every section into hidden HTML that only a script reveals, so no-JavaScript visitors and crawlers would see nothing.
 
-**Held back, not live:** the business card on the fold's screen with a QR to the Google profile (Ameer). The scene code is done (29 x 29 QR, level L, `site.mapsUrl`, 8 canvas px a module), committed on this branch after the deployed commit and not pushed, but the posters could not be regenerated or the QR decoded from real screenshots: the machine had 0.2 to 0.4 GB free and the preview stopped answering. Shipping the scene without matching posters would flash the old job card under the new one.
+**Fold business card** (Ameer, shipped after the rest of the round, 2 Nov 2026): the fold's inner screen shows the business card in place of the job card, laid out from `growth/Brand/Print/Business Card - Front.png`. The QR is larger than on the print card so a camera can read it off a screen: 29 x 29 modules, level L, 8 canvas px a module, encoding `site.mapsUrl`. Posters regenerated with `scripts/fold-poster.mjs`. Decoded with jsQR from real screenshots (`website-shots/loop-9/round-3/fold-qr/`) to `https://maps.google.com/?cid=7044160813583291979`:
+
+| Shot | Result |
+|---|---|
+| 1440, light and dark, poster and live scene | Decodes; the code is 79 CSS px wide, about 2 cm on a laptop: a phone camera reads it |
+| 390 at 3x, live scene, open | Decodes; 41 CSS px wide, about 7 mm. Too small to rely on, and a phone cannot scan its own screen |
+| 390, poster | No QR: phones start with the fold shut |
+
+Print files, not changed: the card art Ameer attached encodes the write-a-review link (`g.page/r/CUvWWzrw4sFhEAE/review`); `stationery.py` builds the print card's QR from `brand.json` `contact.qr`, which is the WhatsApp link. Neither opens the Google profile. The job card on the home page and /about is unchanged.
 
 ### Gates after round 3 (machine at 0.2 to 0.6 GB free)
 
