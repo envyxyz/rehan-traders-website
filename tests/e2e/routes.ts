@@ -1,4 +1,4 @@
-import { services } from "../../src/content-large"
+import { guides, services } from "../../src/content-large"
 
 // Every page in src/app/sitemap.ts, plus the pages it leaves out. Shared by the axe and CSP specs.
 export const routes = [
@@ -14,5 +14,7 @@ export const routes = [
   "/privacy",
   "/terms",
   ...services.map((s) => `/repairs/${s.slug}`),
+  "/guides",
+  ...guides.map((g) => `/guides/${g.slug}`),
   "/book/confirmed",
 ]

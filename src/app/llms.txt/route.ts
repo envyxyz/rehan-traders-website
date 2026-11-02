@@ -1,5 +1,5 @@
 import { faq, facts, priceMode, problems, site } from "@/content"
-import { reviews, services } from "@/content-large"
+import { guides, reviews, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -26,6 +26,7 @@ const pages = [
   { label: "Send by courier", path: "/courier", note: "Phone repair by courier from outside Lahore: the four steps, who pays for delivery, and questions answered" },
   { label: "Reviews", path: "/reviews", note: "Customer reviews copied directly from Google Business Profile" },
   { label: "FAQ", path: "/faq", note: "Answers to common questions about repairs, pricing and visits" },
+  { label: "Guides", path: "/guides", note: "Guides to common phone faults: cracked screen, lines on the screen, water damage, not charging, battery drain, not turning on, touch not working" },
   { label: "About", path: "/about", note: "History since 2009, the open bench, and owner Adnan Ali" },
 ]
 
@@ -68,6 +69,10 @@ const body = [
   "",
   "## Repairs offered",
   ...services.map((s) => `- [${s.title}](${site.url}/repairs/${s.slug}): ${s.short}`),
+  "",
+  "## Guides",
+  "What to do about common phone faults, each with a short answer first.",
+  ...guides.map((g) => `- [${g.title}](${site.url}/guides/${g.slug}): ${g.answer}`),
   "",
   "## Pages on this site",
   ...pages.map((p) => `- [${p.label}](${site.url}${p.path}): ${p.note}`),

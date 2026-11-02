@@ -1,5 +1,5 @@
 import { aboutPage, faq, facts, faqPage, priceMode, privacyPage, problems, repairsPage, reviewsPage, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
-import { reviews, services } from "@/content-large"
+import { guides, reviews, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -203,6 +203,30 @@ const sections: string[] = [
   ...services.flatMap((s) =>
     s.faq.map((f) => `Q: ${f.q} (${s.title})\nA: ${f.a}\n`)
   ),
+
+  hr(),
+
+  // ── Guides ────────────────────────────────────────────────────────────
+  "## Guides",
+  `URL: ${site.url}/guides`,
+  "",
+  ...guides.flatMap((g) => [
+    `### ${g.title}`,
+    `URL: ${site.url}/guides/${g.slug} (updated ${g.updated})`,
+    "",
+    g.answer,
+    "",
+    ...g.sections.flatMap((x) => [
+      `#### ${x.h}`,
+      x.answer,
+      ...(x.list ?? []).map((item, i) => (x.steps ? `${i + 1}. ${item}` : `- ${item}`)),
+      ...(x.table ? [x.table.head.join(" | "), ...x.table.rows.map((r) => r.join(" | "))] : []),
+      "",
+    ]),
+    ...g.faq.map((f) => `Q: ${f.q}\nA: ${f.a}\n`),
+    `Repairs for this: ${g.services.map((slug) => `${site.url}/repairs/${slug}`).join(", ")}`,
+    "",
+  ]),
 
   hr(),
 

@@ -17,8 +17,8 @@ import { ServiceCard } from "@/components/service-card"
 import { Heading, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
-import { actions, breadcrumbs, repairsPage, site } from "@/content"
-import { reviews, services } from "@/content-large"
+import { actions, breadcrumbs, guidesPage, repairsPage, site } from "@/content"
+import { guides, reviews, services } from "@/content-large"
 import { faqSchema, serviceSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
@@ -45,6 +45,7 @@ export default async function ServicePage({ params }: PageProps) {
 
   const relatedServices = services.filter((s) => service.related.includes(s.slug))
   const proof = reviews.items.filter((r) => service.proof?.includes(r.author))
+  const forThis = guides.filter((g) => g.services.includes(service.slug))
   const a = repairsPage.answers
   const actionsRow = (from: string) => (
     <div className="flex flex-wrap items-center gap-3">
@@ -191,6 +192,22 @@ export default async function ServicePage({ params }: PageProps) {
               <Text tone="muted" className="mt-3">
                 {repairsPage.bookLede}
               </Text>
+              {/* Repair page and guides link both ways: the guide answers the search, this page takes the booking. */}
+              {forThis.length > 0 && (
+                <>
+                  <h3 className="mt-8 font-display text-title-md text-ink">{guidesPage.forRepair}</h3>
+                  <ul className="mt-2">
+                    {forThis.map((g) => (
+                      <li key={g.slug}>
+                        <Link href={`/guides/${g.slug}`} className="flex min-h-11 items-center gap-1.5 py-2 text-body-sm text-ink underline-offset-4 hover:underline">
+                          {g.title}
+                          <Icon icon={ArrowRight} size="sm" className="shrink-0" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
             <div className="lg:col-span-7">
               <Accordion className="border-t border-hairline">

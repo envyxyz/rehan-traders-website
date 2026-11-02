@@ -542,3 +542,424 @@ export const estimator = {
     { slug: "other", label: "Something else", service: "", panel: null },
   ] satisfies EstimateFault[],
 } as const
+
+export type Guide = {
+  slug: string
+  /** h1: the question people search, in their words */
+  title: string
+  seo: { title: string; description: string }
+  /** 40 to 60 words that answer the h1 on their own, for answer boxes and AI assistants */
+  answer: string
+  sections: {
+    /** h2: a searched question; Roman Urdu in brackets where people search it that way */
+    h: string
+    /** the first 40 to 60 words answer the h2 */
+    answer: string
+    list?: string[]
+    /** the list is steps to follow (HowTo) */
+    steps?: boolean
+    table?: { head: string[]; rows: string[][] }
+  }[]
+  faq: { q: string; a: string }[]
+  /** Repair slugs this guide leads to. */
+  services: string[]
+  published: string
+  updated: string
+}
+
+/** Researched from Google autocomplete and People also ask for Pakistan, 2 Nov 2026 (English, Roman Urdu). General advice only; anything about the shop is a confirmed fact. */
+const atShop = `${site.address.short}, ${site.address.city}`
+const g2 = { published: "2026-11-02", updated: "2026-11-02" }
+
+export const guides: Guide[] = [
+  {
+    slug: "cracked-screen-glass-or-full-screen",
+    title: "Cracked phone screen: new glass or a whole new screen?",
+    seo: {
+      title: "Cracked phone screen: glass or full screen?",
+      description: "How to tell if a cracked phone needs only new touch glass or a full screen (panel) change, what each fixes, and how to get it checked free in Lahore.",
+    },
+    answer:
+      "If the picture under the cracks is clean, with no lines, black spots or flicker, and touch works everywhere, usually only the outer glass needs replacing and your display stays. If the screen shows lines, black patches or nothing at all, the display panel itself is damaged and the whole screen has to be changed.",
+    sections: [
+      {
+        h: "What is the difference between touch glass and the screen (panel)?",
+        answer:
+          "A phone screen is layers bonded together: the outer glass you touch, and the display panel under it that makes the picture. On many phones the touch sensor is built into the panel; on some it is bonded to the glass. Touch glass replacement changes only the outer glass. A screen or panel change replaces the whole display.",
+        table: {
+          head: ["What you see", "What is damaged", "What it usually needs"],
+          rows: [
+            ["Cracks, but a clean picture and working touch", "Outer glass", "Touch glass replacement"],
+            ["Cracks and touch dead in some spots", "Glass, sometimes the panel's touch layer", "Free check decides"],
+            ["Lines, black or green patches, flicker", "Display panel", "Screen (panel) change"],
+            ["Black screen, but the phone rings or vibrates", "Display panel or its connection", "Screen check, then panel change if needed"],
+          ],
+        },
+      },
+      {
+        h: "How do I know if only the glass is broken (sirf glass toota hai)?",
+        answer:
+          "Look at the picture, not the cracks. Open something plain white, then something dark. If the colors look even, there are no lines or ink-like spots, and every part of the screen responds to your finger, the panel is very likely fine and only the glass is broken.",
+        list: [
+          "Open a plain white page and look for dark spots, stains or colored lines.",
+          "Open a dark image and look for bright lines or patches.",
+          "Drag an app icon slowly across the whole screen, edges included, to find dead spots.",
+          "Turn brightness up and down and watch for flicker.",
+        ],
+        steps: true,
+      },
+      {
+        h: "What are the signs the panel under the glass is damaged?",
+        answer:
+          "Vertical or horizontal lines, a green, pink or white line, a black blot that grows, flicker, or a screen that stays black while the phone is clearly on. These mean the display panel is damaged. New glass on top will not fix any of them, so the screen has to be changed.",
+      },
+      {
+        h: "Is it okay to keep using a phone with cracked glass?",
+        answer:
+          "For a short time, yes, but cracks tend to spread, sharp edges can cut a finger, and a cracked front lets in dust and moisture. If the panel is still fine, fixing the glass soon keeps it that way. A thin clear tape or screen protector over the cracks helps until you can get it repaired.",
+      },
+      {
+        h: `Getting it checked at ${atShop}`,
+        answer: `${site.name} checks your phone free of cost and tells you whether glass alone will do or the screen has to be changed, before any work starts. The shop tries to save your panel, and your money, first. Send the model and a photo on WhatsApp to ${site.phone.display} for a quote, or send it by courier from outside Lahore.`,
+      },
+    ],
+    faq: [
+      { q: "Mobile ki screen toot gayi but the display works. Can only the glass be changed?", a: "Usually, yes. If the picture is clean and touch works, only the outer glass is replaced and your original display stays. A free check confirms it." },
+      { q: "Will new glass remove lines or black spots?", a: "No. Lines and black spots come from the display panel under the glass. Only a screen (panel) change fixes them." },
+      { q: "Why is a glass change cheaper than a panel change?", a: "You pay for new glass and the work, not a whole new display. The exact price depends on the model, so ask for a quote on WhatsApp." },
+    ],
+    services: ["touch-glass-replacement", "screen-replacement"],
+    ...g2,
+  },
+  {
+    slug: "lines-on-phone-screen",
+    title: "Lines on your phone screen: what they mean and how to fix them",
+    seo: {
+      title: "Lines on phone screen: causes and fix",
+      description: "Why green, white or pink lines appear on a phone screen after a drop, water or an update, how to test if it is the panel, and what fixes it.",
+    },
+    answer:
+      "A line that stays on the screen, shows on the startup logo and does not appear in a screenshot is a fault in the display panel or its connection, not in the software. Restarts and resets will not remove it. The fix is a screen (panel) change, after a check that the connection is not the cause.",
+    sections: [
+      {
+        h: "Why is there a green or white line on my phone screen (screen par line aa gayi)?",
+        answer:
+          "Most lines come from damage inside the display panel: a drop or pressure in a pocket, liquid reaching the screen connector, or the panel wearing out. Some owners notice a line first after a software update, but a line that stays through restarts is still a hardware fault in the panel or where it connects to the board.",
+      },
+      {
+        h: "How can I tell if the line is hardware or software?",
+        answer:
+          "Take a screenshot while the line is showing and open it on another phone or a computer. If the line is not in the screenshot, it is in the display hardware. A line that also shows on the startup logo, before any app runs, points the same way.",
+        list: [
+          "Take a screenshot while the line is on screen.",
+          "Send it to another phone and look at it there.",
+          "Restart the phone and watch the startup logo for the line.",
+          "If the line is in the screenshot too, update the phone and check the app you saw it in.",
+        ],
+        steps: true,
+      },
+      {
+        h: "Can screen lines be fixed without changing the screen?",
+        answer:
+          "Rarely. If the line comes from a loose or dirty screen connector, for example after water, cleaning and reseating it can bring the picture back, which the check finds out. A line from damage inside the panel itself cannot be repaired by software, a reset or new glass, so the panel is replaced.",
+      },
+      {
+        h: "Will one line turn into more lines?",
+        answer:
+          "It can. Some lines stay the same for months, others spread or turn into a black patch, and there is no reliable way to predict which. If the phone also got wet or was dropped, have it checked sooner, because corrosion or a cracked panel tends to get worse.",
+      },
+      {
+        h: `Getting a lined screen checked at ${atShop}`,
+        answer: `${site.name} checks the phone free of cost, including the screen connection, and tells you what is wrong and what it will cost before any work. If the panel has to be changed, you hear the price first and decide. Send the model and a photo of the line on WhatsApp to ${site.phone.display} for a quote.`,
+      },
+    ],
+    faq: [
+      { q: "Screen par line aa gayi. Will a factory reset fix it?", a: "No. If the line shows on the startup logo or is missing from a screenshot, it is in the display hardware and a reset will not touch it." },
+      { q: "Does a line mean only the glass is broken?", a: "No. Lines come from the display panel or its connection, under the glass. New glass alone will not fix a line." },
+      { q: "A pink or green line appeared after my phone got wet. What should I do?", a: "Turn it off, do not charge it, and get it checked soon. Liquid at the screen connector can cause lines, and corrosion spreads with time." },
+    ],
+    services: ["screen-replacement"],
+    ...g2,
+  },
+  {
+    slug: "phone-fell-in-water",
+    title: "Phone fell in water: what to do right now",
+    seo: {
+      title: "Phone fell in water: what to do now",
+      description: "Phone dropped in water? Turn it off, do not charge it, skip the rice and the hair dryer. What to do now, and when to get it opened and cleaned.",
+    },
+    answer:
+      "Take it out, turn it off and do not charge it. Wipe it dry, remove the case and SIM tray, and tap it gently with the charging port facing down. Leave it to dry in moving air. Do not use rice, a hair dryer or any heat. If it was in for more than a moment, get it opened and cleaned.",
+    sections: [
+      {
+        h: "What should I do first (mobile pani mein gir gaya to kya karein)?",
+        answer:
+          "Act in the first minutes: power and water together cause the damage. Turn the phone off, keep it off the charger, and get as much water out as you can. These steps follow what Apple and Samsung advise for wet phones.",
+        list: [
+          "Take the phone out of the water and turn it off. Do not keep pressing buttons to test it.",
+          "Do not plug in a charger or cable.",
+          "Take off the case and pull out the SIM tray.",
+          "Wipe it with a dry, soft cloth.",
+          "Hold it with the charging port facing down and tap it gently against your hand.",
+          "Leave it in a dry place with moving air, such as in front of a fan, not in the sun.",
+        ],
+        steps: true,
+      },
+      {
+        h: "Should I put my wet phone in rice?",
+        answer:
+          "No. Apple advises against it. Rice does not pull water out from inside the phone faster than open air, and grains and starch dust can get stuck in the charging port and speaker. Leaving the phone in moving air does the same job without that risk.",
+      },
+      {
+        h: "Can I use a hair dryer or charge it to check if it works?",
+        answer:
+          "No. Heat can damage the battery and the seals, and a hot air stream pushes water further in. Charging a wet phone sends current through water on the board, which can short it. Wait until it has been opened and cleaned, or at least fully dried, before you charge it.",
+      },
+      {
+        h: "My phone fell in water but still works. Is it safe?",
+        answer:
+          "Not necessarily. Water or salt left inside can corrode the board over the following days, so a phone that works today can fail later. Water resistance also weakens with age and after a screen or battery repair. If it went fully under, especially in salt water, tea or a drink, have it opened and cleaned.",
+      },
+      {
+        h: "Can photos and data be recovered from a water-damaged phone?",
+        answer:
+          "Often, if it is cleaned before corrosion goes too far. Whether data can be recovered, and how long it takes, depends on the damage. Turning the phone off quickly and not charging it gives the best chance.",
+      },
+      {
+        h: `Getting a wet phone cleaned at ${atShop}`,
+        answer: `${site.name} checks water-damaged phones free of cost and tells you what is wrong, what it will cost and how long it will take. Water damage repairs take anywhere from 8 hours to several days, depending on how bad it is. Call or WhatsApp ${site.phone.display}, or send the phone by courier from outside Lahore.`,
+      },
+    ],
+    faq: [
+      { q: "Phone pani mein gir gaya, ab on nahi ho raha. What should I do?", a: "Do not charge it and do not keep trying to turn it on. Bring it in for cleaning and a check; the board may still be saved." },
+      { q: "My phone says liquid or moisture detected. Can I charge it?", a: "No. Unplug it and leave it with the port facing down in moving air. Apple says to wait at least 30 minutes before trying again, longer if the warning comes back." },
+      { q: "Is my phone water resistant after a repair?", a: "Do not rely on it. The shop re-applies the water-resistance seal after a repair on request, but no repaired phone should be treated as waterproof." },
+    ],
+    services: ["water-damage-data-recovery"],
+    ...g2,
+  },
+  {
+    slug: "phone-not-charging",
+    title: "Phone not charging: what to check before a repair",
+    seo: {
+      title: "Phone not charging? What to check first",
+      description: "Phone not charging when plugged in? Check the cable, adapter and port lint first. Signs it is the charging port, battery or board, and where to get it checked.",
+    },
+    answer:
+      "Try a different cable and wall adapter first, then restart the phone. Turn it off and look into the charging port with a light: packed pocket lint is a common cause. If it still will not charge, charges only at an angle, or says moisture is detected, the port, the battery or the board needs a check.",
+    sections: [
+      {
+        h: "Why is my phone not charging when plugged in (mobile charge nahi ho raha)?",
+        answer:
+          "Most often it is the cable or adapter, lint packed into the port, or a software hang. Less often it is a worn charging port, a battery at the end of its life, or a fault on the board. Rule out the simple causes first, because they cost nothing.",
+        list: [
+          "Try another cable and adapter you know work.",
+          "Try a different wall socket, not a laptop or car port.",
+          "Restart the phone, or force restart it if it is frozen.",
+          "Look into the port with a light for lint, dirt or water.",
+        ],
+        steps: true,
+      },
+      {
+        h: "How do I clean lint out of the charging port safely?",
+        answer:
+          "Turn the phone off first. Use a wooden toothpick and gently lift lint out from the back of the port. Never use a pin, needle or anything metal, never use water or liquid, and do not dig hard at the contacts. If the lint is packed tight, a repair shop can clear it without damaging the port.",
+      },
+      {
+        h: "What does moisture detected in the charging port mean?",
+        answer:
+          "The phone found liquid in the port and stopped charging to protect itself. Unplug it, hold it with the port facing down, tap it gently and leave it in moving air until the warning clears. Do not use heat or push anything into the port.",
+      },
+      {
+        h: "Is it the cable, the port, the battery or the board?",
+        answer:
+          "The symptom usually points to the part. A new cable that works settles it at once. Charging only at a certain angle points to the port. A phone that charges but dies fast points to the battery. No sign of charging with any cable, once the port is clean, needs a check of the board.",
+        table: {
+          head: ["What happens", "Likely cause"],
+          rows: [
+            ["Works with another cable", "Old cable or adapter"],
+            ["Plug does not go all the way in", "Lint in the port"],
+            ["Charges only at an angle or when held", "Worn charging port"],
+            ["Charges, but the battery drops fast or the phone shuts off", "Worn battery"],
+            ["No charging with any cable, port clean", "Board or charging circuit"],
+          ],
+        },
+      },
+      {
+        h: `Getting charging checked at ${atShop}`,
+        answer: `${site.name} checks the phone free of cost and tells you whether it needs a port, a battery or board work, and what it will cost, before any repair. Send your model on WhatsApp to ${site.phone.display} for a quote, or send the phone by courier from outside Lahore.`,
+      },
+    ],
+    faq: [
+      { q: "Mobile charge nahi le raha but the cable works on another phone. What is wrong?", a: "Check the port for lint first. If it is clean, the port, battery or board needs a check." },
+      { q: "Why does my phone charge so slowly?", a: "A low-power adapter, a worn cable, lint in the port or heavy use while charging. A worn battery can also make charging behave oddly." },
+      { q: "Can a cheap charger damage my phone?", a: "A poor-quality charger or cable can charge badly and may harm the charging circuit. A certified charger from the phone's maker or a known brand is safer." },
+    ],
+    services: ["battery-charging"],
+    ...g2,
+  },
+  {
+    slug: "battery-draining-fast",
+    title: "Phone battery draining fast: settings or a worn battery?",
+    seo: {
+      title: "Battery draining fast? Causes and fixes",
+      description: "Why a phone battery drains fast, how to check battery health on iPhone and Android, when a battery needs replacing, and what to do about a swollen battery.",
+    },
+    answer:
+      "Sudden drain after an update, a new app or with weak signal is usually software or settings and often settles within a day or two. Drain that keeps getting worse, a phone that shuts off with charge left, or battery health well below 80 percent means a worn battery. A swollen battery needs replacing straight away.",
+    sections: [
+      {
+        h: "Why is my battery draining so fast all of a sudden (battery jaldi khatam ho jati hai)?",
+        answer:
+          "Look at what changed. After a software update the phone works in the background for a while. One app can run wild. Weak signal, high brightness, location and a hot phone all use more charge. The battery screen in Settings shows which apps use the most.",
+        list: [
+          "Open Settings, then Battery, and see which app uses the most.",
+          "Update or remove the app at the top if it looks wrong.",
+          "Restart the phone.",
+          "Lower the brightness and turn on battery saver or Low Power Mode for a day to compare.",
+        ],
+        steps: true,
+      },
+      {
+        h: "How do I check battery health on iPhone and Android?",
+        answer:
+          "On iPhone, go to Settings, then Battery, then Battery Health. Maximum Capacity shows how much the battery holds compared with new. Android differs by maker: some show battery health under Settings, Battery; on Samsung, the Samsung Members app has a battery check under Diagnostics.",
+      },
+      {
+        h: "When does a battery need replacing?",
+        answer:
+          "Apple treats a battery at about 80 percent of its original capacity as worn. Other signs: the phone shuts off at 20 or 30 percent, it slows down, it gets hot while charging, or a full charge no longer lasts the day. A new battery fixes these; settings will not.",
+      },
+      {
+        h: "Is a swollen phone battery dangerous?",
+        answer:
+          "Yes. A swollen battery can catch fire if it is pressed, punctured or charged. Signs: the screen or back lifting from the frame, a gap at the edge, or the phone rocking on a table. Stop using and charging it, and get the battery replaced.",
+        list: [
+          "Turn the phone off and unplug it.",
+          "Do not press the screen or back down to close the gap.",
+          "Keep it away from heat, beds and anything that burns.",
+          "Do not charge it again; take it in for a new battery.",
+        ],
+        steps: true,
+      },
+      {
+        h: `Getting a battery checked at ${atShop}`,
+        answer: `${site.name} checks the phone free of cost and tells you whether the battery is worn, what a new one costs and how long it takes. On an iPhone you choose the battery, and the shop explains what that means for battery health. Send your model on WhatsApp to ${site.phone.display} for a quote.`,
+      },
+    ],
+    faq: [
+      { q: "iPhone ki battery health 79 percent hai. Should I replace it?", a: "Apple treats about 80 percent as worn. If the phone shuts off early or does not last the day, a new battery fixes it." },
+      { q: "Will an iPhone show Unknown Part after a battery change?", a: facts.battery },
+      { q: "Can an update make the battery drain faster?", a: "For a while, yes. The phone does background work after a big update. If the drain lasts more than a few days, look at the battery settings or have it checked." },
+    ],
+    services: ["battery-charging"],
+    ...g2,
+  },
+  {
+    slug: "phone-not-turning-on",
+    title: "Phone not turning on: what to try, and when it is the board",
+    seo: {
+      title: "Phone not turning on? What to try first",
+      description: "Phone dead or will not turn on? Charge it properly, force restart it by brand, check if only the screen is dead, and know when it needs board repair.",
+    },
+    answer:
+      "Charge it on a wall adapter you trust for up to an hour, then force restart it with the buttons for your brand. If it rings, vibrates or shows up on a computer while the screen stays black, the phone is on and the screen is the problem. If nothing works, the battery or the board needs a check.",
+    sections: [
+      {
+        h: "How do I force restart a phone that will not turn on (mobile on nahi ho raha)?",
+        answer:
+          "A force restart cuts power to a frozen phone and does not erase anything. The buttons depend on the brand. Hold them until the logo appears, then let go. If nothing happens, charge for an hour and try again.",
+        list: [
+          "iPhone 8 and later: press and release Volume Up, press and release Volume Down, then hold the side button until the Apple logo appears.",
+          "Samsung Galaxy: hold the side button and Volume Down together for more than 7 seconds.",
+          "Google Pixel: hold the power button for about 30 seconds.",
+          "Other Android phones: hold the power button, or power and Volume Up, for 10 to 20 seconds; your phone maker's support page gives the exact keys.",
+        ],
+      },
+      {
+        h: "Is it the screen or the phone that is dead?",
+        answer:
+          "Call the phone from another number. If it rings or vibrates, plug it into a charger and listen for the charging sound, or connect it to a computer and see if it appears. Any of these with a black screen means the phone is on and the display panel or its connection is the fault.",
+      },
+      {
+        h: "My phone died and will not turn on even when charging. Why?",
+        answer:
+          "A fully flat battery can take a while before the phone shows anything. Apple says to charge for up to an hour. Try another cable and adapter and check the port for lint. If there is still no charging sign, the battery, the charging port or the board needs a check.",
+      },
+      {
+        h: "When does a dead phone need board repair?",
+        answer:
+          "When a known-good battery, cable and screen do not bring it back, or it died after water, a drop or a power surge, the fault is usually on the main board. Board-level repair is done under a microscope. Whether it can be saved depends on the damage, which the check finds out.",
+      },
+      {
+        h: `Getting a dead phone checked at ${atShop}`,
+        answer: `${site.name} checks dead phones free of cost at an open bench with a microscope, and tells you what is wrong, whether it can be repaired, what it will cost and how long it will take. Call or WhatsApp ${site.phone.display}, or send it by courier from outside Lahore.`,
+      },
+    ],
+    faq: [
+      { q: "Phone vibrates but the screen stays black. What is wrong?", a: "The phone is on; the display panel or its connection is the fault. A screen check tells you whether the panel needs changing." },
+      { q: "Mobile on nahi ho raha. Is my data lost?", a: "Not necessarily. If the board can be repaired, the data on it usually stays. Whether it can be recovered depends on the damage." },
+      { q: "Does a force restart delete anything?", a: "No. A force restart only restarts the phone. A factory reset is different and erases data." },
+    ],
+    services: ["board-repair", "screen-replacement"],
+    ...g2,
+  },
+  {
+    slug: "touch-not-working",
+    title: "Phone touch not working: what to try, and what it needs",
+    seo: {
+      title: "Touch screen not working? What to try",
+      description: "Touch not working or ghost touching? Restart, check the screen protector and safe mode, then learn if it needs new touch glass or a full screen change.",
+    },
+    answer:
+      "Restart or force restart the phone, unplug any cable, then remove a cracked or thick screen protector and clean the screen. If touch works in Safe Mode, an app is to blame. If touch is still dead or presses itself after a drop, the screen hardware is damaged and needs new glass or a new screen.",
+    sections: [
+      {
+        h: "Touch is not working (touch kaam nahi kar raha). What should I try first?",
+        answer:
+          "Start with the free steps. A frozen phone looks like dead touch, and a restart clears it. Water, grease or a cracked protector can also stop touch or make it press by itself.",
+        list: [
+          "Force restart the phone with the buttons for your brand.",
+          "Unplug the charger and any accessory; some faulty chargers cause ghost touches.",
+          "Dry and clean the screen with a soft cloth.",
+          "Remove a cracked, lifted or thick screen protector and test again.",
+        ],
+        steps: true,
+      },
+      {
+        h: "Can an app cause touch problems? How do I test in Safe Mode?",
+        answer:
+          "Yes, sometimes. Safe Mode starts Android with downloaded apps turned off. On most Android phones, hold the power button, then press and hold Power off until Safe mode appears. If touch works there, remove recently added apps. iPhones have no Safe Mode; update the iPhone instead.",
+      },
+      {
+        h: "Why does my screen touch by itself (ghost touch)?",
+        answer:
+          "Ghost touches come from damage to the touch layer, often after a drop or pressure, from moisture on or under the glass, a cracked protector, or a faulty charger. If it stops when the charger is unplugged and the screen is dry, it was not the screen.",
+      },
+      {
+        h: "Does dead touch need new glass or a whole new screen?",
+        answer:
+          "It depends on where the touch layer sits in your phone and on the panel. If the picture is clean, new touch glass often fixes cracked glass with dead touch. If there are lines, black patches or flicker as well, the panel is damaged and the screen is changed.",
+        table: {
+          head: ["What you see", "What it usually needs"],
+          rows: [
+            ["Clean picture, glass intact, touch odd", "Restart, protector off, Safe Mode test"],
+            ["Cracked glass, clean picture, touch dead in spots", "Free check; often new touch glass"],
+            ["Lines, black spots or flicker", "Screen (panel) change"],
+          ],
+        },
+      },
+      {
+        h: `Getting touch checked at ${atShop}`,
+        answer: `${site.name} checks the phone free of cost and tells you whether new touch glass fixes it or the screen has to be changed. The shop tries to save your panel first, and you hear the price before work starts. Send your model and a photo on WhatsApp to ${site.phone.display}.`,
+      },
+    ],
+    faq: [
+      { q: "Mobile ka touch kharab ho gaya after a fall. Can only the glass be changed?", a: "Often, if the picture is clean with no lines or black spots. The free check tells you whether glass alone will fix it." },
+      { q: "Touch works in some places but not others. Why?", a: "Usually damage to the touch layer from a drop or pressure. Try removing the screen protector first; if the dead area stays, the screen needs a check." },
+      { q: "Can a screen protector stop touch from working?", a: "Yes. A cracked, lifted or very thick protector can block touches or cause ghost touches. Take it off and test." },
+    ],
+    services: ["touch-glass-replacement", "screen-replacement"],
+    ...g2,
+  },
+]

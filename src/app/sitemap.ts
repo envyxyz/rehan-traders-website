@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 
 import { site } from "@/content"
-import { services } from "@/content-large"
+import { guides, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -59,6 +59,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
     },
     {
+      url: `${site.url}/guides`,
+      lastModified: "2026-11-02",
+    },
+    {
       url: `${site.url}/about`,
       lastModified,
       images: [
@@ -81,5 +85,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified,
   }))
 
-  return [...staticRoutes, ...serviceRoutes]
+  const guideRoutes: MetadataRoute.Sitemap = guides.map((g) => ({
+    url: `${site.url}/guides/${g.slug}`,
+    lastModified: g.updated,
+  }))
+
+  return [...staticRoutes, ...serviceRoutes, ...guideRoutes]
 }

@@ -377,6 +377,7 @@ export const footer = {
     { label: "Reviews", href: "/reviews" },
     { label: "FAQ", href: "/faq" },
     { label: "Send by courier", href: "/courier" },
+    { label: "Repair guides", href: "/guides" },
     // Warranty page publishes only once Adnan confirms terms
   ],
   directions: "Directions on Google Maps",
@@ -395,6 +396,7 @@ export const breadcrumbs = {
   visit: "Visit",
   faq: "Questions",
   courier: "Courier",
+  guides: "Guides",
   about: "About",
   privacy: "Privacy",
   terms: "Terms",
@@ -430,6 +432,19 @@ export const repairsPage = {
   bookLede: "Book a visit to Shop G-88 or ask for a quote on WhatsApp.",
   allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
   priceTitle: "Price",
+} as const
+
+/** /guides: answers to the questions people search before they need a repair. Each guide is in content-large.ts. */
+export const guidesPage = {
+  title: "Phone repair guides",
+  lede: "Plain answers to what people search when a phone breaks: what the fault looks like, what you can try yourself, and when it needs the bench.",
+  updated: "Updated",
+  by: "Rehan Traders, Shop G-88, Hafeez Center, Lahore",
+  faqTitle: "More questions",
+  repairTitle: "The repair for this",
+  /** On a repair page: the guides that lead to it. */
+  forRepair: "Guides for this repair",
+  all: "All guides",
 } as const
 
 export const reviewsPage = {
@@ -659,6 +674,10 @@ export const seo = {
   courier: {
     title: "Phone repair by courier, from outside Lahore",
     description: "Send your phone by courier for repair from anywhere in Pakistan. Rehan Traders, Shop G-88, Hafeez Center, Lahore inspects it, quotes, repairs it once you agree and sends it back.",
+  },
+  guides: {
+    title: "Phone repair guides: screen, water, battery",
+    description: "What to do when a phone screen cracks or shows lines, falls in water, stops charging, drains fast or will not turn on. Plain answers from a Lahore repair lab.",
   },
   faq: {
     title: "Phone repair questions, Hafeez Center Lahore",

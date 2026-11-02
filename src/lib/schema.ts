@@ -1,5 +1,5 @@
 import { aboutPage, site } from "../content"
-import { services, type Service } from "../content-large"
+import { services, type Guide, type Service } from "../content-large"
 
 // Structured data per PRD §8. No AggregateRating: stars come from the Google Business Profile, not this site.
 // No priceRange, warranty or turnaround: none is confirmed for publishing.
@@ -92,3 +92,39 @@ export const faqSchema = (items: readonly { q: string; a: string }[]) => ({
   "@type": "FAQPage",
   mainEntity: items.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 })
+
+const guideUrl = (g: Guide) => `${site.url}/guides/${g.slug}`
+
+/** A guide is an Article by the shop; it is about the repairs it links to. */
+export const articleSchema = (g: Guide) => ({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": `${guideUrl(g)}#article`,
+  headline: g.title,
+  description: g.seo.description,
+  url: guideUrl(g),
+  mainEntityOfPage: guideUrl(g),
+  // The photo of the first repair it leads to (the generated share image has a hashed name).
+  image: `${site.url}/images/${services.find((s) => s.slug === g.services[0])?.image ?? "storefront"}-og.jpg`,
+  inLanguage: "en-PK",
+  datePublished: g.published,
+  dateModified: g.updated,
+  author: { "@type": "Organization", "@id": storeId, name: site.name, url: site.url },
+  publisher: { "@type": "Organization", "@id": storeId, name: site.name, logo: { "@type": "ImageObject", url: `${site.url}${site.logo}` } },
+  about: g.services.map((slug) => ({ "@id": `${site.url}/repairs/${slug}#service` })),
+})
+
+/** Only for a section whose list is real steps someone can follow. Google no longer shows HowTo results; AI answers still read it. */
+export const howToSchema = (g: Guide) => {
+  const s = g.sections.find((x) => x.steps && x.list)
+  return s
+    ? {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        name: s.h,
+        description: s.answer,
+        url: guideUrl(g),
+        step: s.list!.map((text, i) => ({ "@type": "HowToStep", position: i + 1, text })),
+      }
+    : null
+}

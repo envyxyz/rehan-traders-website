@@ -24,12 +24,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: seo.home.title, template: seo.titleTemplate },
   description: seo.home.description,
-  // Stable URLs in public/. Google's favicon crawler takes the PNG (a multiple of 48px); browsers take the SVG, which is
-  // transparent and turns light in dark mode. Listing favicon.ico with a 16 or 32 size would make Chrome pick it over
-  // the SVG, so it is not listed: it stays at /favicon.ico for clients that ask for that path. None of these may live in
-  // src/app: one icon file there replaces this whole list.
+  // Stable URLs in public/. Google's favicon crawler takes a square PNG in a multiple of 48px; browsers take the SVG,
+  // which is transparent and turns light in dark mode. Listing favicon.ico (16, 32, 48) with a size would make Chrome
+  // pick it over the SVG, so it is not listed: it stays at /favicon.ico for clients that ask for that path. None of
+  // these may live in src/app: one icon file there replaces this whole list. 512px is not a multiple of 48, so it is only
+  // in the manifest. tests/e2e/favicon.spec.ts checks them.
   icons: {
     icon: [
+      { url: "/icon-48.png", type: "image/png", sizes: "48x48" },
+      { url: "/icon-96.png", type: "image/png", sizes: "96x96" },
       { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
       { url: "/icon.svg", type: "image/svg+xml" },
     ],

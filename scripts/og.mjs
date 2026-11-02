@@ -1,6 +1,7 @@
 // Renders the link-preview images with the installed Edge (same approach as scripts/palette.mjs):
 //   src/app/opengraph-image.png  1200x630  (also copied to twitter-image.png)
 //   public/apple-icon.png        180x180
+//   public/icon-{48,96,192,512}.png  transparent favicons (Google wants a square multiple of 48px)
 // Needs network once, for the Google Sans Flex latin subset (inlined so the render is self-contained).
 // Run:  node scripts/og.mjs     Text mirrors site.name, the brand descriptor and site.address.short in src/content.ts.
 import { copyFile, readFile, stat, writeFile } from "node:fs/promises"
@@ -11,8 +12,8 @@ const paper = "#F5F5F2"
 const ink = "#0E0E0E"
 const steel = "#5C5C58"
 
-// The mark from src/app/icon.svg: strip its dark-mode <style> and the .p / .a hooks, keep the light colours.
-const svg = (await readFile(new URL("icon.svg", root), "utf8"))
+// The mark from public/icon.svg: strip its dark-mode <style> and the .p / .a hooks, keep the light colours.
+const svg = (await readFile(new URL("../../public/icon.svg", root), "utf8"))
   .replace(/<title>.*?<\/title>/, "")
   .replace(/<style>[\s\S]*?<\/style>/, "")
   .replace(/ class="[^"]*"/g, "")
@@ -52,17 +53,22 @@ const og = page(
 const apple = page(180, 180, `<div class="mark">${svg}</div>`, `.mark{position:absolute;inset:34px}`)
 
 const browser = await chromium.launch({ channel: "msedge" })
-const shot = async (html, w, h, file) => {
+const shot = async (html, w, h, file, omitBackground = false) => {
   const p = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 1 })
   await p.setContent(html)
   await p.evaluate(() => document.fonts.ready)
-  await writeFile(new URL(file, root), await p.screenshot({ type: "png" }))
+  await writeFile(new URL(file, root), await p.screenshot({ type: "png", omitBackground }))
   await p.close()
 }
 await shot(og, 1200, 630, "opengraph-image.png")
 await shot(apple, 180, 180, "../../public/apple-icon.png")
+// Favicons: the mark alone with a little padding, no background, so it sits on Google's own chip.
+for (const n of [48, 96, 192, 512]) {
+  const pad = Math.round(n / 24)
+  await shot(`<!doctype html><style>html,body{margin:0;background:transparent}div{position:absolute;inset:${pad}px}</style><div>${svg}</div>`, n, n, `../../public/icon-${n}.png`, true)
+}
 await browser.close()
 await copyFile(new URL("opengraph-image.png", root), new URL("twitter-image.png", root))
 const kb = (await stat(new URL("opengraph-image.png", root))).size / 1024
-console.log(`opengraph-image.png and twitter-image.png written (${kb.toFixed(0)} KB), apple-icon.png written`)
+console.log(`opengraph-image.png and twitter-image.png written (${kb.toFixed(0)} KB), apple-icon.png and icon-*.png written`)
 if (kb > 300) throw new Error("OG image is over 300 KB; WhatsApp drops it")
