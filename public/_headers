@@ -11,6 +11,20 @@
   Cross-Origin-Opener-Policy: same-origin
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
+# Photos, art, sounds and icons keep the same file name when they change (no hash), so they are not immutable: a week in the
+# browser, then a day more served stale while the browser refreshes it. Replace one under a new name if it must show at once.
+/images/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/art/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/sounds/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/icon*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/apple-icon.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/favicon.ico
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 /sitemap.xml
   Cache-Control: public, max-age=86400, s-maxage=86400
 /sitemap_index.xml
