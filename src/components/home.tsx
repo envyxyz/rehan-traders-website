@@ -217,7 +217,7 @@ function Bench() {
           </div>
           <div className="mt-6 flex items-center gap-4">
             {/* eslint-disable-next-line @next/next/no-img-element -- a static export has no image optimizer */}
-            <img src="/images/adnan-ali-192.webp" width={64} height={64} alt={c.owner.alt} loading="lazy" decoding="async" className="size-16 shrink-0 rounded-full object-cover" />
+            <img src="/images/adnan-ali-128.webp" srcSet="/images/adnan-ali-128.webp 128w, /images/adnan-ali-192.webp 192w" sizes="4rem" width={64} height={64} alt={c.owner.alt} loading="lazy" decoding="async" className="size-16 shrink-0 rounded-full object-cover" />
             <p className="min-w-0 text-body-sm text-body">
               <b className="block font-display text-body-md text-ink">
                 {c.owner.name}, {c.owner.role}
