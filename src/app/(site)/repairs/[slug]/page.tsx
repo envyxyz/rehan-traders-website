@@ -166,7 +166,7 @@ export default async function ServicePage({ params }: PageProps) {
       {/* How it works */}
       <Section tone={proof.length > 0 ? "panel" : "paper"}>
         <Container>
-          <Heading as="h2">{repairsPage.howItWorks}</Heading>
+          <Heading as="h2">{service.howItWorksTitle ?? repairsPage.howItWorks}</Heading>
           <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {service.howItWorks.map((st) => (
               <li key={st.step} className="rounded-xl border border-hairline bg-card p-6">

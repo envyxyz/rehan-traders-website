@@ -70,6 +70,8 @@ export type Service = {
   image: string
   faq: { q: string; a: string }[]
   howItWorks: { step: string; title: string; text: string }[]
+  /** Replaces "How it works" as the h2 above the steps. */
+  howItWorksTitle?: string
   related: string[]
   /** The first and third of a repair page's six questions; the other four are shared (repairsPage.answers). Only confirmed facts. */
   answers: { model: string; time: string }
@@ -89,9 +91,10 @@ export const services: Service[] = [
     slug: "touch-glass-replacement",
     title: "Touch glass replacement",
     short: "Cracked glass replaced on its own. Your original display stays.",
-    long: "Rehan Traders first checks that the display under the cracked glass still works. If it does, the glass is separated from the display under heat and vacuum and new glass is laminated on. You keep the display your phone came with and pay for new glass, not a whole new screen.",
+    long: "Rehan Traders first checks that the display under the cracked glass still works. If it does, this is a mobile glass replacement: the cracked glass is separated from the display under heat and vacuum and new glass is laminated on. You keep the display your phone came with and pay for new glass, not a whole new screen.",
     faults: ["Cracked glass", "Scratched glass", "Touch not working"],
     image: "glass-separation",
+    howItWorksTitle: "How mobile glass replacement works",
     howItWorks: [
       { step: "01", title: "Free check", text: "We check the display under the glass for black spots or colored lines." },
       { step: "02", title: "Glass separation", text: "Under heat and vacuum, the cracked outer glass is separated from the display." },
@@ -110,8 +113,8 @@ export const services: Service[] = [
     answers: { model: "Yes, if the display under the cracked glass still works. Send your exact model on WhatsApp and the shop confirms it.", time: timeDepends },
     proof: ["Junaid B."],
     seo: {
-      title: "Touch glass replacement, Hafeez Center Lahore",
-      description: `Cracked phone glass? Rehan Traders replaces only the glass and keeps your original display. Shop G-88, Hafeez Center, Lahore. Free checking: ${site.phone.display}.`,
+      title: "Mobile glass replacement in Lahore",
+      description: "Mobile glass replacement at Hafeez Center, Lahore: only the cracked glass is changed and your original display stays. Free checking.",
     },
   },
   {
@@ -139,8 +142,8 @@ export const services: Service[] = [
     answers: { model: "Yes. All foldables, including Duo, every Galaxy Z Series generation and Pixel Fold.", time: "Up to a day, depending on the repair, parts availability and the model. Never guaranteed." },
     proof: ["Zunair K.", "Xhah A.", "Ali R."],
     seo: {
-      title: "Foldable repair, Z Fold, Z Flip, Pixel, Hafeez Center Lahore",
-      description: "Inner screen black or lined, cracked outer glass or a stiff hinge? All foldables repaired, including Duo, Galaxy Z Series and Pixel Fold, at Shop G-88, Hafeez Center, Lahore. Free checking.",
+      title: "Z Fold and Flip screen repair, Lahore",
+      description: "Z Fold and Z Flip screen repair at Hafeez Center, Lahore: inner screen, outer glass and hinge on every foldable. Free checking first.",
     },
   },
   {
@@ -168,8 +171,8 @@ export const services: Service[] = [
     answers: { model: "Send your exact iPhone model on WhatsApp and the shop confirms the repair, or bring it in for the free check.", time: timeDepends },
     proof: ["Faizan I.", "Junaid B."],
     seo: {
-      title: "iPhone repair, Hafeez Center Lahore",
-      description: `Broken iPhone screen, cracked back glass, Face ID, battery or charging fault? Repaired at Shop G-88, Hafeez Center, Lahore. Free checking. WhatsApp ${site.phone.display}.`,
+      title: "iPhone repair in Lahore, Hafeez Center",
+      description: "iPhone repair at Hafeez Center, Lahore: screen, back glass, Face ID, battery and charging. Free checking. WhatsApp 0305 8874839.",
     },
   },
   {
@@ -195,8 +198,8 @@ export const services: Service[] = [
     related: ["touch-glass-replacement", "galaxy-z-fold-flip", "water-damage-data-recovery"],
     answers: { model: "iPhone, Samsung, Google Pixel, OnePlus and other brands. Send your exact model on WhatsApp and the shop confirms it.", time: "A normal screen change can take as little as 60 minutes, depending on parts and the model. Complex devices such as foldables can take up to a day. Never guaranteed." },
     seo: {
-      title: "Phone screen replacement, Hafeez Center Lahore",
-      description: "Lines on the screen, a black, green or flickering display? Rehan Traders replaces phone screens at Shop G-88, Hafeez Center, Lahore. Free checking first.",
+      title: "Phone screen replacement in Lahore",
+      description: "Phone screen replacement at Hafeez Center, Lahore for lines, black, green or flickering displays. Free checking first: 0305 8874839.",
     },
   },
   {
@@ -223,8 +226,8 @@ export const services: Service[] = [
     related: ["iphone", "board-repair", "ipad-tablet"],
     answers: { model: askModel, time: timeDepends },
     seo: {
-      title: "Battery and charging repair, Hafeez Center Lahore",
-      description: `Phone not charging, battery draining fast or swollen? Battery and charging port repair at Shop G-88, Hafeez Center, Lahore. Free checking: ${site.phone.display}.`,
+      title: "Battery and charging repair, Lahore",
+      description: "Phone battery and charging port repair at Hafeez Center, Lahore: fast drain, swollen battery, not charging. Free checking first.",
     },
   },
   {
@@ -248,8 +251,8 @@ export const services: Service[] = [
     related: ["board-repair", "screen-replacement", "battery-charging"],
     answers: { model: askModel, time: "Anywhere from 8 hours to several days, depending on how severe the damage is. Data recovery time depends on the phone's condition." },
     seo: {
-      title: "Water damaged phone repair, Hafeez Center Lahore",
-      description: "Phone fell in water or will not turn on? Turn it off, do not charge it, and bring it to Shop G-88, Hafeez Center, Lahore for cleaning, repair and data recovery.",
+      title: "Water damaged phone repair, Lahore",
+      description: "Phone fell in water? Turn it off, do not charge it, and bring it to Hafeez Center, Lahore for cleaning, repair and data recovery.",
     },
   },
   {
@@ -275,8 +278,8 @@ export const services: Service[] = [
     related: ["water-damage-data-recovery", "iphone", "battery-charging"],
     answers: { model: askModel, time: timeDepends },
     seo: {
-      title: "Motherboard repair, Hafeez Center Lahore",
-      description: "Phone dead, no network or SIM, Face ID or camera fault? Board-level repair under the microscope at Shop G-88, Hafeez Center, Lahore. Free checking first.",
+      title: "Motherboard repair in Lahore",
+      description: "Motherboard repair at Hafeez Center, Lahore: dead phone, no network or SIM, Face ID or camera faults, fixed under the microscope.",
     },
   },
   {
@@ -301,8 +304,8 @@ export const services: Service[] = [
     related: ["touch-glass-replacement", "screen-replacement", "battery-charging"],
     answers: { model: "Mainly Apple iPads. For another tablet, ask on WhatsApp first. Very old, obsolete tablets are not taken in.", time: timeDepends },
     seo: {
-      title: "iPad repair, Hafeez Center Lahore",
-      description: `Cracked iPad glass, broken screen, battery or charging fault? Mainly iPad repairs at Shop G-88, Hafeez Center, Lahore. Free checking. WhatsApp ${site.phone.display}.`,
+      title: "iPad repair in Lahore, Hafeez Center",
+      description: "iPad repair at Hafeez Center, Lahore: cracked glass, broken screen, battery and charging faults. Free checking. WhatsApp 0305 8874839.",
     },
   },
 ]
@@ -494,8 +497,7 @@ export type EstimateFault = {
 export const estimator = {
   seo: {
     title: "Get a phone repair quote in Lahore",
-    description:
-      "Find your issue to see the likely repair, or send photos. Rehan Traders, Hafeez Center, Lahore replies with a quote on WhatsApp.",
+    description: "Get a phone repair quote in Lahore: pick your fault or send photos, and Rehan Traders, Hafeez Center replies with a quote on WhatsApp.",
   },
   title: "Get a Quote",
   lede: "Find your issue to see the likely repair, or describe it with photos. The shop replies on WhatsApp with a quote.",
@@ -571,9 +573,7 @@ export type Guide = {
 
 /** Researched from Google autocomplete and People also ask for Pakistan, 2 Nov 2026 (English, Roman Urdu). General advice only; anything about the shop is a confirmed fact. */
 const atShop = `${site.address.short}, ${site.address.city}`
-const g2 = { published: "2026-11-02", updated: "2026-11-02" }
-/** Guides whose copy changed on 7 Nov 2026 (the sitemap and the page's "Updated" line read this). */
-const g3 = { ...g2, updated: "2026-11-07" }
+const g2 = { published: "2026-11-02", updated: "2026-11-07" }
 
 export const guides: Guide[] = [
   {
@@ -581,7 +581,7 @@ export const guides: Guide[] = [
     title: "Cracked phone screen: new glass or a whole new screen?",
     seo: {
       title: "Cracked phone screen: glass or full screen?",
-      description: "How to tell if a cracked phone needs only new touch glass or a full screen (panel) change, what each fixes, and how to get it checked free in Lahore.",
+      description: "Does a cracked phone need only new touch glass or a full screen change? How to tell, what each fixes, and how to get it checked free.",
     },
     answer:
       "If the picture under the cracks is clean, with no lines, black spots or flicker, and touch works everywhere, usually only the outer glass needs replacing and your display stays. If the screen shows lines, black patches or nothing at all, the display panel itself is damaged and the whole screen has to be changed.",
@@ -589,8 +589,8 @@ export const guides: Guide[] = [
       {
         h: "What is the difference between touch glass and the screen (panel)?",
         answer:
-          "A phone screen is layers bonded together: the outer glass you touch, and the display panel under it that makes the picture. On many phones the touch sensor is built into the panel; on some it is bonded to the glass. Touch glass replacement changes only the outer glass. A screen or panel change replaces the whole display.",
-        link: { phrase: "Touch glass replacement", href: touchGlassHref },
+          "A phone screen is layers bonded together: the outer glass you touch, and the display panel under it that makes the picture. On many phones the touch sensor is built into the panel; on some it is bonded to the glass. Mobile glass replacement changes only the outer glass. A screen or panel change replaces the whole display.",
+        link: { phrase: "Mobile glass replacement", href: touchGlassHref },
         table: {
           head: ["What you see", "What is damaged", "What it usually needs"],
           rows: [
@@ -634,14 +634,14 @@ export const guides: Guide[] = [
       { q: "Why is a glass change cheaper than a panel change?", a: "You pay for new glass and the work, not a whole new display. The exact price depends on the model, so ask for a quote on WhatsApp." },
     ],
     services: ["touch-glass-replacement", "screen-replacement"],
-    ...g3,
+    ...g2,
   },
   {
     slug: "lines-on-phone-screen",
     title: "Lines on your phone screen: what they mean and how to fix them",
     seo: {
       title: "Lines on phone screen: causes and fix",
-      description: "Why green, white or pink lines appear on a phone screen after a drop, water or an update, how to test if it is the panel, and what fixes it.",
+      description: "Why green, white or pink lines appear on a phone screen after a drop, water or an update, how to test the panel, and what fixes it.",
     },
     answer:
       "A line that stays on the screen, shows on the startup logo and does not appear in a screenshot is a fault in the display panel or its connection, not in the software. Restarts and resets will not remove it. The fix is a screen (panel) change, after a check that the connection is not the cause.",
@@ -691,7 +691,7 @@ export const guides: Guide[] = [
     title: "Phone fell in water: what to do right now",
     seo: {
       title: "Phone fell in water: what to do now",
-      description: "Phone dropped in water? Turn it off, do not charge it, skip the rice and the hair dryer. What to do now, and when to get it opened and cleaned.",
+      description: "Phone fell in water? Turn it off, do not charge it, skip the rice and the hair dryer. What to do now, and when to get it opened.",
     },
     answer:
       "Take it out, turn it off and do not charge it. Wipe it dry, remove the case and SIM tray, and tap it gently with the charging port facing down. Leave it to dry in moving air. Do not use rice, a hair dryer or any heat. If it was in for more than a moment, get it opened and cleaned.",
@@ -748,7 +748,7 @@ export const guides: Guide[] = [
     title: "Phone not charging: what to check before a repair",
     seo: {
       title: "Phone not charging? What to check first",
-      description: "Phone not charging when plugged in? Check the cable, adapter and port lint first. Signs it is the charging port, battery or board, and where to get it checked.",
+      description: "Phone not charging? Check the cable, adapter and port lint first. Signs it is the charging port, battery or board, and what to do next.",
     },
     answer:
       "Try a different cable and wall adapter first, then restart the phone. Turn it off and look into the charging port with a light: packed pocket lint is a common cause. If it still will not charge, charges only at an angle, or says moisture is detected, the port, the battery or the board needs a check.",
@@ -808,7 +808,7 @@ export const guides: Guide[] = [
     title: "Phone battery draining fast: is it settings or wear?",
     seo: {
       title: "Battery draining fast? Causes and fixes",
-      description: "Why a phone battery drains fast, how to check battery health on iPhone and Android, when a battery needs replacing, and what to do about a swollen battery.",
+      description: "Why a phone battery drains fast, how to check battery health on iPhone and Android, and when a swollen or worn battery needs replacing.",
     },
     answer:
       "Sudden drain after an update, a new app or with weak signal is usually software or settings and often settles within a day or two. Drain that keeps getting worse, a phone that shuts off with charge left, or a health reading well below 80 percent means the battery is worn. A swollen one needs replacing straight away.",
@@ -862,14 +862,14 @@ export const guides: Guide[] = [
       { q: "Can an update make the phone drain faster?", a: "For a while, yes. The phone does background work after a big update. If the drain lasts more than a few days, look at the usage list in Settings or have it checked." },
     ],
     services: ["battery-charging"],
-    ...g3,
+    ...g2,
   },
   {
     slug: "phone-not-turning-on",
     title: "Phone not turning on: what to try, and when it is the board",
     seo: {
       title: "Phone not turning on? What to try first",
-      description: "Phone dead or will not turn on? Charge it properly, force restart it by brand, check if only the screen is dead, and know when it needs board repair.",
+      description: "Phone dead or will not turn on? Charge it properly, force restart it by brand, check if only the screen is dead, or if it is the board.",
     },
     answer:
       "Charge it on a wall adapter you trust for up to an hour, then force restart it with the buttons for your brand. If it rings, vibrates or shows up on a computer while the screen stays black, the phone is on and the screen is the problem. If nothing works, the battery or the board needs a check.",
@@ -918,7 +918,7 @@ export const guides: Guide[] = [
     title: "Phone touch not working: what to try, and what it needs",
     seo: {
       title: "Touch screen not working? What to try",
-      description: "Touch not working or ghost touching? Restart, check the screen protector and safe mode, then learn if it needs new touch glass or a full screen change.",
+      description: "Touch not working or ghost touching? Restart, check the protector and safe mode, then see if it needs new touch glass or a full screen.",
     },
     answer:
       "Restart or force restart the phone, unplug any cable, then remove a cracked or thick screen protector and clean the screen. If touch works in Safe Mode, an app is to blame. If touch is still dead or presses itself after a drop, the screen hardware is damaged and needs new glass or a new screen.",
@@ -970,6 +970,6 @@ export const guides: Guide[] = [
       { q: "Can a screen protector stop touch from working?", a: "Yes. A cracked, lifted or very thick protector can block touches or cause ghost touches. Take it off and test." },
     ],
     services: ["touch-glass-replacement", "screen-replacement"],
-    ...g3,
+    ...g2,
   },
 ]
