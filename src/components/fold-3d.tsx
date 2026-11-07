@@ -177,8 +177,7 @@ export function Fold3D() {
           sizes={SIZES}
           width={1152}
           height={1152}
-          // eslint-disable-next-line no-restricted-syntax -- decorative: the button carries the label
-          alt=""
+          alt={hero.fold.alt}
           fetchPriority="high"
           className={cn("absolute inset-0 size-full", ready && "opacity-0 transition-opacity delay-(--duration-base)")}
         />

@@ -28,7 +28,8 @@ export function pageMeta({ title, description, path, absolute, extra }: PageMeta
     title: absolute ? { absolute: title } : title,
     description,
     // types: repeated because a page's alternates replace the root layout's, which would drop the llms.txt link.
-    alternates: { canonical: path, types: { "text/plain": "/llms.txt" } },
+    // languages: one language and market, so each page names itself (en-PK) and is the x-default.
+    alternates: { canonical: path, languages: { "en-PK": path, "x-default": path }, types: { "text/plain": "/llms.txt" } },
     openGraph: { title, description, url: path, siteName: site.name, type: "website", locale: "en_PK" },
     twitter: { card: "summary_large_image", title, description },
     ...extra,

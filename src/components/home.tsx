@@ -15,7 +15,7 @@ import { OpenStatus } from "@/components/open-status"
 import { ReviewCard } from "@/components/review-card"
 import { ServiceCard } from "@/components/service-card"
 import { Stars } from "@/components/stars"
-import { Heading, Text } from "@/components/typography"
+import { Heading, Linked, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -52,6 +52,9 @@ function Repairs() {
     <Section id="repairs">
       <Container className="max-w-cards">
         <SectionHead title={home.repairs.title} link={{ href: "/repairs", label: actions.allRepairs }} />
+        <Text className="mt-4 max-w-2xl">
+          <Linked link={home.repairs.link}>{home.repairs.lede}</Linked>
+        </Text>
         <ul className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-6">
           {services.map((s, i) => (
             <li key={s.slug} className={cn("lg:col-span-2", i === services.length - 2 && "lg:col-start-2")}>
@@ -211,7 +214,9 @@ function Bench() {
         </Reveal>
         <Reveal className="order-1 lg:order-2 lg:col-span-6">
           <Heading>{c.title}</Heading>
-          <Text className="mt-4">{c.lede}</Text>
+          <Text className="mt-4">
+            <Linked link={c.link}>{c.lede}</Linked>
+          </Text>
           <div className="mt-6">
             <Points items={c.points} />
           </div>
@@ -283,7 +288,9 @@ function Faq() {
             {faq.slice(0, 5).map((f) => (
               <AccordionItem key={f.q}>
                 <AccordionTrigger>{f.q}</AccordionTrigger>
-                <AccordionContent>{f.a}</AccordionContent>
+                <AccordionContent>
+                  <Linked link={f.link}>{f.a}</Linked>
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

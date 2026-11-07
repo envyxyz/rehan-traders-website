@@ -274,7 +274,7 @@ function DesktopNav() {
   return (
     <header className="nav-desktop max-lg:hidden">
       <div ref={row} className="pointer-events-none fixed inset-x-0 top-0 z-40 flex items-center justify-between px-14 pt-7 pb-6">
-        <Link ref={logo} href="/" aria-label={nav.home} className="pointer-events-auto relative z-10 flex size-10 text-ink will-change-transform">
+        <Link ref={logo} href="/" className="pointer-events-auto relative z-10 flex size-10 text-ink will-change-transform">
           <span ref={mark} className="flex">
             <Mark className="size-10" />
           </span>
@@ -342,7 +342,7 @@ function MobileNav() {
       className="fixed inset-x-0 top-0 z-40 flex h-16 translate-y-(--nav-y) items-center justify-between px-5 transition-transform duration-(--duration-nav) ease-nav focus-within:translate-y-0 motion-reduce:transition-none sm:px-7 lg:hidden"
     >
       <span ref={solid} aria-hidden className="absolute inset-0 -z-10 border-b border-hairline bg-paper opacity-0" />
-      <Link href="/" aria-label={nav.home} className="-ml-1.5 flex h-11 items-center gap-2 px-1.5 text-ink">
+      <Link href="/" className="-ml-1.5 flex h-11 items-center gap-2 px-1.5 text-ink">
         <Mark className="size-9" />
         <span className="flex flex-col font-display text-title-md leading-none font-extrabold tracking-tight">
           <span>{jobCardContent.brandFirst}</span>

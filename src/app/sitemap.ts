@@ -16,11 +16,13 @@ export const dynamic = "force-static"
 export default function sitemap(): MetadataRoute.Sitemap {
   // Bump this date when meaningful site content changes (copy, services, images).
   const lastModified = "2026-10-31"
+  // Pages whose copy changed on 7 Nov 2026 (in-copy links to the touch glass page and /visit, the glass-only repair wording).
+  const edited = "2026-11-07"
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${site.url}/`,
-      lastModified,
+      lastModified: edited,
       images: [
         `${site.url}/images/storefront-1280.webp`,
         `${site.url}/images/microscope-bench-1280.webp`,
@@ -29,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${site.url}/repairs`,
-      lastModified,
+      lastModified: edited,
     },
     {
       url: `${site.url}/quote`,
@@ -56,7 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${site.url}/faq`,
-      lastModified,
+      lastModified: edited,
     },
     {
       url: `${site.url}/guides`,
@@ -64,7 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${site.url}/about`,
-      lastModified,
+      lastModified: edited,
       images: [
         `${site.url}/images/microscope-bench-1280.webp`,
         `${site.url}/images/workbench-team-1280.webp`,

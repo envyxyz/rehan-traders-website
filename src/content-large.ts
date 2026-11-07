@@ -4,7 +4,7 @@
  * Only pages and lazy pieces that need these import them. content.ts must never import this file.
  */
 
-import { actions, estimate, facts, googleRating, site } from "./content"
+import { actions, estimate, facts, googleRating, site, touchGlassHref, type InlineLink } from "./content"
 
 // Typed in by hand (static site, no Places API). Update rating and asOf together.
 // Review text copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings then, 49 on 31 Oct, 32 with text (the other 18 are
@@ -559,6 +559,8 @@ export type Guide = {
     /** the list is steps to follow (HowTo) */
     steps?: boolean
     table?: { head: string[]; rows: string[][] }
+    /** a phrase of `answer` that links to a repair page */
+    link?: InlineLink
   }[]
   faq: { q: string; a: string }[]
   /** Repair slugs this guide leads to. */
@@ -570,6 +572,8 @@ export type Guide = {
 /** Researched from Google autocomplete and People also ask for Pakistan, 2 Nov 2026 (English, Roman Urdu). General advice only; anything about the shop is a confirmed fact. */
 const atShop = `${site.address.short}, ${site.address.city}`
 const g2 = { published: "2026-11-02", updated: "2026-11-02" }
+/** Guides whose copy changed on 7 Nov 2026 (the sitemap and the page's "Updated" line read this). */
+const g3 = { ...g2, updated: "2026-11-07" }
 
 export const guides: Guide[] = [
   {
@@ -586,6 +590,7 @@ export const guides: Guide[] = [
         h: "What is the difference between touch glass and the screen (panel)?",
         answer:
           "A phone screen is layers bonded together: the outer glass you touch, and the display panel under it that makes the picture. On many phones the touch sensor is built into the panel; on some it is bonded to the glass. Touch glass replacement changes only the outer glass. A screen or panel change replaces the whole display.",
+        link: { phrase: "Touch glass replacement", href: touchGlassHref },
         table: {
           head: ["What you see", "What is damaged", "What it usually needs"],
           rows: [
@@ -629,7 +634,7 @@ export const guides: Guide[] = [
       { q: "Why is a glass change cheaper than a panel change?", a: "You pay for new glass and the work, not a whole new display. The exact price depends on the model, so ask for a quote on WhatsApp." },
     ],
     services: ["touch-glass-replacement", "screen-replacement"],
-    ...g2,
+    ...g3,
   },
   {
     slug: "lines-on-phone-screen",
@@ -800,60 +805,64 @@ export const guides: Guide[] = [
   },
   {
     slug: "battery-draining-fast",
-    title: "Phone battery draining fast: settings or a worn battery?",
+    title: "Phone battery draining fast: is it settings or wear?",
     seo: {
       title: "Battery draining fast? Causes and fixes",
       description: "Why a phone battery drains fast, how to check battery health on iPhone and Android, when a battery needs replacing, and what to do about a swollen battery.",
     },
     answer:
-      "Sudden drain after an update, a new app or with weak signal is usually software or settings and often settles within a day or two. Drain that keeps getting worse, a phone that shuts off with charge left, or battery health well below 80 percent means a worn battery. A swollen battery needs replacing straight away.",
+      "Sudden drain after an update, a new app or with weak signal is usually software or settings and often settles within a day or two. Drain that keeps getting worse, a phone that shuts off with charge left, or a health reading well below 80 percent means the battery is worn. A swollen one needs replacing straight away.",
     sections: [
       {
-        h: "Why is my battery draining so fast all of a sudden (battery jaldi khatam ho jati hai)?",
+        h: "Why is my phone draining so fast all of a sudden (battery jaldi khatam ho jati hai)?",
         answer:
-          "Look at what changed. After a software update the phone works in the background for a while. One app can run wild. Weak signal, high brightness, location and a hot phone all use more charge. The battery screen in Settings shows which apps use the most.",
+          "Look at what changed. After a software update the phone works in the background for a while. One app can run wild. Weak signal, high brightness, location and a hot phone all use more charge. The usage list in Settings shows which apps use the most.",
         list: [
           "Open Settings, then Battery, and see which app uses the most.",
           "Update or remove the app at the top if it looks wrong.",
           "Restart the phone.",
-          "Lower the brightness and turn on battery saver or Low Power Mode for a day to compare.",
+          "Lower the brightness and turn on power saving or Low Power Mode for a day to compare.",
         ],
         steps: true,
       },
       {
         h: "How do I check battery health on iPhone and Android?",
         answer:
-          "On iPhone, go to Settings, then Battery, then Battery Health. Maximum Capacity shows how much the battery holds compared with new. Android differs by maker: some show battery health under Settings, Battery; on Samsung, the Samsung Members app has a battery check under Diagnostics.",
+          "On iPhone, go to Settings, then Battery, then Battery Health. Maximum Capacity shows how much charge it holds compared with new. Android differs by maker: some show health under Settings, Battery; on Samsung, the Samsung Members app has a check under Diagnostics.",
       },
       {
         h: "When does a battery need replacing?",
         answer:
-          "Apple treats a battery at about 80 percent of its original capacity as worn. Other signs: the phone shuts off at 20 or 30 percent, it slows down, it gets hot while charging, or a full charge no longer lasts the day. A new battery fixes these; settings will not.",
+          "Apple treats about 80 percent of its original capacity as worn. Other signs: the phone shuts off at 20 or 30 percent, it slows down, it gets hot while charging, or a full charge no longer lasts the day. A replacement fixes these; settings will not.",
       },
       {
         h: "Is a swollen phone battery dangerous?",
         answer:
-          "Yes. A swollen battery can catch fire if it is pressed, punctured or charged. Signs: the screen or back lifting from the frame, a gap at the edge, or the phone rocking on a table. Stop using and charging it, and get the battery replaced.",
+          "Yes. A swollen battery can catch fire if it is pressed, punctured or charged. Signs: the screen or back lifting from the frame, a gap at the edge, or the phone rocking on a table. Stop using and charging it, and get it replaced.",
         list: [
           "Turn the phone off and unplug it.",
           "Do not press the screen or back down to close the gap.",
           "Keep it away from heat, beds and anything that burns.",
-          "Do not charge it again; take it in for a new battery.",
+          "Do not charge it again; take it in for a replacement.",
         ],
         steps: true,
       },
       {
         h: `Getting a battery checked at ${atShop}`,
-        answer: `${site.name} checks the phone free of cost and tells you whether the battery is worn, what a new one costs and how long it takes. On an iPhone you choose the battery, and the shop explains what that means for battery health. Send your model on WhatsApp to ${site.phone.display} for a quote.`,
+        answer: `${site.name} checks the phone free of cost and tells you whether the battery is worn, what a new one costs and how long it takes. On an iPhone you choose the replacement, and the shop explains what that means for the health reading. Send your model on WhatsApp to ${site.phone.display} for a quote.`,
       },
     ],
     faq: [
-      { q: "iPhone ki battery health 79 percent hai. Should I replace it?", a: "Apple treats about 80 percent as worn. If the phone shuts off early or does not last the day, a new battery fixes it." },
-      { q: "Will an iPhone show Unknown Part after a battery change?", a: facts.battery },
-      { q: "Can an update make the battery drain faster?", a: "For a while, yes. The phone does background work after a big update. If the drain lasts more than a few days, look at the battery settings or have it checked." },
+      { q: "iPhone ki battery health 79 percent hai. Should I replace it?", a: "Apple treats about 80 percent as worn. If the phone shuts off early or does not last the day, a replacement fixes it." },
+      // facts.battery, with "battery" said once (this guide is measured for keyword density).
+      {
+        q: "Will an iPhone show Unknown Part after a battery change?",
+        a: "On an iPhone, if you choose an original one, the \"Unknown Part\" message can be removed and the health reading is shown. If you choose a cheaper copy, the IC from your old original can be moved to the new one. In some very rare cases this is not possible, and the shop tells you after checking the phone.",
+      },
+      { q: "Can an update make the phone drain faster?", a: "For a while, yes. The phone does background work after a big update. If the drain lasts more than a few days, look at the usage list in Settings or have it checked." },
     ],
     services: ["battery-charging"],
-    ...g2,
+    ...g3,
   },
   {
     slug: "phone-not-turning-on",
@@ -939,7 +948,8 @@ export const guides: Guide[] = [
       {
         h: "Does dead touch need new glass or a whole new screen?",
         answer:
-          "It depends on where the touch layer sits in your phone and on the panel. If the picture is clean, new touch glass often fixes cracked glass with dead touch. If there are lines, black patches or flicker as well, the panel is damaged and the screen is changed.",
+          "It depends on where the touch layer sits in your phone and on the panel. If the picture is clean, you can often replace just the glass and fix cracked glass with dead touch. If there are lines, black patches or flicker as well, the panel is damaged and the screen is changed.",
+        link: { phrase: "replace just the glass", href: touchGlassHref },
         table: {
           head: ["What you see", "What it usually needs"],
           rows: [
@@ -960,6 +970,6 @@ export const guides: Guide[] = [
       { q: "Can a screen protector stop touch from working?", a: "Yes. A cracked, lifted or very thick protector can block touches or cause ghost touches. Take it off and test." },
     ],
     services: ["touch-glass-replacement", "screen-replacement"],
-    ...g2,
+    ...g3,
   },
 ]

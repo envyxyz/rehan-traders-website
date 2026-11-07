@@ -10,7 +10,7 @@ import { ArrowRight } from "@/components/icons"
 import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
 import { ServiceCard } from "@/components/service-card"
-import { Heading, Text } from "@/components/typography"
+import { Heading, Linked, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, guidesPage, repairsPage, site } from "@/content"
@@ -78,7 +78,9 @@ export default async function GuidePage({ params }: PageProps) {
                   <Heading as="h2" size="title-lg">
                     {s.h}
                   </Heading>
-                  <Text className="mt-3">{s.answer}</Text>
+                  <Text className="mt-3">
+                    <Linked link={s.link}>{s.answer}</Linked>
+                  </Text>
                   {s.list && (
                     <List className={cn("mt-4 space-y-2 pl-5 text-body-md text-body marker:text-steel", s.steps ? "list-decimal" : "list-disc")}>
                       {s.list.map((item) => (
@@ -103,17 +105,12 @@ export default async function GuidePage({ params }: PageProps) {
                         <tbody className="text-body">
                           {s.table.rows.map((row) => (
                             <tr key={row.join()} className="border-t border-hairline">
-                              {row.map((cell, i) =>
-                                i === 0 ? (
-                                  <th key={i} scope="row" className="px-4 py-3 align-top font-semibold text-ink">
-                                    {cell}
-                                  </th>
-                                ) : (
-                                  <td key={i} className="px-4 py-3 align-top">
-                                    {cell}
-                                  </td>
-                                ),
-                              )}
+                              {/* Every cell is data: a row-header cell leaves its column's header with no data cells. */}
+                              {row.map((cell, i) => (
+                                <td key={i} className={cn("px-4 py-3 align-top", i === 0 && "font-semibold text-ink")}>
+                                  {cell}
+                                </td>
+                              ))}
                             </tr>
                           ))}
                         </tbody>

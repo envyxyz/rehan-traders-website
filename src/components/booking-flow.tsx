@@ -253,7 +253,7 @@ export function BookingFlow({ service, device, onDone, onBack }: { service?: str
         </h2>
 
         {step === "device" && (
-          <DeviceField value={draft.device} onChange={(device) => set({ device })} describedBy={error ? `${ids}-error` : undefined} />
+          <DeviceField value={draft.device} onChange={(device) => set({ device })} invalid={!!error} describedBy={error ? `${ids}-error` : undefined} />
         )}
 
         {step === "fault" && (
@@ -412,8 +412,8 @@ export function BookingFlow({ service, device, onDone, onBack }: { service?: str
         )}
       </div>
 
-      {/* Honeypot: off-screen and out of the tab order, so only bots fill it. */}
-      <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" aria-label={booking.details.honeypot} />
+      {/* Honeypot: off-screen and inert (no focus, no screen reader), so only bots fill it. */}
+      <input ref={honeypot} name="website" type="url" tabIndex={-1} autoComplete="off" inert className="sr-only" aria-label={booking.details.honeypot} />
 
       {/* Docked at the foot of the sheet only; on /book the buttons follow the form. */}
       <div className={cn("-mx-1 mt-auto flex flex-wrap gap-2.5 bg-card px-1 py-3", onDone && "sticky bottom-0")}>

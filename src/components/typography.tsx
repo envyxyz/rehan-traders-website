@@ -1,5 +1,7 @@
 import * as React from "react"
+import Link from "next/link"
 
+import type { InlineLink } from "@/content"
 import { cn } from "@/lib/utils"
 
 const headingSizes = {
@@ -42,4 +44,20 @@ type TextProps = React.ComponentProps<"p"> & {
 /** Body running text. Callers cap the measure (max-w-prose) where text runs long. */
 export function Text({ as: Tag = "p", size = "body-md", tone = "body", className, ...props }: TextProps) {
   return <Tag className={cn("text-pretty", textSizes[size], textTones[tone], className)} {...props} />
+}
+
+/** Copy with one phrase of it linked (set in content.ts). The text itself stays plain, so schema, llms.txt and the assistant read it as is. A phrase that is not in the text fails the build. */
+export function Linked({ link, children }: { link?: InlineLink; children: string }) {
+  if (!link) return children
+  const at = children.indexOf(link.phrase)
+  if (at < 0) throw new Error(`Linked: "${link.phrase}" is not in "${children}"`)
+  return (
+    <>
+      {children.slice(0, at)}
+      <Link href={link.href} className="text-ink underline underline-offset-4">
+        {link.phrase}
+      </Link>
+      {children.slice(at + link.phrase.length)}
+    </>
+  )
 }

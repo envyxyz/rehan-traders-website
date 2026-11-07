@@ -6,7 +6,7 @@ import { Img } from "@/components/img"
 import { JobCard } from "@/components/job-card"
 import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
-import { Heading, Text } from "@/components/typography"
+import { Heading, Linked, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
 import { aboutPage, breadcrumbs, jobCardContent, seo } from "@/content"
 import { storeSchema } from "@/lib/schema"
@@ -75,7 +75,7 @@ export default function AboutPage() {
             <div className="order-1 lg:order-2 lg:col-span-6">
               <Heading as="h2">{aboutPage.benchTitle}</Heading>
               <Text tone="body" className="mt-4">
-                {aboutPage.benchText}
+                <Linked link={aboutPage.benchLink}>{aboutPage.benchText}</Linked>
               </Text>
 
               <div className="mt-8 border-t border-hairline pt-8">

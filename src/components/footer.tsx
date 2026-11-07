@@ -5,7 +5,7 @@ import { ArrowUpRight } from "@/components/icons"
 import { Container } from "@/components/layout"
 import { Mark } from "@/components/logo"
 import { Reveal } from "@/components/reveal"
-import { footer, nav, site, actions, ui } from "@/content"
+import { footer, site, actions, ui } from "@/content"
 import { services } from "@/content-large"
 import { cn } from "@/lib/utils"
 
@@ -28,7 +28,7 @@ export function Footer() {
       <Container>
         <Reveal className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-12">
           <div className="sm:col-span-2 lg:col-span-3">
-            <Link href="/" aria-label={nav.home} className="-my-1.5 inline-flex min-h-11 items-center gap-2.5 font-display text-title-lg font-extrabold text-on-band no-underline">
+            <Link href="/" className="-my-1.5 inline-flex min-h-11 items-center gap-2.5 font-display text-title-lg font-extrabold text-on-band no-underline">
               <Mark className="size-8" />
               {site.name}
             </Link>

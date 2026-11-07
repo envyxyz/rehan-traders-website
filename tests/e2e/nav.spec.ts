@@ -74,7 +74,7 @@ test("desktop: scrolled, the bar becomes the centred island and stays on screen;
   expect(island.width).toBeLessThan(700)
   expect(island.top).toBeGreaterThanOrEqual(0)
   // The mark sits inside the island, drawn over its glass.
-  const mark = await desktop(page).getByRole("link", { name: nav.home }).locator("svg").evaluate((el) => el.getBoundingClientRect().toJSON() as DOMRect)
+  const mark = await desktop(page).getByRole("link", { name: site.name }).locator("svg").evaluate((el) => el.getBoundingClientRect().toJSON() as DOMRect)
   expect(mark.left).toBeGreaterThan(island.left)
   const onTop = await page.evaluate(([x, y]) => !!document.elementFromPoint(x, y)?.closest("svg"), [mark.left + mark.width / 2, mark.top + mark.height / 2])
   expect(onTop).toBe(true)
@@ -125,11 +125,11 @@ test("phone: the header is the lockup, a call button and a menu button, with no 
   test.skip(!isMobile, "desktop uses the top bar")
   await page.goto("/")
   const header = phone(page)
-  await expect(header.getByRole("link", { name: nav.home })).toBeVisible()
+  await expect(header.getByRole("link", { name: site.name })).toBeVisible()
   await expect(header.getByRole("button", { name: nav.menu })).toBeVisible()
   await expect(header.getByRole("link", { name: nav.call })).toHaveAttribute("href", site.phone.href)
   await expect(header.getByRole("link")).toHaveCount(2)
-  await expect(header.getByRole("link", { name: nav.home })).toContainText(`${jobCardContent.brandFirst}${jobCardContent.brandSecond}`)
+  await expect(header.getByRole("link", { name: site.name })).toContainText(`${jobCardContent.brandFirst}${jobCardContent.brandSecond}`)
   await expect(header.locator(".glass")).toHaveCount(0)
   // Transparent at the top of the page, solid paper with a hairline once scrolled.
   await sheetLoaded(header.getByRole("button", { name: nav.menu })) // hydrated: the scroll listener is on
@@ -308,7 +308,7 @@ test("there is no sticky bar: no page floats a Book or WhatsApp bar over its con
 
 test("the logo link goes home from any page", async ({ page, isMobile }) => {
   await page.goto("/faq")
-  await (isMobile ? phone(page) : desktop(page)).getByRole("link", { name: nav.home }).first().click()
+  await (isMobile ? phone(page) : desktop(page)).getByRole("link", { name: site.name }).first().click()
   await expect(page).toHaveURL("/")
 })
 

@@ -91,7 +91,7 @@ export function PhotoPicker({
           >
             <Icon icon={Plus} size="lg" />
           </button>
-          <input ref={input} type="file" accept="image/*" multiple hidden onChange={(e) => add(e.target.files)} />
+          <input ref={input} type="file" accept="image/*" multiple hidden aria-label={c.addPhoto} onChange={(e) => add(e.target.files)} />
         </li>
       )}
     </ul>

@@ -5,7 +5,7 @@ import { CtaBand } from "@/components/cta-band"
 import { WhatsAppIcon } from "@/components/icon"
 import { Container, Section } from "@/components/layout"
 import { JsonLd } from "@/components/json-ld"
-import { Heading, Text } from "@/components/typography"
+import { Heading, Linked, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, faq, faqPage, seo, site } from "@/content"
@@ -39,7 +39,7 @@ export default function FaqPage() {
                     {f.q}
                   </AccordionTrigger>
                   <AccordionContent className="text-body-md text-body">
-                    {f.a}
+                    <Linked link={f.link}>{f.a}</Linked>
                   </AccordionContent>
                 </AccordionItem>
               ))}

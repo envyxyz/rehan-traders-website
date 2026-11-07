@@ -368,8 +368,8 @@ function TicketForm({ q }: { q: string }) {
         </div>
       </div>
       <p className="-mt-2 text-caption text-steel">{t.hint}</p>
-      {/* Honeypot: off-screen and out of the tab order, so only bots fill it. */}
-      <input ref={honeypot} name="website" tabIndex={-1} autoComplete="off" aria-hidden className="sr-only" aria-label={booking.details.honeypot} />
+      {/* Honeypot: off-screen and inert (no focus, no screen reader), so only bots fill it. */}
+      <input ref={honeypot} name="website" type="url" tabIndex={-1} autoComplete="off" inert className="sr-only" aria-label={booking.details.honeypot} />
       <SubmitRow error={error?.text} errorId={`${ids}-error`}>
         <Button type="submit" size="lg" arrow className="w-full justify-between sm:w-auto" disabled={sending}>
           {sending ? booking.review.sending : t.submit}

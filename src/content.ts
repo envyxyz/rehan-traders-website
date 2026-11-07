@@ -7,6 +7,11 @@
 
 export type PriceMode = "from" | "quote"
 
+/** A link inside a sentence of copy: `phrase` is part of that sentence, `href` where it goes. Set by `Linked` (typography.tsx); the copy stays plain text. */
+export type InlineLink = { phrase: string; href: string }
+/** The money page: linked from copy on other pages. */
+export const touchGlassHref = "/repairs/touch-glass-replacement"
+
 /** One-line switch. Adnan chose "Get a quote" (PRD §11 q3). */
 export const priceMode: PriceMode = "quote"
 
@@ -127,7 +132,6 @@ export const nav = {
   courier: "Send by courier",
   /** Phones: back from the Repairs list to the menu. */
   back: "Back",
-  home: `${site.name} home`,
   /** Phones: the menu's first row. */
   homeLink: "Home",
   label: "Main",
@@ -169,6 +173,8 @@ export const hero = {
     network: "5G",
     close: "Fold the phone",
     open: "Open the phone",
+    /** The poster image of the fold: the button's own label says what a tap does. */
+    alt: "A folding phone showing the Rehan Traders business card",
     /** The business card on its screen (growth/Brand/Print/Business Card - Front.png). */
     card: { brandFirst: "Rehan", brandSecond: "Traders", name: "Adnan Ali", address: "Shop G-88, Hafeez Center, Lahore", descriptor: "Mobile & Tab Repair Lab", hours: "Mon to Sat · 11 AM to 10 PM" },
   },
@@ -197,10 +203,11 @@ export const process = [
   { title: "Tested and sealed", text: "Every repair is tested, then sealed in a pouch until you collect it." },
 ] as const
 
-export const faq = [
+export const faq: readonly { q: string; a: string; link?: InlineLink }[] = [
   {
     q: "Can you replace only the broken glass and keep my original display?",
-    a: "Yes, when the display still works. Rehan Traders separates the cracked glass from the display under heat and vacuum and laminates new glass onto the display your phone came with. Lines, dark patches or no picture mean the panel itself is damaged and needs a screen replacement.",
+    a: "Yes, when the display still works. In a glass-only repair, Rehan Traders separates the cracked glass from the display under heat and vacuum and laminates new glass onto the display your phone came with. Lines, dark patches or no picture mean the panel itself is damaged and needs a screen replacement.",
+    link: { phrase: "glass-only repair", href: touchGlassHref },
   },
   {
     q: "Is checking my phone free?",
@@ -258,7 +265,7 @@ export const faq = [
     q: "My phone or tablet is broken. Where can I get it repaired in Lahore?",
     a: `Rehan Traders repairs phones and tablets at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore: cracked glass, broken screens, foldables, iPhone, iPad, batteries and charging, water damage and motherboard faults. Checking is free. Call or WhatsApp ${site.phone.display}, or walk in ${site.hours.oneLine}.`,
   },
-] as const
+]
 
 /**
  * Broken-phone problems as people type them, in Pakistani English and Roman Urdu (plus Urdu script for llms.txt),
@@ -311,7 +318,11 @@ export const estimate = {
 
 /** Homepage section copy, in PRD §5 order. */
 export const home = {
-  repairs: { title: "What we repair" },
+  repairs: {
+    title: "What we repair",
+    lede: "Cracked glass on a display that still works? A touch glass replacement changes only the glass and keeps the display your phone came with.",
+    link: { phrase: "touch glass replacement", href: touchGlassHref },
+  },
   beforeAfter: {
     // TODO(adnan): real before-and-after pair from a finished job (PRD §12 q6). Hidden until then; set true with the real images.
     show: false as boolean,
@@ -345,6 +356,7 @@ export const home = {
   bench: {
     title: "The open bench",
     lede: "Your phone is repaired at the open bench in Shop G-88, which has a microscope for board work.",
+    link: { phrase: "Shop G-88", href: "/visit" },
     points: [
       { title: "Watch it happen", text: "Ask to watch when the bench is not busy." },
       { title: "Get your old parts back", text: "Ask for them if you want them. Swollen batteries are the exception: the shop disposes of them safely straight away." },
@@ -405,7 +417,8 @@ export const breadcrumbs = {
 
 export const repairsPage = {
   title: "Repairs",
-  lede: "Phone and tablet repairs at Shop G-88, Hafeez Center, Lahore. Every repair starts with a free check, and when only the glass is cracked, only the glass is replaced.",
+  lede: "Phone and tablet repairs at Shop G-88, Hafeez Center, Lahore. Every repair starts with a free check, and when only the glass is cracked, the shop does a glass-only repair.",
+  link: { phrase: "glass-only repair", href: touchGlassHref },
   problemsTitle: "What's wrong with your phone?",
   whatWeFix: "What we fix",
   howItWorks: "How it works",
@@ -546,6 +559,7 @@ export const aboutPage = {
   sinceText: "Rehan Traders has repaired phones since 2009. A repair counts as certified when the phone works well and the customer has no issues with it. Every job starts with a free check: the shop tells you plainly what is wrong, whether it can be fixed, what it will cost and how long it will take. Then you decide.",
   benchTitle: "The open repair bench",
   benchText: "Repairs happen at the open bench in Shop G-88, which has a microscope for board work. Ask to watch when the bench is not busy, and ask for your old parts back if you want them. Swollen batteries are the exception: the shop disposes of them straight away.",
+  benchLink: { phrase: "Shop G-88", href: "/visit" },
   adnanTitle: "Adnan Ali",
   adnanRole: "Owner", // Adnan, PRD §11; his title as a technician is not confirmed
   adnanText: "The shop is run by its owner, Adnan Ali. Saving the customer's damaged panel is the shop's main priority.",
