@@ -1,7 +1,7 @@
 // Next's static export names a page's prefetch files "__next.<segment>.<segment>.txt", but on Windows its
 // collectSegmentPaths() keeps the path separator, so they land as __next.<segment>/<segment>.txt and the client's
 // requests 404. Rename them to the dotted names. Does nothing where the export is already right (Linux builds).
-import { readdirSync, renameSync, rmSync } from "node:fs"
+import { appendFileSync, readdirSync, renameSync, rmSync } from "node:fs"
 import { join, relative, sep } from "node:path"
 
 const files = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? files(join(dir, e.name)) : [join(dir, e.name)]))
@@ -19,3 +19,7 @@ walk("out")
 rmSync("out/dev", { recursive: true, force: true })
 rmSync("out/dev.html", { force: true })
 rmSync("out/dev.txt", { force: true })
+// Next writes the OG/Twitter image routes without an extension (opengraph-image-<hash>), so Cloudflare sends no Content-Type
+// and nosniff stops crawlers reading them. _headers allows one splat per rule, so add an exact-path rule per file.
+const images = files("out").filter((f) => /(^|[\\/])(opengraph|twitter)-image-\w+$/.test(f))
+appendFileSync("out/_headers", images.map((f) => `\n/${relative("out", f).split(sep).join("/")}\n  Content-Type: image/png\n`).join(""))
