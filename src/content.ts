@@ -121,6 +121,7 @@ export const facts = {
 export const nav = {
   links: [
     { label: "Repairs", href: "/repairs" },
+    { label: "Guides", href: "/guides" },
     { label: "Get a Quote", href: "/quote" },
     { label: "Reviews", href: "/reviews" },
     { label: "About", href: "/about" },
@@ -130,7 +131,7 @@ export const nav = {
   call: `Call ${site.phone.display}`,
   menu: "Menu",
   courier: "Send by courier",
-  /** Phones: back from the Repairs list to the menu. */
+  /** Phones: back from the Repairs or Guides list to the menu. */
   back: "Back",
   /** Phones: the menu's first row. */
   homeLink: "Home",
@@ -458,6 +459,8 @@ export const guidesPage = {
   /** On a repair page: the guides that lead to it. */
   forRepair: "Guides for this repair",
   all: "All guides",
+  /** On a guide: the other guides. */
+  more: "More guides",
 } as const
 
 export const reviewsPage = {

@@ -65,7 +65,7 @@ export default async function ServicePage({ params }: PageProps) {
     <>
       <JsonLd data={serviceSchema(service)} />
       {service.faq.length > 0 && <JsonLd data={faqSchema(service.faq)} />}
-      <Section first>
+      <Section first className="flex flex-col justify-center">
         <Container>
           <Breadcrumbs
             items={[
@@ -75,13 +75,16 @@ export default async function ServicePage({ params }: PageProps) {
             className="mb-3"
           />
 
-          <div className="grid items-start gap-10 lg:grid-cols-12 lg:gap-14">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
             <div className="lg:col-span-7">
               <Heading as="h1" size="display-xl" rule>
                 {service.title}
               </Heading>
               <Text tone="muted" size="body-md" className="mt-4 max-w-xl">
                 {service.short}
+              </Text>
+              <Text size="body-md" tone="ink" className="mt-4 max-w-xl">
+                {service.intro}
               </Text>
               <PriceLine priceFrom={service.priceFrom} className="mt-6" />
               <div className="mt-8">{actionsRow("repair")}</div>
@@ -150,11 +153,8 @@ export default async function ServicePage({ params }: PageProps) {
       <Section>
         <Container>
           <article className="max-w-3xl">
-            <Text size="body-md" tone="ink">
-              {service.intro}
-            </Text>
-            {service.detail.map((d) => (
-              <section key={d.h} className="mt-12">
+            {service.detail.map((d, n) => (
+              <section key={d.h} className={n ? "mt-12" : undefined}>
                 <Heading as="h2" size="title-lg">
                   {d.h}
                 </Heading>

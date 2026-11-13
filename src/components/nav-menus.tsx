@@ -15,22 +15,30 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
-import { actions, nav, site } from "@/content"
-import { services } from "@/content-large"
+import { actions, guidesPage, nav, site } from "@/content"
+import { guides, services } from "@/content-large"
 import { menuStagger } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
 // The nav's Radix menus. Nav loads this module with next/dynamic after hydration, so the menu and dialog code is not
 // in the first load; until it arrives Nav shows the same trigger without behaviour. The triggers' faces come from Nav.
 
-/** Repairs opens the 8 repairs. `menu` controls it. */
-export function RepairsMenu({
+/** What each menu link opens. A guide's entry is its title up to the colon: the fault, without the question. */
+const menus = {
+  "/repairs": { all: actions.allRepairs, items: services.map((s) => ({ href: `/repairs/${s.slug}`, label: s.title })) },
+  "/guides": { all: guidesPage.all, items: guides.map((g) => ({ href: `/guides/${g.slug}`, label: g.title.split(":")[0] })) },
+}
+export type MenuHref = keyof typeof menus
+const hasMenu = (href: string): href is MenuHref => href in menus
+
+/** Desktop: Repairs opens the 8 repairs, Guides the guides. `menu` controls it. */
+export function LinkMenu({
   href,
   className,
   menu,
   children,
 }: {
-  href: string
+  href: MenuHref
   className: string
   menu?: { open: boolean; onOpenChange: (open: boolean) => void }
   children: React.ReactNode
@@ -39,21 +47,20 @@ export function RepairsMenu({
     <DropdownMenu modal={false} {...menu}>
       <DropdownMenuTrigger className={className}>{children}</DropdownMenuTrigger>
       <DropdownMenuContent align="start" sideOffset={12}>
-        {services.map((s) => (
-          <DropdownMenuItem key={s.slug} asChild>
-            <Link href={`/repairs/${s.slug}`}>{s.title}</Link>
+        {menus[href].items.map((item) => (
+          <DropdownMenuItem key={item.href} asChild>
+            <Link href={item.href}>{item.label}</Link>
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href={href}>{actions.allRepairs}</Link>
+          <Link href={href}>{menus[href].all}</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
 
-const repairs = nav.links.find((link) => link.href === "/repairs")!
 const row = "flex min-h-12 w-full items-center font-display text-title-lg text-ink"
 // The header strip of both panels (Menu, Back): the same height, type, separator and tint. The sheet's X sits in its right end.
 const bar = "flex h-17 shrink-0 items-center border-b border-hairline bg-sheet-bar px-6 font-display text-title-lg text-ink"
@@ -62,21 +69,23 @@ const rise = "animate-rise motion-reduce:animate-none"
 const delay = (i: number) => ({ animationDelay: `${menuStagger.start + i * menuStagger.step}s` })
 
 /**
- * Phones: the menu sheet, opened by Nav's menu button (`open`). The items fade in after the sheet slides in. Repairs slides a
- * second panel over the first (Back, All repairs, the eight repairs); whichever panel is hidden is inert.
+ * Phones: the menu sheet, opened by Nav's menu button (`open`). The items fade in after the sheet slides in. Repairs and Guides each slide
+ * a second panel over the first (Back, the link to all, then the list); whichever panel is hidden is inert.
  */
 export function MobileMenu({ open, onOpenChange, returnFocus }: { open: boolean; onOpenChange: (open: boolean) => void; returnFocus: React.RefObject<HTMLElement | null> }) {
   const [sub, setSub] = React.useState(false)
+  // Which list the second panel holds. It stays while the panel slides back out.
+  const [list, setList] = React.useState<MenuHref>("/repairs")
   const close = () => {
     onOpenChange(false)
     setSub(false)
   }
-  const repairsButton = React.useRef<HTMLButtonElement>(null)
+  const opener = React.useRef<HTMLButtonElement | null>(null)
   const backButton = React.useRef<HTMLButtonElement>(null)
   // Focus follows the panel: flushSync lifts `inert` before focusing, and preventScroll keeps the clipped sheet from jumping.
   const show = (next: boolean) => {
     flushSync(() => setSub(next))
-    ;(next ? backButton : repairsButton).current?.focus({ preventScroll: true })
+    ;(next ? backButton : opener).current?.focus({ preventScroll: true })
   }
   return (
     <Sheet
@@ -93,8 +102,18 @@ export function MobileMenu({ open, onOpenChange, returnFocus }: { open: boolean;
             {nav.homeLink}
           </Link>
           {nav.links.map((link, i) =>
-            link === repairs ? (
-              <button key={link.href} ref={repairsButton} type="button" className={cn(row, "cursor-pointer justify-between", rise)} style={delay(i + 1)} onClick={() => show(true)}>
+            hasMenu(link.href) ? (
+              <button
+                key={link.href}
+                type="button"
+                className={cn(row, "cursor-pointer justify-between", rise)}
+                style={delay(i + 1)}
+                onClick={(e) => {
+                  opener.current = e.currentTarget
+                  setList(link.href as MenuHref)
+                  show(true)
+                }}
+              >
                 {link.label}
                 <Icon icon={ChevronRight} size="xl" className="text-steel" />
               </button>
@@ -144,14 +163,14 @@ export function MobileMenu({ open, onOpenChange, returnFocus }: { open: boolean;
           </div>
           <ul className="flex flex-col px-6 pt-2 pb-6">
             <li>
-              <Link href={repairs.href} className={cn(entry, sub && rise)} style={delay(0)}>
-                {actions.allRepairs}
+              <Link href={list} className={cn(entry, sub && rise)} style={delay(0)}>
+                {menus[list].all}
               </Link>
             </li>
-            {services.map((s, i) => (
-              <li key={s.slug}>
-                <Link href={`/repairs/${s.slug}`} className={cn(entry, sub && rise)} style={delay(i + 1)}>
-                  {s.title}
+            {menus[list].items.map((item, i) => (
+              <li key={item.href}>
+                <Link href={item.href} className={cn(entry, sub && rise)} style={delay(i + 1)}>
+                  {item.label}
                 </Link>
               </li>
             ))}

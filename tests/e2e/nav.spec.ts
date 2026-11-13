@@ -7,7 +7,7 @@ import { routes } from "./routes"
 // The nav renders twice (desktop, phone); only the visible one counts per project.
 const desktop = (page: Page) => page.locator("header").first() // the desktop bar that morphs into the island; the phone header is the second
 const phone = (page: Page) => page.locator("header").nth(1)
-const links = nav.links.filter((l) => l.href !== "/repairs")
+const links = nav.links.filter((l) => !["/repairs", "/guides"].includes(l.href))
 const repairs = nav.links.find((l) => l.href === "/repairs")!
 
 // The Radix menu and the phone sheet are next/dynamic chunks that load after hydration. Until then the same-looking buttons

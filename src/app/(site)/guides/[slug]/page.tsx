@@ -183,6 +183,20 @@ export default async function GuidePage({ params }: PageProps) {
               </li>
             ))}
           </ul>
+          {/* Guide to guide: every guide is one click from every other, in the server HTML (the nav's menu is not). */}
+          <h2 className="mt-14 font-display text-title-lg text-ink">{guidesPage.more}</h2>
+          <ul className="mt-2 grid gap-x-10 md:grid-cols-2">
+            {guides
+              .filter((g) => g.slug !== guide.slug)
+              .map((g) => (
+                <li key={g.slug}>
+                  <Link href={`/guides/${g.slug}`} className="flex min-h-11 items-center gap-1.5 py-2 text-body-sm text-ink underline-offset-4 hover:underline">
+                    {g.title}
+                    <Icon icon={ArrowRight} size="sm" className="shrink-0" />
+                  </Link>
+                </li>
+              ))}
+          </ul>
         </Container>
       </Section>
 

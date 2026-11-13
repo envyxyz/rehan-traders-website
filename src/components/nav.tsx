@@ -7,6 +7,7 @@ import Link from "next/link"
 import { Icon } from "@/components/icon"
 import { ChevronDown, Menu, Phone } from "@/components/icons"
 import { Mark } from "@/components/logo"
+import type { MenuHref } from "@/components/nav-menus"
 import { Button } from "@/components/ui/button"
 import { jobCardContent, nav, site } from "@/content"
 import { cn } from "@/lib/utils"
@@ -33,24 +34,26 @@ const ICON_SHIFT = 5 // its phone icon moves from 18px in to the middle of the 4
 const WORD_DONE = 0.55 // by this much of the morph the name has gone into the mark...
 const NUMBER_DONE = 0.7 // ...and the number into the phone icon
 
-const linkClass = "inline-flex h-11 items-center gap-1 rounded-pill px-3.5 font-display text-nav text-ink active:bg-concrete"
+// Seven links: tighter below xl, so the nav clears the logo at 1024.
+const linkClass = "inline-flex h-11 items-center gap-1 rounded-pill px-2 xl:px-3.5 font-display text-nav text-ink active:bg-concrete"
 // No outline utilities: the global :focus-visible ring applies (`outline-none` here used to hide it for keyboard users too).
 const triggerClass = cn(linkClass, "cursor-pointer")
-const repairs = nav.links.find((link) => link.href === "/repairs")!
-const repairsFace = (
+/** The links that open a menu (nav-menus.tsx lists what each holds). */
+const hasMenu = (href: string): href is MenuHref => href === "/repairs" || href === "/guides"
+const face = (label: string) => (
   <>
-    {repairs.label}
+    {label}
     <Icon icon={ChevronDown} size="sm" className="text-steel" />
   </>
 )
-// The Radix menu and sheet (about 48 KB) wait for the visitor's first interaction, out of the page load. Until then Repairs is a
-// plain link to its page, and the phone menu's button is already the real one: a tap opens the sheet as soon as its code arrives.
-const RepairsLink = () => (
-  <Link href={repairs.href} className={triggerClass}>
-    {repairsFace}
+// The Radix menu and sheet (about 48 KB) wait for the visitor's first interaction, out of the page load. Until then Repairs and
+// Guides are plain links to their pages, and the phone menu's button is already the real one: a tap opens the sheet as soon as its code arrives.
+const PlainLink = ({ href, label }: { href: string; label: string }) => (
+  <Link href={href} className={triggerClass}>
+    {face(label)}
   </Link>
 )
-const RepairsMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.RepairsMenu), { ssr: false, loading: RepairsLink })
+const LinkMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.LinkMenu), { ssr: false })
 const MobileMenu = dynamic(() => import("@/components/nav-menus").then((mod) => mod.MobileMenu), { ssr: false })
 
 /** True from the visitor's first interaction of these kinds. Lighthouse never interacts, and neither has anyone who has not yet looked. */
@@ -67,17 +70,22 @@ function useWake(events: readonly (keyof WindowEventMap)[]) {
 const WAKE_DESKTOP = ["pointermove", "keydown", "wheel", "scroll"] as const
 const WAKE_PHONE = ["touchstart", "pointerdown", "keydown", "scroll"] as const
 
-/** Repairs opens the 8 repairs; the other links are plain. `menu` controls the Repairs menu. */
-function NavLinks({ menu }: { menu: { open: boolean; onOpenChange: (open: boolean) => void } }) {
+/** Repairs opens the 8 repairs and Guides the guides; the other links are plain. `open` is the href of the open menu. */
+function NavLinks({ open, onOpen }: { open: string | null; onOpen: (href: string | null) => void }) {
   const awake = useWake(WAKE_DESKTOP)
+  const [loaded, setLoaded] = React.useState(false)
+  // The plain links stay until the menu code is in, then both swap at once.
+  React.useEffect(() => {
+    if (awake) void import("@/components/nav-menus").then(() => setLoaded(true))
+  }, [awake])
   return nav.links.map((link) =>
-    link === repairs ? (
-      awake ? (
-        <RepairsMenu key={link.href} href={link.href} className={triggerClass} menu={menu}>
-          {repairsFace}
-        </RepairsMenu>
+    hasMenu(link.href) ? (
+      loaded ? (
+        <LinkMenu key={link.href} href={link.href} className={triggerClass} menu={{ open: open === link.href, onOpenChange: (o) => onOpen(o ? link.href : null) }}>
+          {face(link.label)}
+        </LinkMenu>
       ) : (
-        <RepairsLink key={link.href} />
+        <PlainLink key={link.href} href={link.href} label={link.label} />
       )
     ) : (
       <Link key={link.href} href={link.href} className={linkClass}>
@@ -186,7 +194,7 @@ function DesktopNav() {
   const call = React.useRef<HTMLAnchorElement>(null)
   const callIcon = React.useRef<HTMLSpanElement>(null)
   const number = React.useRef<HTMLSpanElement>(null)
-  const [menu, setMenu] = React.useState(false)
+  const [menu, setMenu] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     const el: Parts = {
@@ -237,7 +245,7 @@ function DesktopNav() {
       island = next
       target = Number(island)
       el.wordMask.style.pointerEvents = island ? "none" : ""
-      setMenu(false) // an open Repairs menu does not follow the nav
+      setMenu(null) // an open menu does not follow the nav
       if (reduced.matches || !touched) {
         cancelAnimationFrame(frame)
         frame = 0
@@ -289,7 +297,7 @@ function DesktopNav() {
         <nav ref={navEl} aria-label={nav.label} className="pointer-events-auto relative isolate flex items-center gap-0.5 p-1.25 will-change-transform">
           <span ref={glass} aria-hidden className="glass absolute inset-0 -z-10 rounded-pill" />
           <div ref={links} className="flex items-center gap-0.5">
-            <NavLinks menu={{ open: menu, onOpenChange: setMenu }} />
+            <NavLinks open={menu} onOpen={setMenu} />
           </div>
           {/* The number sits behind a mask beside the icon and slides left into it, while the button narrows to a circle. */}
           <Button asChild className="justify-start overflow-hidden">
