@@ -6,7 +6,7 @@ export type Events = {
   call_click: { from: string }
   directions_click: { from: string }
   chat_open: Record<string, never>
-  chat_handoff: { action: "form" | "whatsapp" | "call" }
+  chat_handoff: { action: "form" | "whatsapp" | "call" | "page" }
   estimate_complete: { path: "pick"; fault: string; service: string | null }
   price_view: { service?: string; priceFrom?: number }
 }

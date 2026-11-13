@@ -20,12 +20,15 @@ async function openChat(page: Page, load = true) {
 }
 
 test("parseReply reads the chips line on its own line, inline, or half-streamed, and the model's actions never become buttons", () => {
-  expect(parseReply("Hi.\n>> chips: X | Y")).toEqual({ body: "Hi.", buttons: [], chips: ["X", "Y"] })
+  expect(parseReply("Hi.\n>> chips: X | Y")).toEqual({ body: "Hi.", buttons: [], chips: ["X", "Y"], page: null })
   // Groq once wrote them inline with one ">".
-  expect(parseReply("G-88 par.   > chips: A | B")).toEqual({ body: "G-88 par.", buttons: [], chips: ["A", "B"] })
-  expect(parseReply("Hi.\n>> actions: book whatsapp call\n>> chips: X")).toEqual({ body: "Hi.", buttons: [], chips: ["X"] })
-  expect(parseReply("Sorry.\n>> buttons: whatsapp call\n>> chips:")).toEqual({ body: "Sorry.", buttons: ["whatsapp", "call"], chips: [] })
-  expect(parseReply("Half a reply\n>")).toEqual({ body: "Half a reply", buttons: [], chips: [] })
+  expect(parseReply("G-88 par.   > chips: A | B")).toEqual({ body: "G-88 par.", buttons: [], chips: ["A", "B"], page: null })
+  expect(parseReply("Hi.\n>> actions: book whatsapp call\n>> chips: X")).toEqual({ body: "Hi.", buttons: [], chips: ["X"], page: null })
+  expect(parseReply("Sorry.\n>> buttons: whatsapp call\n>> chips:")).toEqual({ body: "Sorry.", buttons: ["whatsapp", "call"], chips: [], page: null })
+  expect(parseReply("Half a reply\n>")).toEqual({ body: "Half a reply", buttons: [], chips: [], page: null })
+  // The page line is the site's own, and only ever one of its guide or repair pages.
+  expect(parseReply("Dry it.\n>> chips: X\n>> page: /guides/phone-fell-in-water | Phone fell in water")).toEqual({ body: "Dry it.", buttons: [], chips: ["X"], page: { href: "/guides/phone-fell-in-water", title: "Phone fell in water" } })
+  expect(parseReply("Hi.\n>> page: https://evil.example/x | Click").page).toBeNull()
 })
 
 test("pieces turns [[send]] and {{form}} into links and holds back an unfinished one", () => {

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { BookButton } from "@/components/book-button"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
+import { GuideFigure } from "@/components/figures"
 import { Icon, WhatsAppIcon } from "@/components/icon"
 import { ArrowRight } from "@/components/icons"
 import { JsonLd } from "@/components/json-ld"
@@ -59,7 +60,7 @@ export default async function GuidePage({ params }: PageProps) {
           <Breadcrumbs items={[{ label: breadcrumbs.guides, href: "/guides" }, { label: guide.title }]} className="mb-3" />
 
           <div className="grid gap-12 lg:grid-cols-12">
-          <article className="max-w-3xl lg:col-span-7">
+          <article className="max-w-3xl min-w-0 lg:col-span-7">
             <Heading as="h1" size="display-xl" rule>
               {guide.title}
             </Heading>
@@ -70,6 +71,7 @@ export default async function GuidePage({ params }: PageProps) {
             <Text size="caption" tone="muted" className="mt-4">
               {guidesPage.updated} <time dateTime={guide.updated}>{date(guide.updated)}</time> · {guidesPage.by}
             </Text>
+            <GuideFigure guide={guide} />
 
             {guide.sections.map((s) => {
               const List = s.steps ? "ol" : "ul"
@@ -130,7 +132,7 @@ export default async function GuidePage({ params }: PageProps) {
                 {repairsPage.bookLede}
               </Text>
               <div className="mt-5 flex flex-col gap-3">
-                <BookButton service={repairs[0]?.slug} arrow className="w-full">
+                <BookButton service={repairs[0]?.slug} arrow className="btn-wide-full w-full justify-between pl-2">
                   {actions.bookRepair}
                 </BookButton>
                 <Button asChild variant="whatsapp" className="w-full">

@@ -104,8 +104,11 @@ export const articleSchema = (g: Guide) => ({
   description: g.seo.description,
   url: guideUrl(g),
   mainEntityOfPage: guideUrl(g),
-  // The photo of the first repair it leads to (the generated share image has a hashed name).
-  image: `${site.url}/images/${services.find((s) => s.slug === g.services[0])?.image ?? "storefront"}-og.jpg`,
+  // The guide's infographic (scripts/figures.mjs), then the photo of the first repair it leads to (the generated share image has a hashed name).
+  image: [
+    { "@type": "ImageObject", url: `${site.url}/guides/figures/${g.slug}.png`, name: g.figure.title, caption: g.figure.caption },
+    `${site.url}/images/${services.find((s) => s.slug === g.services[0])?.image ?? "storefront"}-og.jpg`,
+  ],
   inLanguage: "en-PK",
   datePublished: g.published,
   dateModified: g.updated,

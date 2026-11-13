@@ -53,6 +53,8 @@ pnpm palette      # snapshot /dev/kitchen-sink into design/palette.html (needs p
 pnpm test:e2e     # Playwright (installed Edge) against pnpm preview; booking tests since Phase 5, axe added in Phase 9
 pnpm lhci         # Lighthouse CI (mobile, 3 runs a page) against the production build: pnpm build first; it starts wrangler dev on :8787 itself, so stop pnpm preview; CHROME_PATH if Chrome is not found; results in .lighthouseci/
 pnpm preview      # next build, then wrangler dev (http://localhost:8787): the static export plus the Worker, as production runs it
+node scripts/figures.mjs         # guide infographic PNGs into public/guides/figures (needs pnpm preview running); re-run after changing a drawing or its key, then rebuild
+node scripts/retrieve-check.mjs  # the chat's retrieval, no model or key needed: each test question must find its page; run after changing guides, repair pages or the scoring
 ```
 Deploys: Cloudflare Workers Builds deploys `main` on push.
 Keep this list in sync with `package.json`. `pnpm palette` (with `pnpm dev` running) regenerates `design/palette.html`, an offline snapshot of the kitchen sink with a light/dark/auto switch. Re-run it whenever tokens or primitives change.

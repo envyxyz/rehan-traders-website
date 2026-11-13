@@ -463,6 +463,17 @@ export const guidesPage = {
   more: "More guides",
 } as const
 
+/** The 3D phone on a guide (phone-3d.tsx): taken apart in layers, with the guide's part lit. */
+export const phone3d = {
+  show: "See the parts in 3D",
+  open: "Take it apart",
+  close: "Put it back together",
+  hint: (part: string) => `Drag to turn the phone. The ${part} is in red.`,
+  none: "3D is not available in this browser.",
+  alt: (part: string) => `A phone taken apart in layers, with the ${part} in red`,
+  parts: { glass: "outer glass", panel: "display panel", battery: "battery", board: "main board", port: "charging port" },
+} as const
+
 export const reviewsPage = {
   title: "Customer reviews",
   lede: "Reviews that customers of Rehan Traders, Shop G-88, Hafeez Center, left on Google.",

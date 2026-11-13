@@ -637,6 +637,8 @@ export const estimator = {
   ] satisfies EstimateFault[],
 } as const
 
+export type PhonePart = "glass" | "panel" | "battery" | "board" | "port"
+
 export type Guide = {
   slug: string
   /** h1: the question people search, in their words */
@@ -657,6 +659,10 @@ export type Guide = {
     link?: InlineLink
   }[]
   faq: { q: string; a: string }[]
+  /** The infographic: a numbered drawing (components/figures) and its key. Every line restates this guide's own text. */
+  figure: { title: string; caption: string; items: { label: string; text: string }[] }
+  /** The part the 3D phone highlights for this guide. */
+  part: PhonePart
   /** Repair slugs this guide leads to. */
   services: string[]
   published: string
@@ -665,7 +671,7 @@ export type Guide = {
 
 /** Researched from Google autocomplete and People also ask for Pakistan, 2 Nov 2026 (English, Roman Urdu). General advice only; anything about the shop is a confirmed fact. */
 const atShop = `${site.address.short}, ${site.address.city}`
-const g2 = { published: "2026-11-02", updated: "2026-11-07" }
+const g2 = { published: "2026-11-02", updated: "2026-11-13" } // 13 Nov: the infographic and 3D phone
 
 export const guides: Guide[] = [
   {
@@ -725,6 +731,16 @@ export const guides: Guide[] = [
       { q: "Will new glass remove lines or black spots?", a: "No. Lines and black spots come from the display panel under the glass. Only a screen (panel) change fixes them." },
       { q: "Why is a glass change cheaper than a panel change?", a: "You pay for new glass and the work, not a whole new display. The exact price depends on the model, so ask for a quote on WhatsApp." },
     ],
+    figure: {
+      title: "Cracked phone screen: which layer is damaged",
+      caption: "The layers of a phone screen. Cracks in the outer glass with a clean picture need new glass only; lines, black patches or flicker come from the display panel under it.",
+      items: [
+        { label: "Outer glass", text: "Cracks, but a clean picture and working touch: touch glass replacement." },
+        { label: "Display panel", text: "Lines, black or green patches, flicker: screen (panel) change." },
+        { label: "Panel or its connection", text: "Black screen, but the phone rings or vibrates: screen check, then a panel change if needed." },
+      ],
+    },
+    part: "glass",
     services: ["touch-glass-replacement", "screen-replacement"],
     ...g2,
   },
@@ -775,6 +791,16 @@ export const guides: Guide[] = [
       { q: "Does a line mean only the glass is broken?", a: "No. Lines come from the display panel or its connection, under the glass. New glass alone will not fix a line." },
       { q: "A pink or green line appeared after my phone got wet. What should I do?", a: "Turn it off, do not charge it, and get it checked soon. Liquid at the screen connector can cause lines, and corrosion spreads with time." },
     ],
+    figure: {
+      title: "Line on a phone screen: hardware or software?",
+      caption: "The screenshot test. A line that is missing from a screenshot, or shows on the startup logo, is in the display hardware.",
+      items: [
+        { label: "Take a screenshot", text: "Capture the screen while the line is showing, and open it on another phone." },
+        { label: "Line not in the screenshot", text: "The fault is in the display panel or its connection. A reset will not remove it." },
+        { label: "Line in the screenshot too", text: "Update the phone and check the app you saw it in." },
+      ],
+    },
+    part: "panel",
     services: ["screen-replacement"],
     ...g2,
   },
@@ -832,6 +858,18 @@ export const guides: Guide[] = [
       { q: "My phone says liquid or moisture detected. Can I charge it?", a: "No. Unplug it and leave it with the port facing down in moving air. Apple says to wait at least 30 minutes before trying again, longer if the warning comes back." },
       { q: "Is my phone water resistant after a repair?", a: "Do not rely on it. The shop re-applies the water-resistance seal after a repair on request, but no repaired phone should be treated as waterproof." },
     ],
+    figure: {
+      title: "Phone fell in water: what to do, in order",
+      caption: "First steps for a wet phone: off, no charger, case and SIM tray out, port facing down, moving air. No rice, no hair dryer.",
+      items: [
+        { label: "Turn it off", text: "Take the phone out of the water and turn it off. Do not keep pressing buttons to test it." },
+        { label: "No charger", text: "Do not plug in a charger or cable." },
+        { label: "Case off, SIM tray out", text: "Take off the case and pull out the SIM tray, then wipe the phone with a dry, soft cloth." },
+        { label: "Port facing down", text: "Hold it with the charging port facing down and tap it gently against your hand." },
+        { label: "Moving air", text: "Leave it in a dry place with moving air, such as in front of a fan, not in the sun." },
+      ],
+    },
+    part: "board",
     services: ["water-damage-data-recovery"],
     ...g2,
   },
@@ -892,6 +930,18 @@ export const guides: Guide[] = [
       { q: "Why does my phone charge so slowly?", a: "A low-power adapter, a worn cable, lint in the port or heavy use while charging. A worn battery can also make charging behave oddly." },
       { q: "Can a cheap charger damage my phone?", a: "A poor-quality charger or cable can charge badly and may harm the charging circuit. A certified charger from the phone's maker or a known brand is safer." },
     ],
+    figure: {
+      title: "Phone not charging: where the fault can be",
+      caption: "From the wall to the board: what each symptom points to when a phone will not charge.",
+      items: [
+        { label: "Cable or adapter", text: "Works with another cable: old cable or adapter." },
+        { label: "Lint in the port", text: "Plug does not go all the way in: lint in the port." },
+        { label: "Charging port", text: "Charges only at an angle or when held: worn charging port." },
+        { label: "Battery", text: "Charges, but the battery drops fast or the phone shuts off: worn battery." },
+        { label: "Board", text: "No charging with any cable, port clean: board or charging circuit." },
+      ],
+    },
+    part: "port",
     services: ["battery-charging"],
     ...g2,
   },
@@ -953,6 +1003,16 @@ export const guides: Guide[] = [
       },
       { q: "Can an update make the phone drain faster?", a: "For a while, yes. The phone does background work after a big update. If the drain lasts more than a few days, look at the usage list in Settings or have it checked." },
     ],
+    figure: {
+      title: "Battery draining fast: settings, wear or swelling",
+      caption: "Three kinds of battery trouble: drain from software or settings, a worn battery, and a swollen battery that must be replaced.",
+      items: [
+        { label: "Sudden drain", text: "After an update, a new app or with weak signal: usually software or settings, and it often settles within a day or two." },
+        { label: "Worn battery", text: "Drain that keeps getting worse, or a phone that shuts off with charge left. Apple treats about 80 percent of original capacity as worn." },
+        { label: "Swollen battery", text: "The screen or back lifting from the frame, or a gap at the edge. Stop using and charging it, and get it replaced." },
+      ],
+    },
+    part: "battery",
     services: ["battery-charging"],
     ...g2,
   },
@@ -1002,6 +1062,17 @@ export const guides: Guide[] = [
       { q: "Mobile on nahi ho raha. Is my data lost?", a: "Not necessarily. If the board can be repaired, the data on it usually stays. Whether it can be recovered depends on the damage." },
       { q: "Does a force restart delete anything?", a: "No. A force restart only restarts the phone. A factory reset is different and erases data." },
     ],
+    figure: {
+      title: "Phone not turning on: what to check, in order",
+      caption: "Four checks for a dead phone: charge, force restart, a call to see if only the screen is dead, then the battery or the board.",
+      items: [
+        { label: "Charge it", text: "Use a wall adapter you trust for up to an hour." },
+        { label: "Force restart", text: "Hold the buttons for your brand until the logo appears. It does not erase anything." },
+        { label: "Call the phone", text: "If it rings or vibrates while the screen stays black, the phone is on and the screen is the problem." },
+        { label: "Battery or board", text: "If nothing works, the battery, the charging port or the board needs a check." },
+      ],
+    },
+    part: "board",
     services: ["board-repair", "screen-replacement"],
     ...g2,
   },
@@ -1061,6 +1132,16 @@ export const guides: Guide[] = [
       { q: "Touch works in some places but not others. Why?", a: "Usually damage to the touch layer from a drop or pressure. Try removing the screen protector first; if the dead area stays, the screen needs a check." },
       { q: "Can a screen protector stop touch from working?", a: "Yes. A cracked, lifted or very thick protector can block touches or cause ghost touches. Take it off and test." },
     ],
+    figure: {
+      title: "Touch not working: protector, glass or panel",
+      caption: "The layers a touch passes through, and what each sign usually needs: the protector off, new touch glass, or a screen change.",
+      items: [
+        { label: "Screen protector", text: "A cracked, lifted or very thick protector can block touches or cause ghost touches. Take it off and test." },
+        { label: "Glass and touch layer", text: "Cracked glass, clean picture, touch dead in spots: free check; often new touch glass." },
+        { label: "Display panel", text: "Lines, black spots or flicker: screen (panel) change." },
+      ],
+    },
+    part: "glass",
     services: ["touch-glass-replacement", "screen-replacement"],
     ...g2,
   },

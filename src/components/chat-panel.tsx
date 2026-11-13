@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { Icon, WhatsAppIcon } from "@/components/icon"
-import { ArrowUp, Phone } from "@/components/icons"
+import { ArrowRight, ArrowUp, Phone } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -106,7 +106,7 @@ export function ChatPanel() {
           {assistant.greeting}
         </Bubble>
         {messages.map((m, i) => {
-          const { body, buttons } = m.role === "assistant" ? parseReply(m.content) : { body: m.content, buttons: [] as ("whatsapp" | "call")[] }
+          const { body, buttons, page } = m.role === "assistant" ? parseReply(m.content) : { body: m.content, buttons: [] as ("whatsapp" | "call")[], page: null }
           const streaming = busy && i === messages.length - 1
           const enter = i >= restored
           return (
@@ -130,6 +130,12 @@ export function ChatPanel() {
                       </a>
                     )}
                   </>
+                ) : !streaming && page ? (
+                  // The guide or repair page the answer came from (the Worker adds it; the model cannot).
+                  <a href={page.href} className={attached} onClick={() => track("chat_handoff", { action: "page" })}>
+                    {page.title}
+                    <Icon icon={ArrowRight} />
+                  </a>
                 ) : null
               }
             >

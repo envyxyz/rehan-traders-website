@@ -15,7 +15,7 @@ const expectProvider = process.argv[3] ?? ""
 const gap = Number(process.argv[4] ?? 1500)
 
 // Numbers the site itself states (phone, hours, founded, rating, address, "5 minutes"). Anything else is invented.
-const allowed = new Set(["0305", "8874839", "923058874839", "03058874839", "5", "11", "10", "1", "2", "13", "14", "22", "2009", "4.9", "50", "88", "54000", "3", "4", "28", "2026", "12", "00", "30"])
+const allowed = new Set(["0305", "8874839", "923058874839", "03058874839", "5", "11", "10", "1", "2", "13", "14", "22", "2009", "4.9", "50", "88", "54000", "3", "4", "28", "2026", "12", "00", "30", "80", "60", "7", "8", "20"])
 
 const ROMAN = /\b(hai|hain|ka|ki|ke|ko|aap|ap|mein|main|nahi|nahin|kya|kar|karein|sakte|sakta|ho|jayega|jaye|liye|hum|wala|se|par|bhi)\b/gi
 const ARABIC = /[؀-ۿ]/g

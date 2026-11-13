@@ -90,6 +90,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const guideRoutes: MetadataRoute.Sitemap = guides.map((g) => ({
     url: `${site.url}/guides/${g.slug}`,
     lastModified: g.updated,
+    images: [`${site.url}/guides/figures/${g.slug}.png`],
   }))
 
   return [...staticRoutes, ...serviceRoutes, ...guideRoutes]

@@ -6,6 +6,7 @@ import { z } from "zod"
 
 import { assistant } from "../src/content"
 import { chatSystem, MAX_INPUT, MAX_TURNS } from "../src/lib/assistant"
+import { related, type Passage } from "../src/lib/retrieve"
 
 export type AiEnv = {
   OPENROUTER_API_KEY?: string
@@ -95,13 +96,13 @@ const encoder = new TextEncoder()
 const fixedReply = `${assistant.fallback}\n>> buttons: whatsapp call\n>> chips:`
 
 /** Starts one provider and waits for its first words, so a dead provider fails here and the next one is tried. */
-async function start(p: Provider, messages: ModelMessage[]) {
+async function start(p: Provider, messages: ModelMessage[], pages: string | null) {
   const ctrl = new AbortController()
   const timer = setTimeout(() => ctrl.abort(), FIRST_TOKEN_MS)
   const result = streamText({
     model: p.model,
-    // The hint goes after the cached block, so the cache still hits.
-    instructions: [instructions, scriptHint(messages.at(-1)!.content)],
+    // The matched passages and the hint go after the cached block, so the cache still hits.
+    instructions: [instructions, ...(pages ? [{ role: "system" as const, content: pages }] : []), scriptHint(messages.at(-1)!.content)],
     messages,
     maxOutputTokens: p.maxOutput,
     maxRetries: 0,
@@ -144,10 +145,15 @@ export async function chat(request: Request, env: AiEnv): Promise<Response> {
   if (!parsed.success) return Response.json({ ok: false, error: "invalid" }, { status: 400 })
 
   const headers = (name: string) => ({ "content-type": "text/plain; charset=utf-8", "cache-control": "no-store", "x-chat-provider": name })
+  // Retrieval: the question, with the one before it so a follow-up ("and if it still does not charge?") keeps its topic.
+  const asked = parsed.data.messages.filter((m) => m.role === "user").slice(-2)
+  const found = related(asked.map((m) => m.content).join(" "))
+  // Written by the site after the reply, never by the model: the page the answer came from.
+  const pageLine = (page: Passage | null | undefined) => (page ? `\n>> page: ${page.href} | ${page.page}` : "")
   for (const p of providers(env)) {
     let started
     try {
-      started = await start(p, parsed.data.messages)
+      started = await start(p, parsed.data.messages, found?.text ?? null)
     } catch (err) {
       // Status and message only: never the customer's text.
       console.error("chat provider failed", p.name, String(err).slice(0, 200))
@@ -164,6 +170,7 @@ export async function chat(request: Request, env: AiEnv): Promise<Response> {
             if (value.type === "text-delta") c.enqueue(encoder.encode(value.text))
             if (value.type === "error" || value.type === "abort") throw new Error(value.type)
           }
+          c.enqueue(encoder.encode(pageLine(found?.page)))
         } catch (err) {
           // Broke off mid-reply: end it with the contact buttons rather than leave it hanging.
           console.error("chat stream broke", p.name, String(err).slice(0, 200))
