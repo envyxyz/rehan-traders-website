@@ -81,9 +81,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
+  // 13 Nov 2026: every repair page got its long section and more questions.
   const serviceRoutes: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${site.url}/repairs/${s.slug}`,
-    lastModified,
+    lastModified: "2026-11-13",
   }))
 
   const guideRoutes: MetadataRoute.Sitemap = guides.map((g) => ({

@@ -14,7 +14,7 @@ import { Points } from "@/components/points"
 import { PriceLine } from "@/components/price-line"
 import { ReviewCard } from "@/components/review-card"
 import { ServiceCard } from "@/components/service-card"
-import { Heading, Text } from "@/components/typography"
+import { Heading, Linked, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, guidesPage, repairsPage, site } from "@/content"
@@ -146,25 +146,41 @@ export default async function ServicePage({ params }: PageProps) {
         </Container>
       </Section>
 
-      {proof.length > 0 && (
-        <Section>
-          <Container>
-            <Heading as="h2" size="display-md" className="sm:text-display-lg">
-              {repairsPage.proofTitle}
-            </Heading>
-            <ul className="mt-8 grid gap-4 lg:grid-cols-3">
-              {proof.map((r) => (
-                <li key={r.author}>
-                  <ReviewCard review={r} />
-                </li>
-              ))}
-            </ul>
-          </Container>
-        </Section>
-      )}
+      {/* The long read: what is repaired, the signs, what to do first, how the bench decides. */}
+      <Section>
+        <Container>
+          <article className="max-w-3xl">
+            <Text size="body-md" tone="ink">
+              {service.intro}
+            </Text>
+            {service.detail.map((d) => (
+              <section key={d.h} className="mt-12">
+                <Heading as="h2" size="title-lg">
+                  {d.h}
+                </Heading>
+                {d.p.map((para, i) => (
+                  <Text key={i} className="mt-3">
+                    {/* The link goes on the first paragraph that holds its phrase. */}
+                    {i === d.p.findIndex((x) => d.link && x.includes(d.link.phrase)) ? <Linked link={d.link}>{para}</Linked> : para}
+                  </Text>
+                ))}
+                {d.list && (
+                  <ul className="mt-4 list-disc space-y-2 pl-5 text-body-md text-body marker:text-steel">
+                    {d.list.map((item) => (
+                      <li key={item} className="pl-1">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </article>
+        </Container>
+      </Section>
 
       {/* How it works */}
-      <Section tone={proof.length > 0 ? "panel" : "paper"}>
+      <Section tone="panel">
         <Container>
           <Heading as="h2">{service.howItWorksTitle ?? repairsPage.howItWorks}</Heading>
           <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -182,6 +198,23 @@ export default async function ServicePage({ params }: PageProps) {
           </ol>
         </Container>
       </Section>
+
+      {proof.length > 0 && (
+        <Section>
+          <Container>
+            <Heading as="h2" size="display-md" className="sm:text-display-lg">
+              {repairsPage.proofTitle}
+            </Heading>
+            <ul className="mt-8 grid gap-4 lg:grid-cols-3">
+              {proof.map((r) => (
+                <li key={r.author}>
+                  <ReviewCard review={r} />
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      )}
 
       {/* FAQ */}
       {service.faq.length > 0 && (

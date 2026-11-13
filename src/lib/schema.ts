@@ -78,7 +78,7 @@ export const serviceSchema = (s: Service) => ({
   "@id": `${serviceUrl(s)}#service`,
   name: s.title,
   serviceType: s.title,
-  description: `${s.short} ${s.long}`,
+  description: s.intro,
   url: serviceUrl(s),
   image: `${site.url}/images/${s.image}-og.jpg`,
   // Named here too: the full store node is only on the home, about and visit pages.
