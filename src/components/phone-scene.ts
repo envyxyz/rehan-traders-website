@@ -169,6 +169,10 @@ export async function createPhone(canvas: HTMLCanvasElement, { part, open: start
 
   let open = startOpen
   let since = -Infinity
+  // A press mid-move turns back from where the layers are, so fast presses never jump.
+  let from = startOpen ? 1 : 0
+  let apart = from
+  let span = MOVE_MS
   const drag = { yaw: 0, pitch: 0 }
   let held = false
   let sway = reduced ? 0 : 1 // eases to 0 while held, so grabbing and letting go never jump
@@ -183,8 +187,9 @@ export async function createPhone(canvas: HTMLCanvasElement, { part, open: start
   }
 
   function update(now: number) {
-    const moved = reduced ? 1 : easeInOut(clamp01((now - since) / MOVE_MS))
-    place(open ? moved : 1 - moved)
+    const moved = reduced ? 1 : easeInOut(clamp01((now - since) / span))
+    apart = from + ((open ? 1 : 0) - from) * moved
+    place(apart)
     sway += ((reduced || held ? 0 : 1) - sway) * 0.06
     pose.rotation.set(POSE.pitch + drag.pitch, POSE.yaw + drag.yaw + Math.sin(now / 2600) * SWAY * sway, 0)
     lit.emissiveIntensity = reduced ? 0.2 : 0.15 + 0.1 * Math.sin(now / 700)
@@ -204,7 +209,7 @@ export async function createPhone(canvas: HTMLCanvasElement, { part, open: start
   let visible = true
   const tick = (now: number) => {
     raf = 0
-    if (update(now) || now - since < MOVE_MS) wake()
+    if (update(now) || now - since < span) wake()
     renderer.render(scene, camera)
   }
   const wake = () => {
@@ -234,8 +239,10 @@ export async function createPhone(canvas: HTMLCanvasElement, { part, open: start
   return {
     /** Takes the phone apart or puts it back. Returns the new state. */
     toggle() {
+      from = apart
       open = !open
       since = performance.now()
+      span = Math.max(1, MOVE_MS * Math.abs((open ? 1 : 0) - from))
       wake()
       return open
     },

@@ -337,7 +337,8 @@ function MobileNav() {
   const paint = React.useCallback(({ y, shown, linked, still }: Headroom) => {
     const el = header.current
     if (!el) return
-    el.style.setProperty("--nav-y", still || shown ? "0px" : `${-(linked ? y : HEADER_HEIGHT)}px`)
+    // While linked it only follows the page: a small scroll up near the top used to snap it back in with no transition.
+    el.style.setProperty("--nav-y", still ? "0px" : linked ? `${-y}px` : shown ? "0px" : `${-HEADER_HEIGHT}px`)
     el.style.transition = linked && !still ? "none" : "" // linked moves with the finger; a transition would trail behind it
     if (solid.current) solid.current.style.opacity = String(still ? Number(y > 0) : linked ? 0 : Math.min(y / HEADER_HEIGHT, 1))
   }, [])
