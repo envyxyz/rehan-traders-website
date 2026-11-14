@@ -21,6 +21,7 @@ import { actions, breadcrumbs, guidesPage, repairsPage, site } from "@/content"
 import { guides, reviews, services } from "@/content-large"
 import { faqSchema, serviceSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
+import { cn } from "@/lib/utils"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -181,21 +182,28 @@ export default async function ServicePage({ params }: PageProps) {
 
       {/* How it works */}
       <Section tone="panel">
-        <Container>
-          <Heading as="h2">{service.howItWorksTitle ?? repairsPage.howItWorks}</Heading>
-          <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {service.howItWorks.map((st) => (
-              <li key={st.step} className="rounded-xl border border-hairline bg-card p-6">
-                <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
-                  {st.step}
-                </span>
-                <h3 className="mt-3 font-display text-title-md text-ink">{st.title}</h3>
-                <Text tone="muted" className="mt-2">
-                  {st.text}
-                </Text>
-              </li>
-            ))}
-          </ol>
+        <Container className="grid items-start gap-8 lg:grid-cols-12 lg:gap-12">
+          <div className={service.detailPhoto ? "lg:col-span-8" : "lg:col-span-12"}>
+            <Heading as="h2">{service.howItWorksTitle ?? repairsPage.howItWorks}</Heading>
+            <ol className={cn("mt-10 grid gap-6 sm:grid-cols-2", !service.detailPhoto && "lg:grid-cols-4")}>
+              {service.howItWorks.map((st) => (
+                <li key={st.step} className="rounded-xl border border-hairline bg-card p-6">
+                  <span aria-hidden className="block font-display text-display-md text-signal tabular-nums">
+                    {st.step}
+                  </span>
+                  <h3 className="mt-3 font-display text-title-md text-ink">{st.title}</h3>
+                  <Text tone="muted" className="mt-2">
+                    {st.text}
+                  </Text>
+                </li>
+              ))}
+            </ol>
+          </div>
+          {service.detailPhoto && (
+            <div className="lg:col-span-4 lg:pt-20">
+              <Img name={service.detailPhoto} sizes="(min-width: 1024px) 380px, calc(100vw - 2rem)" className="aspect-4/3 w-full rounded-xl" />
+            </div>
+          )}
         </Container>
       </Section>
 

@@ -70,7 +70,9 @@
   },
   {
     "name": "screen-replacement",
-    "sources": ["scripts/images/out/glass-separation.png"],
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
     "aspect": "3:2",
     "prompt": "Same bench, red silicone mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, fitting a new complete display panel onto an opened Android smartphone; the old display with green vertical lines lies face-up beside it. A plastic opening pick and a precision screwdriver nearby.",
     "alt": "A new display being fitted to a phone, the old screen with green lines beside it"
@@ -132,5 +134,77 @@
     "aspect": "3:2",
     "prompt": "Exactly the same photo as the one attached: the same phone, position, light, wallpaper and framing. The only change: the front glass is now flawless and new, with no cracks.",
     "alt": "Placeholder: the same phone with new front glass after repair"
+  },
+  {
+    "name": "touch-glass-laminate",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, lowering a new clear front glass onto a phone display panel held in a black alignment mould, a small UV curing lamp beside it. No logos.",
+    "alt": "New front glass being aligned onto a phone display in a lamination mould"
+  },
+  {
+    "name": "fold-hinge",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, holding an opened foldable phone flat with its inner screen removed and the hinge exposed, fine tweezers in one hand. No logos.",
+    "alt": "Opened foldable phone with the inner screen removed and the hinge exposed"
+  },
+  {
+    "name": "iphone-camera",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, lifting a rear camera module out of an opened iPhone-style phone with fine tweezers. No logos, no brand marks.",
+    "alt": "Rear camera module being lifted out of an opened iPhone"
+  },
+  {
+    "name": "screen-test",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hand, no face, holding a repaired smartphone over the bench, its new screen switched on and showing a plain white test screen with no text. A plastic opening pick nearby.",
+    "alt": "A repaired phone with its new screen switched on to a plain white test screen"
+  },
+  {
+    "name": "usb-meter",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a smartphone lying on the bench, connected by a cable to a small inline USB power meter whose tiny display is out of focus and unreadable. A technician's gloved hand, no face, adjusting the cable.",
+    "alt": "A phone on the bench connected to a USB power meter for a charging test"
+  },
+  {
+    "name": "ultrasonic-clean",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, lowering a bare smartphone logic board in a small basket into a compact stainless ultrasonic cleaner filled with clear liquid. No labels or text.",
+    "alt": "A phone logic board being lowered into an ultrasonic cleaner after water damage"
+  },
+  {
+    "name": "hot-air-rework",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a smartphone logic board held in a board holder, a hot-air rework nozzle hovering over one chip, fine tweezers ready beside it, the base of a microscope visible at the edge. No text.",
+    "alt": "Hot-air rework on a chip of a phone logic board"
+  },
+  {
+    "name": "ipad-digitizer",
+    "sources": [
+      "scripts/images/out/glass-separation.png"
+    ],
+    "aspect": "3:2",
+    "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, opening a tablet with thin plastic picks along the edge of its cracked front glass, the tablet lying flat on the mat. No logos.",
+    "alt": "A tablet with cracked glass being opened with plastic picks"
   }
 ]

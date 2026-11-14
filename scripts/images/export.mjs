@@ -54,7 +54,7 @@ for (const j of jobs) {
   const side = JSON.parse(await readFile(path.join(OUT, j.name + '.json'), 'utf8').catch(() => '{}'));
   // XMP travels with every file: what it shows, and an IPTC flag that it is AI-made (Google reads DigitalSourceType).
   // Clean-ups of a real photo are "composite"; new scenes are fully generated.
-  const edit = !j.prompt.startsWith('New') && !!j.sources[0] && !j.sources[0].startsWith('out:');
+  const edit = j.sources.some((s) => s.includes('growth/Photos'));
   const type = side.model === 'photo' ? 'digitalCapture' : edit ?'compositeWithTrainedAlgorithmicMedia' : 'trainedAlgorithmicMedia';
   const xmp = `<x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:Iptc4xmpExt="http://iptc.org/std/Iptc4xmpExt/2008-02-29/" Iptc4xmpExt:DigitalSourceType="http://cv.iptc.org/newscodes/digitalsourcetype/${type}"><dc:title><rdf:Alt><rdf:li xml:lang="x-default">${esc(j.alt)}</rdf:li></rdf:Alt></dc:title><dc:creator><rdf:Seq><rdf:li>Rehan Traders</rdf:li></rdf:Seq></dc:creator><dc:rights><rdf:Alt><rdf:li xml:lang="x-default">© Rehan Traders, Hafeez Center, Lahore</rdf:li></rdf:Alt></dc:rights></rdf:Description></rdf:RDF></x:xmpmeta>`;
   const meta = await sharp(file).metadata();

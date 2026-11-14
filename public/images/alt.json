@@ -117,5 +117,26 @@
     "height": 848,
     "placeholder": false,
     "ai": true
+  },
+  "touch-glass-laminate": {
+    "alt": "New front glass being aligned onto a phone display in a lamination mould",
+    "width": 1264,
+    "height": 848,
+    "placeholder": false,
+    "ai": true
+  },
+  "fold-hinge": {
+    "alt": "Opened foldable phone with the inner screen removed and the hinge exposed",
+    "width": 1264,
+    "height": 848,
+    "placeholder": false,
+    "ai": true
+  },
+  "screen-test": {
+    "alt": "A repaired phone with its new screen switched on to a plain white test screen",
+    "width": 1264,
+    "height": 848,
+    "placeholder": false,
+    "ai": true
   }
 }

@@ -16,7 +16,8 @@ export const dynamic = "force-static"
 export default function sitemap(): MetadataRoute.Sitemap {
   // Bump this date when meaningful site content changes (copy, services, images).
   // 7 Nov 2026: every page got a new title and description, and some got in-copy links.
-  const lastModified = "2026-11-07"
+  // 15 Nov 2026: repair pages got a second (detail) photo.
+  const lastModified = "2026-11-15"
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -84,7 +85,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 13 Nov 2026: every repair page got its long section and more questions.
   const serviceRoutes: MetadataRoute.Sitemap = services.map((s) => ({
     url: `${site.url}/repairs/${s.slug}`,
-    lastModified: "2026-11-13",
+    lastModified: "2026-11-15",
+    images: [s.image, s.detailPhoto].filter(Boolean).map((n) => `${site.url}/images/${n}-1280.webp`),
   }))
 
   const guideRoutes: MetadataRoute.Sitemap = guides.map((g) => ({

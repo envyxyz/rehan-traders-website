@@ -15,10 +15,12 @@ export const dynamic = "force-static"
  * - Training-only crawlers (GPTBot, ClaudeBot, Google-Extended) are allowed
  *   here because the business benefits from appearing in AI-generated answers
  *   and has no licensing objection.  Re-evaluate if that changes.
- * - /book/confirmed, /api/, and /dev/ are disallowed for everyone.
+ * - /api/ and /dev/ are disallowed for everyone. /book/confirmed is NOT disallowed: it carries
+ *   noindex, and Google can only see that tag if it may crawl the page (Search Console showed
+ *   it as "Blocked by robots.txt" while it was disallowed).
  */
 export default function robots(): MetadataRoute.Robots {
-  const disallow = ["/book/confirmed", "/api/", "/dev/"]
+  const disallow = ["/api/", "/dev/"]
 
   return {
     rules: [
