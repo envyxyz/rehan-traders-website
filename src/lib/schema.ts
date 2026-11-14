@@ -81,7 +81,7 @@ export const serviceSchema = (s: Service) => ({
   description: s.intro,
   url: serviceUrl(s),
   image: `${site.url}/images/${s.image}-og.jpg`,
-  // Named here too: the full store node is only on the home, about and visit pages.
+  // Short reference; the full store node is output beside it on every repair page.
   provider: { "@type": "MobilePhoneStore", "@id": storeId, name: site.name, url: site.url, telephone: site.phone.dial, address },
   areaServed: lahore,
   availableChannel: { "@type": "ServiceChannel", serviceLocation: { "@id": storeId }, servicePhone: { "@type": "ContactPoint", telephone: site.phone.dial }, serviceUrl: serviceUrl(s) },
@@ -116,18 +116,3 @@ export const articleSchema = (g: Guide) => ({
   publisher: { "@type": "Organization", "@id": storeId, name: site.name, logo: { "@type": "ImageObject", url: `${site.url}${site.logo}` } },
   about: g.services.map((slug) => ({ "@id": `${site.url}/repairs/${slug}#service` })),
 })
-
-/** Only for a section whose list is real steps someone can follow. Google no longer shows HowTo results; AI answers still read it. */
-export const howToSchema = (g: Guide) => {
-  const s = g.sections.find((x) => x.steps && x.list)
-  return s
-    ? {
-        "@context": "https://schema.org",
-        "@type": "HowTo",
-        name: s.h,
-        description: s.answer,
-        url: guideUrl(g),
-        step: s.list!.map((text, i) => ({ "@type": "HowToStep", position: i + 1, text })),
-      }
-    : null
-}

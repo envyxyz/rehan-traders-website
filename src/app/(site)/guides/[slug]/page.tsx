@@ -16,7 +16,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, guidesPage, repairsPage, site } from "@/content"
 import { guides, services } from "@/content-large"
-import { articleSchema, faqSchema, howToSchema } from "@/lib/schema"
+import { articleSchema, faqSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 import { cn } from "@/lib/utils"
 
@@ -48,13 +48,11 @@ export default async function GuidePage({ params }: PageProps) {
   if (!guide) notFound()
 
   const repairs = services.filter((s) => guide.services.includes(s.slug))
-  const howTo = howToSchema(guide)
 
   return (
     <>
       <JsonLd data={articleSchema(guide)} />
       <JsonLd data={faqSchema(guide.faq)} />
-      {howTo && <JsonLd data={howTo} />}
       <Section first>
         <Container>
           <Breadcrumbs items={[{ label: breadcrumbs.guides, href: "/guides" }, { label: guide.title }]} className="mb-3" />

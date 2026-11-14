@@ -19,7 +19,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, guidesPage, repairsPage, site } from "@/content"
 import { guides, reviews, services } from "@/content-large"
-import { faqSchema, serviceSchema } from "@/lib/schema"
+import { faqSchema, serviceSchema, storeSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 import { cn } from "@/lib/utils"
 
@@ -65,6 +65,7 @@ export default async function ServicePage({ params }: PageProps) {
   return (
     <>
       <JsonLd data={serviceSchema(service)} />
+      <JsonLd data={storeSchema} />
       {service.faq.length > 0 && <JsonLd data={faqSchema(service.faq)} />}
       <Section first className="flex flex-col justify-center">
         <Container>
