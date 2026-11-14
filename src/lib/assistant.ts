@@ -24,6 +24,7 @@ export const knowledge = [
   `Outside Lahore: ${facts.courier}`,
   `Checking: ${facts.check}`,
   `iPhone batteries: ${facts.battery} This is only about batteries and what the customer chooses: never say the shop's parts are original.`,
+  `Brands: ${facts.brands} Never say a particular model is or is not repaired; ask for the exact model.`,
   `Foldables: ${facts.foldables} If a customer names any foldable, say yes, the shop repairs it.`,
   `Water-resistance seal: ${facts.seal} Never say the phone is water resistant afterwards.`,
   `Warranty: ${facts.warranty} Never state a number of days or months.`,

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { BookButton } from "@/components/book-button"
+import { BrandPage } from "@/components/brand-page"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
 import { Icon, WhatsAppIcon } from "@/components/icon"
@@ -18,7 +19,7 @@ import { Heading, Linked, Text } from "@/components/typography"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { actions, breadcrumbs, guidesPage, repairsPage, site } from "@/content"
-import { guides, reviews, services } from "@/content-large"
+import { brands, guides, reviews, services } from "@/content-large"
 import { faqSchema, serviceSchema, storeSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 import { cn } from "@/lib/utils"
@@ -28,12 +29,14 @@ type PageProps = {
 }
 
 export function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }))
+  return [...services, ...brands].map((s) => ({ slug: s.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const service = services.find((s) => s.slug === slug)
+  const brand = brands.find((b) => b.slug === slug)
+  if (brand) return pageMeta({ title: brand.seo.title, description: brand.seo.description, path: `/repairs/${brand.slug}` })
   if (!service) return {}
 
   return pageMeta({ title: service.seo.title, description: service.seo.description, path: `/repairs/${service.slug}` })
@@ -42,6 +45,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ServicePage({ params }: PageProps) {
   const { slug } = await params
   const service = services.find((s) => s.slug === slug)
+  const brand = brands.find((b) => b.slug === slug)
+  if (brand) return <BrandPage brand={brand} />
   if (!service) notFound()
 
   const relatedServices = services.filter((s) => service.related.includes(s.slug))

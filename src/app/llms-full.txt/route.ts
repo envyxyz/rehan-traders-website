@@ -1,5 +1,5 @@
 import { aboutPage, faq, facts, faqPage, priceMode, privacyPage, problems, repairsPage, reviewsPage, site, termsPage, visitPage, visit, process as processSteps } from "@/content"
-import { guides, reviews, services } from "@/content-large"
+import { brands, guides, reviews, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -78,6 +78,27 @@ const sections: string[] = [
       }),
       "",
     ] : []),
+  ]),
+
+  // ── Each brand page ───────────────────────────────────────────────────
+  ...brands.flatMap((b) => [
+    hr(),
+    `## ${b.title}`,
+    `URL: ${site.url}/repairs/${b.slug}`,
+    "",
+    b.short,
+    "",
+    ...b.intro.flatMap((p) => [p.text, ""]),
+    `### ${b.seriesTitle}`,
+    ...b.series.flatMap((x) => [`#### ${x.h}`, x.text, ""]),
+    `### ${b.differTitle}`,
+    ...b.differ.flatMap((x) => [`#### ${x.h}`, x.text, ""]),
+    `### Questions about ${b.name} repair`,
+    ...b.faq.map((f) => `Q: ${f.q}
+A: ${f.a}
+`),
+    `Repairs: ${b.repairs.map((slug) => `${site.url}/repairs/${slug}`).join(", ")}`,
+    "",
   ]),
 
   hr(),

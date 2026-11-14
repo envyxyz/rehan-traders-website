@@ -215,6 +215,10 @@ export const services: Service[] = [
       { h: "Before you bring your iPhone in", p: ["Back up to iCloud or a computer if the screen still works. If the phone has been in water, do not charge it or switch it on: current through wet circuits causes board damage. Do not press on cracked glass, and never use a pin or needle in the charging port.", "If the battery has swollen and the screen is lifting, stop charging it, do not press it back down and do not heat it. Bring it in as it is."] },
       { h: "How an iPhone is checked and repaired at the bench", p: ["Every iPhone goes on a numbered job card. The check tests the display, Face ID, battery health and cameras so faults already there are written down before work starts. A cracked front glass with a good display goes to heat and vacuum separation; power and charging faults are traced with a multimeter and schematics under the microscope.", "After the repair, touch and sensors are tested again. The water-resistance seal is re-applied on request, but no repaired phone should be treated as water resistant. The iPhone is then sealed in a pouch for collection."] },
       { h: "iPhone not charging: port, battery or board?", p: ["Lint packed into the port and worn pins are common, but not the only cause. The battery can be at fault, and so can the charging circuit on the logic board, which a cheap car charger or a power surge can damage. In that case even a new port will not help.", "At the bench, the multimeter and schematics show whether power gets through the port to the charging chips. If the port passes power but the board does not take it, the repair is micro-soldering on the board, not a new connector."], link: { phrase: "Lint packed into the port", href: "/guides/phone-not-charging" } },
+      { h: "Face ID and Touch ID: which iPhone has which?", p: ["iPhones from the X onward unlock with Face ID, and the iPhone 8 and the SE keep Touch ID. Face ID relies on a small set of sensors at the top of the screen, so a drop or water can stop it working while the rest of the phone looks fine.", "The check at Shop G-88 tests Face ID along with the display, battery health and cameras, and tells you whether the fault is one sensor, a cable or the board."] },
+      { h: "Back glass: both faces are glass from the iPhone 8", p: ["From the iPhone 8 the back is glass too, so one fall can crack both faces. Cracked back glass does not always mean damage inside. The repair is bench work: the broken glass comes off, the frame is cleaned and new glass is fitted."] },
+      { h: "Lightning or USB-C: the iPhone 15 changed the port", p: ["The iPhone 15 moved from the Lightning port to USB-C. On either port, a phone that will not charge may only have lint packed into it, and that is cleaned first. If the pins are broken the port is replaced; if the port is fine, the battery or the board is next."], link: { phrase: "the battery or the board", href: "/repairs/battery-charging" } },
+      { h: "Other Apple devices: iPads", p: ["For tablets, Rehan Traders mainly repairs Apple iPads: cracked glass, screens, batteries and charging. An iPad gets the same free check as an iPhone, and the iPad repair page has the details."], link: { phrase: "iPad repair page", href: "/repairs/ipad-tablet" } },
     ],
   },
   {
@@ -670,9 +674,9 @@ export type Guide = {
   }[]
   faq: { q: string; a: string }[]
   /** The infographic: a numbered drawing (components/figures) and its key. Every line restates this guide's own text. */
-  figure: { title: string; caption: string; items: { label: string; text: string }[] }
+  figure?: { title: string; caption: string; items: { label: string; text: string }[] }
   /** The part the 3D phone highlights for this guide. */
-  part: PhonePart
+  part?: PhonePart
   /** Repair slugs this guide leads to. */
   services: string[]
   published: string
@@ -792,6 +796,26 @@ export const guides: Guide[] = [
           "It can. Some lines stay the same for months, others spread or turn into a black patch, and there is no reliable way to predict which. If the phone also got wet or was dropped, have it checked sooner, because corrosion or a cracked panel tends to get worse.",
       },
       {
+        h: "What do green, pink, white and yellow lines mean?",
+        answer:
+          "The colour tells you little about the cause. Green, pink, white and yellow lines all come from the display panel or its connection, and a pink line is not a milder fault than a green one. What matters is whether the line stays through a restart, spreads, or shows on the startup logo.",
+      },
+      {
+        h: "Lines appeared after I dropped the phone (gir jane ke baad line aa gayi). Is it the glass?",
+        answer:
+          "Probably the panel, even when the glass looks fine. A drop can crack the display layer under uncracked glass or loosen the connector behind it. New glass will not remove a line, and the free check looks at the panel and its connection before anything is replaced.",
+      },
+      {
+        h: "Lines appeared after a software update. Did the update cause it?",
+        answer:
+          "An update does not physically damage a panel, but a restart can make a weakened panel show its fault, so it feels as if the update caused it. The screenshot test settles it: if the line is missing from a screenshot, it is in the hardware.",
+      },
+      {
+        h: "Will a force restart or a factory reset remove the lines?",
+        answer:
+          "No. A force restart only restarts the phone, and a factory reset erases your data without touching the display hardware. Back up what you can before the check if the phone still works.",
+      },
+      {
         h: `Getting a lined screen checked at ${atShop}`,
         answer: `${site.name} checks the phone free of cost, including the screen connection, and tells you what is wrong and what it will cost before any work. If the panel has to be changed, you hear the price first and decide. Send the model and a photo of the line on WhatsApp to ${site.phone.display} for a quote.`,
       },
@@ -800,6 +824,8 @@ export const guides: Guide[] = [
       { q: "Screen par line aa gayi. Will a factory reset fix it?", a: "No. If the line shows on the startup logo or is missing from a screenshot, it is in the display hardware and a reset will not touch it." },
       { q: "Does a line mean only the glass is broken?", a: "No. Lines come from the display panel or its connection, under the glass. New glass alone will not fix a line." },
       { q: "A pink or green line appeared after my phone got wet. What should I do?", a: "Turn it off, do not charge it, and get it checked soon. Liquid at the screen connector can cause lines, and corrosion spreads with time." },
+      { q: "Screen par white line aa gayi hai, kya karun?", a: "Take a screenshot while it shows. If the line is not in the screenshot, it is in the display hardware, and the panel needs a check. Send the model and a photo on WhatsApp for a quote." },
+      { q: "Phone gir gaya aur screen par yellow line aa gayi. Is the glass the problem?", a: "A line after a drop usually means the panel or its connection, even with uncracked glass. The free check confirms it." },
     ],
     figure: {
       title: "Line on a phone screen: hardware or software?",
@@ -1063,6 +1089,16 @@ export const guides: Guide[] = [
           "When a known-good battery, cable and screen do not bring it back, or it died after water, a drop or a power surge, the fault is usually on the main board. Board-level repair is done under a microscope. Whether it can be saved depends on the damage, which the check finds out.",
       },
       {
+        h: "My phone will not turn on after a drop (gir jane ke baad on nahi ho raha). What now?",
+        answer:
+          "Do not keep pressing the power button or plugging and unplugging chargers. Charge it for an hour on a known-good adapter, then try the force restart for your brand. If the phone vibrates, rings or shows up on a computer, it is on and the screen is the fault. If nothing works, the battery or the board took the hit.",
+      },
+      {
+        h: "My phone will not turn on after an update (update ke baad on nahi ho raha)?",
+        answer:
+          "If the logo appears and the phone restarts again and again, it is powered, and the fault points to software or storage more than to a dead battery. Do not factory reset it before you have asked about your data, because a reset erases it. If there is no logo at all, treat it as a power fault and have it checked.",
+      },
+      {
         h: `Getting a dead phone checked at ${atShop}`,
         answer: `${site.name} checks dead phones free of cost at an open bench with a microscope, and tells you what is wrong, whether it can be repaired, what it will cost and how long it will take. Call or WhatsApp ${site.phone.display}, or send it by courier from outside Lahore.`,
       },
@@ -1071,6 +1107,8 @@ export const guides: Guide[] = [
       { q: "Phone vibrates but the screen stays black. What is wrong?", a: "The phone is on; the display panel or its connection is the fault. A screen check tells you whether the panel needs changing." },
       { q: "Mobile on nahi ho raha. Is my data lost?", a: "Not necessarily. If the board can be repaired, the data on it usually stays. Whether it can be recovered depends on the damage." },
       { q: "Does a force restart delete anything?", a: "No. A force restart only restarts the phone. A factory reset is different and erases data." },
+      { q: "Phone gir gaya, ab on nahi ho raha. Can the data be saved?", a: "Often, if the board can be repaired. Do not keep trying to start it. The free check at Shop G-88 tells you what the damage is and whether your data can be recovered." },
+      { q: "Phone update ke baad logo par atka hua hai. Should I reset it?", a: "Not yet. A reset erases the data. Bring it in for the free check first." },
     ],
     figure: {
       title: "Phone not turning on: what to check, in order",
@@ -1154,5 +1192,683 @@ export const guides: Guide[] = [
     part: "glass",
     services: ["touch-glass-replacement", "screen-replacement"],
     ...g2,
+  },
+  {
+    slug: "what-decides-phone-repair-price-lahore",
+    title: "What decides a phone repair price in Lahore?",
+    seo: {
+      title: "What decides a phone repair price in Lahore",
+      description: "Why one phone repair costs more than another in Lahore: the model, glass or screen, part quality and parts supply.",
+    },
+    answer:
+      "Five things decide it: the model, what is actually damaged (glass, display or board), the quality of part you choose, whether that part is easy to get this week, and how much bench time the job takes. Nobody can quote honestly without knowing the model and seeing the fault.",
+    sections: [
+      {
+        h: "What makes one phone repair cost more than another?",
+        answer:
+          "The phone and the fault, together. A cracked glass on a common model, a failed display on a foldable and a dead board after water are three different jobs with different parts, different risk and different hours at the bench. The table shows what moves the price and why.",
+        table: {
+          head: ["What changes", "Why it moves the price"],
+          rows: [
+            ["The model", "Rare, new or curved-display phones have fewer parts in the market and take more care to open."],
+            ["The damaged layer", "Glass only, the whole display, or a board fault: each needs different parts and a different amount of work."],
+            ["Part quality", "Parts come in more than one quality. A better part costs more, and warranty depends on what you choose."],
+            ["Parts supply", "Wholesale part prices change daily, so the same repair can cost a different amount next week."],
+            ["Bench time", "Separating glass, micro-soldering a chip and re-seating a hinge take different hours."],
+          ],
+        },
+      },
+      {
+        h: "Why does glass-only cost less than a new screen (glass change ya panel change)?",
+        answer:
+          "With glass-only repair, the display your phone came with stays and only the cracked top layer is replaced, so you pay for new glass and the work to separate and laminate it. A panel change buys a whole new display. It only works when the picture under the cracks is clean.",
+        link: { phrase: "glass-only repair", href: touchGlassHref },
+      },
+      {
+        h: "Does the quality of the part change the price?",
+        answer:
+          "Yes, and the choice is yours. Parts for the same phone are sold in different qualities, and a cheaper one costs less and may come with different warranty terms. Ask which quality you are being quoted before you agree, and what it means for warranty on that repair.",
+      },
+      {
+        h: "Why does the price change from week to week (rate roz badal jata hai)?",
+        answer:
+          "Because the parts do. Prices in the mobile parts market move daily, so a number printed on a website can be wrong by the time you read it. That is why Rehan Traders does not publish prices online and quotes each phone when it is checked.",
+      },
+      {
+        h: "Why can't a shop quote a real price without seeing the phone?",
+        answer:
+          "Two phones of the same model can need different repairs. One has a cracked glass over a healthy display; the other has a damaged panel behind a cracked glass, and a drop can also hurt the board. A price given without checking is a guess, and the real figure can land above or below it.",
+        list: [
+          "Give the exact model, not just the brand.",
+          "Say what you see: lines, black patches, no touch, no charging.",
+          "Send a photo of the screen or the damage.",
+          "Expect to hear a firm price only after a check.",
+        ],
+      },
+      {
+        h: "How do I get a price I can trust?",
+        answer: `Get it checked. At ${atShop}, the check is free: the shop tells you what the fault is, whether it can be repaired, what it will cost and how long it will take, and you decide before any work starts. If you can't visit, send the model and photos on WhatsApp.`,
+      },
+    ],
+    faq: [
+      { q: "Mobile screen change ka kitna kharcha aata hai?", a: "It depends on the model and on whether only the glass or the whole display has to change, and parts prices move daily, so no honest number fits every phone. Send your model and a photo on WhatsApp to 0305 8874839 for a quote, or bring it in for the free check." },
+      { q: "Why doesn't Rehan Traders list prices on the website?", a: "Parts prices change daily and every phone differs, so a listed price would be wrong for many customers. You get the price after the free check, before work starts." },
+      { q: "Is checking my phone really free?", a: facts.check },
+      { q: "Will the price change after I agree?", a: "You hear the price before work starts, and you decide whether to go ahead." },
+      { q: "Does a cheaper part mean a worse repair?", a: "Not always, but it can mean different warranty terms and a different finish. Ask what quality is being quoted, and ask what that means for warranty on your repair." },
+    ],
+    services: ["touch-glass-replacement", "screen-replacement"],
+    published: "2026-11-15",
+    updated: "2026-11-15",
+  },
+]
+
+/**
+ * One page per phone brand the shop repairs (Ameer, 15 Nov 2026; PRODUCT.md): /repairs/<slug>. Apple is the iPhone repair page and
+ * foldables are the foldables page, so neither is here. Brand-level claims only: no model is said to be repaired, no price, no
+ * warranty length, no "original parts". Each page needs 600+ words of its own and under 30% text shared with another brand page
+ * (.agency/build/brand-pages/overlap.py). `says` are Roman Urdu phrasings people use; each links to the repair that answers it.
+ */
+export type Brand = {
+  slug: string
+  /** As written in running text. */
+  name: string
+  /** The h1 and the Service name. */
+  title: string
+  short: string
+  image: string
+  detailPhoto?: string
+  intro: { text: string; link?: InlineLink }[]
+  seriesTitle: string
+  series: { h: string; text: string; link?: InlineLink }[]
+  /** Which repair for which sign: a table in the brand's own terms. */
+  table: { title: string; head: string[]; rows: string[][] }
+  differTitle: string
+  differ: { h: string; text: string; link?: InlineLink }[]
+  says: { say: string; service: string }[]
+  answers: { model: string; time: string }
+  faq: { q: string; a: string }[]
+  /** Repair page slugs, at least three. */
+  repairs: string[]
+  /** Guide slugs. */
+  guides: string[]
+  /** Brand slugs linked at the foot. */
+  others: string[]
+  /** Authors of reviews in `reviews.items` that name this brand, text as written. */
+  proof?: string[]
+  seo: { title: string; description: string }
+}
+
+export const brands: Brand[] = [
+  {
+    slug: "samsung",
+    name: "Samsung",
+    title: "Samsung repair in Lahore",
+    short: "Galaxy S, A and M screens, glass, charging and water damage, checked free at Hafeez Center.",
+    image: "machine-corner",
+    detailPhoto: "microscope-bench",
+    intro: [
+      { text: "Galaxy phones reach Hafeez Center in every shape: the A series most people carry, the S series flagships, and older Note phones whose owners refuse to retire them. Rehan Traders, Shop G-88, repairs Samsung phones at an open bench and starts with a free check of what is actually broken." },
+      { text: "The check matters more on a Galaxy than on most phones, because the display is AMOLED and the damage under a crack is not always the crack. A clean picture usually means the glass can be replaced on its own. Lines or dark patches mean the panel. Foldable Galaxy Z Fold and Z Flip phones are covered on the foldables page.", link: { phrase: "foldables page", href: "/repairs/galaxy-z-fold-flip" } },
+    ],
+    seriesTitle: "What goes wrong on Galaxy phones",
+    series: [
+      {
+        h: "S and S Ultra: curved edges and coloured lines",
+        text: "The Ultra models from the S20 to the S23 have glass that curves over the sides. It looks good, and it chips at the corners when the phone lands on them. A crack along a curved edge can sit on top of a healthy picture, so the check looks at the picture before anyone says new screen. A green, pink or white vertical line that stays through restarts is different: that is the panel, and new glass cannot remove it.",
+        link: { phrase: "new glass cannot remove it", href: "/guides/lines-on-phone-screen" },
+      },
+      {
+        h: "A series: the everyday faults",
+        text: "The A series phones in Lahore pockets fail in ordinary ways: glass cracked by a fall, a charging port that wobbles, a battery that no longer lasts the day. If the phone throws up a moisture warning in the charging port and keeps refusing to charge after it has dried, the port or the small board under it needs a look.",
+        link: { phrase: "charging port", href: "/repairs/battery-charging" },
+      },
+      {
+        h: "Water, and the photos inside",
+        text: "A Galaxy S22 Ultra that went into water and came back with its data is described in one of the shop's Google reviews. Water damage is board work, and the first job is getting the battery out of the circuit before corrosion spreads.",
+        link: { phrase: "Water damage", href: "/repairs/water-damage-data-recovery" },
+      },
+    ],
+    table: {
+      title: "Which repair does your Galaxy need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["Cracked glass, clean picture, touch fine", "Glass only; the Galaxy keeps its display"],
+        ["A green, pink or white line that stays", "A new panel; glass cannot remove a line"],
+        ["Crack at the curved edge of an Ultra", "Free check first; an edge crack does not always reach the picture"],
+        ["Moisture warning that stays after drying", "The charging port, or the board under it, needs a look"],
+        ["Wet Galaxy that will not start", "Water damage repair, with your data tried first"],
+      ],
+    },
+    differTitle: "What is different about repairing a Galaxy",
+    differ: [
+      { h: "Glass only, when the panel is fine", text: "Touch glass replacement keeps the display your Galaxy came with and changes only the cracked top layer. It suits a phone whose picture and touch still work everywhere. Curved glass takes more care to separate than flat glass, so the shop confirms your exact model before it promises glass-only." },
+      { h: "The fingerprint reader decides which screen fits", text: "Galaxy S flagships read fingerprints with an ultrasonic sensor under the display, while some A models such as the A52 and A54 use an optical one. A replacement screen has to suit the reader your model carries, or unlocking can stop working. Ask about it before you agree to a screen change." },
+      { h: "Your data before the bench", text: "Samsung's Maintenance mode hides your personal data while the phone is out of your hands. You turn it on yourself in Settings; it is worth doing for any phone you hand to a repairer." },
+    ],
+    says: [
+      { say: "Samsung ka panel change karwana hai", service: "screen-replacement" },
+      { say: "Samsung ki screen tuti hui hai, sirf glass change ho sakta hai?", service: "touch-glass-replacement" },
+      { say: "Samsung charge nahi ho raha", service: "battery-charging" },
+      { say: "Samsung pani mein gir gaya", service: "water-damage-data-recovery" },
+    ],
+    answers: {
+      model: "Send your exact Galaxy model on WhatsApp and the shop confirms it, or bring the phone for the free check. Samsung foldables have their own page.",
+      time: "A normal Galaxy screen change can take as little as 60 minutes, depending on parts and the model. Water damage and board work take longer, and the check tells you how long.",
+    },
+    faq: [
+      { q: "Samsung ki screen par green line aa gayi. Can it be fixed?", a: "A green, pink or white line that stays through a restart comes from the display panel, not from the glass, so new glass will not remove it. The free check at Shop G-88 confirms the panel is the cause, and the panel is replaced." },
+      { q: "Can only the glass of my Galaxy be replaced?", a: "Yes, when the picture and touch are still good under the cracks. Only the top glass is changed, and the display your Galaxy came with stays. On curved models the shop confirms your exact model first." },
+      { q: "My Galaxy says moisture was detected and will not charge. What now?", a: "Let the phone dry, with no charger connected, then try again. If the warning stays, bring it in: the charging port or the board under it may need cleaning or replacing." },
+      { q: "Will my Galaxy fingerprint reader work after a new screen?", a: "That depends on the screen fitted and on which reader your Galaxy has, ultrasonic or optical. Ask before you agree, and the shop tells you what to expect for your phone." },
+      { q: "Do you repair Galaxy Z Fold and Z Flip?", a: "Yes, as with every other foldable: inner screen, outer glass and hinge are all bench jobs, and the foldables page explains how they go." },
+    ],
+    repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "water-damage-data-recovery"],
+    guides: ["cracked-screen-glass-or-full-screen", "lines-on-phone-screen"],
+    others: ["google-pixel", "oneplus", "xiaomi"],
+    proof: ["Junaid B.", "Haadi O."],
+    seo: {
+      title: "Samsung repair in Lahore, Hafeez Center",
+      description: "Samsung repair in Lahore at Hafeez Center: Galaxy glass, screens, charging and water damage. Free checking first. 0305 8874839.",
+    },
+  },
+  {
+    slug: "google-pixel",
+    name: "Google Pixel",
+    title: "Google Pixel repair in Lahore",
+    short: "Pixel screens, camera glass, batteries and charging, checked free at Hafeez Center.",
+    image: "microscope-station",
+    detailPhoto: "parts-drawers",
+    intro: [
+      { text: "Pixel owners in Lahore tend to be people who chose the phone on purpose, and they want to know what a repair does to the camera, the fingerprint reader and the screen. Rehan Traders, Shop G-88, Hafeez Center, repairs Pixel phones at an open bench and answers those questions after a free check. One of the shop's Google reviews comes from a Pixel Fold owner whose inner display was repaired." },
+      { text: "Pixel Fold and Pixel 9 Pro Fold are foldables, and they are handled on the foldables page. The rest of this page is about the slab Pixels: the 6, 7, 8 and 9 families and the a models.", link: { phrase: "foldables page", href: "/repairs/galaxy-z-fold-flip" } },
+    ],
+    seriesTitle: "Known Pixel faults",
+    series: [
+      {
+        h: "Pixel 8: vertical lines and flicker",
+        text: "Google's own help page for the Pixel 8 says a limited number of phones may show vertical lines and flickering on the display, and it runs an Extended Repair Program for them. If your Pixel 8 shows a line, check Google's page first. Outside that program, or on any other Pixel, a line that stays through a restart is a panel fault.",
+        link: { phrase: "panel fault", href: "/repairs/screen-replacement" },
+      },
+      {
+        h: "Pixel 7 and 7 Pro: camera glass",
+        text: "Owners of the Pixel 7 family reported the glass over the camera bar cracking with no drop to explain it, a story The Verge covered in January 2023. A cracked camera cover lets dust onto the lens, and it can cut a finger, so it is worth having looked at.",
+      },
+      {
+        h: "Any Pixel: charging and battery",
+        text: "Batteries lose capacity with age, and a phone that drains fast or shuts down at 30 percent is asking for a new one. A port that no longer holds the cable is the other common reason a Pixel stops charging; the check starts with cleaning it before anything is replaced.",
+        link: { phrase: "new one", href: "/repairs/battery-charging" },
+      },
+    ],
+    table: {
+      title: "Which repair does your Pixel need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["A line or flicker on a Pixel 8", "Check Google's Extended Repair Program page, then the panel"],
+        ["Cracked glass over a clean picture", "Glass only; your original display stays"],
+        ["Cracked camera cover", "Free check; the shop says what the job involves before work starts"],
+        ["Drains fast or shuts down early", "Battery check, then the charging port"],
+        ["Pixel Fold screen or hinge fault", "Foldable repair: outer glass, inner screen or hinge"],
+      ],
+    },
+    differTitle: "What is different about repairing a Pixel",
+    differ: [
+      { h: "The screen comes off first", text: "Phones from different brands open differently, and the shop works from the exact model in front of it. Send the model before you come and the shop can tell you what the job involves." },
+      { h: "Fingerprint calibration after a screen change", text: "Newer Pixels read your fingerprint through the display, so a replacement screen has to suit the reader, and a calibration step may be needed afterwards. Ask what will happen to the reader before you agree." },
+      { h: "Imported phones, no local Google service", text: "Parts for any phone come in more than one quality, and you choose. Ask which one you are being quoted, and what it means for warranty, which the shop discusses once the fault is diagnosed." },
+    ],
+    says: [
+      { say: "Google Pixel ki screen tuti hui hai", service: "touch-glass-replacement" },
+      { say: "Pixel ka panel change karwana hai", service: "screen-replacement" },
+      { say: "Pixel ki battery jaldi khatam ho jati hai", service: "battery-charging" },
+      { say: "Pixel on nahi ho raha", service: "board-repair" },
+    ],
+    answers: {
+      model: "Send your exact Pixel model on WhatsApp and the shop confirms it, or bring the phone for the free check. Pixel Fold and Pixel 9 Pro Fold are handled as foldables.",
+      time: "A normal Pixel screen change can take as little as 60 minutes, depending on parts and the model. Foldables and board work take longer; the check tells you how long.",
+    },
+    faq: [
+      { q: "Pixel 8 par vertical line aa gayi hai. Is it covered by Google?", a: "Google runs an Extended Repair Program for a limited number of Pixel 8 phones with display lines and flicker. Check its help page for your phone. If it does not apply, the shop checks the panel free of cost." },
+      { q: "Can only the cracked glass of a Pixel be replaced?", a: "When the picture is clean and touch works everywhere, yes: the cracked layer is swapped and your original Pixel display stays. Lines or dark patches mean the panel itself is replaced." },
+      { q: "My Pixel's camera glass cracked by itself. Can it be fixed?", a: "Bring it in for the free check. The shop tells you what the repair involves and what it will cost before any work starts." },
+      { q: "Will the fingerprint reader still work after a new Pixel screen?", a: "Newer Pixels read the fingerprint through the display, so the screen fitted matters and a calibration step may follow. Raise it before you agree to the repair." },
+      { q: "Do you repair Pixel Fold and Pixel 9 Pro Fold?", a: "Yes. They go through the same bench as any foldable: outer glass, inner display and hinge. The foldables page has the details." },
+    ],
+    repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "galaxy-z-fold-flip"],
+    guides: ["lines-on-phone-screen", "phone-not-charging"],
+    others: ["samsung", "oneplus", "oppo"],
+    proof: ["Xhah A."],
+    seo: {
+      title: "Google Pixel repair in Lahore, Hafeez Center",
+      description: "Google Pixel repair in Lahore at Hafeez Center: screens, camera glass, battery and charging. Free checking. WhatsApp 0305 8874839.",
+    },
+  },
+  {
+    slug: "oneplus",
+    name: "OnePlus",
+    title: "OnePlus repair in Lahore",
+    short: "OnePlus screens, glass, charging and board faults, checked free at Hafeez Center.",
+    image: "parts-drawers",
+    detailPhoto: "microscope-station",
+    intro: [
+      { text: "OnePlus owners tend to know their phones well, and they ask sharper questions than most: will the alert slider survive, will the charging stay fast, will the screen keep its colours. Rehan Traders, Shop G-88, Hafeez Center, repairs OnePlus phones at an open bench, and it answers those questions after a free check rather than before one." },
+      { text: "Most OnePlus faults fall into three bins: the display, the charging, and the board. This page takes them in that order." },
+    ],
+    seriesTitle: "Where OnePlus phones fail",
+    series: [
+      {
+        h: "The green line",
+        text: "A green line across a OnePlus screen is a familiar sight on AMOLED phones, and it is a panel fault. New glass cannot remove it, and a restart or reset will not either. The free check confirms that the panel is the cause, and the panel is what gets replaced.",
+        link: { phrase: "panel fault", href: "/repairs/screen-replacement" },
+      },
+      {
+        h: "Charging that is no longer fast",
+        text: "Warp Charge and SUPERVOOC reach full speed only with the matching charger and cable. A OnePlus that has slowed down is often the cable first and the port second. The check tests with a known-good cable, then looks at the port and the board under it.",
+        link: { phrase: "port", href: "/repairs/battery-charging" },
+      },
+      {
+        h: "Dead, restarting or stuck",
+        text: "A phone that will not start, or restarts again and again, may have a power fault on the board rather than a software problem. Board work is done under a microscope. Whether the phone can be saved depends on the damage, and the free check tells you plainly.",
+        link: { phrase: "Board work", href: "/repairs/board-repair" },
+      },
+    ],
+    table: {
+      title: "Which repair does your OnePlus need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["A green line across the screen", "A new panel"],
+        ["Slow charging with the right charger", "The cable first, then the port, then the board"],
+        ["Alert slider loose or stuck", "Mention it when you book; the free check looks at it"],
+        ["Cracked curved glass over a clean picture", "Possibly glass only; confirm your model first"],
+        ["Dead, or restarting by itself", "Board check under the microscope"],
+      ],
+    },
+    differTitle: "What is different about repairing a OnePlus",
+    differ: [
+      { h: "The alert slider", text: "Most OnePlus flagships carry a physical alert slider on the frame, and most Nord phones do not. It is a small part to disturb during a repair, so tell the shop if yours feels loose or sticky." },
+      { h: "No local service network to compare with", text: "Parts for a OnePlus come in more than one quality, and you choose. Ask which one you are being quoted, and what it means for warranty, which the shop discusses once the fault is diagnosed." },
+      { h: "Glass only on a curved screen", text: "Several OnePlus models have a curved display, and curved glass is harder to separate cleanly than flat glass. The shop confirms your exact model before it promises a glass-only repair." },
+    ],
+    says: [
+      { say: "OnePlus ki screen mein green line aa gayi", service: "screen-replacement" },
+      { say: "OnePlus ka touch kaam nahi kar raha", service: "touch-glass-replacement" },
+      { say: "OnePlus ka charger fast charge nahi kar raha", service: "battery-charging" },
+      { say: "OnePlus restart ho raha hai", service: "board-repair" },
+    ],
+    answers: {
+      model: "Send your exact OnePlus model on WhatsApp and the shop confirms it, or bring the phone for the free check.",
+      time: "A normal screen change can take as little as 60 minutes, depending on parts and the model. Board work takes longer; the check tells you how long.",
+    },
+    faq: [
+      { q: "OnePlus par green line aa gayi. Can it be fixed?", a: "A green line is a panel fault, so the panel is replaced; glass alone will not remove it. The shop checks the phone free of cost and tells you the repair and what it will cost before any work." },
+      { q: "Will my OnePlus charge fast again after a repair?", a: "Fast charging needs the right charger, cable and port working together. The check tests each, and the shop tells you which one is holding yours back." },
+      { q: "Can the alert slider be repaired?", a: "Tell the shop when you book. A loose or stuck slider is looked at during the free check, and the shop says what it involves." },
+      { q: "Can glass alone be replaced on a curved OnePlus screen?", a: "Sometimes. If the picture and touch are fine the glass can be changed by itself, but curved models need your exact model confirmed before the shop promises it." },
+      { q: "My OnePlus is dead and restarts by itself. Can it be saved?", a: "Often a board fault, and board faults are worked on under a microscope. The check is free, and the shop tells you whether it can be repaired." },
+    ],
+    repairs: ["screen-replacement", "touch-glass-replacement", "battery-charging", "board-repair"],
+    guides: ["phone-not-charging", "phone-not-turning-on"],
+    others: ["oppo", "vivo", "xiaomi"],
+    seo: {
+      title: "OnePlus repair in Lahore, Hafeez Center",
+      description: "OnePlus repair in Lahore at Hafeez Center: screens, glass, charging and board faults. Free checking first. WhatsApp 0305 8874839.",
+    },
+  },
+  {
+    slug: "oppo",
+    name: "Oppo",
+    title: "Oppo repair in Lahore",
+    short: "Oppo A, F, Reno and Find screens, glass, charging and board faults at Hafeez Center.",
+    image: "microscope-bench",
+    detailPhoto: "machine-corner",
+    intro: [
+      { text: "If you are looking for Shop G-88, look for the Oppo sign. The big sign on the front of the shop says OPPO, and G-88 is at its left edge. It is only a coincidence of the building, but it means Oppo owners already know where to stand." },
+      { text: "Rehan Traders repairs Oppo phones at an open bench: the A and F series that sell in volume, the Reno phones with curved screens, and the Find N flip phones, which are foldables and have their own page.", link: { phrase: "have their own page", href: "/repairs/galaxy-z-fold-flip" } },
+    ],
+    seriesTitle: "What fails on Oppo phones",
+    series: [
+      {
+        h: "Reno: curved screens",
+        text: "Several Reno models have a display that curves at the edges. They photograph well and crack at the corners. A crack on a curved edge does not always mean a dead panel, so the check looks at the picture and the touch before it says glass-only or new screen.",
+        link: { phrase: "glass-only", href: "/repairs/touch-glass-replacement" },
+      },
+      {
+        h: "A and F: glass, ports and batteries",
+        text: "These are the Oppo phones with the longest working lives, so their faults come from age as much as from drops: a loose charging port, a battery that drains by evening, glass cracked years ago and still being used. All three are ordinary bench jobs.",
+        link: { phrase: "loose charging port", href: "/repairs/battery-charging" },
+      },
+      {
+        h: "Slow VOOC",
+        text: "VOOC and SuperVOOC charge at full speed only with the matching Oppo charger and cable. If your Oppo has started charging slowly, try the original cable first. If it still crawls, the port or the board under it is the suspect.",
+      },
+    ],
+    table: {
+      title: "Which repair does your Oppo need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["A crack at the corner of a Reno", "Free check; glass only if the picture is clean"],
+        ["Lines or dark patches", "A new panel"],
+        ["Slow charging with the Oppo charger", "Cable, then port, then board"],
+        ["Fingerprint fails after a screen change", "The screen fitted may not suit the reader; ask the shop"],
+        ["Dead after a drop", "Board check"],
+      ],
+    },
+    differTitle: "What is different about repairing an Oppo",
+    differ: [
+      { h: "The charger is part of the system", text: "A fast-charge Oppo expects a matching charger, cable and port. Replacing only one of them can leave the phone charging slowly, which is why the check tests all three." },
+      { h: "Several Oppo phones read your fingerprint through the screen", text: "On those models a replacement display has to suit the reader behind it, or unlocking can stop working. Ask about it before you agree to a screen change." },
+      { h: "Find N Flip", text: "Oppo's Find N2 Flip and N3 Flip are foldable phones. They are repaired like every other foldable: outer glass, inner screen and hinge." },
+    ],
+    says: [
+      { say: "Oppo ka panel change karwana hai", service: "screen-replacement" },
+      { say: "Oppo ka sirf upar wala glass toota hai", service: "touch-glass-replacement" },
+      { say: "Oppo ka charging jack kharab ho gaya", service: "battery-charging" },
+      { say: "Oppo mobile on nahi ho raha", service: "board-repair" },
+    ],
+    answers: {
+      model: "Send your exact Oppo model on WhatsApp and the shop confirms it, or bring the phone for the free check.",
+      time: "A normal Oppo screen change can take as little as 60 minutes, depending on parts and the model. Board work takes longer; the check tells you how long.",
+    },
+    faq: [
+      { q: "Oppo ki screen toot gayi. Can only the glass be changed?", a: "Often, yes. A crack in an Oppo's glass does not always reach the display under it. The free check looks at the picture and the touch; glass alone is replaced when the panel is healthy, and lines or dark patches mean a new panel." },
+      { q: "Why is my Oppo charging slowly?", a: "VOOC and SuperVOOC work only as a set: Oppo charger, Oppo cable and a healthy port. The check starts with the cable and charger, then moves to the port and the board." },
+      { q: "Where exactly is Shop G-88 for Oppo repair?", a: "Ground floor of Hafeez Center, Main Boulevard, Gulberg III. The big sign says OPPO: look for G-88 at its left edge and for Tab House & Rehan Traders Lab along the bottom." },
+      { q: "Will my Oppo unlock with a fingerprint after a screen change?", a: "On Oppo models that read the fingerprint through the screen, the replacement display has to suit that reader. Ask first, and the shop says what to expect for your phone." },
+      { q: "Do you repair the Oppo Find N Flip?", a: "Yes. The N2 Flip and N3 Flip are foldables, and foldables are repaired here from the outer glass to the hinge." },
+    ],
+    repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "board-repair"],
+    guides: ["cracked-screen-glass-or-full-screen", "phone-not-charging"],
+    others: ["vivo", "oneplus", "infinix"],
+    seo: {
+      title: "Oppo repair in Lahore, Hafeez Center",
+      description: "Oppo repair in Lahore at Hafeez Center, under the OPPO sign: glass, screens, charging and board faults. Free checking. 0305 8874839.",
+    },
+  },
+  {
+    slug: "vivo",
+    name: "Vivo",
+    title: "Vivo repair in Lahore",
+    short: "Vivo Y, V and X screens, glass, charging and board faults at Hafeez Center.",
+    image: "workbench-team",
+    detailPhoto: "machine-corner",
+    intro: [
+      { text: "Vivo sells two kinds of phone in Lahore: the Y series that people buy by the dozen for a family, and the V and X phones that people buy for the camera and the finish. They break differently, so Rehan Traders, Shop G-88, Hafeez Center, reads the phone before it reads the price list." },
+      { text: "Every Vivo repair starts with a free check at an open bench. The shop tells you what the fault is, whether it can be repaired, what it will cost and how long it will take." },
+    ],
+    seriesTitle: "Where Vivo phones fail",
+    series: [
+      {
+        h: "V series: curved glass at the corners",
+        text: "The V27, V29 and V30 families have curved AMOLED screens. Curved glass breaks at its edges first, and the damage often sits above a display that still works. The check looks at the picture and the touch, and glass-only is offered when the panel is healthy.",
+        link: { phrase: "glass-only", href: "/repairs/touch-glass-replacement" },
+      },
+      {
+        h: "Y series: ports and batteries",
+        text: "Y phones do hard daily work with budget parts. The usual faults on a phone of that kind are a charging port that loosens, a battery that fades, and glass that cracks in a pocket or a school bag. These are quick bench jobs, and the free check says which of them yours needs.",
+        link: { phrase: "charging port", href: "/repairs/battery-charging" },
+      },
+      {
+        h: "X series: camera hardware",
+        text: "The X phones are bought for their cameras, and a hard drop can disturb what sits behind the lens: a picture that will not focus, or a lens that rattles. Send your exact model and the check tells you what yours needs.",
+        link: { phrase: "camera", href: "/repairs/board-repair" },
+      },
+    ],
+    table: {
+      title: "Which repair does your Vivo need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["A crack at a curved V-series corner", "Glass only if the display under it works"],
+        ["A wobbly Y-series charging port", "Cleaned first; replaced if the pins are broken"],
+        ["Slow FlashCharge", "The matching charger and cable first, then the port"],
+        ["Colour-changing back cracked", "Back glass repair; confirm your model"],
+        ["Black screen but the phone vibrates", "The panel or its connection"],
+      ],
+    },
+    differTitle: "What is different about repairing a Vivo",
+    differ: [
+      { h: "FlashCharge needs the matching charger", text: "Vivo's FlashCharge reaches its quoted speed only with the matching Vivo charger and cable. A slow Vivo is often a cable problem before it is a port problem, and the check tries both." },
+      { h: "The colour-changing back", text: "Some V phones, such as the V27, have a colour-changing glass back. Back glass is glued on, so it is a job for a heated bench and patience, and the shop confirms your exact model before it promises it." },
+      { h: "Curved glass is harder than flat", text: "On a curved V phone the shop confirms your exact model before it promises a glass-only repair." },
+    ],
+    says: [
+      { say: "Vivo ki screen tuti hui hai", service: "touch-glass-replacement" },
+      { say: "Vivo ka panel change", service: "screen-replacement" },
+      { say: "Vivo ka charging port kharab hai", service: "battery-charging" },
+      { say: "Vivo on nahi ho raha", service: "board-repair" },
+    ],
+    answers: {
+      model: "Send your exact Vivo model on WhatsApp and the shop confirms it, or bring the phone for the free check.",
+      time: "A normal Vivo screen change can take as little as 60 minutes, depending on parts and the model. Board work takes longer; the check tells you how long.",
+    },
+    faq: [
+      { q: "Vivo V series ki screen kone se toot gayi. Is the display dead?", a: "Not necessarily. A crack at a curved corner can sit on a healthy display. The free check looks at the picture and the touch, and glass alone is replaced when the panel is fine." },
+      { q: "Why does my Vivo charge slowly?", a: "FlashCharge needs a Vivo charger and cable that match. The check swaps in known-good ones first, then looks at the port and the board." },
+      { q: "Can the colour-changing back of a Vivo V be repaired?", a: "Tell the shop your exact model when you book, and the free check says what the back-glass repair involves." },
+      { q: "My Vivo is dead and does not charge. Can it be saved?", a: "The free check at the bench tells you whether it is the battery, the port or the board, and what each repair costs." },
+      { q: "Do you replace a Vivo battery?", a: "Yes. Batteries and charging ports are bench jobs, and a battery that has swollen is taken out and disposed of safely straight away." },
+    ],
+    repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "board-repair"],
+    guides: ["cracked-screen-glass-or-full-screen", "battery-draining-fast"],
+    others: ["oppo", "oneplus", "infinix"],
+    seo: {
+      title: "Vivo repair in Lahore, Hafeez Center",
+      description: "Vivo repair in Lahore at Hafeez Center: Y, V and X screens, glass, battery and charging. Free checking first. WhatsApp 0305 8874839.",
+    },
+  },
+  {
+    slug: "infinix",
+    name: "Infinix",
+    title: "Infinix repair in Lahore",
+    short: "Infinix Hot, Note, Zero and Smart screens, charging and board faults at Hafeez Center.",
+    image: "microscope-bench",
+    detailPhoto: "parts-drawers",
+    intro: [
+      { text: "Infinix makes four lines you meet in Lahore: Hot, Note, Zero and Smart. All of them sit under Transsion Holdings, the same company that owns Tecno and itel, and the brand's official after-sales network in Pakistan is Carlcare. Rehan Traders is an independent bench in Hafeez Center, which suits the owner who wants a repair today and a second opinion on what it needs." },
+      { text: "Every Infinix repair starts with a free check of the phone. You hear the fault and the price before any work, and you decide." },
+    ],
+    seriesTitle: "What breaks on Infinix phones",
+    series: [
+      {
+        h: "Hot and Smart: the working phones",
+        text: "These are the budget phones people use hardest. The faults that follow are cracked glass, a charging port that loses grip on the cable, and a battery that drops from half to nothing. Each is a short bench job once the check has said which one it is.",
+        link: { phrase: "battery that drops", href: "/guides/battery-draining-fast" },
+      },
+      {
+        h: "Note: bigger screens, faster charging",
+        text: "Note phones carry larger displays and quicker charging, so the display and the charging parts do more of the work. A line across the screen means the panel; a Note that charges slower than it used to means the cable, the port or the board, in that order.",
+        link: { phrase: "the panel", href: "/repairs/screen-replacement" },
+      },
+      {
+        h: "Zero: the flagships",
+        text: "The Zero line is where Infinix puts its curved displays and its fastest charging. Curved glass breaks at the edge, and a fast-charge phone needs parts that match its charger. The shop confirms your exact model before quoting.",
+      },
+    ],
+    table: {
+      title: "Which repair does your Infinix need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["Hot or Smart with cracked glass", "Glass only if the panel works; otherwise the screen"],
+        ["A Note that charges slower than before", "Cable, then port, then board"],
+        ["A Zero with a cracked curved edge", "Free check; the shop confirms your model before quoting"],
+        ["Stuck on the logo or restarting", "Software, storage or board; the check separates them"],
+        ["Battery that falls from half to nothing", "Battery replacement"],
+      ],
+    },
+    differTitle: "What is different about repairing an Infinix",
+    differ: [
+      { h: "Official service is a separate thing", text: "Carlcare is Infinix's own service network. If your phone is under warranty, start there. If it is not, or you want a free check from the person who will work on the phone, the bench at G-88 is the other route." },
+      { h: "All-Round FastCharge needs the matching charger", text: "Infinix's fast charging is branded All-Round FastCharge. It runs at full speed only with the matching charger and cable, so a slow phone is often a cable fault." },
+      { h: "XOS", text: "Infinix phones run XOS. A phone that restarts or sticks on the logo can be a software fault, a storage fault or a board fault; the free check separates them." },
+    ],
+    says: [
+      { say: "Infinix ki screen tuti hui hai", service: "touch-glass-replacement" },
+      { say: "Infinix ka panel kitne ka hai", service: "screen-replacement" },
+      { say: "Infinix charging nahi ho raha", service: "battery-charging" },
+      { say: "Infinix baar baar restart ho raha hai", service: "board-repair" },
+    ],
+    answers: {
+      model: "Send your exact Infinix model on WhatsApp and the shop confirms it, or bring the phone for the free check.",
+      time: "A normal Infinix screen change can take as little as 60 minutes, depending on parts and the model. Board work takes longer; the check tells you how long.",
+    },
+    faq: [
+      { q: "Infinix ka panel change karwana hai. Do you repair Infinix screens?", a: "Yes. The shop checks the phone free of cost, tells you whether glass alone or the whole screen is needed, and quotes before it starts." },
+      { q: "Is Infinix warranty affected if I repair elsewhere?", a: "Warranty terms are the brand's, not the shop's. If your phone is under warranty, ask Carlcare first. If it is not, the free check tells you what the repair involves." },
+      { q: "Why does my Infinix charge slowly now?", a: "All-Round FastCharge runs at full speed only with the matching charger and cable. The shop tries known-good ones first, then the port and the board." },
+      { q: "My Infinix keeps restarting on the logo. What is wrong?", a: "It could be software, storage or the board. Bring it in for the free check, and the shop tells you which and what it will cost." },
+      { q: "Can only the cracked glass of my Infinix be replaced?", a: "Yes, when the panel under the crack still works. An Infinix with lines, black patches or dead touch zones needs the whole screen replaced instead." },
+    ],
+    repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "board-repair"],
+    guides: ["battery-draining-fast", "phone-not-turning-on"],
+    others: ["tecno", "vivo", "xiaomi"],
+    seo: {
+      title: "Infinix repair in Lahore, Hafeez Center",
+      description: "Infinix repair in Lahore at Hafeez Center: Hot, Note, Zero and Smart screens, charging and boards. Free checking first. 0305 8874839.",
+    },
+  },
+  {
+    slug: "xiaomi",
+    name: "Xiaomi, Redmi and Poco",
+    title: "Xiaomi, Redmi and Mi repair in Lahore",
+    short: "Xiaomi, Redmi, Redmi Note, Poco and Mi screens, charging and board faults at Hafeez Center.",
+    image: "workbench-team",
+    detailPhoto: "microscope-station",
+    intro: [
+      { text: "Xiaomi sells phones under the Xiaomi, Redmi and Poco names, and the old Mi name still turns up on phones people bought a few years ago. They are one company, one family of parts and one bench at Shop G-88, Hafeez Center, which is why Redmi, Redmi Note, Poco and Mi owners share this page." },
+      { text: "Every Xiaomi repair starts with a free check. The shop tells you what is broken, whether it can be repaired, what it will cost and how long it will take." },
+    ],
+    seriesTitle: "What fails on Xiaomi phones",
+    series: [
+      {
+        h: "Redmi Note: the volume phones",
+        text: "Redmi Note phones are the ones most people in Lahore mean when they say Redmi. The Note 13 Pro and Pro+ carry AMOLED screens with a fingerprint reader behind them, which makes a cracked screen more than a glass question. A clean picture means glass-only; lines or dark patches mean a new panel.",
+        link: { phrase: "glass-only", href: "/repairs/touch-glass-replacement" },
+      },
+      {
+        h: "Redmi and Redmi A: the budget lines",
+        text: "These are phones that get dropped, charged overnight and used for years. Cracked glass, a tired battery and a loose charging port are the usual reasons they come in, and each is a short bench job.",
+        link: { phrase: "tired battery", href: "/repairs/battery-charging" },
+      },
+      {
+        h: "Poco: performance phones that run hot",
+        text: "Poco phones are bought for speed, and speed means heat. Heat shortens battery life and can shorten the life of charging parts. A Poco that gets warm, drains quickly or charges slowly belongs on the bench for a battery and port check.",
+      },
+    ],
+    table: {
+      title: "Which repair does your Xiaomi, Redmi or Poco need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["Redmi Note with clean picture under the cracks", "Glass only"],
+        ["Coloured lines or ink-like patches", "A new panel"],
+        ["A Poco that runs warm and drains fast", "Battery and charging port check"],
+        ["Stuck on the MIUI or HyperOS logo", "Software or hardware; the check tells which"],
+        ["Charges slowly", "Cable, then port, then board"],
+      ],
+    },
+    differTitle: "What is different about repairing a Xiaomi",
+    differ: [
+      { h: "MIUI, then HyperOS", text: "Older Xiaomi phones run MIUI and newer ones run HyperOS. A phone stuck on its logo after an update may be a software fault, but a phone that does not show a logo at all is a hardware matter. The free check tells you which." },
+      { h: "HyperCharge and the matching charger", text: "Xiaomi's fastest charging, HyperCharge, reaches 120W on some phones and needs the matching charger. A phone that charges slowly is often the cable before it is the phone." },
+      { h: "One page for Mi, Redmi and Poco", text: "These are lines of one maker, not separate brands, and a repair is judged by the phone in front of the bench rather than by the name on the box. Send your exact model and the shop confirms it." },
+    ],
+    says: [
+      { say: "Redmi ka panel change karwana hai", service: "screen-replacement" },
+      { say: "Redmi ki screen tuti hui hai", service: "touch-glass-replacement" },
+      { say: "Xiaomi phone charge nahi ho raha", service: "battery-charging" },
+      { say: "Poco phone dead ho gaya", service: "board-repair" },
+    ],
+    answers: {
+      model: "Send your exact Xiaomi, Redmi, Poco or Mi model on WhatsApp and the shop confirms it, or bring the phone for the free check.",
+      time: "A normal Xiaomi screen change can take as little as 60 minutes, depending on parts and the model. Board work takes longer; the check tells you how long.",
+    },
+    faq: [
+      { q: "Redmi Note ki screen tuti hui hai. Do I need a new screen?", a: "Not always. Look at the picture first: if it is clean and touch works edge to edge, new glass on the original display is enough. Coloured lines or ink-like patches mean a new panel." },
+      { q: "Do you repair Mi phones, or only Redmi?", a: "Both, along with Xiaomi and Poco. They are lines of one maker, and the shop checks the phone in front of it." },
+      { q: "Will my fingerprint reader still work after a screen change?", a: "On models with the reader behind the screen, the display fitted decides it. Ask before you agree." },
+      { q: "Why does my Xiaomi charge slowly?", a: "Fast charging needs the matching charger and cable. The shop tries known-good ones, then looks at the port and the board." },
+      { q: "My Poco got hot and died. Can it be saved?", a: "Possibly. Heat can damage the battery or a board part. The free check says which, and the shop tells you plainly whether it can be repaired." },
+    ],
+    repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "board-repair"],
+    guides: ["cracked-screen-glass-or-full-screen", "phone-not-charging"],
+    others: ["infinix", "oppo", "vivo"],
+    seo: {
+      title: "Xiaomi, Redmi and Mi repair in Lahore",
+      description: "Xiaomi, Redmi, Poco and Mi repair in Lahore at Hafeez Center: screens, glass, charging and boards. Free checking. 0305 8874839.",
+    },
+  },
+  {
+    slug: "tecno",
+    name: "Tecno",
+    title: "Tecno repair in Lahore",
+    short: "Tecno Spark, Camon, Pova and Phantom screens, charging and board faults at Hafeez Center.",
+    image: "parts-drawers",
+    detailPhoto: "microscope-bench",
+    intro: [
+      { text: "Tecno sells four lines in Pakistan: Spark, Camon, Pova and Phantom. Spark phones are the everyday ones, Camon the camera phones, Pova the big-battery ones and Phantom the foldables. Rehan Traders, Shop G-88, Hafeez Center, repairs all of them at an open bench." },
+      { text: "Like Infinix and itel, Tecno belongs to Transsion Holdings, and its official service network in Pakistan is Carlcare. If your phone is under warranty, start there; if it is not, or you would rather talk to the person who will work on it, bring it to G-88 for a free check." },
+    ],
+    seriesTitle: "What breaks on Tecno phones",
+    series: [
+      {
+        h: "Spark: glass and ports",
+        text: "Spark phones take the knocks of daily use: cracked glass, a charging port that loses grip on the cable, a battery that fades after a year or two. Touch glass replacement keeps the display when the picture is clean, and a port is cleaned before it is replaced.",
+        link: { phrase: "Touch glass replacement", href: "/repairs/touch-glass-replacement" },
+      },
+      {
+        h: "Camon: camera island and display",
+        text: "Camon phones put the camera up front, and a hard drop can crack the lens cover or knock the camera out of focus. If the display shows a coloured line afterwards, that is a panel fault, not a glass one.",
+        link: { phrase: "panel fault", href: "/repairs/screen-replacement" },
+      },
+      {
+        h: "Pova: big batteries",
+        text: "Several Pova phones carry batteries of around 6000 mAh. A bigger battery lasts longer and takes longer to swell, but when it does, the phone's back can lift. A swollen battery is removed and disposed of safely, straight away.",
+        link: { phrase: "swollen battery", href: "/repairs/battery-charging" },
+      },
+      {
+        h: "Phantom: foldables",
+        text: "Phantom V Fold and Phantom V Flip are foldable phones. They are repaired like every other foldable: outer glass, inner screen and hinge. Read the foldables page for how those repairs go.",
+        link: { phrase: "foldables page", href: "/repairs/galaxy-z-fold-flip" },
+      },
+    ],
+    table: {
+      title: "Which repair does your Tecno need?",
+      head: ["What you see", "What it usually needs"],
+      rows: [
+        ["A Spark with cracked glass", "Glass only if the display is healthy"],
+        ["A Camon with a cracked camera cover or a coloured line", "The camera cover or the panel; the check says which"],
+        ["A Pova whose back is lifting", "A swollen battery: stop charging, then replace it"],
+        ["Phantom V Fold or Flip screen or hinge", "Foldable repair"],
+        ["Stuck on the HiOS logo", "Software, storage or board; the check separates them"],
+      ],
+    },
+    differTitle: "What is different about repairing a Tecno",
+    differ: [
+      { h: "HiOS", text: "Tecno phones run HiOS. A phone that sticks on the logo or restarts by itself can be a software fault, a storage fault or a board fault, and the free check separates them before anything is replaced." },
+      { h: "Fast charging parts have to match", text: "A Tecno that charges slowly is the cable first, then the port, then the board. Replacing the wrong one costs money and fixes nothing." },
+      { h: "Warranty first", text: "If your Tecno is still under warranty, take it to Carlcare. Rehan Traders discusses warranty on its own repairs once the fault is diagnosed." },
+    ],
+    says: [
+      { say: "Tecno ki screen tuti hui hai", service: "touch-glass-replacement" },
+      { say: "Tecno ka panel kitne ka hai", service: "screen-replacement" },
+      { say: "Tecno charge nahi ho raha", service: "battery-charging" },
+      { say: "Tecno on nahi ho raha", service: "board-repair" },
+    ],
+    answers: {
+      model: "Send your exact Tecno model on WhatsApp and the shop confirms it, or bring the phone for the free check. Phantom foldables are handled as foldables.",
+      time: "A normal Tecno screen change can take as little as 60 minutes, depending on parts and the model. Foldables and board work take longer; the check tells you how long.",
+    },
+    faq: [
+      { q: "Tecno Spark ki screen tuti hui hai. Can only the glass be changed?", a: "A cracked Spark often has a healthy display under the glass. If so, only the glass is changed and your display stays; lines or dark patches change the answer." },
+      { q: "Tecno ka charging port loose ho gaya. Can it be fixed?", a: "A port packed with lint is cleaned first. If its pins are broken, the port is replaced. The free check tells you which." },
+      { q: "My Tecno Pova battery has swollen. What should I do?", a: "Stop charging it and bring it to Shop G-88. A swollen battery is replaced, and the old one is removed and disposed of safely straight away." },
+      { q: "Do you repair the Tecno Phantom V Fold and Flip?", a: "Yes. Phantom V Fold and Flip owners get the same foldable repair as anyone else: outer glass, inner screen and hinge." },
+      { q: "Should I go to Carlcare or to a shop in Hafeez Center?", a: "Under warranty, Carlcare. Out of warranty, or when you want a free check from the person who will work on the phone, bring it to G-88." },
+    ],
+    repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "galaxy-z-fold-flip"],
+    guides: ["phone-not-charging", "battery-draining-fast"],
+    others: ["infinix", "xiaomi", "samsung"],
+    seo: {
+      title: "Tecno repair in Lahore, Hafeez Center",
+      description: "Tecno repair in Lahore at Hafeez Center: Spark, Camon, Pova and Phantom screens, charging and batteries. Free checking. 0305 8874839.",
+    },
   },
 ]

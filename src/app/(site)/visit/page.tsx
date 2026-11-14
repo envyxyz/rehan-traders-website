@@ -13,9 +13,11 @@ import { Container, Section } from "@/components/layout"
 import { OpenStatus } from "@/components/open-status"
 import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Card } from "@/components/ui/card"
-import { actions, breadcrumbs, seo, site, ui, visit, visitPage } from "@/content"
-import { storeSchema } from "@/lib/schema"
+import { actions, brandPage, breadcrumbs, seo, site, ui, visit, visitPage } from "@/content"
+import { brands, services } from "@/content-large"
+import { faqSchema, storeSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.visit.title, description: seo.visit.description, path: "/visit" })
@@ -24,6 +26,7 @@ export default function VisitPage() {
   return (
     <>
       <JsonLd data={storeSchema} />
+      <JsonLd data={faqSchema(visitPage.faq)} />
       <Section first>
         <Container>
           <Breadcrumbs items={[{ label: breadcrumbs.visit }]} className="mb-3" />
@@ -65,6 +68,9 @@ export default function VisitPage() {
               <div className="mt-10">
                 <h2 className="font-display text-title-md text-ink">{visitPage.hoursTitle}</h2>
                 <HoursTable ink className="mt-4" />
+                <Text tone="muted" size="body-sm" className="mt-4">
+                  {visitPage.hoursNote}
+                </Text>
               </div>
             </div>
 
@@ -114,6 +120,101 @@ export default function VisitPage() {
             {visitPage.courierLink}
             <Icon icon={ArrowRight} size="sm" />
           </Link>
+        </Container>
+      </Section>
+
+      {/* Contact number: what people search before they walk in. */}
+      <Section>
+        <Container className="grid gap-8 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-5">
+            <Heading as="h2">{visitPage.contactTitle}</Heading>
+          </div>
+          <div className="lg:col-span-7">
+            <Text size="body-md">{visitPage.contactText}</Text>
+            <Text className="mt-3">{visitPage.contactSend}</Text>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild size="lg">
+                <a href={site.phone.href} data-track="call" data-track-from="visit">
+                  {actions.call}
+                </a>
+              </Button>
+              <Button asChild size="lg" variant="whatsapp">
+                <a href={site.whatsapp.href} target="_blank" rel="noopener noreferrer" aria-label={actions.whatsappLabel} data-track="whatsapp" data-track-from="visit-contact">
+                  <WhatsAppIcon />
+                  {actions.whatsapp}
+                </a>
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* What the shop repairs: every repair page and every brand page, linked from the page people land on for "Hafeez Center". */}
+      <Section tone="panel">
+        <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-6">
+            <Heading as="h2">{visitPage.repairsTitle}</Heading>
+            <Text tone="muted" className="mt-3">
+              {visitPage.repairsText}
+            </Text>
+            <ul className="mt-4">
+              {services.map((s) => (
+                <li key={s.slug}>
+                  <Link href={`/repairs/${s.slug}`} className="flex min-h-11 items-center gap-1.5 py-2 text-body-md text-ink underline-offset-4 hover:underline">
+                    {s.title}
+                    <Icon icon={ArrowRight} size="sm" className="shrink-0" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="lg:col-span-6">
+            <Heading as="h2">{visitPage.brandsTitle}</Heading>
+            <Text tone="muted" className="mt-3">
+              {visitPage.brandsText}
+            </Text>
+            <ul className="mt-4">
+              {[...brands.map((b) => ({ href: `/repairs/${b.slug}`, label: b.name })), { href: "/repairs/iphone", label: brandPage.apple }].map((b) => (
+                <li key={b.href}>
+                  <Link href={b.href} className="flex min-h-11 items-center gap-1.5 py-2 text-body-md text-ink underline-offset-4 hover:underline">
+                    {b.label}
+                    <Icon icon={ArrowRight} size="sm" className="shrink-0" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container>
+          <Heading as="h2">{visitPage.photosTitle}</Heading>
+          <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+            {visitPage.photos.map((name) => (
+              <li key={name}>
+                <Img name={name} sizes="(min-width: 1024px) 380px, (min-width: 640px) 33vw, calc(100vw - 2rem)" className="aspect-4/3 w-full rounded-xl object-cover" />
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      <Section tone="panel">
+        <Container className="grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <Heading as="h2">{visitPage.faqTitle}</Heading>
+          </div>
+          <div className="lg:col-span-7">
+            <Accordion className="border-t border-hairline">
+              {visitPage.faq.map((f) => (
+                <AccordionItem key={f.q}>
+                  <AccordionTrigger>{f.q}</AccordionTrigger>
+                  <AccordionContent>{f.a}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
         </Container>
       </Section>
 

@@ -1,5 +1,5 @@
 import { faq, facts, priceMode, problems, site } from "@/content"
-import { guides, reviews, services } from "@/content-large"
+import { brands, guides, reviews, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -22,7 +22,7 @@ const pages = [
   { label: "Repairs", path: "/repairs", note: "Every repair the shop lists, with links to individual repair pages" },
   { label: "Get a Quote", path: "/quote", note: "Find your issue: pick the device and the fault to see the likely repair, or create a quote ticket with the problem and up to 3 photos" },
   { label: "Book a visit", path: "/book", note: "Choose a device, a fault and a visit time; no account needed" },
-  { label: "Visit", path: "/visit", note: "Directions, hours, Google Map embed and the four courier steps" },
+  { label: "Hafeez Center page", path: "/visit", note: "Shop G-88 in Hafeez Center: contact number, hours, directions, what the shop repairs, brands and visiting questions" },
   { label: "Send by courier", path: "/courier", note: "Phone repair by courier from outside Lahore: the four steps, who pays for delivery, and questions answered" },
   { label: "Reviews", path: "/reviews", note: "Customer reviews copied directly from Google Business Profile" },
   { label: "FAQ", path: "/faq", note: "Answers to common questions about repairs, pricing and visits" },
@@ -51,7 +51,7 @@ const body = [
   "- All foldables, not only Galaxy Z Fold and Z Flip: Duo, every Galaxy Z Series generation and Pixel Fold. Outer glass, inner screen and hinge.",
   "- iPhone: screen, back glass, Face ID, battery, charging and camera.",
   "- Faults handled: green or white screen, black or blank display, lines and pink line on the screen, flickering, battery, charging port, water and liquid damage, data recovery, no power, network and SIM faults, motherboard (board-level) repair under the microscope.",
-  "- Brands: iPhone, Samsung, Google Pixel, OnePlus and other Android phones; iPads and tablets.",
+  `- Brands: ${facts.brands}`,
   "- Repairs happen at an open bench. Customers can ask to watch when the bench is not busy.",
   "- Every repair goes on a numbered job card: free check, bench repair, testing. Warranty is discussed at the counter.",
   `- ${reviews.rating.toFixed(1)} on Google from ${reviews.count} ratings (as of ${reviews.asOfLabel}).`,
@@ -69,6 +69,10 @@ const body = [
   "",
   "## Repairs offered",
   ...services.map((s) => `- [${s.title}](${site.url}/repairs/${s.slug}): ${s.short}`),
+  "",
+  "## Repairs by brand",
+  ...brands.map((b) => `- [${b.title}](${site.url}/repairs/${b.slug}): ${b.short}`),
+  `- [iPhone repair in Lahore](${serviceUrl("iphone")}): Apple phones. iPads are on [iPad repair](${serviceUrl("ipad-tablet")}).`,
   "",
   "## Guides",
   "What to do about common phone faults, each with a short answer first.",

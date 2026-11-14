@@ -1,5 +1,5 @@
 import { aboutPage, site } from "../content"
-import { services, type Guide, type Service } from "../content-large"
+import { services, type Brand, type Guide, type Service } from "../content-large"
 
 // Structured data per PRD §8. No AggregateRating: stars come from the Google Business Profile, not this site.
 // No priceRange, warranty or turnaround: none is confirmed for publishing.
@@ -87,6 +87,21 @@ export const serviceSchema = (s: Service) => ({
   availableChannel: { "@type": "ServiceChannel", serviceLocation: { "@id": storeId }, servicePhone: { "@type": "ContactPoint", telephone: site.phone.dial }, serviceUrl: serviceUrl(s) },
 })
 
+/** A brand page is a Service by the shop, about repairing that brand's phones in Lahore. */
+export const brandServiceSchema = (b: Brand) => ({
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": `${site.url}/repairs/${b.slug}#service`,
+  name: b.title,
+  serviceType: `${b.name} phone repair`,
+  description: `${b.short} ${b.intro[0].text}`,
+  url: `${site.url}/repairs/${b.slug}`,
+  image: `${site.url}/images/${b.image}-og.jpg`,
+  provider: { "@type": "MobilePhoneStore", "@id": storeId, name: site.name, url: site.url, telephone: site.phone.dial, address },
+  areaServed: lahore,
+  availableChannel: { "@type": "ServiceChannel", serviceLocation: { "@id": storeId }, servicePhone: { "@type": "ContactPoint", telephone: site.phone.dial }, serviceUrl: `${site.url}/repairs/${b.slug}` },
+})
+
 export const faqSchema = (items: readonly { q: string; a: string }[]) => ({
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -106,7 +121,7 @@ export const articleSchema = (g: Guide) => ({
   mainEntityOfPage: guideUrl(g),
   // The guide's infographic (scripts/figures.mjs), then the photo of the first repair it leads to (the generated share image has a hashed name).
   image: [
-    { "@type": "ImageObject", url: `${site.url}/guides/figures/${g.slug}.png`, name: g.figure.title, caption: g.figure.caption },
+    ...(g.figure ? [{ "@type": "ImageObject", url: `${site.url}/guides/figures/${g.slug}.png`, name: g.figure.title, caption: g.figure.caption }] : []), // a guide without a drawing has no PNG
     `${site.url}/images/${services.find((s) => s.slug === g.services[0])?.image ?? "storefront"}-og.jpg`,
   ],
   inLanguage: "en-PK",

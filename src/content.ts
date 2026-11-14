@@ -99,6 +99,8 @@ export const facts = {
   turnaround:
     "Repair time at Rehan Traders, Hafeez Center, Lahore depends on the type of repair, parts availability, and how rare and complex the model is. A normal screen (panel) change can take as little as 60 minutes.",
   foldables: "Rehan Traders repairs all foldables, not only Galaxy Z Fold and Z Flip: Duo, every Galaxy Z Series generation, Pixel Fold and any other foldable.",
+  brands:
+    "Rehan Traders repairs Samsung, Apple (iPhone and iPad), Google Pixel, OnePlus, Oppo, Vivo, Infinix, Xiaomi (Mi and Redmi) and Tecno phones, and all foldables. For a particular model, send the exact model on WhatsApp and the shop confirms it.",
   turnaroundFold:
     "Complex devices such as foldables can take up to a day.",
   courier: `Rehan Traders repairs phones sent by courier from outside Lahore. Fill in the form on this website or call ${site.phone.display}, and send photos of the phone on WhatsApp. If possible the shop quotes over the phone. Otherwise you send the phone, the shop inspects it and quotes, repairs it once you agree, and sends it back. ${delivery}`,
@@ -381,6 +383,7 @@ export const cta = {
 export const footer = {
   groups: {
     repairs: "Repairs",
+    brands: "Brands",
     shop: "Shop",
     visit: "Visit",
     legal: "Legal",
@@ -446,6 +449,29 @@ export const repairsPage = {
   bookLede: "Book a visit to Shop G-88 or ask for a quote on WhatsApp.",
   allRepairsLede: "Select a repair below to see what we fix, how the repair works, and book your visit.",
   priceTitle: "Price",
+  intro: [
+    "Most repairs come down to four questions: is the glass cracked or the screen itself broken, will it charge, is it wet, will it turn on. The list below starts from what you see on the phone and sends you to the page that explains the repair.",
+    "Every repair at Shop G-88, Hafeez Center starts with a free check. You hear what is wrong, whether it can be repaired, what it will cost and how long it will take, and you decide before any work starts.",
+  ],
+  brandsTitle: "Repairs by phone brand",
+  brandsLede: "Rehan Traders repairs Samsung, Apple, Google Pixel, OnePlus, Oppo, Vivo, Infinix, Xiaomi (Mi and Redmi) and Tecno. Each brand page covers the faults that are common on that brand and links to the repair that fixes them.",
+  guidesTitle: "Guides for what you see",
+  guidesLede: "Plain answers to what people search when a phone breaks, with a link to the repair for each.",
+  guideFor: "Guide",
+} as const
+
+/** The /repairs/<brand> pages: strings around each brand's own copy (content-large.ts `brands`). */
+export const brandPage = {
+  introTitle: (name: string) => `${name} repair at Shop G-88, Hafeez Center`,
+  whatLead: (name: string) => `${name} repairs at Shop G-88:`,
+  saysTitle: "In your own words",
+  faqTitle: (name: string) => `${name} repair questions`,
+  otherBrandsTitle: "Other brands",
+  whatsapp: (name: string) => `Assalam o alaikum. I need a quote for a ${name} repair.\nMy phone model: `,
+  /** Brand pages are listed in the hub, the footer and the visit page under this label. */
+  allBrands: "All brands",
+  /** The Apple page is the iPhone repair page. */
+  apple: "Apple",
 } as const
 
 /** /guides: answers to the questions people search before they need a repair. Each guide is in content-large.ts. */
@@ -484,8 +510,28 @@ export const reviewsPage = {
 } as const
 
 export const visitPage = {
-  title: "Visit Shop G-88",
-  lede: "Rehan Traders is at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54660, Pakistan.",
+  title: "Mobile repair shop in Hafeez Center, Lahore",
+  lede: "Rehan Traders is Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54660. The shop has repaired phones here since 2009. It is a walk-in shop: bring the phone and it is checked free of cost.",
+  contactTitle: "Contact number and WhatsApp",
+  contactText: `The number for Shop G-88 is ${site.phone.display}. It is the same number for calls and WhatsApp, and WhatsApp is the quickest way to reach the shop. Hafeez Center has many shops, and this is the number of one of them, not a directory for the building.`,
+  contactSend: "Send the exact model and a photo of the fault, and the shop replies with a quote. Prices are not published online because parts prices change daily.",
+  repairsTitle: "What the shop repairs",
+  repairsText: "Eight repairs have their own page, each with its questions answered.",
+  brandsTitle: "Phone brands",
+  brandsText: "Rehan Traders repairs Samsung, Apple, Google Pixel, OnePlus, Oppo, Vivo, Infinix, Xiaomi (Mi and Redmi) and Tecno, plus iPads and every foldable. Pick yours for the faults that are common on it.",
+  hoursNote: "The shop opens whenever Hafeez Center does, so on Eid, Ashura and any other day the building closes, the shop is closed as well. Friday has a prayer break from 1:00 to 2:00 PM.",
+  photosTitle: "The shop",
+  /** Photos from public/images: the bench and the lamination machine at Shop G-88 (no AI mockups of jobs). */
+  photos: ["workbench-team", "microscope-bench", "machine-corner"],
+  faqTitle: "Questions about visiting",
+  faq: [
+    { q: "What is the contact number of Rehan Traders in Hafeez Center?", a: `${site.phone.display}, for calls and WhatsApp. The shop is G-88, on the ground floor of Hafeez Center, Main Boulevard, Gulberg III, Lahore.` },
+    { q: "Where is Shop G-88 in Hafeez Center?", a: "On the ground floor. The big sign says OPPO: look for G-88 at its left edge and for Tab House & Rehan Traders Lab along the bottom." },
+    { q: "What time does Rehan Traders open and close?", a: "Monday to Saturday, 11:00 AM to 10:00 PM, with a Friday prayer break from 1:00 to 2:00 PM. The shop is closed on Sundays and whenever Hafeez Center closes, such as Eid and Ashura." },
+    { q: "Do I need an appointment?", a: "No. It is a walk-in shop and checking is free. You can also book a time on this website so the shop expects you." },
+    { q: "Which phones are repaired at Shop G-88?", a: "Samsung, Apple, Google Pixel, OnePlus, Oppo, Vivo, Infinix, Xiaomi (Mi and Redmi) and Tecno, plus iPads and foldables. Send the exact model on WhatsApp and the shop confirms it." },
+    { q: "I live outside Lahore. Can I still use the shop?", a: "Yes. Phones are repaired by courier from anywhere in Pakistan. Send photos on WhatsApp first; if the shop can quote from them it does, otherwise you send the phone." },
+  ],
   directionsTitle: "How to find Shop G-88",
   floorLabel: "Floor",
   floorValue: "Ground Floor",
@@ -688,15 +734,15 @@ export const seo = {
   bookConfirmed: { title: "Booking confirmed", description: "Your Rehan Traders booking." },
   repairs: {
     title: "Phone and tablet repair in Lahore",
-    description: "Phone and tablet repair at Hafeez Center, Lahore: cracked glass, screens, foldables, iPhone, iPad, batteries, water damage and boards.",
+    description: "Phone and tablet repair at Hafeez Center, Lahore: Samsung, iPhone, Pixel, OnePlus, Oppo, Vivo, Infinix, Xiaomi, Tecno. Free check.",
   },
   reviews: {
     title: "Phone repair reviews, Hafeez Center",
     description: "Customer reviews of Rehan Traders, the phone repair shop at Shop G-88, Hafeez Center, Lahore, copied from Google as written.",
   },
   visit: {
-    title: "Mobile repair shop at Hafeez Center",
-    description: "Find Rehan Traders at Shop G-88, Ground Floor, Hafeez Center, Gulberg III, Lahore. Open Monday to Saturday, 11 AM to 10 PM.",
+    title: "Mobile repair shop at Hafeez Center, G-88",
+    description: "Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore. Call or WhatsApp 0305 8874839. Open Monday to Saturday, 11 AM to 10 PM.",
   },
   courier: {
     title: "Phone repair by courier, all Pakistan",

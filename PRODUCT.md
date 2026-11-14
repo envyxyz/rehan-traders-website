@@ -42,6 +42,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Water damage: anywhere from 8 hours to several days, depending on how severe it is. Data recovery time depends on the situation (Adnan, 31 Oct 2026).
 - Hinges: the shop repairs foldable hinges (Adnan, 31 Oct 2026, for Galaxy Z Fold and Z Flip; all foldables per Ameer, 1 Nov 2026).
 - Tablets: mainly iPads (Adnan, 31 Oct 2026).
+- Brands repaired: Samsung, Apple, Google Pixel, OnePlus, Oppo, Vivo, Infinix, Xiaomi (Mi and Redmi), Tecno (Ameer, 15 Nov 2026). Brand-level claims only; no model-level "we repair X" until Adnan confirms models. No prices ever (Ameer, 15 Nov 2026): `priceMode` stays `'quote'`.
 - Address: Shop G-88 line confirmed by Adnan, 31 Oct 2026. The Google listing is named "Rehan Traders & Mobile Repairing Shop"; the website and brand use "Rehan Traders" (schema alternateName carries the listing name).
 - Payment: all methods (cash, card, JazzCash, EasyPaisa, bank transfer).
 - Customers can watch the repair and take back removed parts, on request, when the bench is not busy. Swollen batteries are disposed of safely straight away.

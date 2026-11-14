@@ -25,18 +25,19 @@ const drawings: Record<string, () => React.JSX.Element> = {
  */
 export function GuideFigure({ guide }: { guide: Guide }) {
   const Drawing = drawings[guide.slug]
-  if (!Drawing) return null
+  const { figure, part } = guide
+  if (!Drawing || !figure || !part) return null
   const id = `figure-${guide.slug}`
   return (
     <figure data-figure aria-labelledby={id} className="mt-10 rounded-xl border border-hairline bg-card p-5 sm:p-7">
       <h2 id={id} className="font-display text-title-md text-ink">
-        {guide.figure.title}
+        {figure.title}
       </h2>
       <div className="mt-4">
         <Drawing />
       </div>
       <ol className="mt-5 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-        {guide.figure.items.map((item, i) => (
+        {figure.items.map((item, i) => (
           <li key={item.label} className="flex gap-3 text-body-sm text-body">
             <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-pill bg-ink font-display text-caption font-bold text-paper tabular-nums">
               {i + 1}
@@ -47,9 +48,9 @@ export function GuideFigure({ guide }: { guide: Guide }) {
           </li>
         ))}
       </ol>
-      <figcaption className="mt-5 border-t border-hairline pt-4 text-caption text-steel">{guide.figure.caption}</figcaption>
+      <figcaption className="mt-5 border-t border-hairline pt-4 text-caption text-steel">{figure.caption}</figcaption>
       <div data-no-shot>
-        <Phone3D part={guide.part} />
+        <Phone3D part={part} />
       </div>
     </figure>
   )

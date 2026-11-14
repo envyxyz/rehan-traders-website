@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next"
 
 import { site } from "@/content"
-import { guides, services } from "@/content-large"
+import { brands, guides, services } from "@/content-large"
 
 export const dynamic = "force-static"
 
@@ -16,7 +16,7 @@ export const dynamic = "force-static"
 export default function sitemap(): MetadataRoute.Sitemap {
   // Bump this date when meaningful site content changes (copy, services, images).
   // 7 Nov 2026: every page got a new title and description, and some got in-copy links.
-  // 15 Nov 2026: repair pages got a second (detail) photo.
+  // 15 Nov 2026: repair pages got a second (detail) photo; brand pages, the Hafeez Center page (/visit) and the price guide added.
   const lastModified = "2026-11-15"
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -89,11 +89,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     images: [s.image, s.detailPhoto].filter(Boolean).map((n) => `${site.url}/images/${n}-1280.webp`),
   }))
 
+  const brandRoutes: MetadataRoute.Sitemap = brands.map((b) => ({
+    url: `${site.url}/repairs/${b.slug}`,
+    lastModified,
+    images: [b.image, b.detailPhoto].filter(Boolean).map((n) => `${site.url}/images/${n}-1280.webp`),
+  }))
+
   const guideRoutes: MetadataRoute.Sitemap = guides.map((g) => ({
     url: `${site.url}/guides/${g.slug}`,
     lastModified: g.updated,
     images: [`${site.url}/guides/figures/${g.slug}.png`],
   }))
 
-  return [...staticRoutes, ...serviceRoutes, ...guideRoutes]
+  return [...staticRoutes, ...serviceRoutes, ...brandRoutes, ...guideRoutes]
 }

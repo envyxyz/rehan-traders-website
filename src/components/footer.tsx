@@ -5,8 +5,8 @@ import { ArrowUpRight } from "@/components/icons"
 import { Container } from "@/components/layout"
 import { Mark } from "@/components/logo"
 import { Reveal } from "@/components/reveal"
-import { footer, site, actions, ui } from "@/content"
-import { services } from "@/content-large"
+import { brandPage, footer, site, actions, ui } from "@/content"
+import { brands, services } from "@/content-large"
 import { cn } from "@/lib/utils"
 
 const groupTitle = "font-display text-title-md text-on-band"
@@ -89,6 +89,18 @@ export function Footer() {
               </li>
             ))}
           </Group>
+          <div className="sm:col-span-2 lg:col-span-12">
+            <h2 className={groupTitle}>{footer.groups.brands}</h2>
+            <ul className="mt-3 flex flex-wrap gap-x-6">
+              {[...brands.map((b) => ({ href: `/repairs/${b.slug}`, label: b.name })), { href: "/repairs/iphone", label: brandPage.apple }].map((b) => (
+                <li key={b.href}>
+                  <Link href={b.href} className={linkClass}>
+                    {b.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Reveal>
         <div className="mt-14 flex flex-wrap justify-between gap-2 pt-6 text-caption">
           <span>{footer.copyright(new Date().getFullYear())}</span>
