@@ -54,8 +54,8 @@ export const site = {
   mapsUrl: "https://maps.google.com/?cid=7044160813583291979",
   /**
    * Confirmed profiles only, for JSON-LD sameAs. The Google Maps place page for now.
-   * TODO(adnan): confirm. The Facebook page (rehantraders0) joins this list once its phone and hours are fixed
-   * (it shows 0305 5875716 and "Always open"); it is left out until then.
+   * The old Facebook page (rehantraders0, wrong phone and hours) was deleted by 15 Nov 2026. Add the new
+   * Facebook page and the other profiles here as each one goes live with the exact NAP.
    */
   sameAs: ["https://maps.google.com/?cid=7044160813583291979", "https://www.instagram.com/rehantraders.lab/"], // Instagram: as listed on the verified Business Profile
   /** Square brand avatar, public/images/logo.png. */
