@@ -17,6 +17,9 @@ const { retrieve, related, passages, PAGE_SCORE } = await import(pathToFileURL(o
 
 // [question, the page its best passage must be on, or null for no passages at all]
 const cases = [
+  ["samsung maintenance mode hides my data", "/repairs/samsung"],
+  ["pixel 8 vertical line google program", "/repairs/google-pixel"],
+  ["tecno under warranty should I go to carlcare", "/repairs/tecno"],
   ["my phone fell in water what should I do", "/guides/phone-fell-in-water"],
   ["mobile pani mein gir gaya kya karun", "/guides/phone-fell-in-water"],
   ["should I put it in rice", "/guides/phone-fell-in-water"],

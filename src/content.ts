@@ -33,7 +33,8 @@ export const site = {
   url: "https://rehanmobiletraders.com",
   entity:
     "Rehan Traders is a phone and tablet repair lab at Shop G-88, Ground Floor, Hafeez Center, Gulberg III, Lahore.",
-  founded: 2009, // Adnan, PRD §11 q12
+  founded: 2010, // opened 2 Feb 2010, the Google Business Profile opening date (Ameer, 15 Nov 2026); replaces 2009 from PRD §11 q12
+  opened: "2010-02-02",
   phone: { display: "0305 8874839", dial: phoneDial, href: `tel:${phoneDial}` },
   whatsapp: {
     href: "https://wa.me/923058874839",
@@ -368,7 +369,7 @@ export const home = {
     owner: {
       name: "Adnan Ali",
       role: "Owner",
-      text: "Rehan Traders has repaired phones since 2009.",
+      text: "Rehan Traders has repaired phones since 2010.",
       alt: "Adnan Ali, owner of Rehan Traders",
       more: "About the shop",
     },
@@ -511,7 +512,7 @@ export const reviewsPage = {
 
 export const visitPage = {
   title: "Mobile repair shop in Hafeez Center, Lahore",
-  lede: "Rehan Traders is Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54660. The shop has repaired phones here since 2009. It is a walk-in shop: bring the phone and it is checked free of cost.",
+  lede: "Rehan Traders is Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Block E1, Gulberg III, Lahore 54660. The shop has repaired phones here since 2010. It is a walk-in shop: bring the phone and it is checked free of cost.",
   contactTitle: "Contact number and WhatsApp",
   contactText: `The number for Shop G-88 is ${site.phone.display}. It is the same number for calls and WhatsApp, and WhatsApp is the quickest way to reach the shop. Hafeez Center has many shops, and this is the number of one of them, not a directory for the building.`,
   contactSend: "Send the exact model and a photo of the fault, and the shop replies with a quote. Prices are not published online because parts prices change daily.",
@@ -615,8 +616,8 @@ export const faqPage = {
 export const aboutPage = {
   title: "About Rehan Traders",
   lede: `${site.entity} Hafeez Center is Lahore's phone market, and getting a reliable repair there can be confusing. The shop's aim is to make repairing easy.`,
-  sinceTitle: "Since 2009",
-  sinceText: "Rehan Traders has repaired phones since 2009. A repair counts as certified when the phone works well and the customer has no issues with it. Every job starts with a free check: the shop tells you plainly what is wrong, whether it can be fixed, what it will cost and how long it will take. Then you decide.",
+  sinceTitle: "Since 2010",
+  sinceText: "Rehan Traders has repaired phones since 2010. A repair counts as certified when the phone works well and the customer has no issues with it. Every job starts with a free check: the shop tells you plainly what is wrong, whether it can be fixed, what it will cost and how long it will take. Then you decide.",
   benchTitle: "The open repair bench",
   benchText: "Repairs happen at the open bench in Shop G-88, which has a microscope for board work. Ask to watch when the bench is not busy, and ask for your old parts back if you want them. Swollen batteries are the exception: the shop disposes of them straight away.",
   benchLink: { phrase: "Shop G-88", href: "/visit" },
@@ -758,7 +759,7 @@ export const seo = {
   },
   about: {
     title: "About the shop at Hafeez Center, Lahore",
-    description: "Rehan Traders has repaired phones at Shop G-88, Hafeez Center, Lahore since 2009. Run by Adnan Ali, it tries to save your panel first.",
+    description: "Rehan Traders has repaired phones at Shop G-88, Hafeez Center, Lahore since 2010. Run by Adnan Ali, it tries to save your panel first.",
   },
   privacy: {
     title: "Privacy policy for repair bookings",

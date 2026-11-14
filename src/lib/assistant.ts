@@ -1,5 +1,5 @@
 import { facts, faq, price, priceMode, process, site } from "../content"
-import { estimator, reviews, services, type EstimateFault, type Service } from "../content-large"
+import { brands, estimator, reviews, services, type EstimateFault, type Service } from "../content-large"
 
 // Shared by the Worker (worker/chat.ts) and the client (ChatPanel, Estimator), so both agree on
 // the limits, the reply format and how a fault maps to a repair. Relative imports: the Worker bundles this file.
@@ -39,6 +39,10 @@ export const knowledge = [
   "",
   "## Repairs",
   ...services.map((s) => `- ${s.title}: ${s.long} Faults: ${s.faults.join(", ")}.${priceLine(s) ? ` Price: ${priceLine(s)}.` : ""}`),
+  "",
+  "## Brand pages (link the one for the customer's brand; Apple is the iPhone repair page)",
+  ...brands.map((b) => `- ${b.name}: /repairs/${b.slug}. ${b.short}`),
+  "- Apple: /repairs/iphone",
   "",
   "## How a repair works",
   ...process.map((p, i) => `${i + 1}. ${p.title}: ${p.text}`),

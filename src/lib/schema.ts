@@ -36,7 +36,7 @@ export const storeSchema = {
   description: site.entity,
   telephone: site.phone.dial,
   email: site.email,
-  foundingDate: String(site.founded),
+  foundingDate: site.opened,
   image: `${site.url}/images/storefront-og.jpg`,
   logo: `${site.url}${site.logo}`,
   sameAs: site.sameAs,

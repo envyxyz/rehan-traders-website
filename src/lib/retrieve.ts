@@ -1,4 +1,4 @@
-import { guides, services } from "../content-large"
+import { brands, guides, services } from "../content-large"
 
 // The chat's retrieval, used only by the Worker (worker/chat.ts). Kept out of assistant.ts, which the pages also load:
 // building the index there would cost every visitor the guides' text and the work of indexing it.
@@ -7,24 +7,33 @@ import { guides, services } from "../content-large"
 export type Passage = { href: string; page: string; title: string; text: string }
 
 /** The guides and the repair pages' long sections, cut into passages. Too long for every prompt, so each question gets its best few. */
+// Built from content data at Worker start: a guide or FAQ item missing a field must drop out, not crash the Worker.
 export const passages: Passage[] = [
   ...guides.flatMap((g) => {
     const at = { href: `/guides/${g.slug}`, page: g.title }
     return [
       { ...at, title: g.title, text: g.answer },
-      ...g.sections.map((s) => ({ ...at, title: s.h, text: [s.answer, ...(s.list ?? []), ...(s.table?.rows.map((r) => r.join(": ")) ?? [])].join(" ") })),
-      ...g.faq.map((f) => ({ ...at, title: f.q, text: f.a })),
+      ...(g.sections ?? []).map((s) => ({ ...at, title: s.h, text: [s.answer, ...(s.list ?? []), ...(s.table?.rows.map((r) => r.join(": ")) ?? [])].join(" ") })),
+      ...(g.faq ?? []).map((f) => ({ ...at, title: f.q, text: f.a })),
     ]
   }),
   ...services.flatMap((s) => {
     const at = { href: `/repairs/${s.slug}`, page: s.title }
     return [
       { ...at, title: s.title, text: `${s.intro} ${s.answers.model} ${s.answers.time}` },
-      ...s.detail.map((d) => ({ ...at, title: d.h, text: [...d.p, ...(d.list ?? [])].join(" ") })),
-      ...s.faq.map((f) => ({ ...at, title: f.q, text: f.a })),
+      ...(s.detail ?? []).map((d) => ({ ...at, title: d.h, text: [...(d.p ?? []), ...(d.list ?? [])].join(" ") })),
+      ...(s.faq ?? []).map((f) => ({ ...at, title: f.q, text: f.a })),
     ]
   }),
-]
+  ...brands.flatMap((b) => {
+    const at = { href: `/repairs/${b.slug}`, page: b.title }
+    return [
+      { ...at, title: b.title, text: [b.short, ...b.intro.map((p) => p.text)].join(" ") },
+      ...[...b.series, ...b.differ].map((x) => ({ ...at, title: x.h, text: x.text })),
+      ...b.faq.map((f) => ({ ...at, title: f.q, text: f.a })),
+    ]
+  }),
+].filter((p): p is Passage => typeof p.title === "string" && typeof p.text === "string" && p.text.length > 0)
 
 // Words that carry no topic, in English and Roman Urdu.
 const STOP = new Set(
@@ -56,8 +65,8 @@ const ALIAS: Record<string, string> = {
  * "charge nahi" and "not charging" are both the pair charging+not, which is rare enough to find its page where the two
  * words alone are too common to.
  */
-export function terms(text: string) {
-  const words = (text.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []).map((w) => ALIAS[w] ?? w).filter((w) => w.length > 1 && !STOP.has(w))
+export function terms(text: string | undefined) {
+  const words = ((text ?? "").toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []).map((w) => ALIAS[w] ?? w).filter((w) => w.length > 1 && !STOP.has(w))
   const pairs = words.slice(1).flatMap((w, i) => (w === words[i] ? [] : [[words[i], w].sort().join("+")]))
   return [...words, ...pairs]
 }
@@ -67,6 +76,8 @@ const K1 = 1.4
 const B = 0.6
 const TITLE_WEIGHT = 2 // a passage's heading counts double
 const GUIDE_BOOST = 1.25 // a guide says what to do; a repair page says what the shop does. The chat is asked the first more often
+const BRAND_DAMP = 0.8 // a brand page touches every repair briefly; the repair's own page answers it better
+const brandHrefs = new Set(brands.map((b) => `/repairs/${b.slug}`))
 const index = passages.map((p) => {
   const tf = new Map<string, number>()
   for (const t of terms(p.title)) tf.set(t, (tf.get(t) ?? 0) + TITLE_WEIGHT)
@@ -93,7 +104,8 @@ export function retrieve(query: string, k = 3) {
         const f = d.tf.get(t)
         if (f) score += (idf.get(t)! * f * (K1 + 1)) / (f + K1 * (1 - B + (B * d.length) / mean))
       }
-      return { passage: passages[i], score: passages[i].href.startsWith("/guides/") ? score * GUIDE_BOOST : score }
+      const href = passages[i].href
+      return { passage: passages[i], score: href.startsWith("/guides/") ? score * GUIDE_BOOST : brandHrefs.has(href) ? score * BRAND_DAMP : score }
     })
     .filter((r) => r.score >= MIN_SCORE)
     .sort((a, b) => b.score - a.score)

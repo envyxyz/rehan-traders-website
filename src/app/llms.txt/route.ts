@@ -27,7 +27,7 @@ const pages = [
   { label: "Reviews", path: "/reviews", note: "Customer reviews copied directly from Google Business Profile" },
   { label: "FAQ", path: "/faq", note: "Answers to common questions about repairs, pricing and visits" },
   { label: "Guides", path: "/guides", note: "Guides to common phone faults: cracked screen, lines on the screen, water damage, not charging, battery drain, not turning on, touch not working" },
-  { label: "About", path: "/about", note: "History since 2009, the open bench, and owner Adnan Ali" },
+  { label: "About", path: "/about", note: "History since 2010, the open bench, and owner Adnan Ali" },
 ]
 
 const serviceUrl = (slug: string) => `${site.url}/repairs/${slug}`

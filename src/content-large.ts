@@ -839,6 +839,7 @@ export const guides: Guide[] = [
     part: "panel",
     services: ["screen-replacement"],
     ...g2,
+    updated: "2026-11-15", // 15 Nov: questions people search (line colours, after a drop, after an update)
   },
   {
     slug: "phone-fell-in-water",
@@ -1123,6 +1124,7 @@ export const guides: Guide[] = [
     part: "board",
     services: ["board-repair", "screen-replacement"],
     ...g2,
+    updated: "2026-11-15", // 15 Nov: questions people search (line colours, after a drop, after an update)
   },
   {
     slug: "touch-not-working",
@@ -1392,7 +1394,7 @@ export const brands: Brand[] = [
       },
       {
         h: "Pixel 7 and 7 Pro: camera glass",
-        text: "Owners of the Pixel 7 family reported the glass over the camera bar cracking with no drop to explain it, a story The Verge covered in January 2023. A cracked camera cover lets dust onto the lens, and it can cut a finger, so it is worth having looked at.",
+        text: "Owners of the Pixel 7 family reported the glass over the camera bar cracking with no drop to explain it, which 9to5Google reported in January 2023. A cracked camera cover lets dust onto the lens, and it can cut a finger, so it is worth having looked at.",
       },
       {
         h: "Any Pixel: charging and battery",
@@ -1413,9 +1415,9 @@ export const brands: Brand[] = [
     },
     differTitle: "What is different about repairing a Pixel",
     differ: [
-      { h: "The screen comes off first", text: "Phones from different brands open differently, and the shop works from the exact model in front of it. Send the model before you come and the shop can tell you what the job involves." },
+      { h: "Send the exact model first", text: "Phones from different brands open differently, and the shop works from the exact model in front of it. Send the model before you come and the shop can tell you what the job involves." },
       { h: "Fingerprint calibration after a screen change", text: "Newer Pixels read your fingerprint through the display, so a replacement screen has to suit the reader, and a calibration step may be needed afterwards. Ask what will happen to the reader before you agree." },
-      { h: "Imported phones, no local Google service", text: "Parts for any phone come in more than one quality, and you choose. Ask which one you are being quoted, and what it means for warranty, which the shop discusses once the fault is diagnosed." },
+      { h: "Part quality is your choice", text: "Parts for any phone come in more than one quality, and you choose. Ask which one you are being quoted, and what it means for warranty, which the shop discusses once the fault is diagnosed." },
     ],
     says: [
       { say: "Google Pixel ki screen tuti hui hai", service: "touch-glass-replacement" },
@@ -1485,8 +1487,8 @@ export const brands: Brand[] = [
     },
     differTitle: "What is different about repairing a OnePlus",
     differ: [
-      { h: "The alert slider", text: "Most OnePlus flagships carry a physical alert slider on the frame, and most Nord phones do not. It is a small part to disturb during a repair, so tell the shop if yours feels loose or sticky." },
-      { h: "No local service network to compare with", text: "Parts for a OnePlus come in more than one quality, and you choose. Ask which one you are being quoted, and what it means for warranty, which the shop discusses once the fault is diagnosed." },
+      { h: "The alert slider", text: "Most OnePlus flagships carry a physical alert slider on the frame, and the cheaper Nord CE and N phones do not. It is a small part to disturb during a repair, so tell the shop if yours feels loose or sticky." },
+      { h: "Part quality is your choice", text: "Parts for a OnePlus come in more than one quality, and you choose. Ask which one you are being quoted, and what it means for warranty, which the shop discusses once the fault is diagnosed." },
       { h: "Glass only on a curved screen", text: "Several OnePlus models have a curved display, and curved glass is harder to separate cleanly than flat glass. The shop confirms your exact model before it promises a glass-only repair." },
     ],
     says: [
@@ -1610,7 +1612,6 @@ export const brands: Brand[] = [
       {
         h: "X series: camera hardware",
         text: "The X phones are bought for their cameras, and a hard drop can disturb what sits behind the lens: a picture that will not focus, or a lens that rattles. Send your exact model and the check tells you what yours needs.",
-        link: { phrase: "camera", href: "/repairs/board-repair" },
       },
     ],
     table: {
@@ -1803,7 +1804,7 @@ export const brands: Brand[] = [
     image: "parts-drawers",
     detailPhoto: "microscope-bench",
     intro: [
-      { text: "Tecno sells four lines in Pakistan: Spark, Camon, Pova and Phantom. Spark phones are the everyday ones, Camon the camera phones, Pova the big-battery ones and Phantom the foldables. Rehan Traders, Shop G-88, Hafeez Center, repairs all of them at an open bench." },
+      { text: "Tecno sells four lines in Pakistan: Spark, Camon, Pova and Phantom. Spark phones are the everyday ones, Camon the camera phones, Pova the big-battery ones and Phantom the premium line, which includes the Phantom V Fold and V Flip foldables. Rehan Traders, Shop G-88, Hafeez Center, repairs all of them at an open bench." },
       { text: "Like Infinix and itel, Tecno belongs to Transsion Holdings, and its official service network in Pakistan is Carlcare. If your phone is under warranty, start there; if it is not, or you would rather talk to the person who will work on it, bring it to G-88 for a free check." },
     ],
     seriesTitle: "What breaks on Tecno phones",

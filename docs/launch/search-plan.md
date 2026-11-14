@@ -77,7 +77,7 @@ Add Google's predefined services that match (screen repair, battery replacement,
 
 ### Description (750 characters, no links, no promotions)
 
-> Rehan Traders is a phone and tablet repair lab at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore, repairing phones since 2009. When only the glass is cracked, the shop replaces the touch glass and keeps your original display. It repairs every Galaxy Z Fold and Z Flip generation (outer glass, inner screen and hinge), iPhones (screen, back glass, Face ID, battery, charging), screens with lines or black displays, batteries and charging ports, water-damaged phones with data recovery, motherboard faults under the microscope, and iPads. Checking is free: the shop tells you what is wrong, what it will cost and how long it will take. Call or WhatsApp 0305 8874839.
+> Rehan Traders is a phone and tablet repair lab at Shop G-88, Ground Floor, Hafeez Center, Main Boulevard, Gulberg III, Lahore, repairing phones since 2010. When only the glass is cracked, the shop replaces the touch glass and keeps your original display. It repairs every Galaxy Z Fold and Z Flip generation (outer glass, inner screen and hinge), iPhones (screen, back glass, Face ID, battery, charging), screens with lines or black displays, batteries and charging ports, water-damaged phones with data recovery, motherboard faults under the microscope, and iPads. Checking is free: the shop tells you what is wrong, what it will cost and how long it will take. Call or WhatsApp 0305 8874839.
 
 (About 700 characters. Every fact is in PRODUCT.md.)
 

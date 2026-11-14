@@ -24,7 +24,7 @@ Turn a visitor with a broken device into a booked visit, a WhatsApp chat, a call
 - Saves the damaged panel first where it can (Adnan: "our main priority").
 - Foldables: all of them, not only Galaxy Z Fold and Z Flip (Ameer, 1 Nov 2026). Name Duo, Galaxy Z Series and Pixel Fold; list no other brands. Outer glass, inner panel, hinge.
 - Board-level repair at an open bench with a microscope, inside Hafeez Center, Lahore's phone market.
-- Repairing phones since 2009.
+- Repairing phones since 2010: opened 2 February 2010, the opening date on the Google Business Profile (Ameer, 15 Nov 2026; earlier notes said 2009).
 - 10,000+ certified repairs (confirmed by Ameer, 1 Nov 2026).
 - 4.9 on Google from 49 reviews (31 Oct 2026). Copied from the Google listing into content.ts with its date, refreshed by hand; never rounded up or guessed.
 

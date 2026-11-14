@@ -149,7 +149,7 @@ These are confirmed and can go on the site:
 - **Booking email:** rehanmobiletraders@gmail.com.
 - **Photos:** team faces allowed, names not needed. Owner is Adnan (his photo: the old profile picture in `../growth/Brand/`).
 - **Coverage:** all foldables, not only Galaxy Z Fold and Z Flip (Ameer, 1 Nov 2026; earlier wording: every Z Fold and Z Flip generation, Pixel Fold, Surface Duo). Copy names Duo, Galaxy Z Series and Pixel Fold only; iPhones (panels, back glass); water damage; tablets except very old, obsolete models. The shop tries to save the damaged panel first.
-- **Founded:** 2009.
+- **Founded:** 2010 (opened 2 Feb 2010, per the Google Business Profile; corrected 15 Nov 2026).
 
 Answered 30 Oct 2026 (former §12 q1, q2 and q4):
 - **Warranty:** depends on the type of repair, the model and the quality of parts the customer chooses. It is discussed right after the job is confirmed or the fault is diagnosed. The shop gives generous warranties. No length, no "lifetime", no "100%".
