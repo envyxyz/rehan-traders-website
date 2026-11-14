@@ -4,7 +4,7 @@ import path from "node:path"
 import { cn } from "@/lib/utils"
 
 // Phase 2 writes public/images/<name>-<width>.avif|webp at these widths (scripts/images/export.mjs).
-const WIDTHS = [640, 960, 1280, 1920]
+const WIDTHS = [640, 800, 960, 1280, 1920]
 const dir = path.join(process.cwd(), "public", "images")
 
 const srcSet = (name: string, ext: string, widths: number[]) =>
