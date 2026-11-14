@@ -575,7 +575,7 @@ export type Guide = {
 const atShop = `${site.address.short}, ${site.address.city}`
 const g2 = { published: "2026-11-02", updated: "2026-11-07" }
 
-export const guides: Guide[] = [
+const allGuides: Guide[] = [
   {
     slug: "cracked-screen-glass-or-full-screen",
     title: "Cracked phone screen: new glass or a whole new screen?",
@@ -973,3 +973,12 @@ export const guides: Guide[] = [
     ...g2,
   },
 ]
+
+/**
+ * Scheduled publishing. A guide goes live on its `published` date: the build leaves out any guide dated in
+ * the future (list, pages, sitemap, llms files, repair-page links, schema). The site is a static export, so a
+ * daily rebuild (.github/workflows/daily-build.yml) makes a dated guide appear on its day. GUIDES_AS_OF
+ * (YYYY-MM-DD) overrides today, for tests. Dates are Pakistan time (UTC+5).
+ */
+const today = process.env.GUIDES_AS_OF ?? new Date(Date.now() + 5 * 3600_000).toISOString().slice(0, 10)
+export const guides: Guide[] = allGuides.filter((g) => g.published <= today)

@@ -1,0 +1,16 @@
+# Guides carry a `published` date and the static export leaves out future ones (src/content-large.ts).
+# This job asks Cloudflare Workers Builds to rebuild every day so a dated guide appears on its day.
+# One-time setup: Cloudflare dashboard > Workers & Pages > the site > Settings > Builds > Deploy hooks,
+# create a hook for branch main, then add its URL as a GitHub repo secret named CF_DEPLOY_HOOK.
+name: daily-build
+on:
+  schedule:
+    - cron: "10 19 * * *" # 00:10 Pakistan time
+  workflow_dispatch:
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl --fail -sS -X POST "$HOOK"
+        env:
+          HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
