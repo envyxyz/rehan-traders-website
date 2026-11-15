@@ -39,15 +39,16 @@ const linkClass = "inline-flex h-11 items-center gap-1 rounded-pill px-2 xl:px-3
 // No outline utilities: the global :focus-visible ring applies (`outline-none` here used to hide it for keyboard users too).
 const triggerClass = cn(linkClass, "cursor-pointer")
 /** The links that open a menu (nav-menus.tsx lists what each holds). */
-const hasMenu = (href: string): href is MenuHref => href === "/repairs" || href === "/guides"
+const MENUS: readonly string[] = ["/repairs", "/repairs#brands", "/guides", "/about"] satisfies MenuHref[]
+const hasMenu = (href: string): href is MenuHref => MENUS.includes(href)
 const face = (label: string) => (
   <>
     {label}
     <Icon icon={ChevronDown} size="sm" className="text-steel" />
   </>
 )
-// The Radix menu and sheet (about 48 KB) wait for the visitor's first interaction, out of the page load. Until then Repairs and
-// Guides are plain links to their pages, and the phone menu's button is already the real one: a tap opens the sheet as soon as its code arrives.
+// The Radix menu and sheet (about 48 KB) wait for the visitor's first interaction, out of the page load. Until then the menu triggers
+// are plain links to their pages, and the phone menu's button is already the real one: a tap opens the sheet as soon as its code arrives.
 const PlainLink = ({ href, label }: { href: string; label: string }) => (
   <Link href={href} className={triggerClass}>
     {face(label)}
@@ -70,7 +71,7 @@ function useWake(events: readonly (keyof WindowEventMap)[]) {
 const WAKE_DESKTOP = ["pointermove", "keydown", "wheel", "scroll"] as const
 const WAKE_PHONE = ["touchstart", "pointerdown", "keydown", "scroll"] as const
 
-/** Repairs opens the 8 repairs and Guides the guides; the other links are plain. `open` is the href of the open menu. */
+/** Repairs, Brands, Guides and About open menus (nav-menus.tsx); the other links are plain. `open` is the href of the open menu. */
 function NavLinks({ open, onOpen }: { open: string | null; onOpen: (href: string | null) => void }) {
   const awake = useWake(WAKE_DESKTOP)
   const [loaded, setLoaded] = React.useState(false)

@@ -48,9 +48,10 @@ export function BrandPage({ brand }: { brand: Brand }) {
       <JsonLd data={faqSchema(brand.faq)} />
       <Section first className="flex flex-col justify-center">
         <Container>
-          <Breadcrumbs items={[{ label: breadcrumbs.repairs, href: "/repairs" }, { label: brand.name }]} className="mb-3" />
           <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            {/* The breadcrumb sits with the heading, in the column, as on the repair pages. */}
             <div className="lg:col-span-7">
+              <Breadcrumbs items={[{ label: breadcrumbs.repairs, href: "/repairs" }, { label: brand.name }]} className="mb-3" />
               <Heading as="h1" size="display-xl" rule>
                 {brand.title}
               </Heading>

@@ -1,8 +1,11 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
+import { BrandLogo, hasLogo } from "@/components/brand-logo"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
+import { Icon } from "@/components/icon"
+import { ArrowRight } from "@/components/icons"
 import { Container, Section } from "@/components/layout"
 import { ServiceCard } from "@/components/service-card"
 import { Heading, Linked, Text } from "@/components/typography"
@@ -11,6 +14,9 @@ import { brands, guides, services } from "@/content-large"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.repairs.title, description: seo.repairs.description, path: "/repairs" })
+
+// The nine brands in the order of the brand pages, Apple (the iPhone page) last.
+const logoWall = [...brands.map((b) => ({ slug: b.slug, name: b.name })), { slug: "iphone", name: brandPage.apple }]
 
 export default function RepairsIndexPage() {
   return (
@@ -39,53 +45,72 @@ export default function RepairsIndexPage() {
               </li>
             ))}
           </ul>
+        </Container>
+      </Section>
 
-          <h2 className="mt-16 font-display text-title-md text-ink">{repairsPage.problemsTitle}</h2>
-          <ul className="mt-4 grid gap-x-8 gap-y-1 md:grid-cols-2">
-            {problems.map((p) => {
-              const guide = guides.find((g) => g.services.includes(p.service))
-              return (
-                <li key={p.problem} className="flex flex-wrap items-center justify-between gap-x-4">
-                  <Link href={`/repairs/${p.service}`} className="flex min-h-11 items-center py-2 text-body-sm text-ink underline-offset-4 hover:underline">
-                    {p.problem}
-                  </Link>
-                  {guide && (
-                    <Link href={`/guides/${guide.slug}`} className="flex min-h-11 items-center py-2 text-body-sm text-steel underline-offset-4 hover:text-ink hover:underline">
-                      {repairsPage.guideFor}
-                    </Link>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-
-          <h2 className="mt-16 font-display text-title-md text-ink">{repairsPage.brandsTitle}</h2>
+      {/* Brands as a logo wall: greyscale marks (currentColor), the name under each so the link always says where it goes. */}
+      <Section id="brands" tone="panel">
+        <Container>
+          <Heading as="h2" size="title-lg">
+            {repairsPage.brandsTitle}
+          </Heading>
           <Text tone="muted" className="mt-3 max-w-2xl">
             {repairsPage.brandsLede}
           </Text>
-          <ul className="mt-4 flex flex-wrap gap-x-8">
-            {[...brands.map((b) => ({ href: `/repairs/${b.slug}`, label: b.name })), { href: "/repairs/iphone", label: brandPage.apple }].map((b) => (
-              <li key={b.href}>
-                <Link href={b.href} className="flex min-h-11 items-center py-2 text-body-md text-ink underline-offset-4 hover:underline">
-                  {b.label}
+          <ul className="mt-8 grid grid-cols-3 border-t border-l border-hairline sm:grid-cols-5 lg:grid-cols-9">
+            {logoWall.map((b) => (
+              <li key={b.slug} className="border-r border-b border-hairline">
+                <Link
+                  href={`/repairs/${b.slug}`}
+                  className="group flex h-full min-h-28 flex-col items-center justify-center gap-3 px-2 py-5 text-steel transition-colors duration-base hover:bg-card hover:text-ink focus-visible:text-ink"
+                >
+                  <span className="flex h-8 items-center">
+                    {hasLogo(b.slug) ? <BrandLogo slug={b.slug} /> : <span className="font-display text-title-md font-extrabold tracking-tight">{b.name}</span>}
+                  </span>
+                  <span className="text-center text-caption text-steel group-hover:text-ink">{b.name}</span>
                 </Link>
               </li>
             ))}
           </ul>
+          <p className="mt-4 text-caption text-steel">{repairsPage.brandsNote}</p>
+        </Container>
+      </Section>
 
-          <h2 className="mt-16 font-display text-title-md text-ink">{repairsPage.guidesTitle}</h2>
-          <Text tone="muted" className="mt-3 max-w-2xl">
-            {repairsPage.guidesLede}
-          </Text>
-          <ul className="mt-4 grid gap-x-8 gap-y-1 md:grid-cols-2">
-            {guides.map((g) => (
-              <li key={g.slug}>
-                <Link href={`/guides/${g.slug}`} className="flex min-h-11 items-center py-2 text-body-sm text-ink underline-offset-4 hover:underline">
-                  {g.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
+      <Section>
+        <Container className="grid gap-14 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-7">
+            <Heading as="h2" size="title-lg">
+              {repairsPage.problemsTitle}
+            </Heading>
+            <ul className="mt-5 border-t border-hairline">
+              {problems.map((p) => (
+                <li key={p.problem} className="border-b border-hairline">
+                  <Link href={`/repairs/${p.service}`} className="flex min-h-12 items-center justify-between gap-4 py-2.5 text-body-sm text-ink underline-offset-4 hover:underline">
+                    {p.problem}
+                    <Icon icon={ArrowRight} size="sm" className="shrink-0 text-steel" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="lg:col-span-5">
+            <Heading as="h2" size="title-lg">
+              {repairsPage.guidesTitle}
+            </Heading>
+            <Text tone="muted" className="mt-3">
+              {repairsPage.guidesLede}
+            </Text>
+            <ul className="mt-5 border-t border-hairline">
+              {guides.map((g) => (
+                <li key={g.slug} className="border-b border-hairline">
+                  <Link href={`/guides/${g.slug}`} className="flex min-h-12 items-center justify-between gap-4 py-2.5 text-body-sm text-ink underline-offset-4 hover:underline">
+                    {g.title}
+                    <Icon icon={ArrowRight} size="sm" className="shrink-0 text-steel" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Container>
       </Section>
 

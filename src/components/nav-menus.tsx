@@ -15,8 +15,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
-import { actions, guidesPage, nav, site } from "@/content"
-import { guides, services } from "@/content-large"
+import { actions, brandPage, guidesPage, nav, site } from "@/content"
+import { brands, guides, services } from "@/content-large"
 import { menuStagger } from "@/lib/tokens"
 import { cn } from "@/lib/utils"
 
@@ -24,14 +24,20 @@ import { cn } from "@/lib/utils"
 // in the first load; until it arrives Nav shows the same trigger without behaviour. The triggers' faces come from Nav.
 
 /** What each menu link opens. A guide's entry is its title up to the colon: the fault, without the question. */
-const menus = {
-  "/repairs": { all: actions.allRepairs, items: services.map((s) => ({ href: `/repairs/${s.slug}`, label: s.title })) },
-  "/guides": { all: guidesPage.all, items: guides.map((g) => ({ href: `/guides/${g.slug}`, label: g.title.split(":")[0] })) },
+const menus: Record<string, { all?: { href: string; label: string }; items: readonly { href: string; label: string }[] }> = {
+  "/repairs": { all: { href: "/repairs", label: actions.allRepairs }, items: services.map((s) => ({ href: `/repairs/${s.slug}`, label: s.title })) },
+  "/repairs#brands": {
+    all: { href: "/repairs#brands", label: brandPage.allBrands },
+    items: [...brands.map((b) => ({ href: `/repairs/${b.slug}`, label: b.name })), { href: "/repairs/iphone", label: brandPage.apple }],
+  },
+  "/guides": { all: { href: "/guides", label: guidesPage.all }, items: guides.map((g) => ({ href: `/guides/${g.slug}`, label: g.title.split(":")[0] })) },
+  "/about": { items: nav.aboutMenu },
 }
-export type MenuHref = keyof typeof menus
+/** The nav links that open a menu. nav.tsx keeps its own copy of this list, so the menus can stay out of the first load. */
+export type MenuHref = "/repairs" | "/repairs#brands" | "/guides" | "/about"
 const hasMenu = (href: string): href is MenuHref => href in menus
 
-/** Desktop: Repairs opens the 8 repairs, Guides the guides. `menu` controls it. */
+/** Desktop: Repairs opens the 8 repairs, Brands the brand pages, Guides the guides, About the shop's own pages. `menu` controls it. */
 export function LinkMenu({
   href,
   className,
@@ -52,10 +58,14 @@ export function LinkMenu({
             <Link href={item.href}>{item.label}</Link>
           </DropdownMenuItem>
         ))}
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href={href}>{menus[href].all}</Link>
-        </DropdownMenuItem>
+        {menus[href].all && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href={menus[href].all.href}>{menus[href].all.label}</Link>
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -69,7 +79,7 @@ const rise = "animate-rise motion-reduce:animate-none"
 const delay = (i: number) => ({ animationDelay: `${menuStagger.start + i * menuStagger.step}s` })
 
 /**
- * Phones: the menu sheet, opened by Nav's menu button (`open`). The items fade in after the sheet slides in. Repairs and Guides each slide
+ * Phones: the menu sheet, opened by Nav's menu button (`open`). The items fade in after the sheet slides in. Repairs, Brands, Guides and About each slide
  * a second panel over the first (Back, the link to all, then the list); whichever panel is hidden is inert.
  */
 export function MobileMenu({ open, onOpenChange, returnFocus }: { open: boolean; onOpenChange: (open: boolean) => void; returnFocus: React.RefObject<HTMLElement | null> }) {
@@ -162,11 +172,13 @@ export function MobileMenu({ open, onOpenChange, returnFocus }: { open: boolean;
             </button>
           </div>
           <ul className="flex flex-col px-6 pt-2 pb-6">
-            <li>
-              <Link href={list} className={cn(entry, sub && rise)} style={delay(0)}>
-                {menus[list].all}
-              </Link>
-            </li>
+            {menus[list].all && (
+              <li>
+                <Link href={menus[list].all.href} className={cn(entry, sub && rise)} style={delay(0)}>
+                  {menus[list].all.label}
+                </Link>
+              </li>
+            )}
             {menus[list].items.map((item, i) => (
               <li key={item.href}>
                 <Link href={item.href} className={cn(entry, sub && rise)} style={delay(i + 1)}>

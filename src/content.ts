@@ -124,12 +124,17 @@ export const facts = {
 export const nav = {
   links: [
     { label: "Repairs", href: "/repairs" },
+    { label: "Brands", href: "/repairs#brands" },
     { label: "Guides", href: "/guides" },
     { label: "Get a Quote", href: "/quote" },
     { label: "Reviews", href: "/reviews" },
     { label: "About", href: "/about" },
+  ],
+  /** The About menu (15 Nov 2026: About, FAQ and Contact under one menu, so the bar has room for Brands). */
+  aboutMenu: [
+    { label: "About Rehan Traders", href: "/about" },
     { label: "FAQ", href: "/faq" },
-    { label: "Contact", href: "/visit" },
+    { label: "Contact and directions", href: "/visit" },
   ],
   call: `Call ${site.phone.display}`,
   menu: "Menu",
@@ -393,6 +398,7 @@ export const footer = {
     { label: "About", href: "/about" },
     { label: "Reviews", href: "/reviews" },
     { label: "FAQ", href: "/faq" },
+    { label: "Contact and directions", href: "/visit" },
     { label: "Send by courier", href: "/courier" },
     { label: "Repair guides", href: "/guides" },
     // Warranty page publishes only once Adnan confirms terms
@@ -456,9 +462,10 @@ export const repairsPage = {
   ],
   brandsTitle: "Repairs by phone brand",
   brandsLede: "Rehan Traders repairs Samsung, Apple, Google Pixel, OnePlus, Oppo, Vivo, Infinix, Xiaomi (Mi and Redmi) and Tecno. Each brand page covers the faults that are common on that brand and links to the repair that fixes them.",
+  /** Under the logo wall (15 Nov 2026): the logos name the phones repaired; no claim of being an authorised centre. */
+  brandsNote: "Brand names and logos belong to their owners. They are shown only to say which phones the shop repairs.",
   guidesTitle: "Guides for what you see",
   guidesLede: "Plain answers to what people search when a phone breaks, with a link to the repair for each.",
-  guideFor: "Guide",
 } as const
 
 /** The /repairs/<brand> pages: strings around each brand's own copy (content-large.ts `brands`). */

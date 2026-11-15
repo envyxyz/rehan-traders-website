@@ -74,16 +74,16 @@ export default async function ServicePage({ params }: PageProps) {
       {service.faq.length > 0 && <JsonLd data={faqSchema(service.faq)} />}
       <Section first className="flex flex-col justify-center">
         <Container>
-          <Breadcrumbs
-            items={[
-              { label: breadcrumbs.repairs, href: "/repairs" },
-              { label: service.title },
-            ]}
-            className="mb-3"
-          />
-
           <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            {/* The breadcrumb sits with the heading: in the column, so it stays on top of it when the photo makes the row taller. */}
             <div className="lg:col-span-7">
+              <Breadcrumbs
+                items={[
+                  { label: breadcrumbs.repairs, href: "/repairs" },
+                  { label: service.title },
+                ]}
+                className="mb-3"
+              />
               <Heading as="h1" size="display-xl" rule>
                 {service.title}
               </Heading>
