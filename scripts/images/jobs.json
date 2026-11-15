@@ -206,5 +206,32 @@
     "aspect": "3:2",
     "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, opening a tablet with thin plastic picks along the edge of its cracked front glass, the tablet lying flat on the mat. No logos.",
     "alt": "A tablet with cracked glass being opened with plastic picks"
+  },
+  {
+    "name": "iphone-housing-swap",
+    "sources": [
+      "../growth/Photos/Originals/2026-11-14_iphone-housing-swap_02.jpg"
+    ],
+    "aspect": "4:3",
+    "prompt": null,
+    "alt": "Two opened iPhones beside a working display at the bench during a housing swap, Rehan Traders, Lahore"
+  },
+  {
+    "name": "battery-bench",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_product-battery_01.jpg"
+    ],
+    "aspect": "4:3",
+    "prompt": null,
+    "alt": "A Samsung phone opened at the bench with its battery showing, Rehan Traders, Lahore"
+  },
+  {
+    "name": "microscope-mat",
+    "sources": [
+      "../growth/Photos/Edited/rehan-traders-lahore_product-board-repair_01.jpg"
+    ],
+    "aspect": "4:3",
+    "prompt": null,
+    "alt": "Stereo microscope over the silicone mat where boards are repaired, Rehan Traders, Lahore"
   }
 ]

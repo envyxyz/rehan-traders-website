@@ -138,5 +138,26 @@
     "height": 848,
     "placeholder": false,
     "ai": true
+  },
+  "iphone-housing-swap": {
+    "alt": "Two opened iPhones beside a working display at the bench during a housing swap, Rehan Traders, Lahore",
+    "width": 1920,
+    "height": 1440,
+    "placeholder": false,
+    "ai": false
+  },
+  "battery-bench": {
+    "alt": "A Samsung phone opened at the bench with its battery showing, Rehan Traders, Lahore",
+    "width": 1200,
+    "height": 900,
+    "placeholder": false,
+    "ai": false
+  },
+  "microscope-mat": {
+    "alt": "Stereo microscope over the silicone mat where boards are repaired, Rehan Traders, Lahore",
+    "width": 1200,
+    "height": 900,
+    "placeholder": false,
+    "ai": false
   }
 }
