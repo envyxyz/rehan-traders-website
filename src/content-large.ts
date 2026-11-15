@@ -307,7 +307,7 @@ export const services: Service[] = [
     long: "Liquid-damaged and dead phones are opened, cleaned and repaired at board level, with your data recovered first where possible.",
     faults: ["Water damage", "Phone will not turn on", "Data recovery"],
     image: "wet-board-cleaning",
-    // detailPhoto: "ultrasonic-clean", // ponytail: master not generated yet (agy quota); uncomment after export
+    detailPhoto: "ultrasonic-clean", // agy image of the bench (15 Nov 2026); swap for a real job photo when Adnan sends one
     howItWorks: [
       { step: "01", title: "Immediate intake", text: "The phone is opened immediately and the battery disconnected to halt short circuits." },
       { step: "02", title: "Corrosion cleaning", text: "Mineral deposits and liquid corrosion are cleaned from the board." },
@@ -383,7 +383,7 @@ export const services: Service[] = [
     long: "Mainly iPad repairs: glass, screens, batteries and charging. Very old, obsolete tablets are not taken in.",
     faults: ["Cracked glass", "Screen", "Battery", "Charging"],
     image: "ipad-screen",
-    // detailPhoto: "ipad-digitizer", // ponytail: master not generated yet (agy quota); uncomment after export
+    detailPhoto: "ipad-digitizer", // agy image of the bench (15 Nov 2026); swap for a real job photo when Adnan sends one
     howItWorks: [
       { step: "01", title: "Tablet inspection", text: "We check whether only the glass is cracked or the display under it is damaged too." },
       { step: "02", title: "Bench repair", text: "Glass separation, display replacement, or battery service is performed at the bench." },

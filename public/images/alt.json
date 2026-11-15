@@ -159,5 +159,19 @@
     "height": 900,
     "placeholder": false,
     "ai": false
+  },
+  "ultrasonic-clean": {
+    "alt": "A phone logic board in the basket of an ultrasonic cleaner after water damage",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
+  },
+  "ipad-digitizer": {
+    "alt": "A tablet with cracked glass being opened with plastic picks and a suction cup at the bench",
+    "width": 1200,
+    "height": 896,
+    "placeholder": false,
+    "ai": true
   }
 }

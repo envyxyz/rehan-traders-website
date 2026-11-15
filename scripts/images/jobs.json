@@ -183,11 +183,11 @@
   {
     "name": "ultrasonic-clean",
     "sources": [
-      "scripts/images/out/glass-separation.png"
+      "../growth/Photos/Originals/2026-10-20_microscope-station_01.jpg"
     ],
-    "aspect": "3:2",
+    "aspect": "4:3",
     "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, lowering a bare smartphone logic board in a small basket into a compact stainless ultrasonic cleaner filled with clear liquid. No labels or text.",
-    "alt": "A phone logic board being lowered into an ultrasonic cleaner after water damage"
+    "alt": "A phone logic board in the basket of an ultrasonic cleaner after water damage"
   },
   {
     "name": "hot-air-rework",
@@ -201,11 +201,11 @@
   {
     "name": "ipad-digitizer",
     "sources": [
-      "scripts/images/out/glass-separation.png"
+      "../growth/Photos/Originals/2026-10-20_microscope-station_01.jpg"
     ],
-    "aspect": "3:2",
+    "aspect": "4:3",
     "prompt": "Same bench, matte charcoal ESD mat, light and camera style as the attached photo. Close-up of a technician's gloved hands, no face, opening a tablet with thin plastic picks along the edge of its cracked front glass, the tablet lying flat on the mat. No logos.",
-    "alt": "A tablet with cracked glass being opened with plastic picks"
+    "alt": "A tablet with cracked glass being opened with plastic picks and a suction cup at the bench"
   },
   {
     "name": "iphone-housing-swap",
