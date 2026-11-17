@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CtaBand } from "@/components/cta-band"
@@ -8,7 +9,8 @@ import { JsonLd } from "@/components/json-ld"
 import { Container, Section } from "@/components/layout"
 import { Heading, Linked, Text } from "@/components/typography"
 import { Card } from "@/components/ui/card"
-import { aboutPage, breadcrumbs, jobCardContent, seo } from "@/content"
+import { aboutPage, brandPage, breadcrumbs, jobCardContent, seo } from "@/content"
+import { brands, guides, services } from "@/content-large"
 import { storeSchema } from "@/lib/schema"
 import { pageMeta } from "@/lib/page-meta"
 
@@ -123,6 +125,93 @@ export default function AboutPage() {
                 {jobCardContent.sampleNote}
               </Text>
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* What is repaired, which brands, where, guides */}
+      <Section tone="panel">
+        <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-6">
+            <Heading as="h2">{aboutPage.repairsTitle}</Heading>
+            <Text tone="muted" className="mt-3">
+              {aboutPage.repairsText}
+            </Text>
+            <ul className="mt-4">
+              {services.map((s) => (
+                <li key={s.slug}>
+                  <Link href={`/repairs/${s.slug}`} className="flex min-h-11 items-center gap-1.5 py-2 text-body-md text-ink underline-offset-4 hover:underline">
+                    {s.title}
+                  </Link>
+                  <Text tone="muted" size="body-sm">
+                    {s.short}
+                  </Text>
+                </li>
+              ))}
+            </ul>
+            <Link href="/repairs" className="mt-4 inline-flex min-h-11 items-center font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline">
+              {aboutPage.allRepairs}
+            </Link>
+          </div>
+          <div className="lg:col-span-6">
+            <Heading as="h2">{aboutPage.brandsTitle}</Heading>
+            <Text tone="muted" className="mt-3">
+              {aboutPage.brandsText}
+            </Text>
+            <ul className="mt-4">
+              {[...brands.map((b) => ({ href: `/repairs/${b.slug}`, label: b.name, short: b.short })), { href: "/repairs/iphone", label: brandPage.apple, short: services.find((s) => s.slug === "iphone")?.short }].map((b) => (
+                <li key={b.href}>
+                  <Link href={b.href} className="flex min-h-11 items-center gap-1.5 py-2 text-body-md text-ink underline-offset-4 hover:underline">
+                    {b.label}
+                  </Link>
+                  <Text tone="muted" size="body-sm">
+                    {b.short}
+                  </Text>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </Section>
+
+      <Section>
+        <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-6">
+            <Heading as="h2">{aboutPage.findTitle}</Heading>
+            <Text tone="body" className="mt-3">
+              <Linked link={aboutPage.findLink}>{aboutPage.findText}</Linked>
+            </Text>
+            <Text tone="body" className="mt-3">
+              {aboutPage.findHours}
+            </Text>
+            <Text tone="body" className="mt-3">
+              <Linked link={aboutPage.courierLink}>{aboutPage.courierText}</Linked>
+            </Text>
+
+            <div className="mt-8 border-t border-hairline pt-8">
+              <Heading as="h2">{aboutPage.reviewsTitle}</Heading>
+              <Text tone="body" className="mt-3">
+                <Linked link={aboutPage.reviewsLink}>{aboutPage.reviewsText}</Linked>
+              </Text>
+            </div>
+          </div>
+          <div className="lg:col-span-6">
+            <Heading as="h2">{aboutPage.guidesTitle}</Heading>
+            <Text tone="muted" className="mt-3">
+              {aboutPage.guidesText}
+            </Text>
+            <ul className="mt-4">
+              {aboutPage.guideSlugs.map((slug) => (
+                <li key={slug}>
+                  <Link href={`/guides/${slug}`} className="flex min-h-11 items-center gap-1.5 py-2 text-body-md text-ink underline-offset-4 hover:underline">
+                    {guides.find((g) => g.slug === slug)?.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Link href="/guides" className="mt-4 inline-flex min-h-11 items-center font-display text-body-sm font-bold text-ink underline-offset-4 hover:underline">
+              {aboutPage.allGuides}
+            </Link>
           </div>
         </Container>
       </Section>
