@@ -33,6 +33,8 @@ const cases = [
   ["mobile on nahi ho raha", "/guides/phone-not-turning-on"],
   ["how to force restart samsung", "/guides/phone-not-turning-on"],
   ["touch kaam nahi kar raha", "/guides/touch-not-working"],
+  ["iphone unknown part after battery change", "/guides/iphone-unknown-part-battery-message"],
+  ["battery change ke baad important battery message aa raha hai", "/guides/iphone-unknown-part-battery-message"],
   ["ghost touch by itself", "/guides/touch-not-working"],
   ["sirf glass toota hai display theek hai", "/guides/cracked-screen-glass-or-full-screen"],
   ["what time do you open", null],

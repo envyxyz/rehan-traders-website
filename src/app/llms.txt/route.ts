@@ -26,7 +26,7 @@ const pages = [
   { label: "Send by courier", path: "/courier", note: "Phone repair by courier from outside Lahore: the four steps, who pays for delivery, and questions answered" },
   { label: "Reviews", path: "/reviews", note: "Customer reviews copied directly from Google Business Profile" },
   { label: "FAQ", path: "/faq", note: "Answers to common questions about repairs, pricing and visits" },
-  { label: "Guides", path: "/guides", note: "Guides to common phone faults: cracked screen, lines on the screen, water damage, not charging, battery drain, not turning on, touch not working" },
+  { label: "Guides", path: "/guides", note: "Guides to common phone faults: cracked screen, lines on the screen, water damage, not charging, battery drain, not turning on, touch not working, iPhone Unknown Part battery message" },
   { label: "About", path: "/about", note: "History since 2010, the open bench, and owner Adnan Ali" },
 ]
 

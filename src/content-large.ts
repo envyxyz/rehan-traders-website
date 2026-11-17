@@ -1263,6 +1263,85 @@ export const guides: Guide[] = [
     published: "2026-11-15",
     updated: "2026-11-15",
   },
+  {
+    // Facts from Apple Support, checked 18 Nov 2026: support.apple.com/en-us/102658 (Parts and Service History) and /101575 (iPhone battery and performance). Shop facts: PRODUCT.md, Adnan 30 Oct 2026.
+    slug: "iphone-unknown-part-battery-message",
+    title: "iPhone says Unknown Part or Important Battery Message after a battery change",
+    seo: {
+      title: "iPhone Unknown Part battery message: what it means",
+      description: "Why an iPhone shows Unknown Part or Important Battery Message after a battery change, whether it hurts the phone, and when the message can be removed.",
+    },
+    answer:
+      "The iPhone could not verify the new battery as a genuine Apple part paired to your phone, so it labels it Unknown or says it cannot verify the battery. Apple says these messages do not stop you using the phone. Battery health may be hidden or inaccurate. With an original battery, the shop can remove the message.",
+    sections: [
+      {
+        h: "Why does my iPhone say Unknown Part after a battery change (battery change ke baad Unknown Part kyun aa raha hai)?",
+        answer:
+          "Your iPhone expects a battery that Apple has verified and linked to that phone. Apple says an Unknown label can appear when the new part isn't a genuine Apple part, isn't working as expected, wasn't verified and linked to the iPhone after the repair, or has been modified.",
+        list: [
+          "A copy battery gets the label even if it works fine.",
+          "A battery taken from another iPhone is labelled Used.",
+          "A good battery fitted without the pairing step can still show Unknown.",
+        ],
+      },
+      {
+        h: "Is the Unknown Part message harmful to my phone?",
+        answer:
+          "Apple says these messages don't affect your ability to use the iPhone unless the description says so. The phone charges and runs on the new battery. What does change is the battery screen, which can stop showing a reliable health figure, and Apple notes that an Unknown part might lower trade-in value.",
+      },
+      {
+        h: "What is the Important Battery Message (important battery message kya hota hai)?",
+        answer:
+          "It is the same check, worded by model. On the iPhone XS, XS Max, XR and later, the battery screen says the iPhone is unable to verify a genuine Apple battery and that its details may not be accurate. On the iPhone X and earlier, it says the phone cannot determine battery health.",
+        table: {
+          head: ["Phone", "What the battery screen says", "What it means"],
+          rows: [
+            ["iPhone XS, XS Max, XR and later", "Unable to verify this iPhone has a genuine Apple battery", "Health figures may be wrong"],
+            ["iPhone X and earlier", "Important Battery Message: unable to determine battery health", "No reliable health figure"],
+            ["Any iPhone with Parts and Service History", "Battery: Unknown", "The part was not verified"],
+          ],
+        },
+      },
+      {
+        h: "How do I check what my iPhone says about its battery?",
+        answer:
+          "Two screens show it. Parts and Service History needs iOS 15.2 or later and appears only after a repair; Battery Health shows the capacity figure or the warning. Take a screenshot of both before you visit, so the shop sees exactly what your phone reports.",
+        list: [
+          "Open Settings, tap General, then About, and look for Parts and Service History.",
+          "Read the label next to Battery: Genuine, Used or Unknown.",
+          "Open Settings, tap Battery, then Battery Health.",
+          "Screenshot both screens and send them on WhatsApp.",
+        ],
+        steps: true,
+      },
+      {
+        h: "Can the Unknown Part message be removed (message hata sakte hain)?",
+        answer:
+          "It depends on the battery you choose. With an original battery, Rehan Traders can remove the Unknown Part message and battery health shows. With a cheaper copy battery, the small IC from your old original battery can be moved onto the new one. Rarely that isn't possible, and the shop tells you after checking the phone.",
+        link: { phrase: "Rehan Traders can remove the Unknown Part message", href: "/repairs/battery-charging" },
+      },
+      {
+        h: "Will the message go away by itself?",
+        answer:
+          "The pop-up will. Apple shows the notification the first time you unlock the phone after the repair and again five days later. The label in Parts and Service History describes the part inside the phone, so it stays until the part or its pairing changes. Waiting does not change the battery.",
+      },
+      {
+        h: `Getting it checked at ${atShop}`,
+        answer: `${site.name} checks an iPhone free of cost and tells you what the issue is and whether it can be fixed before any work starts. For a battery message, bring the phone or send the screenshots and your exact model on WhatsApp to ${site.phone.display}. The shop also repairs the rest of the iPhone.`,
+        link: { phrase: "repairs the rest of the iPhone", href: "/repairs/iphone" },
+      },
+    ],
+    faq: [
+      { q: "iPhone battery change ke baad Unknown Part aa raha hai. Kya phone kharab ho jayega?", a: "No. Apple says these messages don't affect your ability to use the iPhone. The battery screen may stop showing a reliable health figure, and an Unknown part might lower the phone's trade-in value." },
+      { q: "Does an iPhone battery change always show Unknown Part?", a: "No. A genuine part that Apple has verified and linked to your phone shows as Genuine. Copy batteries, and parts that were not linked to the phone after the repair, can show Unknown." },
+      { q: "Why is Battery Health missing after my battery change?", a: "The phone could not verify the battery, so it may hide the figure or warn that the details might not be accurate. Choosing an original battery at Rehan Traders means battery health is shown and the Unknown Part message can be removed." },
+      { q: "Can you remove Unknown Part if I pick a cheaper battery?", a: facts.battery },
+    ],
+    part: "battery",
+    services: ["battery-charging", "iphone"],
+    published: "2026-11-18",
+    updated: "2026-11-18",
+  },
 ]
 
 /**
