@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 
+import { AfterForm } from "@/components/after-form"
 import { BookFromUrl } from "@/components/book-from-url"
 import { WhatsAppIcon } from "@/components/icon"
 import { Container, Section } from "@/components/layout"
@@ -8,13 +9,14 @@ import { Heading, Text } from "@/components/typography"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { actions, seo, site } from "@/content"
-import { booking } from "@/content-large"
+import { bookAfter, booking } from "@/content-large"
 import { pageMeta } from "@/lib/page-meta"
 
 export const metadata: Metadata = pageMeta({ title: seo.book.title, description: seo.book.description, path: "/book" })
 
 export default function BookPage() {
   return (
+    <>
     <Section first className="flex flex-col">
       <Container className="flex flex-1 flex-col gap-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-16">
         <div>
@@ -44,5 +46,7 @@ export default function BookPage() {
         </Card>
       </Container>
     </Section>
+    <AfterForm c={bookAfter} />
+    </>
   )
 }

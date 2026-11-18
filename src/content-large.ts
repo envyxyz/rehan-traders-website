@@ -4,7 +4,7 @@
  * Only pages and lazy pieces that need these import them. content.ts must never import this file.
  */
 
-import { actions, estimate, facts, googleRating, site, touchGlassHref, type InlineLink } from "./content"
+import { actions, estimate, facts, faq, googleRating, process as shopProcess, site, touchGlassHref, type InlineLink } from "./content"
 
 // Typed in by hand (static site, no Places API). Update rating and asOf together.
 // Review text copied on 29 Oct 2026 from the public Google reviews panel (signed out): 50 ratings then, 49 on 31 Oct, 32 with text (the other 18 are
@@ -651,6 +651,40 @@ export const estimator = {
   ] satisfies EstimateFault[],
 } as const
 
+/** The answers shown under a form page: the FAQ entries (content.ts) whose question is listed, in that order. */
+const faqByQuestion = (qs: readonly string[]) => qs.map((q) => faq.find((f) => f.q === q)).filter((f): f is (typeof faq)[number] => !!f)
+
+/** Server-rendered text under the /book form, so the page has more than a form for search to read. */
+export const bookAfter = {
+  title: "What happens after you book",
+  lede: "Booking is free and takes no payment. You get a job number to show at the counter at Shop G-88, Hafeez Center.",
+  steps: shopProcess,
+  notes: [
+    { text: "Not sure what is wrong? Pick \"Not sure\" and the free check finds the fault. Opening hours, the map and directions are on the visit page.", link: { phrase: "visit page", href: "/visit" } },
+    { text: "Want to know what the shop repairs first? See everything Rehan Traders repairs, from cracked glass to board faults.", link: { phrase: "everything Rehan Traders repairs", href: "/repairs" } },
+  ] satisfies { text: string; link: InlineLink }[],
+  faqTitle: "Questions before you visit",
+  faq: faqByQuestion(["Is checking my phone free?", "Where is Rehan Traders and when is it open?", "Can I watch my phone being repaired?", "How can I pay?"]),
+} as const
+
+/** Server-rendered text under the /quote form. Quotes are given on WhatsApp; no prices, no promised speed. */
+export const quoteAfter = {
+  title: "How a quote works",
+  lede: "Rehan Traders does not list prices online. The shop looks at your device and problem, then replies on WhatsApp with a quote. Then you decide.",
+  steps: [
+    { title: "Tell the shop what is wrong", text: "Pick your issue to see the likely repair, or describe the problem with photos and your device model." },
+    { title: "The shop replies on WhatsApp", text: "The quote comes back as a WhatsApp message to the number you gave. Checking is free." },
+    { title: "You decide", text: "Bring the device to Shop G-88, Ground Floor, Hafeez Center, Lahore, or send it by courier from outside Lahore." },
+  ],
+  notes: [
+    { text: "Wondering what changes a repair quote? Read what decides a phone repair price in Lahore.", link: { phrase: "what decides a phone repair price in Lahore", href: "/guides/what-decides-phone-repair-price-lahore" } },
+    { text: "Outside Lahore? The courier page explains how to send your phone, how to pack it and how to pay.", link: { phrase: "courier page", href: "/courier" } },
+    { text: "Browse the repairs the shop does if you want to see your fault before asking.", link: { phrase: "repairs the shop does", href: "/repairs" } },
+  ] satisfies { text: string; link: InlineLink }[],
+  faqTitle: "Questions about quotes",
+  faq: faqByQuestion(["How do I get a price for my repair?", "Is checking my phone free?", "Can I send my phone by courier from outside Lahore?", "Do you give a warranty on repairs?"]),
+} as const
+
 export type PhonePart = "glass" | "panel" | "battery" | "board" | "port"
 
 export type Guide = {
@@ -760,10 +794,10 @@ export const guides: Guide[] = [
   },
   {
     slug: "lines-on-phone-screen",
-    title: "Lines on your phone screen: what they mean and how to fix them",
+    title: "Green or white lines on your phone screen: what they mean and how to fix them",
     seo: {
-      title: "Lines on phone screen: causes and fix",
-      description: "Why green, white or pink lines appear on a phone screen after a drop, water or an update, how to test the panel, and what fixes it.",
+      title: "Green line on phone screen: causes and fix",
+      description: "Why a green, white or pink line appears on a phone screen after a drop, water or an update, how to test it, and what fixes it.",
     },
     answer:
       "A line that stays on the screen, shows on the startup logo and does not appear in a screenshot is a fault in the display panel or its connection, not in the software. Restarts and resets will not remove it. The fix is a screen (panel) change, after a check that the connection is not the cause.",
@@ -781,6 +815,7 @@ export const guides: Guide[] = [
           "Take a screenshot while the line is on screen.",
           "Send it to another phone and look at it there.",
           "Restart the phone and watch the startup logo for the line.",
+          "Start the phone in safe mode. If the line is still there, no app is causing it.",
           "If the line is in the screenshot too, update the phone and check the app you saw it in.",
         ],
         steps: true,
@@ -811,6 +846,11 @@ export const guides: Guide[] = [
           "An update does not physically damage a panel, but a restart can make a weakened panel show its fault, so it feels as if the update caused it. The screenshot test settles it: if the line is missing from a screenshot, it is in the hardware.",
       },
       {
+        h: "Does the brand replace a green-line screen for free?",
+        answer:
+          "Some brands, Samsung and OnePlus among them, have offered free display replacements for green lines on certain models in certain countries. Whether that applies to your phone in Pakistan depends on the model, the warranty and how the phone was imported, so ask the brand's official service centre first if the phone is still under warranty. Rehan Traders is an independent repair lab, not a brand service centre.",
+      },
+      {
         h: "Will a force restart or a factory reset remove the lines?",
         answer:
           "No. A force restart only restarts the phone, and a factory reset erases your data without touching the display hardware. Back up what you can before the check if the phone still works.",
@@ -826,6 +866,7 @@ export const guides: Guide[] = [
       { q: "A pink or green line appeared after my phone got wet. What should I do?", a: "Turn it off, do not charge it, and get it checked soon. Liquid at the screen connector can cause lines, and corrosion spreads with time." },
       { q: "Screen par white line aa gayi hai, kya karun?", a: "Take a screenshot while it shows. If the line is not in the screenshot, it is in the display hardware, and the panel needs a check. Send the model and a photo on WhatsApp for a quote." },
       { q: "Phone gir gaya aur screen par yellow line aa gayi. Is the glass the problem?", a: "A line after a drop usually means the panel or its connection, even with uncracked glass. The free check confirms it." },
+      { q: "Update ke baad screen par green line aa gayi. Will another update remove it?", a: "Only if the line is also in a screenshot. If the screenshot is clean, the line is in the display panel, and no update or reset will remove it." },
     ],
     figure: {
       title: "Line on a phone screen: hardware or software?",
@@ -839,7 +880,7 @@ export const guides: Guide[] = [
     part: "panel",
     services: ["screen-replacement"],
     ...g2,
-    updated: "2026-11-15", // 15 Nov: questions people search (line colours, after a drop, after an update)
+    updated: "2026-11-18", // 18 Nov: title leads with "green line" (the main search), safe-mode test, brand free-replacement question
   },
   {
     slug: "phone-fell-in-water",
