@@ -774,8 +774,9 @@ export const seo = {
     description: "Customer reviews of Rehan Traders, the phone repair shop at Shop G-88, Hafeez Center, Lahore, copied from Google as written.",
   },
   visit: {
-    title: "Mobile repair shop at Hafeez Center, G-88",
-    description: "Rehan Traders, Shop G-88, Ground Floor, Hafeez Center, Lahore. Call or WhatsApp 0305 8874839. Open Monday to Saturday, 11 AM to 10 PM.",
+    // 23 Nov 2026: worded as searched ("mobile repairing shop in hafeez center", "... contact numbers"). Compare CTR on 21 Dec.
+    title: "Mobile repairing shop in Hafeez Center, G-88",
+    description: "Rehan Traders, Shop G-88, Hafeez Center, Lahore. Contact number 0305 8874839, call or WhatsApp. Open Mon to Sat, 11 AM to 10 PM.",
   },
   courier: {
     title: "Phone repair by courier, all Pakistan",

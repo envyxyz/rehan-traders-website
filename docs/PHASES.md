@@ -329,4 +329,5 @@ Phone hero rework (claim above the h1, stacked buttons, first lede sentence hidd
 - **Reviews:** count 55, as of 23 Nov 2026 (Business Profile). Four new reviews copied as written: Usman G. (Flip 5), Usama N. (17 Pro Max front glass), Sheikh A. (Fold3), Muhammad U. (iPhone 16 Pro), shown as proof on touch glass, foldables, iPhone and Samsung. Mian Muneej J.'s S21 review left out: it says "full authentic", which the site never claims.
 - **Schema:** `sameAs` adds the shop's Facebook, TikTok, YouTube and Threads.
 - **Guide meta:** iPhone Unknown Part guide title 60 and description 135 characters (were 66 and 150).
+- **/visit:** title "Mobile repairing shop in Hafeez Center, G-88" and description with "Contact number", the wording of the searches it ranks 2 for (285 impressions, 0.7% CTR). Compare CTR on 21 Dec.
 - **Checks:** typecheck, lint, build pass; `retrieve-check` 27/27. Desktop screenshots in `../.agency/build/website-shots/seo-2026-11-23/`.
