@@ -16,9 +16,9 @@ import { actions, estimate, facts, faq, googleRating, process as shopProcess, si
 // vague) picks which ones llms-full.txt quotes.
 export const reviews = {
   rating: googleRating,
-  count: 49,
-  asOf: "2026-10-31",
-  asOfLabel: "31 October 2026",
+  count: 55,
+  asOf: "2026-11-23",
+  asOfLabel: "23 November 2026",
   // The listing page shows every review. The write-a-review link (https://g.page/r/CUvWWzrw4sFhEBE/review) is for
   // QR cards and WhatsApp follow-ups, not for "Read reviews".
   url: site.mapsUrl,
@@ -36,6 +36,11 @@ export const reviews = {
     { author: "Asil M.", rating: 5, when: "Over a year ago", weight: 3, text: "Highly impressed with the mobile repair service here Fast, reliable, and professional my phone feels brand new again. Definitely the go-to spot for any mobile issues.Mr Adnan is very cooperative and humble person really impressed" },
     { author: "Hassnain T.", rating: 5, when: "May 2026", weight: 3, text: "I recently got my phone repair. Very professional extremely happy with the services of Rehan Trader" },
     { author: "Faizan I.", rating: 5, when: "Oct 2026", weight: 3, text: "Very good service just repaired my 14 pro max" },
+    // Added 23 Nov 2026 from the Business Profile, copied as written.
+    { author: "Usman G.", rating: 5, when: "Nov 2026", weight: 3, text: "Got my Samsung Flip 5 Display strip fixed from here. Adnan bhai is a very good person and resolved my issue very friendly. Recommended 💯" },
+    { author: "Usama N.", rating: 5, when: "Nov 2026", weight: 3, text: "Changed 17 pro max pro max front glass adnan bhai did a very good job you cant even tell its changed" },
+    { author: "Sheikh A.", rating: 5, when: "Nov 2026", weight: 2, text: "I repaire my samsung fold3 very good experience 🥰" },
+    { author: "Muhammad U.", rating: 5, when: "Nov 2026", weight: 2, text: "i repaire my iphone 16pro. very good service" },
     { author: "Farwah W.", rating: 5, when: "Jun 2026", weight: 3, text: "Best Lab in the Entire Hafeez Centre for Mobile repair. Thumbs up 👍" },
     { author: "Junaid B.", rating: 5, when: "Over a year ago", weight: 3, text: "Iphone and samsung front glass specialist" },
     { author: "Salman S.", rating: 5, when: "Over a year ago", weight: 2, text: "Rehan trader is very good repairing center . He is very coprative and honest people. All employees very good trained." },
@@ -121,7 +126,7 @@ export const services: Service[] = [
     ],
     related: ["screen-replacement", "galaxy-z-fold-flip", "iphone"],
     answers: { model: "Yes, if the display under the cracked glass still works. Send your exact model on WhatsApp and the shop confirms it.", time: timeDepends },
-    proof: ["Junaid B."],
+    proof: ["Junaid B.", "Usama N."],
     seo: {
       title: "Mobile glass replacement in Lahore",
       description: "Mobile glass replacement at Hafeez Center, Lahore: only the cracked glass is changed and your original display stays. Free checking.",
@@ -162,7 +167,7 @@ export const services: Service[] = [
     ],
     related: ["touch-glass-replacement", "screen-replacement", "board-repair"],
     answers: { model: "Yes. All foldables, including Duo, every Galaxy Z Series generation and Pixel Fold.", time: "Up to a day, depending on the repair, parts availability and the model. Never guaranteed." },
-    proof: ["Zunair K.", "Xhah A.", "Ali R."],
+    proof: ["Zunair K.", "Xhah A.", "Ali R.", "Usman G.", "Sheikh A."],
     seo: {
       title: "Z Fold and Flip screen repair, Lahore",
       description: "Z Fold and Z Flip screen repair at Hafeez Center, Lahore: inner screen, outer glass and hinge on every foldable. Free checking first.",
@@ -203,7 +208,7 @@ export const services: Service[] = [
     ],
     related: ["touch-glass-replacement", "battery-charging", "board-repair"],
     answers: { model: "Send your exact iPhone model on WhatsApp and the shop confirms the repair, or bring it in for the free check.", time: timeDepends },
-    proof: ["Faizan I.", "Junaid B."],
+    proof: ["Faizan I.", "Junaid B.", "Usama N.", "Muhammad U."],
     seo: {
       title: "iPhone repair in Lahore, Hafeez Center",
       description: "iPhone repair at Hafeez Center, Lahore: screen, back glass, Face ID, battery and charging. Free checking. WhatsApp 0305 8874839.",
@@ -1309,8 +1314,8 @@ export const guides: Guide[] = [
     slug: "iphone-unknown-part-battery-message",
     title: "iPhone says Unknown Part or Important Battery Message after a battery change",
     seo: {
-      title: "iPhone Unknown Part battery message: what it means",
-      description: "Why an iPhone shows Unknown Part or Important Battery Message after a battery change, whether it hurts the phone, and when the message can be removed.",
+      title: "iPhone Unknown Part battery alert, explained",
+      description: "Why an iPhone says Unknown Part or Important Battery Message after a battery change, whether it harms the phone, and how it is removed.",
     },
     answer:
       "The iPhone could not verify the new battery as a genuine Apple part paired to your phone, so it labels it Unknown or says it cannot verify the battery. Apple says these messages do not stop you using the phone. Battery health may be hidden or inaccurate. With an original battery, the shop can remove the message.",
@@ -1484,11 +1489,12 @@ export const brands: Brand[] = [
       { q: "My Galaxy says moisture was detected and will not charge. What now?", a: "Let the phone dry, with no charger connected, then try again. If the warning stays, bring it in: the charging port or the board under it may need cleaning or replacing." },
       { q: "Will my Galaxy fingerprint reader work after a new screen?", a: "That depends on the screen fitted and on which reader your Galaxy has, ultrasonic or optical. Ask before you agree, and the shop tells you what to expect for your phone." },
       { q: "Do you repair Galaxy Z Fold and Z Flip?", a: "Yes, as with every other foldable: inner screen, outer glass and hinge are all bench jobs, and the foldables page explains how they go." },
+      { q: "Is this the Samsung service center in Hafeez Center?", a: "No. Rehan Traders is an independent repair lab at Shop G-88, not a Samsung service center. Warranty terms are set by Samsung, so while your phone is under warranty, ask Samsung's official service first. Out of warranty, or when you want a free check from the person who will work on the phone, bring it to G-88." },
     ],
     repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "water-damage-data-recovery"],
     guides: ["cracked-screen-glass-or-full-screen", "lines-on-phone-screen"],
     others: ["google-pixel", "oneplus", "xiaomi"],
-    proof: ["Junaid B.", "Haadi O."],
+    proof: ["Junaid B.", "Haadi O.", "Usman G."],
     seo: {
       title: "Samsung repair in Lahore, Hafeez Center",
       description: "Samsung repair in Lahore at Hafeez Center: Galaxy glass, screens, charging and water damage. Free checking first. 0305 8874839.",
@@ -1555,6 +1561,7 @@ export const brands: Brand[] = [
       { q: "My Pixel's camera glass cracked by itself. Can it be fixed?", a: "Bring it in for the free check. The shop tells you what the repair involves and what it will cost before any work starts." },
       { q: "Will the fingerprint reader still work after a new Pixel screen?", a: "Newer Pixels read the fingerprint through the display, so the screen fitted matters and a calibration step may follow. Raise it before you agree to the repair." },
       { q: "Do you repair Pixel Fold and Pixel 9 Pro Fold?", a: "Yes. They go through the same bench as any foldable: outer glass, inner display and hinge. The foldables page has the details." },
+      { q: "Is this the Google Pixel service center in Lahore?", a: "No. Rehan Traders is an independent repair lab at Shop G-88, not a Google service center. Warranty terms are set by Google, so while your phone is under warranty, ask Google's official service first. Out of warranty, or when you want a free check from the person who will work on the phone, bring it to G-88." },
     ],
     repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "galaxy-z-fold-flip"],
     guides: ["lines-on-phone-screen", "phone-not-charging"],
@@ -1627,6 +1634,7 @@ export const brands: Brand[] = [
       { q: "Can the alert slider be repaired?", a: "Tell the shop when you book. A loose or stuck slider is looked at during the free check, and the shop says what it involves." },
       { q: "Can glass alone be replaced on a curved OnePlus screen?", a: "Sometimes. If the picture and touch are fine the glass can be changed by itself, but curved models need your exact model confirmed before the shop promises it." },
       { q: "My OnePlus is dead and restarts by itself. Can it be saved?", a: "Often a board fault, and board faults are worked on under a microscope. The check is free, and the shop tells you whether it can be repaired." },
+      { q: "Is this the OnePlus service center in Hafeez Center?", a: "No. Rehan Traders is an independent repair lab at Shop G-88, not a OnePlus service center. Warranty terms are set by OnePlus, so while your phone is under warranty, ask OnePlus's official service first. Out of warranty, or when you want a free check from the person who will work on the phone, bring it to G-88." },
     ],
     repairs: ["screen-replacement", "touch-glass-replacement", "battery-charging", "board-repair"],
     guides: ["phone-not-charging", "phone-not-turning-on"],
@@ -1697,6 +1705,7 @@ export const brands: Brand[] = [
       { q: "Where exactly is Shop G-88 for Oppo repair?", a: "Ground floor of Hafeez Center, Main Boulevard, Gulberg III. The big sign says OPPO: look for G-88 at its left edge and for Tab House & Rehan Traders Lab along the bottom." },
       { q: "Will my Oppo unlock with a fingerprint after a screen change?", a: "On Oppo models that read the fingerprint through the screen, the replacement display has to suit that reader. Ask first, and the shop says what to expect for your phone." },
       { q: "Do you repair the Oppo Find N Flip?", a: "Yes. The N2 Flip and N3 Flip are foldables, and foldables are repaired here from the outer glass to the hinge." },
+      { q: "Is this the Oppo service center in Hafeez Center?", a: "No. Rehan Traders is an independent repair lab at Shop G-88, not an Oppo service center. Warranty terms are set by Oppo, so while your phone is under warranty, ask Oppo's official service first. Out of warranty, or when you want a free check from the person who will work on the phone, bring it to G-88." },
     ],
     repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "board-repair"],
     guides: ["cracked-screen-glass-or-full-screen", "phone-not-charging"],
@@ -1767,6 +1776,7 @@ export const brands: Brand[] = [
       { q: "Can the colour-changing back of a Vivo V be repaired?", a: "Tell the shop your exact model when you book, and the free check says what the back-glass repair involves." },
       { q: "My Vivo is dead and does not charge. Can it be saved?", a: "The free check at the bench tells you whether it is the battery, the port or the board, and what each repair costs." },
       { q: "Do you replace a Vivo battery?", a: "Yes. Batteries and charging ports are bench jobs, and a battery that has swollen is taken out and disposed of safely straight away." },
+      { q: "Is this the Vivo service center in Hafeez Center?", a: "No. Rehan Traders is an independent repair lab at Shop G-88, not a Vivo service center. Warranty terms are set by Vivo, so while your phone is under warranty, ask Vivo's official service first. Out of warranty, or when you want a free check from the person who will work on the phone, bring it to G-88." },
     ],
     repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "board-repair"],
     guides: ["cracked-screen-glass-or-full-screen", "battery-draining-fast"],
@@ -1833,7 +1843,7 @@ export const brands: Brand[] = [
     },
     faq: [
       { q: "Infinix ka panel change karwana hai. Do you repair Infinix screens?", a: "Yes. The shop checks the phone free of cost, tells you whether glass alone or the whole screen is needed, and quotes before it starts." },
-      { q: "Is Infinix warranty affected if I repair elsewhere?", a: "Warranty terms are the brand's, not the shop's. If your phone is under warranty, ask Carlcare first. If it is not, the free check tells you what the repair involves." },
+      { q: "Is this the Infinix service center? Is warranty affected if I repair here?", a: "No. Carlcare is Infinix's official service network, and Rehan Traders is an independent repair lab at G-88. Warranty terms are the brand's, not the shop's. If your phone is under warranty, ask Carlcare first. If it is not, the free check tells you what the repair involves." },
       { q: "Why does my Infinix charge slowly now?", a: "All-Round FastCharge runs at full speed only with the matching charger and cable. The shop tries known-good ones first, then the port and the board." },
       { q: "My Infinix keeps restarting on the logo. What is wrong?", a: "It could be software, storage or the board. Bring it in for the free check, and the shop tells you which and what it will cost." },
       { q: "Can only the cracked glass of my Infinix be replaced?", a: "Yes, when the panel under the crack still works. An Infinix with lines, black patches or dead touch zones needs the whole screen replaced instead." },
@@ -1907,6 +1917,7 @@ export const brands: Brand[] = [
       { q: "Will my fingerprint reader still work after a screen change?", a: "On models with the reader behind the screen, the display fitted decides it. Ask before you agree." },
       { q: "Why does my Xiaomi charge slowly?", a: "Fast charging needs the matching charger and cable. The shop tries known-good ones, then looks at the port and the board." },
       { q: "My Poco got hot and died. Can it be saved?", a: "Possibly. Heat can damage the battery or a board part. The free check says which, and the shop tells you plainly whether it can be repaired." },
+      { q: "Is this the Xiaomi or Redmi service center in Lahore?", a: "No. Rehan Traders is an independent repair lab at Shop G-88, not a Xiaomi service center. Warranty terms are set by Xiaomi, so while your phone is under warranty, ask Xiaomi's official service first. Out of warranty, or when you want a free check from the person who will work on the phone, bring it to G-88." },
     ],
     repairs: ["touch-glass-replacement", "screen-replacement", "battery-charging", "board-repair"],
     guides: ["cracked-screen-glass-or-full-screen", "phone-not-charging"],

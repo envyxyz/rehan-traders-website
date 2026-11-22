@@ -58,7 +58,14 @@ export const site = {
    * The old Facebook page (rehantraders0, wrong phone and hours) was deleted by 15 Nov 2026. Add the new
    * Facebook page and the other profiles here as each one goes live with the exact NAP.
    */
-  sameAs: ["https://maps.google.com/?cid=7044160813583291979", "https://www.instagram.com/rehantraders.lab/"], // Instagram: as listed on the verified Business Profile
+  sameAs: [
+    "https://maps.google.com/?cid=7044160813583291979",
+    "https://www.instagram.com/rehantraders.lab/",
+    "https://www.facebook.com/profile.php?id=61596135745889",
+    "https://www.tiktok.com/@rehantraders.lab",
+    "https://www.youtube.com/@rehantraderslab",
+    "https://www.threads.com/@rehantraders.lab",
+  ], // the shop's own profiles (growth/Notes/Citations.md); all four socials listed on the Business Profile 23 Nov 2026
   /** Square brand avatar, public/images/logo.png. */
   logo: "/images/logo.png",
   /** 24h times, Asia/Karachi. 0 = Sunday. */

@@ -91,7 +91,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const brandRoutes: MetadataRoute.Sitemap = brands.map((b) => ({
     url: `${site.url}/repairs/${b.slug}`,
-    lastModified,
+    lastModified: "2026-11-23", // 23 Nov: each brand page answers the "service center" search
     images: [b.image, b.detailPhoto].filter(Boolean).map((n) => `${site.url}/images/${n}-1280.webp`),
   }))
 

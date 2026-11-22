@@ -321,3 +321,12 @@ Phone hero rework (claim above the h1, stacked buttons, first lede sentence hidd
 - **Next.js 16.4.3 → 16.4.6** (and `eslint-config-next`): the build stopped with a "known security vulnerability" notice on 16.4.3.
 - **Checks:** typecheck, lint, build pass; `retrieve-check` 25/25.
 - **Note:** `pnpm` on PATH is broken on this machine (the global shim points at a missing pnpm.exe); `npx -y pnpm@11.9.0 <script>` works.
+
+### 2026-11-23 · Weekly SEO audit: service-center answers, new reviews, sameAs
+
+- **Search Console (14 to 20 Nov):** 22 clicks (18 the week before), 832 impressions (602), average position 5.9. 28 days: 56 clicks, 2.0K impressions. Brand pages already rank 4.9 to 9.9; people search "vivo service center hafeez center lahore" (5.2), "oppo service center hafeez center" (7.0), "infinix service center hafeez center lahore" (9), "redmi service center lahore" (13).
+- **Brand pages:** Samsung, Pixel, OnePlus, Oppo, Vivo and Xiaomi each get one FAQ, "Is this the <brand> service center…?", answered honestly (independent lab; warranty is the brand's; out of warranty, the free check at G-88). Infinix's warranty question now names "service center" and Carlcare. Brand sitemap `lastModified` 23 Nov.
+- **Reviews:** count 55, as of 23 Nov 2026 (Business Profile). Four new reviews copied as written: Usman G. (Flip 5), Usama N. (17 Pro Max front glass), Sheikh A. (Fold3), Muhammad U. (iPhone 16 Pro), shown as proof on touch glass, foldables, iPhone and Samsung. Mian Muneej J.'s S21 review left out: it says "full authentic", which the site never claims.
+- **Schema:** `sameAs` adds the shop's Facebook, TikTok, YouTube and Threads.
+- **Guide meta:** iPhone Unknown Part guide title 60 and description 135 characters (were 66 and 150).
+- **Checks:** typecheck, lint, build pass; `retrieve-check` 27/27. Desktop screenshots in `../.agency/build/website-shots/seo-2026-11-23/`.
